@@ -1,0 +1,343 @@
+---
+title: "Volume Profile : les bases"
+description: "Comment se construit un profil de volume, ce que sont le POC, la value area, le VAH et le VAL, les formes de profils et leur signification, les profils de session et de range, et les premiers usages comme niveaux et contexte."
+---
+
+# Volume Profile : les bases
+
+Le niveau 2 a lu le volume dans le temps : combien de contrats par bougie. Le niveau 3 a expliqué pourquoi le prix va chercher certains niveaux. Le **volume profile** relie les deux en répondant à une question que l'histogramme temporel ne pose pas : **à quel prix** le volume s'est-il échangé ? Il projette le volume sur l'axe vertical et fait apparaître les prix où le marché a accepté de traiter longuement, et ceux qu'il a traversés sans s'arrêter. Ce chapitre construit l'outil depuis zéro, définit ses repères (POC, value area), lit ses formes, et donne ses premiers usages. C'est le premier pas de l'order flow, et il ne demande que des données de volume par prix, disponibles sur les futures.
+
+## Construction d'un profil de volume
+
+Prenez une période (une séance, un range, une semaine). Pour chaque niveau de prix (chaque tick, ou chaque groupe de ticks), additionnez le volume échangé **à ce prix** pendant la période. Dessinez le résultat en barres horizontales, à droite ou à gauche du graphique : c'est le profil. Un prix où beaucoup de contrats ont changé de mains a une barre longue ; un prix traversé rapidement a une barre courte.
+
+Ce que le profil montre que l'histogramme temporel ne montre pas : le même volume total sur une heure peut être concentré sur trois ticks (le marché s'est arrêté là et a négocié) ou étalé sur trente (il a traversé). Le profil distingue les deux immédiatement.
+
+Trois paramètres à connaître :
+
+- **La période** : profil de session (une séance), profil de range (entre deux swings), profil composite (plusieurs séances, chapitre suivant). Le choix de la période est le choix de la question posée.
+- **La résolution** : le regroupement de prix par barre. Au tick sur l'ES en intraday ; par point ou par 2 points sur un composite de plusieurs semaines. Une résolution trop fine fait un profil hérissé illisible ; trop grossière efface les niveaux.
+- **La source du volume** : réel sur futures et actions ; tick volume sur forex spot (niveau 2). Le profil sur forex spot montre où le prix a passé du temps, pas où les contrats ont été échangés ; il reste utile comme profil de temps, mais ce n'est pas le même objet. Certaines plateformes proposent d'ailleurs le **TPO profile** (market profile), qui compte le temps passé à chaque prix plutôt que le volume ; les deux se ressemblent souvent et se lisent avec les mêmes repères.
+
+<Figure caption="Figure 1 · Construction : à gauche, la séance en M5 ; à droite, le volume de chaque prix additionné sur la séance et projeté à l'horizontale. Les prix où le marché a négocié longtemps forment le ventre du profil ; les prix traversés vite, les queues.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Construction d'un profil de volume à partir d'une séance" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="300" x2="460" y2="300" className="line" strokeWidth="1" />
+  <line x1="40" y1="40" x2="40" y2="300" className="line" strokeWidth="1" />
+  <text x="30" y="60" fontSize="10" textAnchor="end" className="mono muted">5 299</text>
+  <text x="30" y="170" fontSize="10" textAnchor="end" className="mono muted">5 290</text>
+  <text x="30" y="290" fontSize="10" textAnchor="end" className="mono muted">5 280</text>
+  <polyline points="50,240 70,225 90,235 110,210 130,190 150,200 170,175 190,160 210,180 230,165 250,150 270,170 290,160 310,178 330,150 350,140 370,120 390,145 410,110 430,130 450,95" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="250" y="320" fontSize="11" textAnchor="middle" className="muted">séance en M5 (temps →)</text>
+
+  <line x1="500" y1="40" x2="500" y2="300" className="line" strokeWidth="1" />
+  <rect x="500" y="52" width="6" height="10" className="gold" opacity="0.5" /><rect x="500" y="64" width="9" height="10" className="gold" opacity="0.5" /><rect x="500" y="76" width="14" height="10" className="gold" opacity="0.5" /><rect x="500" y="88" width="24" height="10" className="gold" opacity="0.5" /><rect x="500" y="100" width="38" height="10" className="gold" opacity="0.5" /><rect x="500" y="112" width="53" height="10" className="gold" opacity="0.5" /><rect x="500" y="124" width="77" height="10" className="gold" opacity="0.7" /><rect x="500" y="136" width="103" height="10" className="gold" opacity="0.7" /><rect x="500" y="148" width="127" height="10" className="gold" opacity="0.7" /><rect x="500" y="160" width="151" height="10" className="gold" opacity="0.8" /><rect x="500" y="172" width="163" height="10" className="gold" opacity="1" /><rect x="500" y="184" width="141" height="10" className="gold" opacity="0.8" /><rect x="500" y="196" width="113" height="10" className="gold" opacity="0.7" /><rect x="500" y="208" width="86" height="10" className="gold" opacity="0.7" /><rect x="500" y="220" width="62" height="10" className="gold" opacity="0.5" /><rect x="500" y="232" width="43" height="10" className="gold" opacity="0.5" /><rect x="500" y="244" width="27" height="10" className="gold" opacity="0.5" /><rect x="500" y="256" width="17" height="10" className="gold" opacity="0.5" /><rect x="500" y="268" width="10" height="10" className="gold" opacity="0.5" /><rect x="500" y="280" width="7" height="10" className="gold" opacity="0.5" />
+  <text x="600" y="320" fontSize="11" textAnchor="middle" className="muted">profil : volume par prix</text>
+  <text x="670" y="180" fontSize="10" className="gold" fontWeight="600">POC</text>
+  <text x="620" y="70" fontSize="9" className="muted">queue</text>
+  <text x="620" y="290" fontSize="9" className="muted">queue</text>
+</svg>
+</Figure>
+
+## POC, value area, VAH et VAL
+
+Trois repères se lisent sur tout profil.
+
+**Le POC** (point of control) : le prix qui a échangé le plus de volume sur la période ; la barre la plus longue. C'est le prix que le marché a jugé le plus « juste » pendant la période : acheteurs et vendeurs y ont trouvé le plus d'accord. Il attire le prix (le marché y revient souvent) et il sert de pivot (au-dessus, les acheteurs ont l'avantage sur la période ; en dessous, les vendeurs).
+
+**La value area** (VA) : la zone de prix contiguë autour du POC qui contient environ **70 % du volume** de la période. Le chiffre de 70 % vient de la statistique (un écart-type de part et d'autre de la moyenne d'une distribution normale contient environ 68 % des observations) ; c'est une convention universelle. La value area est « là où le marché a accepté de traiter » : sa borne haute est le **VAH** (value area high), sa borne basse le **VAL** (value area low).
+
+**Les queues** : les prix hors value area, où peu de volume s'est échangé : le marché y est allé, n'y a pas trouvé d'accord, et en est reparti. Une queue est un rejet.
+
+Un calcul à la main sur une séance ES simplifiée, volume par point (contrats, chiffres pédagogiques) : 5 280 : 3 · 5 281 : 5 · 5 282 : 8 · 5 283 : 14 · 5 284 : 22 · 5 285 : 31 · 5 286 : 45 · 5 287 : 60 · 5 288 : 74 · 5 289 : 88 · **5 290 : 95** · 5 291 : 82 · 5 292 : 66 · 5 293 : 50 · 5 294 : 36 · 5 295 : 25 · 5 296 : 16 · 5 297 : 10 · 5 298 : 6 · 5 299 : 4. Total : 740 contrats.
+
+- **POC** : 5 290 (95 contrats).
+- **Value area** : on part du POC et on ajoute les niveaux adjacents les plus volumineux jusqu'à atteindre 70 % de 740 = 518. 95 (5 290) + 88 (5 289) + 82 (5 291) + 74 (5 288) + 66 (5 292) + 60 (5 287) + 50 (5 293) = **515**, soit 69,6 % : la value area va de **5 287 (VAL) à 5 293 (VAH)**. Ajouter 5 294 donnerait 74 % ; les plateformes s'arrêtent au premier niveau qui atteint ou approche 70 %, avec de légères différences de convention.
+- **Queues** : 5 280-5 286 en bas, 5 294-5 299 en haut, avec un volume qui décroît vite : le marché a exploré et rejeté.
+
+<Figure caption="Figure 2 · Le profil de l'exemple : POC à 5 290, value area de 5 287 à 5 293 (≈ 70 % du volume), queues au-dessus et en dessous. Ces trois repères sont les niveaux de référence de la séance suivante.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Profil annoté avec POC, VAH, VAL et queues" xmlns="http://www.w3.org/2000/svg">
+  <line x1="200" y1="30" x2="200" y2="310" className="line" strokeWidth="1" />
+  <text x="190" y="46" fontSize="10" textAnchor="end" className="mono muted">5 299</text>
+  <text x="190" y="304" fontSize="10" textAnchor="end" className="mono muted">5 280</text>
+  <rect x="200" y="36" width="8" height="12" className="gold" opacity="0.4" /><rect x="200" y="50" width="12" height="12" className="gold" opacity="0.4" /><rect x="200" y="64" width="20" height="12" className="gold" opacity="0.4" /><rect x="200" y="78" width="32" height="12" className="gold" opacity="0.4" /><rect x="200" y="92" width="50" height="12" className="gold" opacity="0.4" /><rect x="200" y="106" width="72" height="12" className="gold" opacity="0.4" />
+  <rect x="200" y="120" width="100" height="12" className="gold" opacity="0.8" /><rect x="200" y="134" width="132" height="12" className="gold" opacity="0.8" /><rect x="200" y="148" width="164" height="12" className="gold" opacity="0.8" /><rect x="200" y="162" width="176" height="12" className="gold" opacity="0.8" /><rect x="200" y="176" width="190" height="12" className="gold" opacity="1" /><rect x="200" y="190" width="148" height="12" className="gold" opacity="0.8" /><rect x="200" y="204" width="120" height="12" className="gold" opacity="0.8" />
+  <rect x="200" y="218" width="90" height="12" className="gold" opacity="0.4" /><rect x="200" y="232" width="62" height="12" className="gold" opacity="0.4" /><rect x="200" y="246" width="44" height="12" className="gold" opacity="0.4" /><rect x="200" y="260" width="28" height="12" className="gold" opacity="0.4" /><rect x="200" y="274" width="16" height="12" className="gold" opacity="0.4" /><rect x="200" y="288" width="10" height="12" className="gold" opacity="0.4" /><rect x="200" y="302" width="6" height="8" className="gold" opacity="0.4" />
+  <line x1="200" y1="120" x2="560" y2="120" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="565" y="124" fontSize="11" className="red" fontWeight="600">VAH 5 293</text>
+  <line x1="200" y1="216" x2="560" y2="216" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="565" y="220" fontSize="11" className="green" fontWeight="600">VAL 5 287</text>
+  <line x1="200" y1="182" x2="560" y2="182" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="565" y="186" fontSize="11" className="gold" fontWeight="700">POC 5 290 · 95 contrats</text>
+  <rect x="440" y="120" width="100" height="96" className="gold" opacity="0.12" />
+  <text x="490" y="172" fontSize="10" textAnchor="middle">value area</text>
+  <text x="490" y="186" fontSize="10" textAnchor="middle">515 / 740 ≈ 70 %</text>
+  <text x="120" y="80" fontSize="10" className="muted">queue haute :</text>
+  <text x="120" y="94" fontSize="10" className="muted">exploré, rejeté</text>
+  <text x="120" y="262" fontSize="10" className="muted">queue basse</text>
+</svg>
+</Figure>
+
+Deux précisions de vocabulaire que vous croiserez : le **VPOC** (volume point of control) est le POC d'un profil de volume, par opposition au POC d'un profil TPO ; le **HVN** (high volume node) est tout pic local de volume dans le profil (le POC est le plus haut HVN), le **LVN** (low volume node) tout creux local, y compris à l'intérieur de la value area. HVN et LVN reviendront au chapitre suivant.
+
+## Les formes de profils et leur signification
+
+La forme du profil raconte la séance. Quatre formes de base, qui se combinent.
+
+**Le profil en D (normal, ou en cloche).** Une seule bosse, symétrique, POC au centre, queues courtes des deux côtés. C'est une séance d'**équilibre** : acheteurs et vendeurs se sont mis d'accord sur une zone de valeur et le prix a oscillé autour. Signification : marché en range, rotation ; les bornes de la value area sont des zones de réaction (on achète le VAL, on vend le VAH tant que l'équilibre tient), et une sortie de la value area avec acceptation (le prix construit du volume au-delà) est le signal que l'équilibre est rompu.
+
+**Le profil en P.** Bosse dans la partie haute, queue longue en bas : le prix est monté vite (queue), puis a construit de la valeur en haut (bosse). C'est une séance de **hausse puis acceptation** : les acheteurs ont poussé, et le marché a accepté les nouveaux prix. Souvent la fin d'un mouvement haussier de court terme ou une pause avant continuation ; le bas de la bosse (le VAL du P) est le support de référence.
+
+**Le profil en b.** Le miroir : bosse en bas, queue en haut. Baisse puis acceptation des prix bas.
+
+**Le profil en double distribution.** Deux bosses séparées par une zone creuse (un LVN). Le marché a accepté une valeur, puis a migré d'un coup vers une autre valeur, sans traiter entre les deux. La zone creuse est un vide : le prix la traverse vite dans les deux sens ; les deux bosses sont deux zones de valeur, dont l'une deviendra probablement la référence des jours suivants. Signification : changement de régime pendant la séance (une annonce, une cassure).
+
+**Le profil en tendance (trend day).** Allongé, étroit, sans bosse nette, POC souvent près d'un extrême : le prix n'a jamais trouvé d'équilibre, il a avancé toute la séance. Signification : jour de tendance ; les retours vers le POC sont rares ; le lendemain teste souvent l'extrême de la séance.
+
+<Figure caption="Figure 3 · Quatre formes de profil : D (équilibre), P (hausse puis acceptation), b (baisse puis acceptation), double distribution (migration de valeur). La forme se lit avant les niveaux.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Formes de profils de volume" xmlns="http://www.w3.org/2000/svg">
+  <text x="100" y="24" fontSize="12" fontWeight="600" textAnchor="middle">D · équilibre</text>
+  <line x1="60" y1="40" x2="60" y2="270" className="line" strokeWidth="1" />
+  <rect x="60" y="50" width="6" height="8" className="gold" opacity="0.5" /><rect x="60" y="60" width="12" height="8" className="gold" opacity="0.5" /><rect x="60" y="70" width="22" height="8" className="gold" opacity="0.5" /><rect x="60" y="80" width="38" height="8" className="gold" opacity="0.6" /><rect x="60" y="90" width="55" height="8" className="gold" opacity="0.7" /><rect x="60" y="100" width="72" height="8" className="gold" opacity="0.8" /><rect x="60" y="110" width="88" height="8" className="gold" opacity="0.8" /><rect x="60" y="120" width="98" height="8" className="gold" opacity="0.9" /><rect x="60" y="130" width="104" height="8" className="gold" opacity="1" /><rect x="60" y="140" width="100" height="8" className="gold" opacity="0.9" /><rect x="60" y="150" width="90" height="8" className="gold" opacity="0.8" /><rect x="60" y="160" width="74" height="8" className="gold" opacity="0.8" /><rect x="60" y="170" width="56" height="8" className="gold" opacity="0.7" /><rect x="60" y="180" width="40" height="8" className="gold" opacity="0.6" /><rect x="60" y="190" width="24" height="8" className="gold" opacity="0.5" /><rect x="60" y="200" width="12" height="8" className="gold" opacity="0.5" /><rect x="60" y="210" width="6" height="8" className="gold" opacity="0.5" />
+  <text x="100" y="290" fontSize="9" textAnchor="middle" className="muted">rotation autour du POC</text>
+
+  <text x="270" y="24" fontSize="12" fontWeight="600" textAnchor="middle">P · hausse, acceptation</text>
+  <line x1="230" y1="40" x2="230" y2="270" className="line" strokeWidth="1" />
+  <rect x="230" y="50" width="20" height="8" className="gold" opacity="0.6" /><rect x="230" y="60" width="50" height="8" className="gold" opacity="0.8" /><rect x="230" y="70" width="85" height="8" className="gold" opacity="0.9" /><rect x="230" y="80" width="104" height="8" className="gold" opacity="1" /><rect x="230" y="90" width="92" height="8" className="gold" opacity="0.9" /><rect x="230" y="100" width="66" height="8" className="gold" opacity="0.8" /><rect x="230" y="110" width="36" height="8" className="gold" opacity="0.6" /><rect x="230" y="120" width="14" height="8" className="gold" opacity="0.4" /><rect x="230" y="130" width="8" height="8" className="gold" opacity="0.4" /><rect x="230" y="140" width="6" height="8" className="gold" opacity="0.4" /><rect x="230" y="150" width="7" height="8" className="gold" opacity="0.4" /><rect x="230" y="160" width="5" height="8" className="gold" opacity="0.4" /><rect x="230" y="170" width="6" height="8" className="gold" opacity="0.4" /><rect x="230" y="180" width="8" height="8" className="gold" opacity="0.4" /><rect x="230" y="190" width="5" height="8" className="gold" opacity="0.4" /><rect x="230" y="200" width="7" height="8" className="gold" opacity="0.4" /><rect x="230" y="210" width="6" height="8" className="gold" opacity="0.4" />
+  <text x="270" y="290" fontSize="9" textAnchor="middle" className="muted">queue basse, valeur en haut</text>
+
+  <text x="440" y="24" fontSize="12" fontWeight="600" textAnchor="middle">b · baisse, acceptation</text>
+  <line x1="400" y1="40" x2="400" y2="270" className="line" strokeWidth="1" />
+  <rect x="400" y="50" width="6" height="8" className="gold" opacity="0.4" /><rect x="400" y="60" width="7" height="8" className="gold" opacity="0.4" /><rect x="400" y="70" width="5" height="8" className="gold" opacity="0.4" /><rect x="400" y="80" width="8" height="8" className="gold" opacity="0.4" /><rect x="400" y="90" width="6" height="8" className="gold" opacity="0.4" /><rect x="400" y="100" width="7" height="8" className="gold" opacity="0.4" /><rect x="400" y="110" width="5" height="8" className="gold" opacity="0.4" /><rect x="400" y="120" width="8" height="8" className="gold" opacity="0.4" /><rect x="400" y="130" width="14" height="8" className="gold" opacity="0.4" /><rect x="400" y="140" width="36" height="8" className="gold" opacity="0.6" /><rect x="400" y="150" width="66" height="8" className="gold" opacity="0.8" /><rect x="400" y="160" width="92" height="8" className="gold" opacity="0.9" /><rect x="400" y="170" width="104" height="8" className="gold" opacity="1" /><rect x="400" y="180" width="85" height="8" className="gold" opacity="0.9" /><rect x="400" y="190" width="50" height="8" className="gold" opacity="0.8" /><rect x="400" y="200" width="20" height="8" className="gold" opacity="0.6" />
+  <text x="440" y="290" fontSize="9" textAnchor="middle" className="muted">queue haute, valeur en bas</text>
+
+  <text x="610" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Double distribution</text>
+  <line x1="570" y1="40" x2="570" y2="270" className="line" strokeWidth="1" />
+  <rect x="570" y="50" width="20" height="8" className="gold" opacity="0.6" /><rect x="570" y="60" width="55" height="8" className="gold" opacity="0.8" /><rect x="570" y="70" width="80" height="8" className="gold" opacity="1" /><rect x="570" y="80" width="60" height="8" className="gold" opacity="0.8" /><rect x="570" y="90" width="28" height="8" className="gold" opacity="0.6" /><rect x="570" y="100" width="8" height="8" className="gold" opacity="0.3" /><rect x="570" y="110" width="4" height="8" className="gold" opacity="0.3" /><rect x="570" y="120" width="3" height="8" className="gold" opacity="0.3" /><rect x="570" y="130" width="5" height="8" className="gold" opacity="0.3" /><rect x="570" y="140" width="4" height="8" className="gold" opacity="0.3" /><rect x="570" y="150" width="9" height="8" className="gold" opacity="0.3" /><rect x="570" y="160" width="30" height="8" className="gold" opacity="0.6" /><rect x="570" y="170" width="62" height="8" className="gold" opacity="0.8" /><rect x="570" y="180" width="86" height="8" className="gold" opacity="1" /><rect x="570" y="190" width="70" height="8" className="gold" opacity="0.8" /><rect x="570" y="200" width="40" height="8" className="gold" opacity="0.6" /><rect x="570" y="210" width="15" height="8" className="gold" opacity="0.5" />
+  <text x="640" y="128" fontSize="9" className="red">LVN : vide</text>
+  <text x="610" y="290" fontSize="9" textAnchor="middle" className="muted">deux valeurs, migration</text>
+</svg>
+</Figure>
+
+## Profils de session et profils de range
+
+Le choix de la période change la question posée au profil.
+
+**Le profil de session** couvre une séance (souvent la séance américaine RTH pour les futures d'indices, parfois la journée complète). Il répond à : où le marché a-t-il accepté de traiter aujourd'hui, et où a-t-il rejeté ? Ses repères (POC, VAH, VAL, extrêmes) sont **les niveaux de référence du lendemain** : le prix ouvre par rapport à la value area de la veille, et cette position ouvre des scénarios (section suivante). Le profil de session est l'outil de base de l'intraday.
+
+**Le profil de range** couvre une période définie par la structure : entre deux swings significatifs, sur un range d'accumulation Wyckoff, sur une jambe de tendance. Il répond à : dans ce mouvement, où la valeur s'est-elle construite ? Son POC est le prix le plus négocié du range (souvent l'endroit où le prix reviendra si le range est retesté), ses LVN sont les zones traversées vite (les FVG du niveau 3 correspondent souvent à des LVN), ses HVN les zones d'absorption. Le profil de range est l'outil du swing trader et du trader SMC qui veut savoir où, dans une zone d'intérêt, le volume s'est réellement échangé.
+
+**Le profil composite** (chapitre suivant) couvre plusieurs séances ou semaines et donne les niveaux de contexte.
+
+Deux règles pratiques : **un profil par question** (ne pas superposer cinq profils sur le même graphique), et **le profil de session se fige à la clôture** ; le profil de la séance en cours change en permanence et se lit avec prudence avant la fin de la première heure.
+
+## Premiers usages : niveaux et contexte
+
+Sans aller plus loin que ce chapitre, le profil de la veille donne déjà une lecture de contexte pour la séance qui commence.
+
+**L'ouverture par rapport à la value area de la veille.** Trois cas :
+
+- **Ouverture dans la value area** : le marché ouvre là où il a traité hier ; scénario par défaut, rotation dans la value area, réactions au VAH et au VAL, retour fréquent au POC. Le trader de range achète le VAL et vend le VAH tant que rien ne casse ; le trader de tendance attend une sortie avec acceptation.
+- **Ouverture au-dessus de la value area** (dans ou au-dessus de la queue haute) : le marché ouvre plus haut qu'hier ; deux scénarios : soit le prix revient dans la value area (l'ouverture est rejetée, souvent avec un retour au POC : c'est le scénario le plus fréquent statistiquement quand l'ouverture n'est pas suivie d'acceptation), soit il construit de la valeur au-dessus (acceptation : la nouvelle valeur est plus haute, biais haussier pour la journée). Le juge est le volume construit dans la première heure au-dessus du VAH.
+- **Ouverture en dessous** : symétrique.
+
+**Le POC comme aimant et pivot.** Le POC de la veille attire le prix (il est souvent retesté dans la journée) et fait office de pivot intraday : au-dessus, les acheteurs contrôlent la référence ; en dessous, les vendeurs. Le POC d'un profil de range est le prix de « valeur » du range : un retour dessus est le retour à l'équilibre, un rejet du POC dans le sens de la tendance est une confirmation.
+
+**Les bornes de la value area comme zones.** VAH et VAL sont des niveaux au sens du niveau 2 (zones, pas lignes), avec une logique en plus : ils marquent la frontière entre « accepté » et « rejeté ». Une sortie de la value area suivie d'un retour immédiat est un rejet (le prix n'a pas trouvé preneur au-delà) ; une sortie suivie de volume construit au-delà est une acceptation, et l'ancienne borne devient support ou résistance (changement de polarité, niveau 2 et 3).
+
+**Les queues comme rejets.** Une queue longue de la veille (une exploration rapide rejetée) est un niveau où des ordres ont été absorbés ; son extrême est une cible de sweep (niveau 3) et un stop naturel au-delà.
+
+Ce que ces usages ne font pas : donner une entrée. Le profil est un **contexte** et une **carte de niveaux** ; l'entrée vient de la structure, des séquences SMC et, au chapitre 3 de ce niveau, du footprint. Le profil dit où regarder ; il ne dit pas quand cliquer.
+
+<Figure caption="Figure 4 · Ouverture par rapport à la value area de la veille : dans la VA (rotation), au-dessus avec retour (rejet, retour au POC), au-dessus avec acceptation (nouvelle valeur, biais haussier). Le juge est le volume construit dans la première heure.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Trois scénarios d'ouverture par rapport à la value area de la veille" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="110" width="200" height="70" className="gold" opacity="0.15" />
+  <line x1="40" y1="110" x2="240" y2="110" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><line x1="40" y1="180" x2="240" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><line x1="40" y1="145" x2="240" y2="145" stroke="var(--tm-gold)" strokeWidth="1" />
+  <text x="140" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Ouverture dans la VA</text>
+  <polyline points="50,140 80,125 110,160 140,115 170,170 200,140 230,150" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="140" y="240" fontSize="9" textAnchor="middle" className="muted">rotation : VAL acheté, VAH vendu, POC visité</text>
+
+  <rect x="270" y="110" width="200" height="70" className="gold" opacity="0.15" />
+  <line x1="270" y1="110" x2="470" y2="110" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><line x1="270" y1="180" x2="470" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><line x1="270" y1="145" x2="470" y2="145" stroke="var(--tm-gold)" strokeWidth="1" />
+  <text x="370" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Au-dessus, rejetée</text>
+  <polyline points="280,80 300,70 320,90 340,105 360,125 380,150 400,140 420,160 440,148 460,155" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="370" y="240" fontSize="9" textAnchor="middle" className="muted">pas d'acceptation : retour dans la VA, vers le POC</text>
+
+  <rect x="500" y="110" width="200" height="70" className="gold" opacity="0.15" />
+  <line x1="500" y1="110" x2="700" y2="110" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><line x1="500" y1="180" x2="700" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><line x1="500" y1="145" x2="700" y2="145" stroke="var(--tm-gold)" strokeWidth="1" />
+  <text x="600" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Au-dessus, acceptée</text>
+  <polyline points="510,85 530,75 550,90 570,80 590,95 610,70 630,85 650,60 670,72 690,50" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="640" y="55" width="50" height="40" fill="none" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="600" y="240" fontSize="9" textAnchor="middle" className="muted">volume construit au-dessus : le VAH devient support</text>
+</svg>
+</Figure>
+
+## Deux trades sur le profil de la veille
+
+Reconstitutions pédagogiques : la même ouverture, deux lectures.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Short"
+  setup="Ouverture au-dessus de la value area de la veille sans acceptation (première demi-heure sous volume, retour sous le VAH), vente du retest du VAH, cible POC"
+  entree="5 293,25 (retest du VAH 5 293 par-dessous)"
+  stop="5 297,25 (16 ticks, au-dessus du plus haut de l'ouverture)"
+  objectif="5 290,00 (POC de la veille), puis 5 287,00 (VAL)"
+  r="+0,8R et +1,6R sur deux tranches, ≈ +1,2R sur la position">
+
+Profil de la veille : POC 5 290, VAH 5 293, VAL 5 287 (l'exemple du chapitre). Ouverture à 5 296, dans la queue haute. Première demi-heure : le prix monte à 5 297 sur volume faible, ne construit rien au-dessus du VAH, redescend et clôture M15 sous 5 293. Le VAH n'a pas été accepté : scénario de retour dans la value area. Entrée sur le retest de 5 293 par-dessous, stop au-dessus du plus haut de l'ouverture. Première cible le POC (retour à la valeur, +0,8R sur la moitié de la position), seconde le VAL (+1,6R sur l'autre moitié) : un ratio modeste, typique d'un trade de rotation intraday, compensé par un taux de réussite élevé quand le rejet est confirmé. Ce que le profil a apporté : un scénario avant l'ouverture, un niveau d'entrée (VAH), une cible (POC) et un stop (l'extrême rejeté). L'exécution reste celle du niveau 3.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Short"
+  setup="Vente de l'ouverture « parce qu'elle est au-dessus de la value area », sans attendre le rejet ; l'ouverture est acceptée"
+  entree="5 296,00 (au marché à l'ouverture)"
+  stop="5 300,00 (16 ticks)"
+  objectif="5 290,00"
+  r="−1R">
+
+Autre séance, même configuration d'ouverture au-dessus de la value area. Ce trader vend à l'ouverture, en appliquant « au-dessus de la VA, ça revient au POC » comme une règle mécanique. Cette fois, la première demi-heure construit du volume entre 5 296 et 5 300 (le profil de la séance en cours forme déjà une bosse au-dessus du VAH de la veille) : acceptation. Le prix ne revient pas ; il monte à 5 306. Le profil disait « deux scénarios, le volume de la première heure juge » ; il en a lu un seul, avant le juge. Le profil est une carte, pas un signal.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **profil de volume** projette le volume sur l'axe des prix : il montre où le marché a **négocié** (bosses) et où il a **traversé** (queues), ce que l'histogramme temporel ne montre pas.
+- **POC** : prix le plus échangé, aimant et pivot ; **value area** : ~70 % du volume autour du POC, bornée par **VAH** et **VAL** ; **queues** : rejets.
+- Les **formes** se lisent avant les niveaux : D (équilibre), P et b (mouvement puis acceptation), double distribution (migration), tendance (pas d'équilibre).
+- **Un profil par question** : session (niveaux du lendemain), range (valeur d'un mouvement), composite (contexte, chapitre suivant).
+- Premiers usages : **ouverture par rapport à la VA de la veille** (dans, au-dessus ou en dessous, avec le volume de la première heure comme juge), POC aimant et pivot, VAH / VAL comme frontières accepté / rejeté. Le profil est une carte et un contexte, jamais une entrée.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Calculer POC et value area">
+
+Profil de session sur MNQ, volume par tranche de 5 points (contrats) : 18 300 : 40 · 18 305 : 90 · 18 310 : 160 · 18 315 : 260 · 18 320 : 410 · 18 325 : 520 · 18 330 : 480 · 18 335 : 350 · 18 340 : 210 · 18 345 : 120 · 18 350 : 60 · 18 355 : 30.
+
+1. Calculez le volume total et le POC.
+2. Déterminez la value area (VAL, VAH) en ajoutant les niveaux adjacents au POC par ordre décroissant de volume jusqu'à environ 70 %.
+3. Le lendemain ouvre à 18 348. Écrivez les deux scénarios et le critère qui les départage.
+
+<Solution>
+
+1. Total : 40 + 90 + 160 + 260 + 410 + 520 + 480 + 350 + 210 + 120 + 60 + 30 = **2 730**. POC : **18 325** (520).
+2. Cible : 70 % × 2 730 = 1 911. 520 (18 325) + 480 (18 330) = 1 000 ; + 410 (18 320) = 1 410 ; + 350 (18 335) = 1 760 ; + 260 (18 315) = 2 020, soit 74 % (au-delà de 70 %, on s'arrête ici selon la convention la plus courante ; certaines plateformes s'arrêtent à 1 760, 64,5 %). Value area : **VAL 18 315, VAH 18 335** (ou 18 320-18 335 en convention stricte). Ce qui compte : le POC à 18 325 et une VA d'environ 18 315-18 335.
+3. Ouverture à 18 348, **au-dessus de la VA** (dans la queue haute). Scénario A : pas d'acceptation dans la première heure (volume faible au-dessus de 18 335, retour sous le VAH) → retour dans la VA, cible POC 18 325 ; entrée sur le retest de 18 335 par-dessous. Scénario B : acceptation (le profil de la séance construit une bosse au-dessus de 18 335) → nouvelle valeur plus haute, biais haussier, 18 335 devient support. Le critère : le **volume construit au-dessus du VAH dans la première heure**.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire une forme">
+
+Trois profils de session sur l'or : (a) une bosse symétrique entre 2 372 et 2 384, POC 2 378, queues courtes ; (b) une bosse entre 2 388 et 2 396 avec POC 2 392, et une queue fine de 2 366 à 2 388 ; (c) deux bosses, l'une 2 360-2 368 (POC 2 364), l'autre 2 382-2 390 (POC 2 386), presque rien entre 2 368 et 2 382.
+
+1. Nommez chaque forme et dites ce que la séance a fait.
+2. Pour chacune, quel est le niveau le plus important pour le lendemain, et pourquoi ?
+3. Dans le cas (c), que se passe-t-il probablement si le prix entre dans la zone 2 368-2 382 ?
+
+<Solution>
+
+1. **(a) Profil en D** : séance d'équilibre, rotation autour de 2 378. **(b) Profil en P** : hausse rapide (queue de 22 $) puis acceptation en haut ; les acheteurs ont poussé et le marché a accepté. **(c) Double distribution** : valeur construite en bas, migration brutale (annonce ou cassure), nouvelle valeur en haut, vide entre les deux.
+2. (a) : le **POC 2 378** (aimant et pivot) et les bornes de la VA (2 372 / 2 384) comme zones de réaction. (b) : le **VAL du P** (vers 2 388), support de la nouvelle valeur ; s'il cède, la queue se retraverse vite. (c) : les **deux POC** (2 364 et 2 386) et surtout le **LVN** entre les bosses : c'est la frontière entre les deux valeurs.
+3. Le LVN est un vide : le prix le **traverse vite**, dans un sens ou dans l'autre, jusqu'à la bosse suivante. On n'y cherche pas d'entrée ; on y place au contraire des cibles (le bord de la bosse opposée) et on évite les stops à l'intérieur (ils seront traversés d'un coup).
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Profil et séquence SMC">
+
+Un range d'accumulation H4 sur l'ES entre 5 180 et 5 240 a été traversé à la hausse par un displacement laissant un FVG H4 entre 5 246 et 5 254. Le profil de range montre : POC 5 212, HVN à 5 200 et 5 226, LVN à 5 218 et 5 236, presque aucun volume au-dessus de 5 240.
+
+1. Où le FVG se situe-t-il par rapport au profil, et qu'est-ce que cela confirme ?
+2. Si le prix revient dans le range, où sont les zones de réaction et les zones de traversée ?
+3. Où placeriez-vous une cible de repli maximal acceptable pour un long pris au retour dans le FVG ?
+
+<Solution>
+
+1. Le FVG (5 246-5 254) est **au-dessus du range, dans une zone sans volume** : le displacement a traversé un vide, ce que la définition du FVG dit déjà (échange d'un seul côté) et que le profil confirme (aucun HVN là). Le FVG est un LVN : le prix y reviendra vite s'il y revient, et réagira au premier HVN en dessous s'il traverse.
+2. **Réaction** : les HVN (5 226, 5 200) et le POC (5 212) : le marché y a négocié, des ordres y restent. **Traversée** : les LVN (5 236, 5 218) : le prix les franchit d'un coup ; ce sont de mauvais endroits pour un stop, de bons endroits pour une cible intermédiaire.
+3. Le **HVN à 5 226** ou, plus prudent, le **POC 5 212** : si le prix retraverse le FVG et le LVN 5 236, il devrait ralentir sur 5 226 ; sous le POC, l'idée d'une sortie acceptée du range est très affaiblie. Le stop du long dans le FVG se place au-delà du HVN 5 226 avec marge, ou plus serré sous le FVG selon la méthode (niveau 3), mais **jamais dans le LVN 5 236**.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le volume profile montre :",
+      options: [
+        "Le volume par bougie dans le temps",
+        "Le volume échangé à chaque prix sur une période, projeté à l'horizontale",
+        "Le nombre de participants",
+        "L'open interest",
+      ],
+      answer: 1,
+      explain: "Il distingue les prix où le marché a négocié (bosses) de ceux qu'il a traversés (queues), ce que l'histogramme temporel ne montre pas.",
+    },
+    {
+      q: "Le POC est :",
+      options: [
+        "Le prix d'ouverture",
+        "Le prix qui a échangé le plus de volume sur la période ; il attire le prix et sert de pivot",
+        "Le plus haut de la séance",
+        "Le milieu de la fourchette",
+      ],
+      answer: 1,
+      explain: "C'est le prix jugé le plus « juste » pendant la période. Il est souvent retesté et fait office de pivot intraday.",
+    },
+    {
+      q: "La value area contient environ :",
+      options: [
+        "50 % du volume",
+        "70 % du volume, autour du POC, bornée par le VAH et le VAL",
+        "100 % du volume",
+        "Le volume de la première heure",
+      ],
+      answer: 1,
+      explain: "Convention issue de la statistique (un écart-type ≈ 68 %). VAH et VAL marquent la frontière entre accepté et rejeté.",
+    },
+    {
+      q: "Un profil en P signifie :",
+      options: [
+        "Une séance d'équilibre",
+        "Une hausse rapide (queue basse) puis une acceptation des prix hauts (bosse en haut)",
+        "Une baisse",
+        "Une double distribution",
+      ],
+      answer: 1,
+      explain: "Le b est le miroir. Le VAL du P est le support de la nouvelle valeur ; s'il cède, la queue se retraverse vite.",
+    },
+    {
+      q: "Le marché ouvre au-dessus de la value area de la veille. La lecture correcte est :",
+      options: [
+        "Vendre immédiatement, ça revient toujours au POC",
+        "Deux scénarios (retour dans la VA si pas d'acceptation, nouvelle valeur si acceptation) ; le volume construit dans la première heure juge",
+        "Acheter immédiatement",
+        "Sans signification",
+      ],
+      answer: 1,
+      explain: "Le profil est une carte et un contexte, pas un signal. Vendre l'ouverture mécaniquement, c'est lire un scénario sur deux avant le juge.",
+    },
+    {
+      q: "Un LVN (low volume node) est :",
+      options: [
+        "Un bon endroit pour un stop",
+        "Une zone traversée vite : bon endroit pour une cible intermédiaire, mauvais pour un stop",
+        "Le POC",
+        "Une zone d'entrée",
+      ],
+      answer: 1,
+      explain: "Le marché n'y a pas négocié ; il la franchit d'un coup dans les deux sens. Les FVG du niveau 3 correspondent souvent à des LVN.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le profil de session et le profil de range sont posés. Le chapitre suivant élargit la période et affine la lecture : profils composites sur plusieurs semaines, naked POC et niveaux résiduels, migration de la value area comme lecture de tendance, profils d'événements (annonces, ouvertures, expirations), et l'intégration du profil à la structure et aux séquences SMC.
