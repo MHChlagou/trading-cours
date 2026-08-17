@@ -1,0 +1,314 @@
+---
+title: "Calendrier économique et news"
+description: "Hiérarchiser les publications selon ce qui bouge vraiment les prix, l'anatomie du CPI, du NFP et du FOMC, les deux écoles (trader les news ou s'en protéger), le comportement type du prix autour des annonces, et un protocole news écrit et non négociable."
+---
+
+# Calendrier économique et news
+
+Les trois chapitres précédents ont expliqué pourquoi les données et les banques centrales font bouger les marchés. Celui-ci s'occupe du **quand** et du **comment** : quelles publications comptent réellement, à quoi ressemble une grande annonce minute par minute, ce que font les traders qui les tradent et ceux qui s'en protègent, comment le prix se comporte avant, pendant et après, et surtout quelles règles écrire pour ne jamais être surpris. Le calendrier économique est l'outil le moins glamour du cours ; c'est aussi celui qui évite le plus de pertes stupides.
+
+## Hiérarchiser les publications : ce qui bouge vraiment les prix
+
+Un calendrier économique liste des dizaines d'événements par jour, avec un indicateur d'importance à trois niveaux. Cette classification générique est un point de départ ; le trader la remplace par une hiérarchie propre à ses marchés et au moment.
+
+**Niveau 1 : les publications qui déplacent tous les marchés de ce cours.** Le **CPI** américain, le **NFP**, les **décisions du FOMC** (et la conférence de presse), le **PCE core** (moins souvent surprenant mais c'est la mesure de la Fed). À ces quatre s'ajoutent, selon les périodes, le **PIB** (première estimation) et l'**ISM** (surtout quand la croissance est la préoccupation), et les **décisions de la BCE** pour l'euro et de la **BoJ** pour le yen. Sur ces événements, la volatilité est multipliée par plusieurs pendant les minutes qui suivent, le carnet se vide avant (niveau 0), et la séance entière prend souvent sa direction là.
+
+**Niveau 2 : les publications qui déplacent un marché ou nuancent le contexte.** Les inscriptions hebdomadaires au chômage, les ventes au détail, le PPI, la confiance des consommateurs (Michigan, avec ses anticipations d'inflation), les JOLTS, les stocks de pétrole hebdomadaires (pour le pétrole : le rapport de l'EIA le mercredi), les minutes du FOMC, les discours du président de la Fed. Volatilité réelle mais plus courte ; parfois un simple sursaut.
+
+**Niveau 3 : le bruit de fond.** Les indices régionaux, les mises en chantier, les commandes de biens durables (sauf surprise), la plupart des discours de membres, les données secondaires des autres pays. On les note pour ne pas être surpris par un pic de trois ticks ; on ne construit rien dessus.
+
+Trois règles pour hiérarchiser soi-même :
+
+1. **La hiérarchie suit la préoccupation de la banque centrale** (chapitre 1 de ce niveau) : quand l'inflation domine, le CPI et le PCE montent d'un cran et le NFP compte surtout par ses salaires ; quand l'emploi domine, c'est l'inverse.
+2. **La hiérarchie dépend du marché tradé** : le trader de pétrole met le rapport EIA au niveau 1 ; le trader d'EUR/USD met la BCE et l'inflation de la zone euro au niveau 1 ; le trader d'or surveille en priorité ce qui bouge les taux réels et le dollar.
+3. **La surprise fait l'importance** : une donnée de niveau 2 qui sort très loin du consensus déplace plus qu'une donnée de niveau 1 conforme. La hiérarchie dit où placer sa vigilance ; la surprise dit ce qui a bougé.
+
+<Figure caption="Figure 1 · Une semaine type sur le calendrier, hiérarchisée pour un trader d'indices et d'or : trois événements de niveau 1 structurent la semaine ; les niveaux 2 nuancent ; le reste est noté et ignoré.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Semaine type du calendrier économique hiérarchisée" xmlns="http://www.w3.org/2000/svg">
+  <text x="100" y="30" fontSize="12" fontWeight="600" textAnchor="middle">Lundi</text>
+  <text x="230" y="30" fontSize="12" fontWeight="600" textAnchor="middle">Mardi</text>
+  <text x="360" y="30" fontSize="12" fontWeight="600" textAnchor="middle">Mercredi</text>
+  <text x="490" y="30" fontSize="12" fontWeight="600" textAnchor="middle">Jeudi</text>
+  <text x="620" y="30" fontSize="12" fontWeight="600" textAnchor="middle">Vendredi</text>
+  <line x1="40" y1="40" x2="700" y2="40" className="line" strokeWidth="1" />
+  <rect x="50" y="60" width="100" height="26" rx="4" className="box" strokeWidth="1" /><text x="100" y="77" fontSize="9" textAnchor="middle" className="muted">16 h ISM manuf. (2)</text>
+  <rect x="180" y="60" width="100" height="26" rx="4" className="box" strokeWidth="1" /><text x="230" y="77" fontSize="9" textAnchor="middle" className="muted">16 h JOLTS (2)</text>
+  <rect x="310" y="60" width="100" height="26" rx="4" className="gold" opacity="0.9" /><text x="360" y="77" fontSize="9" textAnchor="middle" fill="#141414" fontWeight="600">14 h 30 CPI (1)</text>
+  <rect x="310" y="96" width="100" height="26" rx="4" className="box" strokeWidth="1" /><text x="360" y="113" fontSize="9" textAnchor="middle" className="muted">16 h 30 stocks EIA (2)</text>
+  <rect x="440" y="60" width="100" height="26" rx="4" className="box" strokeWidth="1" /><text x="490" y="77" fontSize="9" textAnchor="middle" className="muted">14 h 30 claims (2)</text>
+  <rect x="440" y="96" width="100" height="26" rx="4" className="gold" opacity="0.9" /><text x="490" y="113" fontSize="9" textAnchor="middle" fill="#141414" fontWeight="600">20 h FOMC (1)</text>
+  <rect x="440" y="132" width="100" height="26" rx="4" className="gold" opacity="0.6" /><text x="490" y="149" fontSize="9" textAnchor="middle" fill="#141414">20 h 30 conférence</text>
+  <rect x="570" y="60" width="100" height="26" rx="4" className="gold" opacity="0.9" /><text x="620" y="77" fontSize="9" textAnchor="middle" fill="#141414" fontWeight="600">14 h 30 NFP (1)</text>
+  <rect x="570" y="96" width="100" height="26" rx="4" className="box" strokeWidth="1" /><text x="620" y="113" fontSize="9" textAnchor="middle" className="muted">16 h Michigan (2)</text>
+  <text x="100" y="200" fontSize="9" textAnchor="middle" className="muted">discours Fed (3)</text>
+  <text x="230" y="200" fontSize="9" textAnchor="middle" className="muted">indices régionaux (3)</text>
+  <text x="360" y="200" fontSize="9" textAnchor="middle" className="muted">mises en chantier (3)</text>
+  <text x="620" y="200" fontSize="9" textAnchor="middle" className="muted">discours (3)</text>
+  <rect x="40" y="230" width="660" height="50" rx="6" className="box" strokeWidth="1" />
+  <text x="370" y="250" fontSize="10" textAnchor="middle">Niveau 1 : la séance prend sa direction là ; protocole news strict. Niveau 2 : vigilance, taille adaptée. Niveau 3 : noté, ignoré.</text>
+  <text x="370" y="268" fontSize="10" textAnchor="middle" className="muted">heures de Paris (été) ; la hiérarchie change avec la préoccupation de la banque centrale et le marché tradé</text>
+</svg>
+</Figure>
+
+## CPI, NFP, FOMC : anatomie des grandes annonces
+
+**Le CPI (indice des prix à la consommation).** Publié par le BLS vers le milieu du mois, à 8 h 30 heure de New York (14 h 30 à Paris en été). Ce que le marché lit en trente secondes : le CPI global en variation mensuelle et annuelle, le **core CPI** (hors énergie et alimentation) mensuel et annuel. La surprise se mesure sur le core mensuel d'abord (0,1 point d'écart au consensus est déjà une surprise), puis sur l'annuel. Ce que les tables regardent ensuite : les services hors logement (le « supercore », suivi par la Fed), le logement (une composante lourde et lente), l'énergie. Réaction typique : un CPI plus fort que prévu → futures de taux qui retirent des baisses, dollar ↑, ES et NQ ↓, or ↓, avec des mouvements de 0,5 à 1,5 % sur les indices selon la surprise. La direction se stabilise en général dans les 20 à 40 minutes ; les inversions arrivent quand la composition contredit le titre.
+
+**Le NFP (créations d'emplois non agricoles).** Le premier vendredi du mois, 14 h 30 (Paris, été). Trois chiffres à la fois : les créations d'emplois (le titre), le **taux de chômage**, les **salaires horaires moyens** (mensuel et annuel), plus les **révisions** des deux mois précédents, souvent importantes. C'est l'annonce où le second chiffre contredit le plus souvent le premier : un NFP fort avec des salaires faibles, un NFP faible avec un chômage stable. Réaction typique : NFP fort → taux ↑, dollar ↑, indices ↓ (en phase d'inflation) ; mais un NFP très faible peut faire baisser les indices aussi (peur de récession) : la grille du chapitre 1 se prépare selon la phase. La volatilité est maximale sur les indices, le dollar et l'or ; le mouvement de la première heure est souvent retracé en partie avant que la tendance de la journée ne s'installe.
+
+**Le FOMC.** Huit fois par an, un mercredi, 20 h (Paris, été) pour la décision et le communiqué, 20 h 30 pour la conférence de presse. Le chapitre 2 a décrit le mécanisme : la décision est dans le prix, la guidance surprend ; la conférence inverse souvent la première réaction. Anatomie d'une soirée : 19 h 45-20 h, le carnet se vide, le prix se fige ; 20 h 00, réaction 1 (10 à 30 points sur l'ES en secondes) ; 20 h 30-21 h 15, réaction 2 au fil des réponses du président ; 21 h 15-22 h, la digestion ; le lendemain, la tendance fiable. Les jours de projections (dot plot), la volatilité est supérieure.
+
+Trois annonces qui ont chacune une signature : le CPI est un choc net dont la direction tient si la composition confirme ; le NFP est un choc à plusieurs chiffres dont la première réaction se retrace souvent ; le FOMC est un événement en deux temps dont le second contredit fréquemment le premier. Connaître ces signatures évite de prendre pour un retournement ce qui n'est qu'un mécanisme.
+
+## Trader les news ou s'en protéger : deux écoles
+
+Il existe deux façons cohérentes de traiter les annonces, et une incohérente.
+
+**L'école de la protection.** On ne trade pas les annonces de niveau 1 : aucune position ouverte quelques minutes avant, aucune entrée pendant, et l'on attend que la poussière retombe (20 à 40 minutes) pour revenir avec la lecture des niveaux 2 à 4. Ses arguments : la liquidité disparaît (niveau 0), le slippage explose, les stops sont exécutés loin, la direction des premières minutes est aléatoire pour un particulier sans accès aux données au millième de seconde, et l'avantage technique n'existe pas dans un carnet vide. C'est l'école recommandée par ce cours pour tout trader qui n'a pas de raison précise de faire autrement.
+
+**L'école du trade de news.** Elle se subdivise. Le **trading de la surprise** entre au marché dans les secondes qui suivent, dans le sens de la surprise : c'est le domaine des algorithmes et de quelques traders très spécialisés, avec des flux de données directs ; pour un particulier, le slippage mange l'avantage. Le **trading du retour** (que le chapitre 1 a décrit) attend le displacement post-annonce et entre sur le retour dans les zones laissées, dans le sens confirmé par les taux : c'est en réalité une variante de l'école de la protection, avec un plan précis pour la reprise, et c'est ce que le cours propose. Le **fade** vend l'exagération de la première réaction quand elle contredit la composition ou le positionnement : plus risqué, réservé à qui a une lecture solide de la donnée et du positionnement, avec des stops larges.
+
+**L'incohérence** : garder une position ouverte avec un stop serré à travers une annonce de niveau 1 « parce que la structure est bonne », ou entrer au marché à 14 h 31 « parce que le chiffre est bon ». C'est ne choisir ni la protection ni le trade de news, et payer les inconvénients des deux : le slippage et le hasard.
+
+La règle pratique pour choisir : un trader qui ne peut pas écrire à l'avance **ce qu'il fera dans chacun des trois cas** (surprise haussière, conforme, surprise baissière), avec des prix et des tailles, appartient à l'école de la protection. Celui qui le peut, et qui a mesuré sur son historique que ses trades post-annonce ont une expectancy positive nette de slippage, peut trader le retour. Personne ne devrait trader la seconde de la publication au marché.
+
+## Le comportement type du prix autour des annonces
+
+Le prix a des habitudes autour des grandes publications ; elles ne sont pas des lois mais des tendances observables sur les futures.
+
+**Avant.** Dans l'heure qui précède une annonce de niveau 1, le prix se **contracte** (niveau 2 : la volatilité baisse, les bougies rétrécissent) : les participants attendent, les market makers réduisent leur exposition. Souvent, un range étroit se forme, avec des EQH et EQL de part et d'autre : la liquidité s'empile pour être prise. Dans les cinq dernières minutes, le carnet se vide et le spread s'écarte.
+
+**Pendant (les premières secondes).** Un **displacement** brutal dans le sens de la surprise, sur un carnet vide : dix à trente points d'ES en une bougie de cinq secondes, avec des trous de prix. Le prix traverse les EQH ou les EQL du range de pré-annonce (le sweep, niveau 3), déclenche les stops, et va souvent chercher la liquidité de l'autre côté aussi (un aller-retour, le « whipsaw ») avant de prendre sa direction. C'est pendant ce whipsaw que les positions ouvertes avec stops serrés sont exécutées, dans les deux sens.
+
+**Après (5 à 40 minutes).** Le prix trouve une direction ; il laisse derrière lui des FVG, un LVN au niveau du displacement (niveau 4), et souvent un retour partiel vers le range de pré-annonce ou vers le premier FVG, avant de continuer. Ce retour est le moment que l'école du trade de retour attend. La direction qui s'installe après trente minutes tient souvent pour le reste de la séance ; les inversions complètes existent (composition contraire au titre, positionnement extrême, seconde publication) et se reconnaissent à un second displacement contraire qui traverse le premier.
+
+**Le jour d'après.** Le lendemain d'un FOMC ou d'un NFP, le marché digère : la tendance de la veille se poursuit ou se corrige, mais avec de la liquidité et une structure lisible ; c'est là que la plupart des bons trades « macro » se prennent.
+
+<Figure caption="Figure 2 · Anatomie d'une annonce sur l'ES en M1 : contraction et range pré-annonce, whipsaw dans les deux sens sur carnet vide (les stops serrés sautent), displacement dans le sens de la surprise, retour dans le FVG, continuation. L'entrée cohérente est sur le retour, pas dans le whipsaw.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Comportement type du prix autour d'une annonce" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <text x="150" y="308" fontSize="10" textAnchor="middle" className="muted">14 h 00 - 14 h 29</text>
+  <text x="330" y="308" fontSize="10" textAnchor="middle" className="muted">14 h 30</text>
+  <text x="520" y="308" fontSize="10" textAnchor="middle" className="muted">14 h 35 - 15 h 10</text>
+  <polyline points="50,160 80,150 110,165 140,152 170,160 200,155 230,158 260,156 285,157 300,150 310,120 318,190 326,105 334,175 342,95 350,110 365,80 380,90 400,120 420,135 440,125 460,110 480,90 520,70 560,60 600,45 660,30" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="50" y1="148" x2="300" y2="148" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="56" y="144" fontSize="9" className="red">EQH pré-annonce</text>
+  <line x1="50" y1="166" x2="300" y2="166" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="56" y="180" fontSize="9" className="green">EQL pré-annonce</text>
+  <rect x="300" y="90" width="55" height="105" className="red" opacity="0.1" />
+  <text x="327" y="215" fontSize="9" textAnchor="middle" className="red" fontWeight="600">whipsaw : les deux</text>
+  <text x="327" y="228" fontSize="9" textAnchor="middle" className="red" fontWeight="600">côtés sont balayés</text>
+  <rect x="380" y="112" width="40" height="18" className="gold" opacity="0.3" /><text x="400" y="108" fontSize="9" textAnchor="middle" className="gold">FVG</text>
+  <circle cx="420" cy="135" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="450" y="155" fontSize="9" className="green" fontWeight="600">retour : l'entrée cohérente</text>
+  <text x="600" y="90" fontSize="9" textAnchor="middle" className="muted">direction installée : continuation</text>
+  <text x="150" y="130" fontSize="9" textAnchor="middle" className="muted">contraction, liquidité qui s'empile</text>
+</svg>
+</Figure>
+
+## Un protocole news écrit et non négociable
+
+Voici le protocole que ce cours recommande, à recopier dans son plan de trading et à ne modifier qu'à froid, jamais en séance.
+
+**1. Le calendrier est vérifié chaque matin**, heure locale, avec le niveau d'importance propre à mes marchés et le consensus des événements de niveau 1 et 2. Sans cette vérification, pas de trade.
+
+**2. Annonces de niveau 1 (CPI, NFP, FOMC, PCE, BCE / BoJ selon le marché) :**
+- Aucune nouvelle position dans les **15 minutes** qui précèdent.
+- Toute position ouverte est soit **fermée**, soit **réduite à une taille dont le pire slippage raisonnable ne dépasse pas 1R**, avec un stop élargi en conséquence et une taille divisée d'autant ; le choix est écrit dans le plan (la plupart des intraday ferment ; certains swing traders réduisent).
+- Aucun ordre au marché entre la publication et **+5 minutes**.
+- Aucune entrée avant **+20 minutes** au plus tôt, et seulement sur une séquence complète (niveau 3) dans le sens confirmé par les futures de taux et le dollar, avec un stop hors des zones balayées par le whipsaw.
+- Pour le FOMC : rien entre 19 h 45 et la fin de la conférence ; lecture, note du biais ; trade éventuel le lendemain.
+
+**3. Annonces de niveau 2 :** pas de nouvelle position dans les 5 minutes qui précèdent ; positions ouvertes gardées si le stop est structurel et à plus de 0,5 ATR M15 ; taille normale après.
+
+**4. Annonces de niveau 3 :** notées, ignorées ; un pic de trois ticks n'est pas un signal.
+
+**5. La grille de réaction** des annonces de niveau 1 est écrite la veille (chapitre 1 de ce niveau) ; le soir, la surprise, la réaction et la justesse de la grille sont notées au journal.
+
+**6. Les annonces non programmées** (déclarations surprises, événements géopolitiques, interventions de change) : à la première alerte, réduction ou fermeture des positions dont la thèse est concernée ; pas de trade tant que la volatilité n'est pas retombée à un niveau où le stop structurel a un sens ; lecture ensuite.
+
+**7. Ce protocole ne se discute pas en séance.** Un setup « parfait » à 14 h 25 est un setup qui attend 14 h 55. Une position « en gain » à 19 h 50 un jour de FOMC est une position dont le gain est sécurisé (stop remonté au-delà du breakeven avec marge de whipsaw) ou fermée.
+
+Ce protocole coûte des trades : quelques bons mouvements pris en pleine annonce seront manqués. Il économise davantage : les stops exécutés à 20 ticks dans le whipsaw, les positions retournées, les journées perdues à 14 h 31. Le niveau 1 avait donné le principe (le contrôle porte sur l'entrée, le stop et la taille) ; le protocole news est ce principe appliqué aux moments où le marché retire tout contrôle.
+
+<Figure caption="Figure 3 · Le protocole news résumé sur la ligne du temps d'une annonce de niveau 1 : fenêtres interdites, actions obligatoires, fenêtre d'entrée. Écrit dans le plan, appliqué sans exception.">
+<svg className="tm-svg" viewBox="0 0 720 240" role="img" aria-label="Ligne de temps du protocole news" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="120" x2="700" y2="120" className="line" strokeWidth="2" />
+  <line x1="180" y1="105" x2="180" y2="135" className="line" strokeWidth="2" /><text x="180" y="98" fontSize="10" textAnchor="middle" className="muted">−15 min</text>
+  <line x1="330" y1="100" x2="330" y2="140" stroke="var(--tm-red)" strokeWidth="3" /><text x="330" y="92" fontSize="11" textAnchor="middle" fontWeight="700" className="red">publication</text>
+  <line x1="400" y1="105" x2="400" y2="135" className="line" strokeWidth="2" /><text x="400" y="98" fontSize="10" textAnchor="middle" className="muted">+5 min</text>
+  <line x1="520" y1="105" x2="520" y2="135" className="line" strokeWidth="2" /><text x="520" y="98" fontSize="10" textAnchor="middle" className="muted">+20 min</text>
+  <rect x="180" y="150" width="150" height="26" rx="4" className="red" opacity="0.2" /><text x="255" y="167" fontSize="9" textAnchor="middle">aucune nouvelle position</text>
+  <rect x="180" y="182" width="150" height="26" rx="4" className="red" opacity="0.2" /><text x="255" y="199" fontSize="9" textAnchor="middle">positions : fermer ou réduire</text>
+  <rect x="330" y="150" width="70" height="26" rx="4" className="red" opacity="0.4" /><text x="365" y="167" fontSize="9" textAnchor="middle" fill="#ffffff">aucun ordre</text>
+  <rect x="400" y="150" width="120" height="26" rx="4" className="gold" opacity="0.2" /><text x="460" y="167" fontSize="9" textAnchor="middle">lecture : surprise, taux, dollar</text>
+  <rect x="520" y="150" width="170" height="26" rx="4" className="green" opacity="0.25" /><text x="605" y="167" fontSize="9" textAnchor="middle">entrée possible : séquence complète,</text>
+  <rect x="520" y="182" width="170" height="26" rx="4" className="green" opacity="0.25" /><text x="605" y="199" fontSize="9" textAnchor="middle">sens confirmé, stop hors whipsaw</text>
+  <text x="120" y="60" fontSize="10" textAnchor="middle" className="muted">matin : calendrier vérifié,</text>
+  <text x="120" y="74" fontSize="10" textAnchor="middle" className="muted">grille écrite la veille</text>
+  <text x="600" y="60" fontSize="10" textAnchor="middle" className="muted">soir : surprise, réaction,</text>
+  <text x="600" y="74" fontSize="10" textAnchor="middle" className="muted">justesse de la grille au journal</text>
+</svg>
+</Figure>
+
+## Deux trades le jour d'un NFP
+
+Reconstitutions pédagogiques : la même publication, deux protocoles.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="NFP nettement sous le consensus avec salaires faibles (surprise dovish nette), taux et dollar en baisse immédiate (cohérent) ; protocole appliqué : rien avant +20 min ; entrée sur le retour dans le FVG M5 du displacement haussier, stop sous la mèche basse du whipsaw"
+  entree="18 442,00"
+  stop="18 414,00 (28 pts, sous le bas du whipsaw + marge)"
+  objectif="18 526,00 (PDH et nPOC)"
+  r="+3R">
+
+Grille écrite la veille : « NFP ≤ 130 000 avec salaires ≤ 0,2 % : dovish, biais haussier indices ; ≥ 230 000 : hawkish, biais baissier ; entre : pas de biais macro. » Publié : 105 000, salaires +0,1 %, révisions négatives. Futures de taux : +12 pb de baisse intégrés ; DXY −0,6 % : cohérent. Le trader n'a rien fait pendant le whipsaw (18 405-18 470 en trois minutes) ni les 20 minutes suivantes. À 14 h 55, retour dans le FVG M5 laissé par le displacement (18 438-18 446), M5 qui se réaligne : entrée, stop sous le bas du whipsaw. Cible : la liquidité au-dessus. Le trade était écrit avant le chiffre ; le chiffre a choisi la ligne de la grille ; le protocole a fixé l'heure.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Position longue prise à 14 h 10 sur un setup M5 « propre », gardée à travers le NFP avec un stop de 12 points"
+  entree="18 448,00"
+  stop="18 436,00 (12 pts), exécuté à 18 411,00 dans le whipsaw"
+  objectif="18 500,00"
+  r="−3,1R">
+
+Même matinée. Ce trader entre à 14 h 10 sur un réalignement M5 correct et garde la position « parce que le setup est bon et que le NFP sera probablement faible ». Il a raison sur le chiffre : le NFP est faible et le marché finira 80 points plus haut. Mais à 14 h 30, le whipsaw descend à 18 405 en dix secondes sur un carnet vide ; son stop à 18 436 est exécuté à 18 411 : 25 points de slippage sur un stop de 12, soit −3,1R au lieu de −1R. Puis le prix monte sans lui. Il avait le bon setup, la bonne direction, la bonne lecture macro, et il a perdu trois fois son risque : il a gardé un stop serré dans la fenêtre où le marché retire tout contrôle. Le protocole existe pour ce jour-là.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Hiérarchiser** : niveau 1 (CPI, NFP, FOMC, PCE, BCE / BoJ selon le marché) structure la séance ; niveau 2 nuance ; niveau 3 est du bruit. La hiérarchie suit la préoccupation de la banque centrale et le marché tradé ; **la surprise fait l'importance**.
+- **Signatures** : le CPI est un choc net qui tient si la composition confirme ; le NFP a plusieurs chiffres et une première réaction souvent retracée ; le FOMC est en deux temps, le second contredisant souvent le premier.
+- Deux écoles cohérentes : **se protéger** (recommandée) et **trader le retour** après le displacement, dans le sens confirmé par les taux ; l'incohérence est de garder un stop serré à travers l'annonce ou d'entrer au marché à la seconde.
+- Le prix **se contracte** avant, **balaie les deux côtés** pendant (whipsaw sur carnet vide), **prend sa direction** en 20 à 40 minutes en laissant FVG et LVN, et **digère** le lendemain.
+- Le **protocole news** est écrit, non négociable : fenêtres interdites, positions fermées ou réduites, aucun ordre au marché autour de la publication, entrée au plus tôt à +20 minutes sur séquence complète, FOMC tradé le lendemain.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Hiérarchiser sa semaine">
+
+Vous tradez MES et MGC en intraday, séance américaine. Semaine à venir : lundi ISM manufacturier ; mardi JOLTS et discours d'un gouverneur de la Fed ; mercredi CPI puis stocks de pétrole EIA ; jeudi claims, décision de la BCE, FOMC le soir avec projections ; vendredi NFP puis Michigan. Contexte : l'inflation est la préoccupation dominante.
+
+1. Classez chaque événement en niveau 1, 2 ou 3 pour vos marchés, avec un mot de justification.
+2. Quels jours et quelles heures votre protocole interdit-il d'ouvrir une position ?
+3. Un trader d'EUR/USD ferait-il le même classement ? Sur quel point diffère-t-il ?
+
+<Solution>
+
+1. **Niveau 1** : CPI (inflation dominante), FOMC avec projections (dot plot), NFP (surtout ses salaires dans ce contexte). **Niveau 2** : ISM manufacturier (croissance, mais l'inflation domine), JOLTS, claims, Michigan (ses anticipations d'inflation), BCE (pour MES et MGC : indirect via le dollar), stocks EIA (indirect pour MGC et MES, sauf choc). **Niveau 3** : le discours du gouverneur (sauf s'il est réputé pour bouger les marchés ; à surveiller sans construire dessus).
+2. Mercredi 14 h 15-14 h 50 (CPI : −15 / +20 min) ; jeudi 19 h 45 jusqu'à la fin de la conférence (FOMC), avec trade éventuel vendredi seulement ; vendredi 14 h 15-14 h 50 (NFP). Plus les 5 minutes avant chaque niveau 2 pour une nouvelle position.
+3. Non : la **BCE** monte au niveau 1 (décision et conférence, jeudi 14 h 15 et 14 h 45), l'inflation de la zone euro aussi si elle tombe cette semaine ; le CPI, le FOMC et le NFP restent au niveau 1 (l'autre moitié de la paire). Le trader d'EUR/USD a une journée de jeudi très chargée : BCE l'après-midi, FOMC le soir ; son protocole peut la déclarer journée sans trade.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Position ouverte avant une annonce">
+
+Il est 14 h 12, vous êtes long 3 MES depuis 13 h 40 avec un stop à 8 points (120 $, votre 1R) et un gain latent de 6 points. Le CPI tombe à 14 h 30. Trois options : (a) garder tel quel ; (b) fermer ; (c) réduire à 1 MES et élargir le stop à 24 points.
+
+1. Quel est le pire slippage raisonnable sur un stop de 8 points pendant le whipsaw d'un CPI, et que devient la perte en R dans le cas (a) ?
+2. Évaluez (b) et (c) selon le protocole du chapitre.
+3. Quelle option choisiriez-vous, et que faut-il avoir écrit dans le plan pour que ce choix ne soit pas pris à chaud ?
+
+<Solution>
+
+1. Un whipsaw de CPI balaie couramment 15 à 30 points sur l'ES en quelques secondes ; un stop à 8 points peut être exécuté 15 à 20 points plus bas. Perte possible : 25 à 30 points × 5 $ × 3 = 375 à 450 $, soit **3 à 4R** au lieu de 1R. Le cas (a) viole le protocole.
+2. **(b)** est conforme et simple : on encaisse +6 points (90 $, +0,75R), on revient à 14 h 55 avec la lecture. **(c)** est conforme aussi : 1 MES avec un stop à 24 points = 120 $ = 1R ; le pire slippage raisonnable (20 points au-delà) ferait −220 $, environ −1,8R, acceptable pour certains plans si la thèse est de swing ; en intraday, (b) est préférable.
+3. **(b)** pour un intraday. Le plan doit contenir la ligne : « annonce de niveau 1 : toute position intraday est fermée à −15 min ; une position swing est réduite à une taille dont le stop élargi vaut 1R ». Écrite à froid, elle s'applique sans débat à 14 h 12.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire son protocole">
+
+Rédigez votre protocole news en dix lignes maximum : calendrier, niveaux, fenêtres interdites, positions ouvertes, ordres au marché, première entrée possible, FOMC, annonces non programmées, journal. Puis relisez vos vingt derniers trades : combien ont été pris ou tenus dans une fenêtre que ce protocole interdit, et quel a été leur résultat ?
+
+<Solution>
+
+Pas de corrigé unique ; le protocole du chapitre est un modèle. La seconde partie est celle qui compte : la plupart des traders découvrent que quelques trades pris dans les fenêtres interdites (souvent des stops glissés ou des entrées de whipsaw) pèsent de façon disproportionnée sur leur relevé. Si c'est le cas, le protocole vient de gagner son coût en trades manqués. Si ce n'est pas le cas, tant mieux : il ne coûte alors presque rien.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La hiérarchie des publications :",
+      options: [
+        "Est fixe et donnée par le calendrier",
+        "Suit la préoccupation de la banque centrale et le marché tradé ; la surprise fait l'importance",
+        "Ne compte pas",
+        "Place tout au même niveau",
+      ],
+      answer: 1,
+      explain: "CPI, NFP, FOMC, PCE structurent ; une donnée de niveau 2 très loin du consensus déplace plus qu'une donnée de niveau 1 conforme.",
+    },
+    {
+      q: "La signature du FOMC est :",
+      options: [
+        "Un choc net qui tient",
+        "Un événement en deux temps (communiqué à 20 h, conférence à 20 h 30) dont le second contredit souvent le premier ; le lendemain est plus fiable",
+        "Une annonce sans volatilité",
+        "Un mouvement à 14 h 30",
+      ],
+      answer: 1,
+      explain: "La décision est dans le prix, la guidance surprend. Le soir, sweeps sur carnet mince ; le trade éventuel se prend le lendemain.",
+    },
+    {
+      q: "L'incohérence en matière de news est :",
+      options: [
+        "Se protéger",
+        "Garder un stop serré à travers une annonce de niveau 1, ou entrer au marché à la seconde de la publication",
+        "Trader le retour à +20 minutes",
+        "Écrire une grille",
+      ],
+      answer: 1,
+      explain: "C'est ne choisir ni la protection ni le trade de news, et payer les inconvénients des deux : le slippage et le hasard.",
+    },
+    {
+      q: "Le whipsaw post-annonce :",
+      options: [
+        "N'existe pas",
+        "Balaie souvent les deux côtés du range pré-annonce sur carnet vide, exécutant les stops serrés dans les deux sens, avant que la direction ne s'installe",
+        "Est le moment idéal pour entrer",
+        "Dure toute la journée",
+      ],
+      answer: 1,
+      explain: "C'est un sweep de grande taille. L'entrée cohérente est sur le retour dans les zones laissées, 20 à 40 minutes après, dans le sens confirmé par les taux.",
+    },
+    {
+      q: "Selon le protocole, la première entrée possible après une annonce de niveau 1 est :",
+      options: [
+        "À la seconde, au marché",
+        "À +20 minutes au plus tôt, sur une séquence complète, dans le sens confirmé, avec un stop hors des zones balayées",
+        "Jamais",
+        "À +1 minute",
+      ],
+      answer: 1,
+      explain: "Aucun ordre au marché entre la publication et +5 minutes ; lecture de la surprise, des taux et du dollar ; puis séquence.",
+    },
+    {
+      q: "Une position intraday ouverte à −15 minutes d'un CPI :",
+      options: [
+        "Se garde si le setup est bon",
+        "Se ferme, ou se réduit à une taille dont le stop élargi vaut 1R (choix écrit dans le plan)",
+        "Se double",
+        "Se garde avec un stop plus serré",
+      ],
+      answer: 1,
+      explain: "Le pire slippage raisonnable d'un stop serré dans le whipsaw fait 3 à 4R. Le protocole existe pour ce moment-là.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le calendrier dit quand le marché va bouger ; il ne dit pas comment il est positionné avant. Le chapitre suivant lit le rapport COT de la CFTC : commercials, large speculators, small traders, les extrêmes de positionnement et leur exploitation, la construction d'un index COT, et les limites de l'outil et son bon horizon.
