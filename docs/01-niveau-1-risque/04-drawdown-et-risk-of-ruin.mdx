@@ -1,0 +1,341 @@
+---
+title: "Drawdown et risk of ruin"
+description: "Mesurer un drawdown en profondeur et en durée, calculer les séries de pertes qu'un système promet statistiquement, comprendre les paramètres de la probabilité de ruine, dimensionner son compte et son risque en conséquence, et appliquer des règles de réduction du risque en période difficile."
+---
+
+# Drawdown et risk of ruin
+
+L'expectancy dit ce qu'un système rapporte en moyenne. Elle ne dit pas ce qu'il fait subir en chemin. Tout système, même excellent, traverse des périodes où le compte baisse pendant des semaines : c'est le drawdown. Ce chapitre le mesure, montre que les séries de pertes sont une certitude statistique et non un accident, calcule la probabilité de ruine, et en tire la question pratique : quel risque par trade et quel capital pour survivre à ce que le système fera de toute façon.
+
+## Drawdown maximal, durée et profondeur
+
+Le **drawdown** est la baisse du capital depuis son dernier plus haut. Il se mesure à chaque instant : si le compte a culminé à 6 200 € et vaut aujourd'hui 5 580 €, le drawdown courant est de 620 €, soit 10 %, soit, avec R = 60 €, un peu plus de 10R.
+
+Trois grandeurs le décrivent :
+
+- **La profondeur maximale (max drawdown)** : la plus grande baisse entre un plus haut et le plus bas qui l'a suivi, sur la période étudiée. C'est le chiffre que tout le monde regarde. Il s'exprime en pourcentage du compte ou, mieux, **en R** : c'est en R qu'il est comparable d'un compte à l'autre et qu'il se relie aux statistiques du système.
+- **La durée** : le temps entre le plus haut et le retour à un nouveau plus haut. Un drawdown de 8R résorbé en deux semaines et un drawdown de 8R qui dure quatre mois n'ont pas le même effet sur le trader, même s'ils ont la même profondeur.
+- **Le temps de récupération** : combien de trades ou de semaines il faut, à l'expectancy du système, pour revenir au plus haut. À +0,3R par trade, un drawdown de 12R demande en moyenne 40 trades pour être effacé, hors nouvelles pertes.
+
+<Figure caption="Figure 1 · Une courbe de capital en R sur 120 trades avec ses drawdowns : profondeur (verticale) et durée (horizontale). Le plus grand est le max drawdown de la période.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Courbe de capital annotée avec profondeur et durée des drawdowns" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="270" className="line" strokeWidth="1" />
+  <text x="50" y="274" fontSize="11" textAnchor="end" className="mono muted">0R</text>
+  <text x="50" y="174" fontSize="11" textAnchor="end" className="mono muted">+20R</text>
+  <text x="50" y="74" fontSize="11" textAnchor="end" className="mono muted">+40R</text>
+  <text x="380" y="300" fontSize="12" textAnchor="middle" className="muted">trades 1 à 120</text>
+
+  <polyline points="60,270 100,250 140,235 180,215 220,238 260,225 300,200 340,180 380,215 420,232 460,220 500,190 540,165 580,140 620,110 660,95 700,80" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+
+  <line x1="180" y1="215" x2="260" y2="215" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="220" y1="215" x2="220" y2="238" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="230" y="250" fontSize="11" className="red">−4,6R · 8 trades</text>
+
+  <line x1="340" y1="180" x2="500" y2="180" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="420" y1="180" x2="420" y2="232" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="430" y="248" fontSize="12" fontWeight="600" className="red">max drawdown : −10,4R</text>
+  <line x1="340" y1="262" x2="500" y2="262" stroke="var(--tm-red)" strokeWidth="1" />
+  <text x="420" y="258" fontSize="11" textAnchor="middle" className="red">durée : 30 trades</text>
+
+  <circle cx="340" cy="180" r="4" className="gold" />
+  <text x="340" y="170" fontSize="10" textAnchor="middle" className="muted">plus haut</text>
+  <circle cx="500" cy="190" r="4" className="gold" />
+  <text x="520" y="200" fontSize="10" className="muted">nouveau plus haut</text>
+</svg>
+</Figure>
+
+Une remarque qui change la façon de vivre les pertes : **le drawdown maximal historique n'est pas le drawdown maximal futur.** Un système qui a montré 10R de drawdown sur 200 trades en montrera probablement 13R ou 15R sur 600. Le pire est toujours devant, par simple effet d'échantillon. Dimensionner un compte sur le pire drawdown observé, sans marge, c'est dimensionner pour être surpris.
+
+## Les séries de pertes statistiquement attendues
+
+C'est le point que les débutants sous-estiment le plus. Un système à 40 % de réussite perd 6 fois sur 10 ; la probabilité de perdre 7 fois de suite sur 7 trades donnés est 0,6⁷ ≈ 2,8 %, ce qui paraît rare. Mais sur 100 trades, il y a des dizaines de fenêtres de 7 trades, et la probabilité qu'au moins une contienne 7 pertes consécutives est très élevée. Le tableau ci-dessous a été calculé exactement pour 100 trades indépendants.
+
+| Taux de réussite | Série de 5 pertes | Série de 6 | Série de 7 | Série de 8 | Série de 10 |
+| --- | --- | --- | --- | --- | --- |
+| 40 % | 98 % | 87 % | 69 % | 49 % | 20 % |
+| 50 % | 81 % | 55 % | 32 % | 17 % | 4 % |
+| 60 % | 46 % | 21 % | 9 % | 4 % | 1 % |
+
+Lecture : avec un système à 40 % de réussite, sur 100 trades, il y a **7 chances sur 10 de subir au moins une série de 7 pertes consécutives**, et 1 sur 2 d'en subir une de 8. Ce n'est pas un accident, ce n'est pas un signe que le système est cassé, ce n'est pas le marché qui « a changé » : c'est le fonctionnement normal d'un système à 40 % de réussite. Sur 300 trades, ces séries deviennent quasi certaines, et des séries plus longues apparaissent.
+
+Deux conséquences :
+
+1. **Une série de pertes n'est pas une information sur le système** tant qu'elle reste dans ce que la statistique prévoit. Le trader qui abandonne un bon système après 6 pertes de suite abandonne au moment le plus prévisible.
+2. **La série de pertes ne suffit pas à faire le drawdown.** Le drawdown se construit aussi de pertes entrecoupées de petits gains : 12 trades à −1R avec 3 trades à +0,5R au milieu font −10,5R sans jamais aligner plus de 5 pertes.
+
+Ce que la simulation donne comme **drawdown maximal attendu en R**, pour des systèmes typiques (chiffres arrondis, obtenus par simulation de plusieurs milliers de séries) :
+
+| Système | Sur 100 trades : médiane · 1 fois sur 10 · 1 fois sur 100 | Sur 300 trades |
+| --- | --- | --- |
+| 40 % de réussite, gains 2R | 10R · 16R · 25R | 14R · 22R · 32R |
+| 50 % de réussite, gains 1,5R | 7R · 12R · 18R | 10R · 15R · 22R |
+| 60 % de réussite, gains 1R | 6R · 9R · 14R | 8R · 12R · 18R |
+
+Retenez l'ordre de grandeur : **un système discrétionnaire ordinaire produit un drawdown de 10R à 15R au moins une fois par an, et un drawdown de 20R à 25R au moins une fois dans une carrière**. Ce sont ces chiffres, pas l'expectancy, qui fixent le risque par trade.
+
+<Figure caption="Figure 2 · Probabilité de subir au moins une série de N pertes consécutives sur 100 trades, pour trois taux de réussite. Les longues séries sont la norme, pas l'exception.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Probabilité de séries de pertes selon la longueur et le taux de réussite" xmlns="http://www.w3.org/2000/svg">
+  <line x1="70" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <line x1="70" y1="30" x2="70" y2="250" className="line" strokeWidth="1" />
+  <text x="385" y="285" fontSize="12" textAnchor="middle" className="muted">longueur de la série de pertes</text>
+  <text x="60" y="254" fontSize="11" textAnchor="end" className="mono muted">0 %</text>
+  <text x="60" y="144" fontSize="11" textAnchor="end" className="mono muted">50 %</text>
+  <text x="60" y="34" fontSize="11" textAnchor="end" className="mono muted">100 %</text>
+  <text x="130" y="268" fontSize="11" textAnchor="middle" className="mono muted">5</text>
+  <text x="250" y="268" fontSize="11" textAnchor="middle" className="mono muted">6</text>
+  <text x="370" y="268" fontSize="11" textAnchor="middle" className="mono muted">7</text>
+  <text x="490" y="268" fontSize="11" textAnchor="middle" className="mono muted">8</text>
+  <text x="640" y="268" fontSize="11" textAnchor="middle" className="mono muted">10</text>
+
+  <polyline points="130,34 250,59 370,98 490,142 640,206" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="560" y="130" fontSize="12" fontWeight="600" className="red">40 % de réussite</text>
+  <polyline points="130,72 250,129 370,180 490,213 640,241" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="380" y="205" fontSize="12" fontWeight="600" className="gold">50 %</text>
+  <polyline points="130,149 250,204 370,230 490,241 640,248" fill="none" stroke="var(--tm-gold)" strokeWidth="2" opacity="0.6" />
+  <text x="180" y="230" fontSize="12" fontWeight="600" className="gold" opacity="0.8">60 %</text>
+
+  <line x1="70" y1="142" x2="700" y2="142" className="line" strokeWidth="1" strokeDasharray="4 3" />
+</svg>
+</Figure>
+
+## La probabilité de ruine et ses paramètres
+
+Le **risk of ruin** (probabilité de ruine) est la probabilité qu'un système finisse par perdre une fraction du capital définie comme « ruine » (souvent 100 %, ou le seuil au-delà duquel le trader ne peut plus continuer). Il dépend de trois paramètres :
+
+- **L'expectancy** (le taux de réussite et le ratio gain/perte). Plus elle est élevée, plus la ruine est improbable ; à expectancy négative, la ruine est certaine à long terme.
+- **La fraction du capital risquée par trade.** C'est le paramètre dominant. Il fixe le nombre d'unités de risque (R) que le compte contient : à 1 %, le compte vaut 100R ; à 5 %, 20R ; à 10 %, 10R.
+- **Le seuil de ruine.** Perdre 100 % ou perdre 50 % ne donne pas la même probabilité, mais dans les deux cas le mécanisme est le même.
+
+Un ordre de grandeur, obtenu par simulation pour un système à 40 % de réussite et gains de 2R (expectancy +0,2R), avec la ruine définie comme la perte de tout le capital, en risque fixe :
+
+| Risque par trade | Capital en R | Probabilité de ruine |
+| --- | --- | --- |
+| 10 % | 10R | environ 15 % |
+| 5 % | 20R | environ 2 % |
+| 2 % | 50R | proche de 0 |
+| 1 % | 100R | négligeable |
+
+Le même système, avec un avantage réel, ruine **un utilisateur sur sept** s'il risque 10 % par trade, et **presque personne** à 1 %. Le talent est identique dans les deux lignes ; seule la taille change. C'est le contenu mathématique de la règle du 1 %.
+
+Deux subtilités :
+
+- Ces chiffres supposent le risque **fixe en R** ; avec un pourcentage du capital courant (chapitre 2), la ruine totale devient asymptotique, mais un drawdown de 50 % ou 70 % reste possible et revient au même pour un trader qui doit vivre de son compte ou garder confiance.
+- Ils supposent une expectancy **connue et stable**. En réel, elle est estimée avec erreur et elle varie ; c'est une raison de plus pour se placer très en dessous du seuil où la ruine devient mesurable.
+
+## Dimensionner son compte et son risque en conséquence
+
+La méthode part du drawdown, pas de l'objectif de gain.
+
+1. **Estimer le drawdown maximal attendu en R** de son système, sur un horizon d'un an. Sans historique : prendre 20R pour un système discrétionnaire ordinaire (deux fois le drawdown médian sur 100 trades, ce qui couvre la plupart des années).
+2. **Fixer le drawdown maximal supportable en pourcentage du compte.** Pas « ce que je pense pouvoir supporter », mais ce qui, une fois atteint, ne m'empêchera pas de continuer à exécuter correctement : pour la plupart des traders, 15 % à 20 %. Au-delà, le jugement se dégrade et le sur-trading commence.
+3. **En déduire le risque par trade** : risque par trade = drawdown supportable ÷ drawdown attendu en R. Exemple : 20 % ÷ 20R = **1 % par trade**. Avec un système plus volatil (25R attendus) ou une tolérance plus basse (15 %) : 15 % ÷ 25R = 0,6 %.
+4. **En déduire le capital nécessaire** à partir du R minimal que le marché impose. Sur MES avec des stops de 8 points, R minimal = 40 $ (1 contrat). Si R doit faire 1 % du compte : compte de 4 000 $. Si le compte est plus petit, on passe à un marché avec un R minimal plus faible (micro-lots forex, MNQ avec stops plus courts) ou on accepte un risque supérieur en connaissance de cause, en sachant ce que dit le tableau ci-dessus.
+
+Ce raisonnement donne aussi le **capital de démarrage réaliste** : c'est celui qui permet de risquer 1 % avec le plus petit véhicule disponible sur le marché choisi, et de survivre à 20R de drawdown en gardant 80 % du compte. Pour les micro-futures avec des stops de quelques points, quelques milliers d'euros ; pour un contrat ES standard, plusieurs dizaines de milliers.
+
+<Figure caption="Figure 3 · Le même drawdown de 20R exprimé en pourcentage du compte selon le risque par trade. À 1 %, il coûte 18 % ; à 5 %, il coûte 64 % et le compte ne s'en relève pas.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Drawdown de 20R en pourcentage du compte selon le risque par trade" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="30" fontSize="14" fontWeight="600">Drawdown de 20R (risque en pourcentage du capital courant)</text>
+  <text x="20" y="72" fontSize="12" className="muted">0,5 % par trade</text>
+  <rect x="150" y="58" width="52" height="20" rx="3" className="red" opacity="0.85" />
+  <text x="212" y="72" fontSize="12" className="mono">−9,5 %</text>
+
+  <text x="20" y="112" fontSize="12" className="muted">1 % par trade</text>
+  <rect x="150" y="98" width="99" height="20" rx="3" className="red" opacity="0.85" />
+  <text x="259" y="112" fontSize="12" className="mono">−18,2 %</text>
+
+  <text x="20" y="152" fontSize="12" className="muted">2 % par trade</text>
+  <rect x="150" y="138" width="181" height="20" rx="3" className="red" opacity="0.85" />
+  <text x="341" y="152" fontSize="12" className="mono">−33,2 %</text>
+
+  <text x="20" y="192" fontSize="12" className="muted">5 % par trade</text>
+  <rect x="150" y="178" width="352" height="20" rx="3" className="red" opacity="0.85" />
+  <text x="512" y="192" fontSize="12" className="mono">−64,2 %</text>
+
+  <text x="20" y="232" fontSize="12" className="muted">Gain nécessaire pour revenir au plus haut : +10 % · +22 % · +50 % · +179 %</text>
+</svg>
+</Figure>
+
+Le dernier chiffre de la figure est important : après un drawdown de 64 %, il faut gagner 179 % pour revenir au point de départ. La perte et le gain nécessaire pour la compenser ne sont pas symétriques : `gain nécessaire = 1 ÷ (1 − perte) − 1`. Après −18 %, +22 % suffisent ; après −50 %, il faut +100 %. C'est la raison profonde pour laquelle protéger le capital passe avant le faire fructifier.
+
+## Règles de réduction du risque en période difficile
+
+Puisque les drawdowns sont certains, le plan doit dire à l'avance ce que l'on fait quand ils arrivent. Décider dans le drawdown, c'est décider sous stress ; décider avant, c'est appliquer.
+
+**Paliers de réduction.** Une règle simple et robuste : à −10R depuis le plus haut, le risque par trade passe de 1 % à 0,5 %. À −15R, à 0,25 %. Le compte perd deux à quatre fois moins vite pendant la mauvaise période, ce qui prolonge la survie et laisse le temps de comprendre. Le risque revient à 1 % quand le compte a repris la moitié du drawdown, ou après un nombre de trades conformes défini.
+
+**Réduction en volume et non en qualité.** Réduire le risque, pas changer de système. Le drawdown n'est pas le moment d'improviser une nouvelle méthode ; c'est le moment de faire la même chose en plus petit. Changer de méthode dans le drawdown revient à jeter l'échantillon et à repartir de zéro, dans le pire état d'esprit.
+
+**Distinguer drawdown normal et système cassé.** Le drawdown reste « normal » tant qu'il est dans la fourchette attendue (le tableau des simulations, ou l'historique du système) et que les trades restent conformes au plan. Deux signaux justifient de suspendre et de revoir plutôt que de réduire : un drawdown qui dépasse nettement l'attendu (au-delà de la valeur « 1 fois sur 100 »), et surtout une **dérive du process** visible au journal (trades hors setup, stops déplacés, tailles non conformes). Dans le premier cas, le système a peut-être perdu son avantage ; dans le second, c'est le trader qui a cassé, pas le système.
+
+**Arrêt temporaire.** À un seuil fixé d'avance (par exemple −20R ou −20 %), arrêt complet du trading réel : revue de tous les trades de la période, retour en simulation ou en taille minimale jusqu'à retrouver une série conforme. Cette règle paraît sévère ; elle est ce qui reste entre un mauvais trimestre et la fin d'un compte.
+
+## Deux trades dans un drawdown
+
+Reconstitutions pédagogiques : deux traders au même point d'un même drawdown, −11R en trois semaines sur un système à 45 % de réussite.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat sur repli, tendance H4 haussière, séance américaine ; palier de réduction actif"
+  entree="5 262,00"
+  stop="5 256,00 (24 ticks)"
+  objectif="5 277,00"
+  r="+2,5R (à demi-taille)">
+
+Compte parti de 8 000 $, en drawdown de 11R : le palier à −10R est actif, le risque est passé de 1 % à 0,5 %, soit 40 $ au lieu de 80 $. Stop de 24 ticks à 1,25 $ = 30 $ par contrat : 1 MES au lieu de 2. Le trade est exactement le même que d'habitude ; seul le montant a changé. Il atteint l'objectif : +2,5R, soit 75 $. En euros, c'est la moitié de ce que le trade aurait rapporté à taille pleine ; en R, c'est identique, et c'est ce qui compte pour la statistique. Le trader n'a rien « rattrapé » et n'a pas cherché à le faire. Il a exécuté un trade conforme au 12e trade d'un drawdown, ce qui est précisément la compétence qu'un drawdown mesure.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Futures NQ (Nasdaq), contrat standard"
+  direction="Long"
+  setup="Achat sur repli, mais taille triplée « pour sortir du trou »"
+  entree="18 410,00"
+  stop="18 398,00 (12 points)"
+  objectif="18 440,00"
+  r="−3R en un trade, −14R de drawdown">
+
+Même compte, même drawdown de 11R. Ce trader décide qu'il a « assez perdu » et que la statistique lui doit un gain : il passe de 2 MNQ (risque 48 $, 0,6 %) à 1 NQ (12 points × 20 $ = 240 $, 3 % du compte). Le trade touche le stop, comme 55 % des trades de son système. Perte : 240 $, soit 3R par rapport à son R normal de 80 $. Le drawdown passe de 11R à 14R en un seul trade, et surtout, la prochaine perte à taille normale mettra le compte à −15R, un niveau qu'il n'a jamais vu. Le système n'a rien fait de mal : il a perdu un trade sur deux comme prévu. Le trader a transformé un drawdown ordinaire en drawdown grave, en une décision.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **drawdown** se mesure en profondeur (en R), en durée et en temps de récupération ; le pire drawdown futur dépasse toujours le pire drawdown passé.
+- Les **séries de pertes** sont certaines : à 40 % de réussite, 7 chances sur 10 de voir 7 pertes de suite sur 100 trades. Une série dans la fourchette attendue n'est pas une information sur le système.
+- Un système ordinaire produit **10R à 15R de drawdown chaque année** et 20R à 25R au moins une fois dans une carrière : c'est ce chiffre qui fixe le risque par trade.
+- La **probabilité de ruine** dépend surtout de la fraction risquée : le même système ruine un utilisateur sur sept à 10 % par trade et presque personne à 1 %.
+- **Risque par trade = drawdown supportable ÷ drawdown attendu en R.** Et dans le drawdown : réduire la taille par paliers, garder le système, arrêter à un seuil fixé d'avance.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Mesurer un drawdown">
+
+Un compte affiche les résultats suivants, en R, sur 15 trades : +2, −1, −1, +3, −1, −1, −1, +0,5, −1, −1, +2, +1, −1, +2,5, +2.
+
+1. Tracez mentalement (ou sur papier) la courbe cumulée et donnez le plus haut atteint avant le pire drawdown, le plus bas, la profondeur du max drawdown en R et sa durée en trades.
+2. Si R = 50 € et le compte de départ 5 000 €, quel est le max drawdown en pourcentage ?
+
+<Solution>
+
+1. Cumul : +2, +1, 0, +3, +2, +1, 0, +0,5, −0,5, −1,5, +0,5, +1,5, +0,5, +3, +5. Plus haut avant le pire drawdown : **+3R** (après le trade 4). Plus bas suivant : **−1,5R** (après le trade 10). Profondeur : **4,5R**. Le nouveau plus haut (+3R) est atteint au trade 14 : durée **10 trades** (du 4 au 14).
+2. 4,5R × 50 € = 225 € sur un compte qui valait 5 150 € au plus haut : environ **4,4 %**. Un drawdown modeste, entièrement dans la norme d'un système à ce taux de réussite.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Séries de pertes et réaction">
+
+Votre système gagne 45 % du temps. Après 8 pertes consécutives, un ami vous conseille de changer de méthode.
+
+1. Quelle est la probabilité de 8 pertes de suite sur 8 trades donnés ?
+2. Pourquoi cette probabilité ne dit-elle pas ce qui vous intéresse, et que faut-il regarder à la place ?
+3. Quelle décision est conforme au plan, et laquelle ne l'est pas ?
+
+<Solution>
+
+1. 0,55⁸ ≈ **0,84 %**, ce qui paraît très rare.
+2. Parce que vous ne tradez pas 8 trades, vous en tradez des centaines : la question est « quelle est la probabilité qu'au moins une série de 8 apparaisse dans mes 100 ou 300 prochains trades ? ». Pour 45 % de réussite sur 100 trades, elle se situe entre les lignes 40 % (49 %) et 50 % (17 %) du tableau, soit environ 30 %. Sur 300 trades, elle dépasse largement une chance sur deux. La série de 8 est un événement attendu.
+3. Conforme : vérifier au journal que les 8 trades étaient dans le plan (setup, stop, taille), appliquer le palier de réduction du risque si le drawdown en R le déclenche, et continuer. Non conforme : changer de méthode au milieu du drawdown, ou augmenter la taille pour se refaire.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Dimensionner risque et compte">
+
+Vous estimez le drawdown maximal attendu de votre système à 22R sur un an. Vous savez que vous exécutez mal au-delà de 15 % de baisse. Votre marché impose un R minimal de 30 $ (1 MNQ avec un stop de 15 points).
+
+1. Quel risque par trade en pourcentage en découle ?
+2. Quel capital minimal faut-il pour respecter ce pourcentage avec le R minimal ?
+3. Vous n'avez que 2 500 $. Quelles sont vos options ?
+
+<Solution>
+
+1. 15 % ÷ 22R ≈ **0,68 %** par trade (arrondir à 0,65 % ou 0,7 %).
+2. R = 30 $ doit représenter 0,68 % du compte : 30 ÷ 0,0068 ≈ **4 400 $**.
+3. Options acceptables : trader avec des stops plus courts sur MNQ (10 points, R = 20 $, soit 0,8 % de 2 500 $, proche de la cible), ou passer sur un véhicule à R plus petit (micro-lots forex), ou constituer le capital avant de trader en réel. Option à connaître pour ce qu'elle est : garder R = 30 $ sur 2 500 $, soit 1,2 % par trade, ce qui porte le drawdown attendu de 22R à environ un quart du compte, au-delà de votre seuil de bonne exécution. Ce n'est pas interdit ; c'est un choix fait en connaissance de cause, à noter dans le plan.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le compte a culminé à 7 000 €, il vaut 6 300 €, R = 70 €. Le drawdown courant est :",
+      options: [
+        "7 %, soit 7R",
+        "10 %, soit 10R",
+        "10 %, soit 7R",
+        "700R",
+      ],
+      answer: 1,
+      explain: "700 € de baisse sur 7 000 € : 10 %. Et 700 ÷ 70 = 10R. Exprimer le drawdown en R le relie directement aux statistiques du système.",
+    },
+    {
+      q: "Un système à 40 % de réussite. Sur 100 trades, la probabilité de voir au moins une série de 7 pertes consécutives est d'environ :",
+      options: [
+        "3 %",
+        "20 %",
+        "70 %",
+        "moins de 1 %",
+      ],
+      answer: 2,
+      explain: "0,6⁷ ≈ 2,8 % pour 7 trades donnés, mais sur 100 trades il y a des dizaines de fenêtres : la probabilité qu'au moins une série de 7 apparaisse est d'environ 69 %.",
+    },
+    {
+      q: "Quel paramètre domine la probabilité de ruine ?",
+      options: [
+        "Le nombre d'écrans",
+        "La fraction du capital risquée par trade",
+        "L'heure de trading",
+        "Le broker",
+      ],
+      answer: 1,
+      explain: "Le même système à expectancy positive ruine environ un utilisateur sur sept à 10 % par trade et presque personne à 1 %. La taille décide, pas le talent.",
+    },
+    {
+      q: "Après un drawdown de 50 %, quel gain faut-il pour revenir au point de départ ?",
+      options: [
+        "50 %",
+        "75 %",
+        "100 %",
+        "150 %",
+      ],
+      answer: 2,
+      explain: "Gain nécessaire = 1 ÷ (1 − 0,5) − 1 = 100 %. L'asymétrie entre perte et récupération est la raison profonde de la protection du capital.",
+    },
+    {
+      q: "Comment déduire le risque par trade ?",
+      options: [
+        "Objectif de gain annuel ÷ nombre de trades",
+        "Drawdown supportable en pourcentage ÷ drawdown attendu en R",
+        "Marge exigée par le broker ÷ capital",
+        "Toujours 2 %",
+      ],
+      answer: 1,
+      explain: "Par exemple 20 % supportables ÷ 20R attendus = 1 % par trade. Le risque se dimensionne sur ce que le système fera subir, pas sur ce qu'on espère gagner.",
+    },
+    {
+      q: "En drawdown de 12R, la réaction conforme au plan est :",
+      options: [
+        "Tripler la taille pour se refaire",
+        "Changer de méthode",
+        "Réduire le risque par palier (par exemple 1 % → 0,5 %), garder le système, vérifier au journal que les trades sont conformes",
+        "Arrêter définitivement",
+      ],
+      answer: 2,
+      explain: "Le drawdown ordinaire se traverse en réduisant la taille, pas en changeant de méthode ni en augmentant. L'arrêt complet est réservé au seuil fixé d'avance ou à une dérive du process.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Tout ce chapitre a raisonné sur un seul système, une position à la fois. En réalité, un trader tient souvent plusieurs positions en même temps, sur des marchés qui bougent ensemble. Le chapitre suivant mesure les corrélations, calcule l'exposition réelle de positions simultanées, et fixe la limite du risque total ouvert.
