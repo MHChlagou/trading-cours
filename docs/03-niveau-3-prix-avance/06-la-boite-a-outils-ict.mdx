@@ -1,0 +1,326 @@
+---
+title: "La boîte à outils ICT"
+description: "Les killzones et les heures qui concentrent les mouvements, le Power of Three (accumulation, manipulation, distribution), premium, discount et OTE, les modèles de session comme le silver bullet, et la façon d'assembler ces outils avec les briques SMC sans en faire une religion."
+---
+
+# La boîte à outils ICT
+
+Les cinq chapitres précédents ont donné les briques : liquidité, displacement, FVG, order block, BOS et CHoCH. Il manque une dimension : **le temps**. Le même sweep n'a pas la même valeur à 3 h du matin et à 15 h 40 ; le même FVG dans la moitié haute d'une fourchette n'est pas le même que dans sa moitié basse. Les outils popularisés sous le nom d'**ICT** (Inner Circle Trader, pseudonyme d'un formateur américain dont les concepts ont largement diffusé) ajoutent cette dimension et proposent des modèles de session. Ce chapitre les présente pour ce qu'ils sont, utiles et vérifiables, et met en garde contre ce qu'ils sont devenus pour beaucoup : un culte.
+
+## Killzones et heures qui concentrent les mouvements
+
+Une **killzone** est une fenêtre horaire pendant laquelle les mouvements directionnels, les sweeps et les displacements sont plus fréquents, parce que le volume et la participation institutionnelle y sont concentrés. Le niveau 0 avait décrit la liquidité par session ; les killzones en tirent des créneaux précis. Heure de New York (ET), à convertir selon votre fuseau (Paris = ET + 6 en été) :
+
+| Killzone | Heure de New York | Heure de Paris (été) | Ce qui s'y passe typiquement |
+| --- | --- | --- | --- |
+| Asie | 20 h 00 - 0 h 00 | 2 h 00 - 6 h 00 | Range étroit qui construit la liquidité (EQH / EQL) prise plus tard |
+| Londres (open) | 2 h 00 - 5 h 00 | 8 h 00 - 11 h 00 | Sweep du range asiatique, souvent le plus haut ou le plus bas de la journée sur le forex |
+| New York AM | 7 h 00 - 10 h 00 (parfois 8 h 30 - 11 h) | 13 h 00 - 16 h 00 | Sweep des extrêmes de Londres, displacement principal de la journée sur indices |
+| Londres (close) | 10 h 00 - 12 h 00 | 16 h 00 - 18 h 00 | Retournements ou continuations, retracement du mouvement du matin |
+| New York PM | 13 h 30 - 16 h 00 | 19 h 30 - 22 h 00 | Second mouvement sur indices, prise de la liquidité restante |
+
+Ce que les killzones apportent de vérifiable : sur les futures et les grandes paires, **la majorité des displacements significatifs et des sweeps de niveaux de référence se produisent dans ces fenêtres**, tout simplement parce que c'est là qu'il y a du volume pour les faire. Un sweep du PDL à 15 h 40 est porté par de la participation ; le même sweep à 3 h 15 est souvent un mouvement de faible volume, repris à l'ouverture. Le niveau 2 (volume relatif par heure) le disait déjà en d'autres termes.
+
+Ce qu'elles n'apportent pas : une garantie. Il y a des séances sans displacement dans une killzone, et des mouvements majeurs hors killzone (annonces, chocs). Les bornes horaires exactes varient selon les auteurs de dix à trente minutes ; leur précision au quart d'heure est une convention, pas une propriété du marché. Le principe utile est simple : **on cherche les setups dans les heures de participation, on ne trade pas les heures creuses**, et on note ses propres heures d'expectancy positive (niveau 1, décomposition par contexte).
+
+<Figure caption="Figure 1 · Une journée type sur NQ (heure de Paris) : le range asiatique construit la liquidité, Londres prend un côté, New York AM produit le displacement principal, l'après-midi retrace ou continue. Les killzones sont les fenêtres où chercher, pas des garanties.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Journée type et killzones sur NQ" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="240" x2="700" y2="240" className="line" strokeWidth="1" />
+  <text x="90" y="258" fontSize="10" textAnchor="middle" className="mono muted">2h</text>
+  <text x="200" y="258" fontSize="10" textAnchor="middle" className="mono muted">8h</text>
+  <text x="330" y="258" fontSize="10" textAnchor="middle" className="mono muted">13h</text>
+  <text x="440" y="258" fontSize="10" textAnchor="middle" className="mono muted">16h</text>
+  <text x="560" y="258" fontSize="10" textAnchor="middle" className="mono muted">19h30</text>
+  <text x="680" y="258" fontSize="10" textAnchor="middle" className="mono muted">22h</text>
+
+  <rect x="60" y="30" width="130" height="200" className="box" opacity="0.4" />
+  <text x="125" y="46" fontSize="9" textAnchor="middle" fontWeight="600">Asie</text>
+  <rect x="190" y="30" width="90" height="200" className="gold" opacity="0.15" />
+  <text x="235" y="46" fontSize="9" textAnchor="middle" fontWeight="600">Londres</text>
+  <rect x="320" y="30" width="120" height="200" className="gold" opacity="0.25" />
+  <text x="380" y="46" fontSize="9" textAnchor="middle" fontWeight="600">New York AM</text>
+  <rect x="440" y="30" width="80" height="200" className="gold" opacity="0.1" />
+  <text x="480" y="46" fontSize="9" textAnchor="middle" fontWeight="600">Londres close</text>
+  <rect x="560" y="30" width="120" height="200" className="gold" opacity="0.15" />
+  <text x="620" y="46" fontSize="9" textAnchor="middle" fontWeight="600">New York PM</text>
+
+  <polyline points="65,150 90,142 115,156 140,146 165,152 185,148 200,140 220,168 235,175 255,150 280,140 300,146 320,150 340,172 355,180 370,130 390,90 410,100 430,80 450,95 470,110 490,100 520,105 560,95 590,70 620,60 650,75 680,65" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="65" y1="140" x2="240" y2="140" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <line x1="65" y1="158" x2="240" y2="158" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="125" y="200" fontSize="9" textAnchor="middle" className="muted">range asiatique : EQH / EQL</text>
+  <circle cx="235" cy="175" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="235" y="215" fontSize="9" textAnchor="middle" className="green">sweep du bas asiatique</text>
+  <circle cx="355" cy="180" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="355" y="215" fontSize="9" textAnchor="middle" className="green">sweep du bas de Londres</text>
+  <text x="400" y="78" fontSize="9" textAnchor="middle" className="muted">displacement principal</text>
+</svg>
+</Figure>
+
+## Power of Three : accumulation, manipulation, distribution
+
+Le **Power of Three** (PO3, ou AMD) est un schéma de séance en trois temps, qui décrit la forme typique d'une bougie quotidienne (ou d'une bougie de session) vue de l'intérieur :
+
+1. **Accumulation** : le prix construit un range étroit autour de l'ouverture (souvent la session asiatique pour la journée, ou les premières heures pour une session). Les positions se construisent, la liquidité s'empile aux bornes du range.
+2. **Manipulation** : le prix sort du range **du mauvais côté** par rapport à la direction finale de la journée : il va prendre la liquidité d'un côté (le sweep du range asiatique par Londres, par exemple), piégeant ceux qui suivent la cassure. C'est la mèche de la bougie quotidienne.
+3. **Distribution** : le prix se retourne et fait le vrai mouvement de la journée, dans la direction opposée à la manipulation, vers la liquidité de l'autre côté. C'est le corps de la bougie quotidienne.
+
+Vu autrement : une bougie quotidienne haussière a souvent une mèche basse (manipulation sous l'ouverture) puis un corps qui monte (distribution) ; le PO3 dit que la mèche est faite en début de journée, dans une killzone, sur un sweep, et que le corps suit.
+
+Ce que le PO3 apporte : un **cadre pour situer la séquence sweep-displacement dans la journée**. Le sweep du chapitre 2 est la manipulation ; le displacement et la marche vers la liquidité opposée sont la distribution ; l'accumulation est le range qui a construit les EQH / EQL. Il aide à répondre à la question « suis-je en train d'acheter la manipulation ou la distribution ? » : acheter la cassure haussière du range asiatique à 8 h 15, c'est souvent acheter la manipulation.
+
+Ce qu'il n'apporte pas : la direction. Le PO3 est symétrique ; il ne dit pas si la journée sera haussière ou baissière. La direction vient du contexte HTF (structure quotidienne, zones HTF non mitigées, biais du niveau 2). Le PO3 dit **comment** la journée se déroulera si le biais est juste : d'abord une incursion contre le biais, puis le mouvement. Sans biais, le PO3 se lit dans les deux sens et ne sert à rien.
+
+<Figure caption="Figure 2 · Power of Three sur une journée haussière : accumulation (range asiatique), manipulation (sweep sous le range à Londres, contre le biais), distribution (displacement et marche vers la liquidité au-dessus). À droite, la bougie quotidienne correspondante.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Schéma Power of Three et bougie quotidienne correspondante" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="560" y2="270" className="line" strokeWidth="1" />
+  <rect x="50" y="30" width="150" height="220" className="box" opacity="0.4" />
+  <text x="125" y="48" fontSize="10" textAnchor="middle" fontWeight="600">Accumulation</text>
+  <rect x="200" y="30" width="110" height="220" className="red" opacity="0.1" />
+  <text x="255" y="48" fontSize="10" textAnchor="middle" fontWeight="600" className="red">Manipulation</text>
+  <rect x="310" y="30" width="240" height="220" className="green" opacity="0.1" />
+  <text x="430" y="48" fontSize="10" textAnchor="middle" fontWeight="600" className="green">Distribution</text>
+  <polyline points="55,150 80,142 105,158 130,146 155,154 180,148 200,150 220,178 245,200 260,215 275,190 295,150 320,120 345,135 375,90 400,105 430,70 460,85 500,50 540,60" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="55" y1="150" x2="560" y2="150" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="545" y="146" fontSize="9" textAnchor="end" className="muted">ouverture du jour</text>
+  <circle cx="260" cy="215" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="260" y="238" fontSize="9" textAnchor="middle" className="red">sweep : la mèche du jour</text>
+  <text x="430" y="130" fontSize="9" textAnchor="middle" className="muted">le corps du jour</text>
+
+  <text x="640" y="48" fontSize="10" textAnchor="middle" fontWeight="600">Bougie D</text>
+  <line x1="640" y1="60" x2="640" y2="215" className="line" strokeWidth="2" />
+  <rect x="620" y="60" width="40" height="90" className="green" opacity="0.9" />
+  <text x="640" y="235" fontSize="9" textAnchor="middle" className="muted">mèche = manipulation</text>
+  <text x="640" y="248" fontSize="9" textAnchor="middle" className="muted">corps = distribution</text>
+</svg>
+</Figure>
+
+## Premium, discount et OTE
+
+Dans une fourchette de prix (dealing range) définie par un swing bas et un swing haut significatifs, ICT partage la fourchette en deux à son milieu (l'équilibre, 50 %) :
+
+- La moitié **basse** est le **discount** : les prix « soldés », où l'on cherche à **acheter** dans une structure haussière.
+- La moitié **haute** est le **premium** : les prix « chers », où l'on cherche à **vendre** dans une structure baissière.
+
+Le principe est celui de tout commerçant : acheter bas dans la fourchette, vendre haut. Traduit en SMC : un FVG ou un OB haussier situé dans le discount de la fourchette en cours a plus de valeur qu'un FVG haussier situé dans le premium (où l'on est déjà loin de l'invalidation et proche de la liquidité qui sert de cible). C'est un filtre de sélection des zones, pas un signal.
+
+L'**OTE** (optimal trade entry) précise la zone : c'est la portion de la fourchette comprise entre **62 % et 79 %** de retracement du mouvement (mesuré depuis le sommet pour un achat : le prix a retracé 62 à 79 % de la hausse), avec un niveau central à 70,5 %. L'idée : les meilleurs retours dans une tendance vont profond, dans le discount avancé, sans casser le swing d'origine ; l'OTE est la zone où l'on attend, de préférence en confluence avec un FVG ou un OB.
+
+Un exemple : hausse de 18 300 à 18 420 sur NQ (fourchette de 120 points). Équilibre à 18 360 ; discount sous 18 360. OTE : de 18 420 − 0,62 × 120 = 18 345,6 à 18 420 − 0,79 × 120 = 18 325,2, niveau central 18 335,4. Un FVG M15 entre 18 332 et 18 340 tombe dans l'OTE : c'est une zone d'achat de qualité, stop sous 18 300 (le swing bas) ou, raffiné, sous le FVG.
+
+Trois réserves honnêtes. Les pourcentages de l'OTE viennent des retracements de Fibonacci ; ils n'ont aucune propriété mathématique particulière sur les marchés, mais ils sont **regardés** par assez de participants pour concentrer des ordres, et ils décrivent correctement le fait que les replis profonds sont plus favorables que les replis superficiels. Ensuite, la fourchette dépend du choix des swings ; deux traders qui choisissent des swings différents ont des OTE différents. Enfin, premium / discount ne s'applique qu'avec un **biais** : dans une structure haussière, on achète le discount ; sans structure, le discount n'est qu'une moitié de graphique.
+
+<Figure caption="Figure 3 · Dealing range, équilibre, premium et discount, et la zone OTE (62 à 79 %) où l'on attend un retour dans une structure haussière. Un FVG dans l'OTE et le discount est une confluence de zones.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Premium, discount et OTE dans une fourchette" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <line x1="120" y1="40" x2="700" y2="40" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="126" y="36" fontSize="10" className="muted">swing haut · 18 420 (0 %)</text>
+  <line x1="120" y1="260" x2="700" y2="260" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="126" y="276" fontSize="10" className="muted">swing bas · 18 300 (100 %)</text>
+  <line x1="120" y1="150" x2="700" y2="150" stroke="var(--tm-gold)" strokeWidth="1.5" strokeDasharray="6 4" />
+  <text x="690" y="146" fontSize="10" textAnchor="end" className="gold" fontWeight="600">équilibre 50 % · 18 360</text>
+  <rect x="120" y="40" width="580" height="110" className="red" opacity="0.08" />
+  <text x="640" y="70" fontSize="11" className="red" fontWeight="600">PREMIUM : on vend</text>
+  <rect x="120" y="150" width="580" height="110" className="green" opacity="0.08" />
+  <text x="640" y="245" fontSize="11" className="green" fontWeight="600">DISCOUNT : on achète</text>
+  <rect x="120" y="176" width="580" height="38" className="gold" opacity="0.3" />
+  <text x="410" y="200" fontSize="11" textAnchor="middle" fontWeight="600">OTE · 62 % (18 345,6) à 79 % (18 325,2) · centre 70,5 % (18 335,4)</text>
+  <polyline points="70,250 130,180 170,220 230,120 270,160 330,60 360,80 380,45 420,90 460,140 500,190 530,175 560,120 600,80 650,50" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="490" y="184" width="40" height="18" className="green" opacity="0.5" />
+  <text x="510" y="220" fontSize="9" textAnchor="middle" className="green">FVG dans l'OTE : confluence</text>
+</svg>
+</Figure>
+
+## Modèles de session : le cas du silver bullet
+
+ICT a formalisé plusieurs **modèles** : des séquences complètes, avec heure, condition et exécution, qui assemblent les briques. Le plus connu est le **silver bullet** ; le présenter suffit à comprendre la logique de tous les autres.
+
+**Le silver bullet**, dans sa version la plus répandue : pendant une fenêtre d'une heure précise (10 h 00 - 11 h 00 heure de New York, soit 16 h - 17 h à Paris en été ; des variantes existent pour 3 h - 4 h et 14 h - 15 h ET), on cherche un FVG formé **dans la fenêtre**, dans le sens du biais de la journée, après une prise de liquidité récente. L'entrée se fait au retour dans ce FVG, le stop au-delà du swing qui l'a produit, la cible sur la liquidité la plus proche (le plus haut ou le plus bas de la session, un PDH / PDL). C'est, très exactement, la séquence sweep → displacement → FVG → retour des chapitres 2 et 3, avec une contrainte horaire et une exigence de biais.
+
+Ce qui fait la valeur du modèle : il **discipline**. Une fenêtre courte, une condition (FVG dans la fenêtre), un sens (le biais), une exécution fixe. Le trader ne cherche pas toute la journée ; il attend une heure précise, prend le trade s'il est là, ne le prend pas sinon. C'est un excellent format pour apprendre à exécuter une séquence sans discrétion.
+
+Ce qui en fait aussi le piège : le nom, l'heure exacte à la minute, l'aura de méthode secrète. Le silver bullet ne « fonctionne » ni plus ni moins que la séquence sweep-FVG-retour prise dans une killzone avec un biais correct ; il en est un cas particulier. Ses statistiques dépendent du marché, du biais, de la définition du FVG, et se mesurent (niveau 7) ; elles ne se lisent pas dans une vidéo. Les autres modèles (modèle de 2022, unicorn qui combine breaker et FVG, etc.) suivent la même logique : une combinaison de briques avec une contrainte de temps. Utiles comme gabarits d'exécution ; trompeurs comme promesses.
+
+## Assembler les outils ICT sans en faire une religion
+
+Le vocabulaire ICT a une particularité : il est immense, en constante expansion, souvent contradictoire d'une année à l'autre, et défendu par une communauté qui tend à considérer chaque terme comme une révélation. Cela produit deux dérives.
+
+**La première dérive : tout expliquer après coup.** Avec assez de concepts (une dizaine de types de gaps, plusieurs types de blocks, des heures « algorithmiques », des « macros » à la minute), n'importe quel mouvement passé s'explique par une combinaison de termes. C'est le contraire d'une méthode : une méthode dit à l'avance ce qu'elle attend, et se trompe de façon mesurable. Le test à appliquer à tout outil ICT (et à tout outil de ce cours) : **puis-je écrire la règle avant, de façon à ce qu'un autre l'applique de la même manière, et compter ensuite ?** Killzones, PO3, premium / discount, OTE, silver bullet passent ce test s'ils sont définis strictement. Beaucoup d'autres concepts ne le passent pas.
+
+**La seconde dérive : la religion.** L'idée qu'il existe un « algorithme » qui livre le prix aux niveaux ICT à des heures précises, que le marché est entièrement piloté, que le trader qui connaît les codes ne peut pas perdre. Cette vision est fausse (les marchés sont faits de participants aux intérêts divers, sous des contraintes réelles ; le niveau 4 le montrera au tick près), et surtout elle est **dangereuse** pour le niveau 1 : celui qui croit à un système infaillible ne dimensionne pas son risque, ne tient pas de journal honnête et n'accepte pas la perte comme normale.
+
+Comment assembler, alors ? De la manière suivante, dans cet ordre :
+
+1. **Le biais** vient du contexte HTF (niveau 2, structure quotidienne / H4, zones HTF non mitigées). Aucun outil ICT ne le remplace.
+2. **La fenêtre** vient des killzones : on ne cherche que dans les heures de participation.
+3. **La forme** vient du PO3 : on attend la manipulation (le sweep contre le biais) avant de chercher la distribution.
+4. **La zone** vient des briques SMC (FVG, OB, breaker), filtrée par premium / discount et OTE : dans une structure haussière, un FVG dans le discount, idéalement dans l'OTE.
+5. **L'exécution** suit un gabarit fixe (le silver bullet ou son propre modèle) : entrée au retour, stop au-delà du swing, cible sur la liquidité.
+6. **Le risque** vient du niveau 1, sans exception : 1 %, budgets, journal.
+7. **La vérification** vient du niveau 7 : on compte, sur son marché, ce que ce gabarit produit réellement.
+
+Utilisés ainsi, les outils ICT sont ce qu'ils sont : de bonnes conventions pour situer les briques SMC dans le temps et dans la fourchette. Ni plus, ni moins.
+
+## Deux trades dans une killzone
+
+Reconstitutions pédagogiques : le même schéma, avec et sans les outils du temps.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Biais D haussier ; range asiatique ; sweep du bas asiatique en killzone Londres (manipulation) ; displacement et FVG M15 dans le discount de la fourchette du jour ; entrée au retour, New York AM"
+  entree="18 338,00"
+  stop="18 316,00 (22 pts, sous le sweep + marge)"
+  objectif="18 404,00 (EQH au-dessus du range asiatique, puis PDH)"
+  r="+3R">
+
+Le plan du matin : « D haussier, dernier HL à 18 250, zone HTF non mitigée entre 18 300 et 18 330. Range asiatique 18 340-18 372. Attendu : manipulation sous 18 340 dans Londres ou New York AM, puis distribution vers 18 404 (EQH) et le PDH 18 440. » 9 h 20 : mèche à 18 322 sous le range, dans la zone HTF, clôture M15 à 18 344 : sweep. Displacement à 18 380, FVG M15 entre 18 334 et 18 342, dans le discount de la fourchette 18 322-18 380 (équilibre à 18 351) et proche de l'OTE. 14 h 05, New York AM : retour dans le FVG. Entrée à 18 338, stop 18 316. Cible atteinte à 15 h 30. Chaque outil a joué son rôle : biais (HTF), fenêtre (killzone), forme (PO3), zone (FVG en discount), exécution fixe.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Achat de la cassure haussière du range asiatique à 8 h 12, sans biais écrit, sans attendre la manipulation"
+  entree="18 375,00 (au marché, sur la cassure du haut du range)"
+  stop="18 360,00 (15 pts)"
+  objectif="18 440,00"
+  r="−1R, puis −1R sur un second essai">
+
+Même matinée. Ce trader voit le range asiatique casser par le haut à 8 h 12 et achète « la cassure de Londres ». Il n'a pas de biais écrit ; il n'attend pas la manipulation ; il achète la première sortie du range, du côté où la liquidité (les EQH à 18 372) vient d'être prise. C'est acheter la manipulation : le prix revient dans le range, prend le bas à 9 h 20 (le sweep du premier trader), touche son stop. Il rachète « la reprise » à 8 h 50 : second stop. Deux pertes avant que le vrai mouvement ne commence, dans un sens qu'il avait deviné juste. Le PO3 n'était pas une prédiction ; c'était l'ordre des événements, et il l'a pris à l'envers.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Les **killzones** sont les fenêtres de participation (Londres, New York AM, Londres close, New York PM) où les sweeps et displacements se concentrent ; on y cherche, on ne trade pas les heures creuses. Les bornes exactes sont des conventions.
+- Le **Power of Three** décrit la forme d'une session : accumulation (range), manipulation (sweep contre le biais), distribution (le mouvement). Il donne le **comment**, jamais la direction, qui vient du contexte HTF.
+- **Premium / discount** : dans une structure haussière, on achète la moitié basse de la fourchette ; l'**OTE** (62 à 79 % de retracement) précise la zone. C'est un filtre de sélection des FVG / OB, pas un signal.
+- Les **modèles** (silver bullet et autres) sont des gabarits d'exécution : briques SMC + fenêtre + biais. Utiles pour discipliner ; trompeurs comme promesses.
+- **Assembler** : biais HTF → killzone → PO3 → zone SMC filtrée → gabarit → risque du niveau 1 → vérification du niveau 7. Le test de tout outil : puis-je écrire la règle avant et compter après ?
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Calculer une OTE">
+
+Sur EUR/USD, un mouvement haussier va de 1,0800 (swing bas) à 1,0880 (swing haut). Structure H4 haussière.
+
+1. Donnez l'équilibre, la zone de discount, et les bornes de l'OTE (62 %, 70,5 %, 79 %).
+2. Un FVG M15 se trouve entre 1,0818 et 1,0826. Est-il dans l'OTE ? Dans le discount ?
+3. Où va le stop d'un achat dans ce FVG, en version large et en version raffinée ?
+
+<Solution>
+
+1. Fourchette : 80 pips. Équilibre : 1,0880 − 40 = **1,0840** ; discount : sous 1,0840. OTE : 62 % → 1,0880 − 49,6 = **1,0830** ; 70,5 % → 1,0880 − 56,4 = **1,0824** ; 79 % → 1,0880 − 63,2 = **1,0817**.
+2. Le FVG 1,0818-1,0826 est **entièrement dans l'OTE** (1,0817-1,0830) et donc dans le discount. Confluence de zones : FVG + OTE + discount.
+3. Version large : **sous le swing bas** 1,0800, avec marge : 1,0795 (23 pips depuis une entrée à 1,0822). Version raffinée : **sous le FVG** avec marge ATR M15 : vers 1,0813 (9 pips). La raffinée a un bien meilleur ratio et une probabilité de stop plus élevée ; c'est le compromis habituel.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire un PO3">
+
+Journée sur l'ES : ouverture à 5 280 ; range asiatique 5 274-5 288 ; à 8 h 40 (Paris), le prix monte à 5 296 puis redescend et clôture M15 à 5 284 ; à 9 h 30, il casse 5 274 et descend à 5 251 en trois bougies M15 larges, laissant un FVG entre 5 262 et 5 268 ; à 14 h 30, il revient à 5 265 puis repart à la baisse jusqu'à 5 232 en fin de séance. Biais D : baissier.
+
+1. Identifiez les trois phases du PO3 et les heures.
+2. Où était la manipulation, et qui a-t-elle piégé ?
+3. Où était l'entrée cohérente avec le biais et dans quelle killzone ? Quel aurait été le résultat en R avec un stop au-dessus du sweep (5 296 + 2) ?
+
+<Solution>
+
+1. **Accumulation** : range asiatique 5 274-5 288 (nuit). **Manipulation** : la poussée à 5 296 à 8 h 40 (Londres), au-dessus du range, contre le biais baissier. **Distribution** : la cassure du bas et le displacement à 5 251 à partir de 9 h 30, puis la reprise de la baisse l'après-midi.
+2. La manipulation est le sweep des EQH au-dessus du range asiatique ; elle a piégé les acheteurs de cassure et pris les stops des vendeurs, fournissant la liquidité aux vendeurs institutionnels.
+3. Entrée short au **retour dans le FVG 5 262-5 268**, à 14 h 30 (killzone New York AM), par exemple à 5 265. Stop à 5 298 : 33 points. Cible : la liquidité en dessous, atteinte à 5 232 : 33 points, soit **+1R** seulement au premier objectif. Ratio insuffisant avec ce stop large ; un stop raffiné (au-dessus du FVG, vers 5 271, 6 points) aurait donné **+5,5R** à 5 232. Le raffinement n'est pas un détail : ici, il fait la différence entre un trade refusable et un excellent trade.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire son gabarit">
+
+Rédigez, en six lignes maximum, un gabarit de session à la manière du silver bullet, pour votre marché et vos heures : fenêtre, condition de biais, condition de zone (brique SMC + filtre premium / discount), déclencheur d'entrée, stop, cible. Puis appliquez-le en simulation ou en annotation sur dix séances passées et comptez : combien de fois le gabarit a-t-il donné un trade, combien de gagnants, quelle expectancy en R.
+
+<Solution>
+
+Un gabarit acceptable a la forme : « Fenêtre : 14 h 00 - 15 h 30 Paris (NY AM). Biais : structure D et H4 alignées, écrit avant 13 h. Zone : FVG M15 formé dans la fenêtre après un sweep d'un extrême de session, situé dans le discount (achat) ou le premium (vente) de la fourchette du jour. Entrée : ordre limite au bord du FVG ou réalignement M5. Stop : au-delà du swing du sweep + 0,5 ATR M5. Cible : liquidité la plus proche (extrême de session opposé, PDH / PDL). » Le comptage sur dix séances ne prouve rien (échantillon minuscule) mais installe le réflexe : un gabarit se juge sur des chiffres, et sur cent séances au moins avant toute conclusion (niveau 7).
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Une killzone est :",
+      options: [
+        "Une heure où le prix monte toujours",
+        "Une fenêtre horaire de forte participation où sweeps et displacements sont plus fréquents ; on y cherche, sans garantie",
+        "Une zone de prix",
+        "Un indicateur",
+      ],
+      answer: 1,
+      explain: "C'est là qu'il y a du volume pour faire les mouvements. Les bornes exactes sont des conventions ; le principe est de ne pas trader les heures creuses.",
+    },
+    {
+      q: "Le Power of Three donne :",
+      options: [
+        "La direction de la journée",
+        "La forme d'une session : accumulation, manipulation contre le biais, distribution ; la direction vient du contexte HTF",
+        "L'heure exacte du sommet",
+        "Un signal d'achat",
+      ],
+      answer: 1,
+      explain: "Le PO3 est symétrique. Sans biais, il se lit dans les deux sens et ne sert à rien. Avec un biais, il dit d'attendre la manipulation avant la distribution.",
+    },
+    {
+      q: "Dans une structure haussière, un FVG situé dans le premium de la fourchette :",
+      options: [
+        "Est la meilleure zone d'achat",
+        "Est une zone d'achat de moindre qualité : loin de l'invalidation, proche de la liquidité qui sert de cible",
+        "Est une zone de vente",
+        "N'existe pas",
+      ],
+      answer: 1,
+      explain: "Premium / discount est un filtre de sélection : on achète le discount dans une structure haussière. Ce n'est pas un signal, et il n'a de sens qu'avec un biais.",
+    },
+    {
+      q: "L'OTE est :",
+      options: [
+        "Un niveau magique",
+        "La zone de 62 à 79 % de retracement d'un mouvement, où les retours profonds offrent les meilleures entrées, en confluence avec un FVG ou un OB",
+        "L'ouverture de la séance",
+        "Un stop",
+      ],
+      answer: 1,
+      explain: "Les pourcentages n'ont pas de propriété mathématique particulière, mais ils sont regardés et décrivent correctement l'avantage des replis profonds. La fourchette dépend du choix des swings.",
+    },
+    {
+      q: "Le silver bullet est :",
+      options: [
+        "Une méthode secrète infaillible",
+        "Un gabarit : FVG dans une fenêtre horaire précise, dans le sens du biais, après une prise de liquidité ; un cas particulier de la séquence sweep-FVG-retour",
+        "Un indicateur",
+        "Une killzone",
+      ],
+      answer: 1,
+      explain: "Sa valeur est de discipliner l'exécution. Ses statistiques dépendent du marché et de la définition, et se mesurent au niveau 7 ; elles ne se lisent pas dans une vidéo.",
+    },
+    {
+      q: "Le test à appliquer à tout outil ICT est :",
+      options: [
+        "Est-il populaire ?",
+        "Puis-je écrire la règle avant, de façon à ce qu'un autre l'applique de la même manière, et compter ensuite ?",
+        "A-t-il un nom en anglais ?",
+        "Explique-t-il le graphique d'hier ?",
+      ],
+      answer: 1,
+      explain: "Une méthode dit à l'avance ce qu'elle attend et se trompe de façon mesurable. Tout expliquer après coup est le contraire d'une méthode.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Les SMC modernes descendent d'une méthode centenaire. Le chapitre suivant présente Wyckoff : les trois lois, les schémas d'accumulation et de distribution, les phases A à E et leurs événements, les springs et upthrusts (qui sont des sweeps à l'échelle des semaines), et la lecture du volume par l'effort et le résultat.
