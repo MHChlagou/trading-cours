@@ -1,0 +1,320 @@
+---
+title: "Introduction aux Smart Money Concepts"
+description: "Pourquoi le prix va chercher la liquidité, qui est en face de vous et comment il exécute, la carte des concepts SMC et leur articulation, ce que les SMC ajoutent ou non à l'analyse technique classique, et le plan de progression du niveau."
+---
+
+# Introduction aux Smart Money Concepts
+
+Le niveau 2 a appris à lire ce que le prix fait : structure, niveaux, volatilité, volume. Le niveau 3 s'intéresse à **pourquoi** il le fait : pourquoi il dépasse un plus haut évident de trois ticks avant de s'effondrer, pourquoi il revient combler une zone traversée trop vite, pourquoi certains niveaux tiennent et d'autres cèdent. Les **Smart Money Concepts** (SMC) sont un vocabulaire et une grille de lecture construits autour d'une idée centrale : le prix se déplace vers la liquidité, parce que les gros participants ont besoin de liquidité pour exécuter. Ce chapitre pose cette idée, décrit les acteurs, dresse la carte des concepts, et situe honnêtement les SMC par rapport à l'analyse technique classique.
+
+## La logique de la liquidité : pourquoi le prix va la chercher
+
+Reprenez le carnet d'ordres du niveau 0. Pour acheter 2 000 contrats ES sans faire décoller le prix, un fonds a besoin de 2 000 contrats à vendre en face de lui. Où trouve-t-il des vendeurs en quantité ? À deux endroits :
+
+- **Là où des ordres limites de vente attendent** : sous une résistance, des vendeurs ont posé des limites ; c'est de la liquidité passive.
+- **Là où des stops de vente vont se déclencher** : sous un plus bas évident, les acheteurs ont placé leurs stops de protection (des ordres de vente au marché, une fois déclenchés). Si le prix touche ce niveau, ces stops **vendent** en cascade : c'est de la liquidité qui apparaît d'un coup, exactement quand le prix passe.
+
+Un participant qui veut acheter gros a donc intérêt à ce que le prix aille **sous** le plus bas évident : les stops des acheteurs lui fournissent les vendeurs dont il a besoin, à un bon prix. Une fois servi, il n'a plus de raison de laisser le prix là ; le prix repart à la hausse, laissant une mèche sous le plus bas et des acheteurs stoppés qui regardent le marché monter sans eux.
+
+C'est le mécanisme de base. Il n'a rien de conspirationniste : personne ne « chasse » votre stop en particulier ; mais des milliers de stops au même endroit forment un réservoir de liquidité, et les participants qui doivent exécuter en taille vont naturellement là où se trouve la liquidité. Le prix est **attiré** par les zones où les ordres s'accumulent, comme l'eau par le point bas.
+
+Trois conséquences pratiques, développées dans les chapitres suivants :
+
+1. **Les niveaux évidents sont testés au-delà avant de tenir.** Un plus bas net, des plus bas égaux, un support tracé par tout le monde : le prix ira souvent quelques ticks en dessous, prendra les stops, puis reviendra. Ce n'est pas une cassure ; c'est un **sweep** (chapitre 2).
+2. **Le prix se déplace de liquidité en liquidité.** Après avoir pris les stops sous un plus bas, il vise souvent les stops au-dessus du plus haut suivant. Une séance peut se lire comme une suite de réservoirs visités.
+3. **Le stop bien placé n'est pas « juste sous le niveau »**, là où sont tous les autres ; il est au-delà de la zone où la liquidité sera prise, ou bien la position s'ouvre **après** le sweep, avec le stop sous la mèche.
+
+<Figure caption="Figure 1 · Le mécanisme de la liquidité. Sous le plus bas évident, des stops d'acheteurs (ordres de vente). Un gros acheteur laisse le prix les déclencher, se sert, et le prix repart. Il reste une mèche et des acheteurs sortis.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Sweep de liquidité sous un plus bas évident" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <line x1="60" y1="200" x2="640" y2="200" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="6 4" />
+  <text x="70" y="194" fontSize="10" className="red">plus bas évident · stops des acheteurs juste dessous</text>
+  <rect x="60" y="202" width="580" height="22" className="red" opacity="0.15" />
+  <text x="350" y="218" fontSize="10" textAnchor="middle" className="red">réservoir de liquidité : ordres de vente au marché en attente de déclenchement</text>
+
+  <polyline points="70,120 110,160 140,140 180,195 220,170 260,150 300,180 340,205 370,236 390,215 420,150 460,120 500,140 540,90 580,110 620,60" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="370" cy="236" r="6" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="370" y="262" fontSize="10" textAnchor="middle" className="green" fontWeight="600">sweep : stops déclenchés, gros acheteur servi</text>
+  <text x="520" y="80" fontSize="10" textAnchor="middle" className="muted">le prix repart vers la liquidité suivante</text>
+  <text x="180" y="120" fontSize="10" textAnchor="middle" className="muted">acheteurs entrés ici, stop sous le plus bas</text>
+  <line x1="180" y1="126" x2="180" y2="190" className="line" strokeWidth="1" strokeDasharray="2 3" />
+</svg>
+</Figure>
+
+## Qui est en face de vous et comment il exécute
+
+Le mot « smart money » désigne, de façon un peu romantique, les participants qui exécutent en taille et avec méthode : banques, fonds, market makers, algorithmes d'exécution. Ce qui les distingue du particulier n'est pas la clairvoyance ; c'est la **contrainte de taille** et le **process d'exécution**.
+
+**La contrainte de taille.** Un particulier achète 2 MES au marché : le carnet ne bouge pas. Un fonds qui doit acheter 3 000 ES ne peut pas cliquer une fois : il ferait monter le prix de 20 points contre lui-même. Il doit **fractionner** (des dizaines ou centaines d'ordres sur des minutes ou des heures), **utiliser la liquidité disponible** (les stops, les ordres limites adverses), et parfois **provoquer** la liquidité (pousser le prix sous un niveau pour déclencher les stops, puis acheter dans la cascade). Ses traces sont visibles : mèches au-delà des niveaux, volume anormal sur les extrêmes, mouvements rapides après une prise de stops.
+
+**Le process d'exécution.** Les algorithmes d'exécution des institutions (VWAP, TWAP, participation) découpent un gros ordre selon le temps ou le volume, et cherchent le prix moyen le plus favorable. Ils achètent davantage quand le prix baisse vers leur zone d'intérêt, moins quand il monte. Résultat visible : des zones où le prix « ne veut pas descendre » malgré des ventes (absorption, niveau 2), et des retours réguliers vers des prix moyens de référence (le VWAP du jour, que le niveau 4 introduit).
+
+**Les market makers.** Ils fournissent la liquidité des deux côtés et se couvrent en permanence. Ils ne « manipulent » pas au sens complotiste, mais ils déplacent leurs cotations là où ils trouvent de la contrepartie, et retirent la liquidité avant les annonces (niveau 0). Leur activité contribue aux mèches et aux sweeps.
+
+**Les autres particuliers.** Ils sont la source principale des stops regroupés aux endroits évidents. Le prix va les chercher non par malveillance mais parce que c'est là que la liquidité est.
+
+Ce que cela change pour vous : **vous n'avez pas à deviner ce que pense le smart money ; vous avez à repérer où il a besoin d'aller (la liquidité) et où il a laissé des traces (les concepts du niveau)**. Le trader SMC ne prédit pas ; il lit un cycle : liquidité prise, réaction, déséquilibre laissé, retour dans le déséquilibre, continuation vers la liquidité suivante.
+
+## La carte des concepts SMC et leur articulation
+
+Le vocabulaire SMC est abondant et parfois redondant. Voici les concepts qui comptent, dans l'ordre logique où ils s'enchaînent sur un graphique, chacun renvoyant à son chapitre.
+
+1. **Liquidité et sweep** (chapitre 2). Où sont les stops (sous les plus bas, au-dessus des plus hauts, sur les plus hauts et plus bas égaux, aux extrêmes de session), et comment le prix va les prendre puis revient. C'est le point de départ de presque tout setup SMC.
+2. **Displacement et FVG** (chapitre 3). Après la prise de liquidité, un mouvement rapide et déséquilibré (le displacement) laisse un trou dans le carnet visible sur le graphique : le **fair value gap**, zone où le prix n'a été échangé que d'un côté. Le prix y revient souvent avant de continuer.
+3. **Order block et breaker** (chapitre 4). La dernière bougie contraire avant le displacement est l'**order block** : la zone où le gros participant a probablement construit sa position. Retour du prix dessus, réaction. Un order block traversé devient un **breaker** : changement de polarité en version SMC.
+4. **BOS et CHoCH** (chapitre 5). Le **break of structure** est la cassure d'un swing dans le sens de la tendance (continuation) ; le **change of character** est la première cassure contre la tendance (indice de retournement). C'est la structure du niveau 2 relue avec la question « cette cassure a-t-elle pris de la liquidité ou construit de la structure ? ».
+5. **Boîte à outils ICT** (chapitre 6). Killzones (heures qui concentrent les mouvements), Power of Three (accumulation, manipulation, distribution sur une session), premium / discount (où l'on achète et où l'on vend dans une fourchette), modèles de session.
+6. **Wyckoff** (chapitres 7 et 8). La grille historique dont les SMC sont, pour une bonne part, une relecture : accumulation, distribution, springs, upthrusts, effort contre résultat. Le composite man de Wyckoff est le « smart money » d'il y a un siècle.
+
+Le fil qui relie tout : **liquidité → displacement → zone d'intérêt (FVG, OB) → retour → continuation vers la liquidité suivante**, le tout situé dans une structure (BOS / CHoCH) et dans le temps (killzones). Un setup SMC complet articule plusieurs de ces éléments ; aucun n'est un signal seul.
+
+<Figure caption="Figure 2 · La séquence SMC type sur un retournement haussier : sweep du plus bas, displacement avec FVG, CHoCH, retour dans la zone (FVG / order block), continuation avec BOS vers la liquidité au-dessus.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Séquence complète des concepts SMC sur un graphique" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="310" x2="700" y2="310" className="line" strokeWidth="1" />
+  <line x1="60" y1="230" x2="360" y2="230" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="66" y="225" fontSize="9" className="red">liquidité (plus bas égaux)</text>
+  <line x1="60" y1="70" x2="700" y2="70" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="66" y="65" fontSize="9" className="red">liquidité (plus haut)</text>
+
+  <polyline points="70,150 110,228 140,190 180,229 210,200 240,232 270,215 300,262 320,250 340,170 360,185 380,120 400,150 420,175 440,160 470,120 500,140 540,90 570,110 610,68 650,90 690,60" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+
+  <circle cx="300" cy="262" r="6" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="300" y="285" fontSize="10" textAnchor="middle" className="green" fontWeight="600">1 · sweep</text>
+  <rect x="330" y="150" width="60" height="30" className="gold" opacity="0.25" />
+  <text x="360" y="145" fontSize="9" textAnchor="middle" className="gold" fontWeight="600">2 · displacement + FVG</text>
+  <line x1="200" y1="190" x2="400" y2="190" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="405" y="194" fontSize="9" className="muted">3 · CHoCH (LH cassé)</text>
+  <rect x="290" y="250" width="30" height="16" className="green" opacity="0.4" />
+  <text x="250" y="300" fontSize="9" className="green">order block</text>
+  <circle cx="420" cy="175" r="5" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="440" y="200" fontSize="9" className="gold" fontWeight="600">4 · retour dans la zone : entrée</text>
+  <line x1="380" y1="120" x2="560" y2="120" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="500" y="112" fontSize="9" className="muted">5 · BOS (HH)</text>
+  <text x="620" y="50" fontSize="9" textAnchor="middle" className="muted">6 · liquidité suivante atteinte</text>
+</svg>
+</Figure>
+
+## SMC et analyse technique classique : rupture ou continuité
+
+Une part du succès des SMC tient à un discours de rupture : « l'analyse technique classique est faite pour piéger le particulier ; les SMC révèlent ce que font les institutions ». Il faut trier.
+
+**Ce qui est de la continuité, sous un vocabulaire neuf.** Le sweep est la fausse cassure des manuels des années 1930 ; l'order block est une zone d'offre ou de demande ; le breaker est le changement de polarité du niveau 2 ; BOS et CHoCH sont la structure HH/HL/LH/LL avec un critère de validation ; le FVG ressemble aux gaps et aux zones de déséquilibre décrits depuis longtemps ; l'accumulation-manipulation-distribution est le schéma de Wyckoff. Un trader qui maîtrise le niveau 2 reconnaît presque tout.
+
+**Ce qui est un apport réel.** Trois choses. D'abord, un **cadre causal cohérent** : la liquidité comme moteur donne une explication unique à des phénomènes que l'analyse classique décrivait sans les relier (pourquoi les fausses cassures, pourquoi les retours dans les gaps, pourquoi les niveaux ronds). Ensuite, une **précision d'exécution** : les SMC forcent à attendre une séquence (sweep, puis displacement, puis retour) plutôt qu'à entrer « sur le support », ce qui donne des stops plus courts et des invalidations plus nettes. Enfin, une **attention au temps** (killzones, sessions) que l'analyse classique néglige souvent.
+
+**Ce qui est du marketing ou de la sur-interprétation.** L'idée que chaque mèche est une manipulation délibérée ; le vocabulaire multiplié (une dizaine de types de « gaps » et de « blocks » qui décrivent la même chose) ; les statistiques de réussite jamais sourcées ; la promesse implicite que « voir comme les institutions » suffit à gagner. Un FVG n'a aucun taux de réussite en soi ; c'est une zone d'intérêt, dans un contexte, avec un stop et une taille. Le niveau 1 s'applique intégralement.
+
+La position de ce cours : les SMC sont **une grille de lecture utile, compatible avec tout ce qui précède, et qui ne dispense d'aucune règle de risque**. Ils s'apprennent avec la même exigence de définitions strictes et de vérification (niveau 7) que le reste.
+
+## Le plan de progression de ce niveau
+
+Le niveau 3 est le plus long du cours (huit chapitres) parce qu'il installe le vocabulaire qui servira aux setups du niveau 7. Voici comment le travailler.
+
+**Chapitres 2 à 5 : les briques.** Liquidité et sweeps, displacement et FVG, order blocks et breakers, BOS et CHoCH. Chaque chapitre donne une **définition stricte** (les SMC souffrent de définitions molles ; celles du cours sont vérifiables), des critères de validité, des exemples annotés, et la place de la brique dans la séquence. Après chaque chapitre, l'exercice à faire est le même que celui du niveau 2 : annoter dix graphiques passés en ne marquant que les éléments qui respectent la définition stricte. Compter ceux qui ont « fonctionné » n'a aucun intérêt à ce stade ; l'intérêt est de voir les mêmes choses que le cours.
+
+**Chapitre 6 : le temps et l'assemblage.** Les outils ICT (killzones, Power of Three, premium / discount) et la façon de les combiner sans en faire une religion. C'est le chapitre où les briques deviennent un début de setup.
+
+**Chapitres 7 et 8 : Wyckoff.** La méthode dont les SMC descendent, avec ses phases, ses événements et sa lecture du volume. Elle donne le recul historique et un cadre pour les mouvements de plusieurs semaines que les SMC intraday négligent.
+
+**Ce que le niveau ne fait pas.** Il ne donne pas encore de setup complet avec statistiques : c'est le rôle du niveau 7, après l'order flow (niveau 4) et le contexte macro (niveaux 5 et 6). Il est tentant de trader dès le chapitre 3 « parce que le FVG est là » ; c'est précisément l'erreur. Le niveau 3 se travaille **en simulation et en annotation**, pas en réel.
+
+<Figure caption="Figure 3 · Le plan du niveau 3 : quatre briques, un chapitre d'assemblage dans le temps, deux chapitres de recul historique. Les setups complets viennent au niveau 7.">
+<svg className="tm-svg" viewBox="0 0 720 240" role="img" aria-label="Plan du niveau 3 en trois blocs" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="330" height="120" rx="8" className="box" strokeWidth="1.5" />
+  <text x="185" y="52" fontSize="12" fontWeight="600" textAnchor="middle">Briques (ch. 2 à 5)</text>
+  <text x="185" y="76" fontSize="11" textAnchor="middle" className="muted">liquidité et sweeps · displacement et FVG</text>
+  <text x="185" y="94" fontSize="11" textAnchor="middle" className="muted">order blocks et breakers · BOS et CHoCH</text>
+  <text x="185" y="122" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">définitions strictes, annotation, pas de trading réel</text>
+
+  <polygon points="365,90 352,82 352,98" className="gold" />
+  <rect x="370" y="30" width="160" height="120" rx="8" className="box" strokeWidth="1.5" />
+  <text x="450" y="52" fontSize="12" fontWeight="600" textAnchor="middle">Assemblage (ch. 6)</text>
+  <text x="450" y="76" fontSize="11" textAnchor="middle" className="muted">killzones · Power of Three</text>
+  <text x="450" y="94" fontSize="11" textAnchor="middle" className="muted">premium / discount · modèles</text>
+  <text x="450" y="122" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">les briques dans le temps</text>
+
+  <polygon points="545,90 532,82 532,98" className="gold" />
+  <rect x="550" y="30" width="150" height="120" rx="8" className="box" strokeWidth="1.5" />
+  <text x="625" y="52" fontSize="12" fontWeight="600" textAnchor="middle">Recul (ch. 7 et 8)</text>
+  <text x="625" y="76" fontSize="11" textAnchor="middle" className="muted">Wyckoff : lois, phases,</text>
+  <text x="625" y="94" fontSize="11" textAnchor="middle" className="muted">springs, composite man</text>
+  <text x="625" y="122" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">l'origine des SMC</text>
+
+  <rect x="20" y="170" width="680" height="50" rx="8" className="gold" opacity="0.15" />
+  <text x="360" y="192" fontSize="11" textAnchor="middle" fontWeight="600">Puis niveau 4 (order flow), niveaux 5 et 6 (contexte), niveau 7 : setups complets avec statistiques</text>
+  <text x="360" y="210" fontSize="10" textAnchor="middle" className="muted">le niveau 1 (risque) s'applique intégralement à chaque étape</text>
+</svg>
+</Figure>
+
+## Deux trades sous l'angle de la liquidité
+
+Reconstitutions pédagogiques : le même plus bas évident, lu par deux traders. Les concepts précis (sweep, FVG, CHoCH) sont définis dans les chapitres suivants ; lisez ici le raisonnement.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Sweep des plus bas égaux de la session asiatique, displacement haussier avec FVG, entrée au retour dans le FVG"
+  entree="18 372,00"
+  stop="18 352,00 (20 pts, sous la mèche du sweep)"
+  objectif="18 432,00 (plus haut de la veille, liquidité au-dessus)"
+  r="+3R">
+
+Deux plus bas égaux à 18 360 formés pendant la nuit : un réservoir de stops évident. À 15 h 40, le prix plonge à 18 355, déclenche les stops, et repart en une bougie M5 de 30 points qui laisse un FVG entre 18 368 et 18 376. Le trader n'achète ni le plus bas ni la bougie : il attend le retour dans le FVG, entre à 18 372, stop sous la mèche du sweep. Le prix se dirige vers la liquidité suivante, le plus haut de la veille, et l'atteint. Le raisonnement : la liquidité sous les plus bas égaux a été prise (le gros acheteur est servi), le displacement montre qu'il est là, le FVG donne le lieu du retour, le plus haut de la veille donne la destination.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Achat sur les plus bas égaux « parce que c'est un support », stop juste dessous"
+  entree="18 362,00"
+  stop="18 357,00 (5 pts, sous les plus bas égaux)"
+  objectif="18 400,00"
+  r="−1R, stoppé au plus bas du mouvement">
+
+Même matinée. Ce trader voit les plus bas égaux à 18 360 comme un support solide et achète dessus à 18 362, stop à 18 357 : exactement là où sont les stops de tous les autres acheteurs. Le sweep descend à 18 355 : son stop est déclenché avec des milliers d'autres, il fournit la liquidité au gros acheteur, et il regarde ensuite le prix monter 70 points. Son analyse de niveau n'était pas fausse : le support a tenu, au sens où le prix est reparti. Mais il a placé son stop dans le réservoir de liquidité, et il a acheté avant que la liquidité soit prise. La différence entre les deux trades n'est pas le niveau ; c'est l'ordre des événements.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le prix va vers la **liquidité** parce que les gros participants ont besoin de contrepartie ; les stops regroupés aux endroits évidents en sont la source principale.
+- Le « smart money » se distingue par la **contrainte de taille** et le **process d'exécution** (fractionner, utiliser et provoquer la liquidité), pas par la clairvoyance. Il laisse des traces lisibles.
+- La séquence type : **liquidité prise → displacement → zone d'intérêt (FVG, order block) → retour → continuation** vers la liquidité suivante, dans une structure (BOS / CHoCH) et un temps (killzones).
+- Les SMC sont largement de la **continuité** avec l'analyse classique et Wyckoff, avec un apport réel (cadre causal, précision d'exécution, temps) et une part de marketing à écarter.
+- Le niveau se travaille en **définitions strictes, annotation et simulation** ; les setups complets viennent au niveau 7 ; le niveau 1 s'applique partout.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Où est la liquidité ?">
+
+Sur un graphique H1 de l'ES, vous relevez : (a) deux plus hauts à 5 318 et 5 319 à une heure d'intervalle ; (b) le plus bas de la session asiatique à 5 284 ; (c) un plus bas isolé à 5 296 il y a trois jours ; (d) le niveau rond 5 300 ; (e) une zone d'ordres limites de vente que vous supposez sous 5 330.
+
+1. Classez ces éléments selon la quantité de liquidité qu'ils concentrent probablement, en justifiant.
+2. Pour chacun des trois premiers, dites quel type d'ordre s'y accumule (stops d'acheteurs, stops de vendeurs, limites).
+3. Un fonds veut vendre 2 000 ES. Vers lequel de ces niveaux a-t-il intérêt à ce que le prix aille d'abord ?
+
+<Solution>
+
+1. **(a)** plus hauts égaux : réservoir majeur, les stops des vendeurs (ordres d'achat) s'y empilent et le niveau est visible de tous. **(b)** plus bas asiatique : réservoir important, référence de session regardée par beaucoup. **(d)** 5 300 : niveau rond, ordres nombreux mais dispersés (stops, limites, objectifs). **(c)** plus bas isolé de trois jours : moins de stops frais, réservoir modeste. **(e)** une supposition sans réaction observée : non classable, on ne suppose pas la liquidité, on la repère.
+2. (a) : **stops de vendeurs**, c'est-à-dire des ordres d'achat au marché en attente de déclenchement. (b) : **stops d'acheteurs**, ordres de vente. (c) : stops d'acheteurs, en petit nombre.
+3. Un vendeur cherche des **acheteurs** en face : la liquidité en ordres d'achat est au-dessus des plus hauts égaux (a). Il a intérêt à ce que le prix dépasse 5 319, déclenche les stops (des achats), et à vendre dans cette cascade. C'est le sweep haussier avant baisse.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Continuité ou rupture">
+
+Pour chaque concept SMC, donnez son équivalent le plus proche dans le niveau 2 ou l'analyse classique, et dites ce que la version SMC ajoute (ou non).
+
+1. Sweep de liquidité.
+2. Breaker block.
+3. CHoCH.
+4. FVG.
+
+<Solution>
+
+1. **Fausse cassure** classique. La version SMC ajoute la **cause** (les stops comme réservoir) et un **critère d'exécution** : attendre le sweep puis le retour, stop sous la mèche.
+2. **Changement de polarité** (chapitre 4 du niveau 2), appliqué à une zone d'order block. Peu d'apport conceptuel ; l'apport est dans la précision de la zone.
+3. **Premier LH (ou HL) après une séquence**, le premier échec de la structure du chapitre 2. La version SMC ajoute la question : cette cassure a-t-elle simplement pris de la liquidité ou construit une structure ?
+4. **Gap ou zone de déséquilibre** : un mouvement si rapide que le prix n'a pas été échangé des deux côtés. La version SMC ajoute une **définition sur trois bougies** vérifiable et l'idée du retour pour « rééquilibrer ». C'est l'apport le plus spécifique des quatre.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le stop et le réservoir">
+
+Vous voulez acheter sur un support formé par deux plus bas égaux à 2 350,0 sur l'or (MGC). Trois options : (A) acheter à 2 351,0 avec un stop à 2 348,5 ; (B) acheter à 2 351,0 avec un stop à 2 343,0 ; (C) attendre que le prix passe sous 2 350,0, revienne au-dessus avec une bougie H1 qui clôture au-dessus de 2 352,0, puis acheter au retour avec un stop sous la mèche.
+
+1. Quelle option place son stop dans le réservoir de liquidité ?
+2. Quels sont les avantages et le coût de l'option B ?
+3. Pourquoi l'option C est-elle celle du niveau 3, et que lui manque-t-il encore pour être un setup ?
+
+<Solution>
+
+1. **A** : le stop à 2 348,5 est là où sont les stops de tous les acheteurs des plus bas égaux ; il sera pris par le sweep, puis le prix repartira.
+2. **B** met le stop au-delà du réservoir probable (7 $ sous les plus bas égaux) : il survit à un sweep ordinaire. Coût : un R plus large (8 $ au lieu de 2,5 $), donc une taille trois fois plus petite pour le même budget, et un ratio moins bon si l'objectif ne change pas ; et il reste exposé si le « sweep » est en réalité une vraie cassure.
+3. **C** achète **après** que la liquidité a été prise, avec la preuve que des acheteurs sont revenus (clôture au-dessus) : le stop sous la mèche est court et logique, et l'entrée est du côté du gros acheteur. Il lui manque encore : la définition précise du sweep (chapitre 2), une zone de retour définie (FVG ou order block, chapitres 3 et 4), la structure (CHoCH, chapitre 5), le contexte de temps (chapitre 6), et surtout des statistiques (niveau 7). C'est un raisonnement juste ; ce n'est pas encore un setup.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Pourquoi le prix va-t-il souvent au-delà d'un plus bas évident avant de repartir ?",
+      options: [
+        "Parce que le broker chasse votre stop",
+        "Parce que les stops regroupés sous ce plus bas fournissent la liquidité dont les gros acheteurs ont besoin pour se servir",
+        "Par hasard",
+        "Parce que les indicateurs le prédisent",
+      ],
+      answer: 1,
+      explain: "Des milliers de stops au même endroit forment un réservoir de liquidité. Les participants qui exécutent en taille vont naturellement là où se trouve la contrepartie.",
+    },
+    {
+      q: "Ce qui distingue le « smart money » du particulier, c'est :",
+      options: [
+        "Une connaissance du futur",
+        "La contrainte de taille et le process d'exécution : fractionner, utiliser et provoquer la liquidité",
+        "L'accès à des indicateurs secrets",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Un fonds qui doit acheter 3 000 ES ne peut pas cliquer une fois. Ses contraintes laissent des traces : mèches, volume anormal, retours dans les déséquilibres.",
+    },
+    {
+      q: "La séquence SMC type sur un retournement haussier est :",
+      options: [
+        "Cassure, achat, objectif",
+        "Sweep de la liquidité sous le plus bas, displacement avec FVG, CHoCH, retour dans la zone, continuation vers la liquidité au-dessus",
+        "Support, achat, stop dessous",
+        "Divergence RSI, achat",
+      ],
+      answer: 1,
+      explain: "Liquidité prise, preuve d'un gros participant, zone de retour, structure qui change, destination : aucun élément n'est un signal seul.",
+    },
+    {
+      q: "Le breaker block correspond, en analyse classique, à :",
+      options: [
+        "Une divergence",
+        "Un changement de polarité support-résistance appliqué à une zone d'order block",
+        "Un gap",
+        "Une moyenne mobile",
+      ],
+      answer: 1,
+      explain: "Une grande partie du vocabulaire SMC est de la continuité sous un nom neuf. Reconnaître les équivalences évite de croire à une rupture qui n'existe pas.",
+    },
+    {
+      q: "L'apport réel des SMC par rapport à l'analyse classique tient à :",
+      options: [
+        "Un taux de réussite garanti",
+        "Un cadre causal (la liquidité), une précision d'exécution (attendre la séquence) et une attention au temps (killzones)",
+        "Un vocabulaire plus long",
+        "L'inutilité du stop",
+      ],
+      answer: 1,
+      explain: "Le reste (chaque mèche est une manipulation, statistiques non sourcées, promesse de gains) est du marketing. Le niveau 1 s'applique intégralement.",
+    },
+    {
+      q: "Comment travailler le niveau 3 ?",
+      options: [
+        "En tradant en réel dès le chapitre 3",
+        "En annotation de graphiques passés avec des définitions strictes et en simulation ; les setups complets viennent au niveau 7",
+        "En mémorisant le vocabulaire",
+        "En cherchant des statistiques sur les forums",
+      ],
+      answer: 1,
+      explain: "Voir les mêmes choses que le cours, avec des définitions vérifiables, avant de compter ce qui « fonctionne ». Le trading réel des setups attend le niveau 7.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Tout part de la liquidité. Le chapitre suivant apprend à la localiser (stops, plus hauts et plus bas égaux, extrêmes de session et de semaine), à distinguer un sweep d'une cassure avec des critères précis, à lire la réaction qui suit, et à annoter des exemples sur NQ et EUR/USD.
