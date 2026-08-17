@@ -1,0 +1,330 @@
+---
+title: "Open interest et funding"
+description: "L'open interest sur les futures et sa lecture, la grille combinée prix, volume et open interest, le funding des perpétuels crypto, le positionnement extrême et les squeezes, et les signaux d'alerte tirés de cas historiques."
+---
+
+# Open interest et funding
+
+Les quatre chapitres précédents ont lu le flux : ce qui s'échange, à quel prix, qui prend l'initiative, ce qui attend. Ce dernier chapitre du niveau lit le **stock** : combien de positions sont ouvertes, et dans quel sens le marché penche. L'**open interest** des futures et le **funding** des perpétuels crypto sont deux mesures du positionnement ; combinées au prix et au volume, elles disent si un mouvement est porté par de nouvelles positions ou par des liquidations, et quand un déséquilibre est devenu assez extrême pour se retourner brutalement. C'est aussi le chapitre qui explique les squeezes, ces mouvements violents qui n'ont rien à voir avec la valeur et tout à voir avec le positionnement.
+
+## L'open interest sur les futures et sa lecture
+
+L'**open interest** (OI) est le nombre de contrats futures **ouverts et non clôturés** à un instant donné. Chaque contrat ouvert a un acheteur (long) et un vendeur (short) ; l'OI compte les contrats, pas les participants, et il ne se confond pas avec le volume.
+
+La différence tient en un exemple. Sur l'ES :
+
+- A achète 10 contrats à B qui les vend, tous deux ouvrant une position : volume +10, **OI +10** (dix nouveaux contrats existent).
+- A revend ses 10 contrats à C qui ouvre un long : volume +10, **OI inchangé** (le long a changé de main, le nombre de contrats ouverts n'a pas bougé).
+- A revend ses 10 contrats à B qui rachète son short : volume +10, **OI −10** (dix contrats ont été fermés des deux côtés).
+
+L'OI est publié par les Bourses (le CME le donne quotidiennement, en différé d'un jour ; certains fournisseurs l'estiment en intraday). Il se lit **en variation** : l'OI qui monte signifie que de nouvelles positions s'ouvrent (de l'argent nouveau entre) ; l'OI qui baisse signifie que des positions se ferment (de l'argent sort, ou des positions sont liquidées).
+
+Trois précautions :
+
+- **L'OI ne dit pas le sens** des positions ouvertes : +10 contrats, c'est un nouveau long et un nouveau short. C'est la combinaison avec le prix qui donne le sens (section suivante).
+- **Les roulements** trimestriels font chuter l'OI du contrat qui expire et monter celui du suivant : sur ces semaines, on lit l'OI cumulé des deux échéances, ou on ne le lit pas.
+- **Le rapport COT** (niveau 5) décompose l'OI par catégorie de participants (commerciaux, gros spéculateurs, petits) chaque semaine : c'est l'OI avec des noms.
+
+<Figure caption="Figure 1 · Volume et open interest ne mesurent pas la même chose : trois transactions de 10 contrats produisent chacune 10 de volume, mais l'OI monte, reste, ou baisse selon que les positions s'ouvrent, changent de main ou se ferment.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Différence entre volume et open interest sur trois transactions" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="215" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="127" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Ouverture des deux côtés</text>
+  <text x="127" y="84" fontSize="11" textAnchor="middle" className="muted">A ouvre un long, B ouvre un short</text>
+  <text x="127" y="120" fontSize="12" textAnchor="middle" className="mono">volume +10</text>
+  <text x="127" y="146" fontSize="14" textAnchor="middle" className="mono green" fontWeight="700">OI +10</text>
+  <text x="127" y="190" fontSize="10" textAnchor="middle" className="muted">argent nouveau, positions nouvelles</text>
+
+  <rect x="252" y="30" width="215" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="359" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Transfert</text>
+  <text x="359" y="84" fontSize="11" textAnchor="middle" className="muted">A ferme son long, C ouvre un long</text>
+  <text x="359" y="120" fontSize="12" textAnchor="middle" className="mono">volume +10</text>
+  <text x="359" y="146" fontSize="14" textAnchor="middle" className="mono" fontWeight="700">OI inchangé</text>
+  <text x="359" y="190" fontSize="10" textAnchor="middle" className="muted">le long change de main</text>
+
+  <rect x="484" y="30" width="215" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="591" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Fermeture des deux côtés</text>
+  <text x="591" y="84" fontSize="11" textAnchor="middle" className="muted">A ferme son long, B rachète son short</text>
+  <text x="591" y="120" fontSize="12" textAnchor="middle" className="mono">volume +10</text>
+  <text x="591" y="146" fontSize="14" textAnchor="middle" className="mono red" fontWeight="700">OI −10</text>
+  <text x="591" y="190" fontSize="10" textAnchor="middle" className="muted">argent qui sort, positions liquidées</text>
+</svg>
+</Figure>
+
+## Prix, volume, OI : la grille combinée
+
+C'est la lecture classique des futures, formalisée depuis des décennies. Croiser la direction du prix avec la variation de l'OI (le volume confirme l'intensité) donne quatre cas :
+
+| Prix | OI | Lecture | Signification |
+| --- | --- | --- | --- |
+| Monte | Monte | **Nouveaux longs** entrent et poussent | Hausse portée par de l'argent nouveau : tendance saine, à confirmer par le volume |
+| Monte | Baisse | **Short covering** : des shorts rachètent | Hausse par liquidation de vendeurs, sans acheteurs nouveaux : fragile, souvent brève (short squeeze) |
+| Baisse | Monte | **Nouveaux shorts** entrent et poussent | Baisse portée par de l'argent nouveau : tendance baissière saine |
+| Baisse | Baisse | **Long liquidation** : des longs vendent | Baisse par liquidation d'acheteurs, sans vendeurs nouveaux : fragile, souvent brève ; parfois capitulation finale |
+
+Ce que cette grille apporte à ce que vous savez déjà :
+
+- Elle distingue une **hausse de conviction** (prix et OI en hausse : des participants prennent des positions longues nouvelles et acceptent le risque) d'une **hausse de couverture** (prix en hausse, OI en baisse : les vendeurs sont sortis de force, personne n'a acheté par choix). La seconde s'arrête quand les shorts ont fini de couvrir ; la première a des jambes.
+- Elle qualifie un **climax** (Wyckoff, niveau 3) : une baisse finale sur volume énorme et OI en forte baisse est une capitulation (les longs sont sortis) ; le marché s'est nettoyé et peut se retourner. La même baisse avec OI en hausse est une baisse portée par de nouveaux shorts : elle peut continuer.
+- Elle éclaire les **ranges** : un range où l'OI monte régulièrement est une accumulation ou une distribution en cours (des positions se construisent, Wyckoff phase B) ; un range où l'OI stagne est un simple équilibre.
+
+Une limite : sur les futures d'indices, l'OI est dominé par des positions de couverture institutionnelle et par les roulements ; les variations quotidiennes sont bruitées. La grille est plus lisible sur les matières premières (pétrole, or, grains) et sur les futures de devises, où les spéculateurs pèsent davantage. Le rapport COT du niveau 5 affine.
+
+## Le funding des perpetuals crypto
+
+Les **perpétuels** (perpetual swaps) sont les contrats les plus échangés en crypto : des futures sans échéance. Sans échéance, rien ne force le prix du perpétuel à converger vers le prix spot ; le mécanisme qui les tient alignés est le **funding** : à intervalles réguliers (toutes les 8 heures sur la plupart des plateformes, parfois toutes les heures), les positions d'un côté paient les positions de l'autre.
+
+- Si le perpétuel cote **au-dessus** du spot (excès de demande de longs), le funding est **positif** : **les longs paient les shorts**. Cela décourage les longs et récompense les shorts, ce qui ramène le prix.
+- Si le perpétuel cote **en dessous**, le funding est **négatif** : les shorts paient les longs.
+
+Le taux se lit en pourcentage du notionnel par période. Un funding « neutre » est de l'ordre de 0,01 % par 8 heures (soit environ 11 % annualisés, le coût du levier en temps normal). Un funding de 0,05 % par 8 heures (55 % annualisés) est élevé ; 0,1 % et plus (plus de 100 % annualisés) est extrême, et rare hors des phases d'euphorie ou de panique.
+
+Ce que le funding dit : **de quel côté le marché penche, et à quel prix il paie pour rester penché**. Un funding très positif signifie que les longs sont nombreux, à levier, et qu'ils paient cher pour tenir : ils sont vulnérables. C'est une mesure de positionnement, comparable à l'OI combiné au prix, mais **en temps réel et avec le sens** : le funding dit qui paie qui.
+
+Ce qu'il coûte au trader : une position de 4 000 $ de notionnel à 0,05 % par 8 heures paie 2 $ par période, 6 $ par jour, 42 $ par semaine ; à 0,15 %, 18 $ par jour. Sur un swing crypto de plusieurs jours, le funding est un coût qui peut dépasser le spread et les commissions, et qui s'ajoute au risque du niveau 1 (le chapitre « Classes d'actifs » l'avait annoncé). Il faut le compter dans l'expectancy.
+
+<Figure caption="Figure 2 · Le funding aligne le perpétuel sur le spot : au-dessus, les longs paient les shorts ; en dessous, l'inverse. Le taux mesure de quel côté le marché penche et à quel prix ; ses extrêmes signalent la vulnérabilité du côté qui paie.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Mécanisme du funding entre perpétuel et spot" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="150" x2="700" y2="150" stroke="var(--tm-gold)" strokeWidth="1.5" strokeDasharray="6 4" />
+  <text x="66" y="145" fontSize="10" className="gold">prix spot</text>
+  <polyline points="70,140 120,110 170,95 220,120 270,105 320,80 370,60 420,90 470,140 520,175 570,200 620,185 670,160" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="600" y="60" fontSize="10" className="red">prix du perpétuel</text>
+  <rect x="120" y="40" width="300" height="20" rx="4" className="red" opacity="0.15" />
+  <text x="270" y="54" fontSize="10" textAnchor="middle" className="red" fontWeight="600">perpétuel au-dessus : funding positif, les longs paient les shorts</text>
+  <rect x="470" y="220" width="200" height="20" rx="4" className="green" opacity="0.15" />
+  <text x="570" y="234" fontSize="10" textAnchor="middle" className="green" fontWeight="600">en dessous : les shorts paient</text>
+  <line x1="60" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <rect x="70" y="266" width="50" height="4" className="gold" opacity="0.6" /><rect x="120" y="258" width="50" height="12" className="red" opacity="0.6" /><rect x="170" y="252" width="50" height="18" className="red" opacity="0.7" /><rect x="220" y="260" width="50" height="10" className="red" opacity="0.6" /><rect x="270" y="256" width="50" height="14" className="red" opacity="0.6" /><rect x="320" y="246" width="50" height="24" className="red" opacity="0.8" /><rect x="370" y="238" width="50" height="32" className="red" opacity="0.9" /><rect x="420" y="256" width="50" height="14" className="red" opacity="0.6" /><rect x="470" y="268" width="50" height="2" className="gold" opacity="0.6" /><rect x="520" y="270" width="50" height="10" className="green" opacity="0.6" /><rect x="570" y="270" width="50" height="16" className="green" opacity="0.7" /><rect x="620" y="270" width="50" height="8" className="green" opacity="0.6" />
+  <text x="40" y="274" fontSize="9" textAnchor="end" className="muted">funding</text>
+  <text x="395" y="232" fontSize="9" textAnchor="middle" className="red">0,12 % / 8 h : extrême</text>
+</svg>
+</Figure>
+
+## Positionnement extrême et squeezes
+
+Un **squeeze** est un mouvement de prix brutal provoqué non par une information nouvelle, mais par la **liquidation forcée** d'un côté du marché trop chargé. Le mécanisme est le même sur tous les marchés à levier :
+
+1. Beaucoup de participants sont du même côté (longs, par exemple), à levier, avec des stops ou des seuils de liquidation regroupés sous le prix.
+2. Le prix baisse un peu, atteint les premiers seuils : ces longs sont liquidés, c'est-à-dire **vendus au marché** par leur broker ou la plateforme.
+3. Ces ventes forcées font baisser le prix, qui atteint les seuils suivants, qui déclenchent d'autres ventes forcées : la cascade.
+4. Le mouvement s'arrête quand il n'y a plus de longs à liquider dans la zone ; le prix rebondit alors souvent aussi vite, parce que la baisse n'avait pas d'acheteur de conviction en face, seulement des liquidations.
+
+Le **short squeeze** est le miroir : les shorts sont rachetés de force, le prix monte en cascade. C'est le cas « prix monte, OI baisse » de la grille, à sa vitesse maximale.
+
+Ce qui rend un squeeze **probable** : un positionnement extrême d'un côté (OI élevé et croissant sur une hausse prolongée ; funding très positif pendant des jours ; rapport COT montrant les spéculateurs record longs), des seuils de liquidation regroupés (visibles sur certaines plateformes crypto qui publient des cartes de liquidation, estimables sur les futures par les niveaux de stops évidents du niveau 3), et un catalyseur même mineur (une annonce, un sweep).
+
+Ce que le squeeze n'est pas : un retournement de tendance en soi. Un short squeeze dans une tendance baissière est violent et bref ; il reprend souvent sa baisse une fois les shorts nettoyés. Un long squeeze dans une tendance haussière nettoie les mains faibles ; il précède souvent une reprise. La lecture SMC du niveau 3 le disait autrement : le squeeze est un sweep de grande taille, et la structure HTF décide de la suite.
+
+Ce que cela change pour le trader :
+
+- **Ne pas être du côté chargé avec un stop dans la zone de liquidation.** Si le funding est extrême et positif, être long à levier avec un stop sous les EQL, c'est faire partie de la cascade.
+- **Ne pas courir après un squeeze.** Acheter un short squeeze en cours, c'est acheter des rachats forcés qui s'arrêteront quand les shorts seront à sec.
+- **Chercher l'entrée après**, dans le sens de la structure HTF, une fois la cascade épuisée (le volume et l'OI le montrent : OI qui a fortement baissé, volume climax, prix qui se stabilise).
+
+<Figure caption="Figure 3 · Long squeeze : positionnement long extrême (OI en hausse, funding très positif), premiers seuils touchés, cascade de liquidations (OI qui s'effondre, volume climax), rebond une fois les longs à sec. Le squeeze est un sweep géant ; la structure HTF décide de la suite.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Déroulement d'un long squeeze avec prix, OI et funding" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="170" x2="700" y2="170" className="line" strokeWidth="1" />
+  <text x="50" y="50" fontSize="11" textAnchor="end" className="muted">prix</text>
+  <polyline points="70,150 120,130 170,115 220,100 270,90 320,85 350,80 380,95 400,120 415,150 425,180 435,205 445,215 460,205 490,175 530,150 580,140 630,135 690,130" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="380" y="100" width="70" height="120" className="red" opacity="0.1" />
+  <text x="415" y="240" fontSize="10" textAnchor="middle" className="red" fontWeight="600">cascade de liquidations</text>
+  <text x="200" y="70" fontSize="10" textAnchor="middle" className="muted">hausse portée par des longs à levier</text>
+  <text x="600" y="120" fontSize="10" textAnchor="middle" className="green">reprise dans le sens HTF une fois les longs à sec</text>
+  <line x1="60" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <text x="50" y="220" fontSize="11" textAnchor="end" className="muted">OI</text>
+  <polyline points="70,280 120,270 170,262 220,255 270,248 320,242 350,238 380,240 400,262 425,282 445,286 490,284 580,280 690,276" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="300" y="228" fontSize="9" textAnchor="middle" className="muted">OI record : positionnement extrême</text>
+  <text x="430" y="305" fontSize="9" textAnchor="middle" className="red">OI s'effondre : positions liquidées</text>
+  <text x="600" y="228" fontSize="9" textAnchor="middle" className="muted">funding : 0,12 % → 0,01 %</text>
+</svg>
+</Figure>
+
+## Signaux d'alerte et cas historiques
+
+Sans prétendre à l'exhaustivité ni à la prévision, quelques configurations reviennent avant les mouvements violents, et quelques épisodes les illustrent.
+
+**Signaux d'alerte de positionnement :**
+
+- **OI record avec prix à un extrême** : beaucoup de positions ouvertes du côté de la tendance, à des prix élevés (ou bas) ; le carburant d'un squeeze est en place.
+- **Funding extrême et persistant** (plusieurs jours au-dessus de 0,05 % par 8 heures, ou en dessous de −0,05 %) : le côté qui paie est chargé et à levier.
+- **Divergence prix / OI** : le prix fait un nouveau sommet, l'OI ne suit pas ou baisse : la hausse est portée par du short covering, pas par des longs nouveaux ; elle est fragile.
+- **Volume climax avec OI en forte baisse** : capitulation ; le côté chargé est sorti ; le marché est « propre », le retournement devient possible (pas certain).
+- **Cartes de liquidation** (crypto) montrant une concentration de seuils juste au-delà d'un niveau évident : la cible du prochain sweep.
+
+**Cas historiques**, décrits en termes de mécanisme et non de dates précises pour rester dans ce que le cours peut affirmer :
+
+- **Les cascades de liquidation en crypto** : à plusieurs reprises depuis 2020, des baisses de 10 à 20 % en quelques heures sur le bitcoin ont coïncidé avec des liquidations de plusieurs milliards de dollars de positions longues à levier, après des périodes de funding très positif. Le schéma est chaque fois le même : euphorie, funding qui monte, OI record, un catalyseur mineur, cascade, OI qui s'effondre, funding qui redevient neutre ou négatif, puis stabilisation. Les traders qui lisaient le funding savaient que le côté long était vulnérable ; personne ne savait le jour.
+- **Les short squeezes sur actions** : des titres très vendus à découvert (un short interest élevé par rapport au flottant) ont connu des hausses de plusieurs centaines de pourcents en quelques jours quand les shorts ont été forcés de racheter, sans qu'aucune information fondamentale ne le justifie. Le mécanisme est celui du chapitre ; l'ampleur tient à la taille du positionnement par rapport à la liquidité disponible.
+- **Les retournements de matières premières après OI record** : sur le pétrole ou les grains, des sommets de plusieurs années ont souvent coïncidé avec un OI spéculatif record (visible dans le COT), suivi d'une liquidation longue. L'OI seul ne donnait pas la date ; il disait que le carburant était là.
+
+Ce qu'il faut retenir de ces cas : **le positionnement ne prédit pas le moment ; il mesure la fragilité**. Un marché chargé d'un côté peut le rester longtemps (les squeezes arrivent souvent après que tout le monde a cessé de les attendre). L'usage correct est défensif d'abord (ne pas être du côté chargé avec un stop dans la zone), opportuniste ensuite (chercher l'entrée après la cascade, dans le sens de la structure).
+
+## Deux trades sur le positionnement
+
+Reconstitutions pédagogiques : le même contexte de funding extrême, deux décisions.
+
+<TradeExample
+  resultat="gain"
+  instrument="BTC/USDT perpétuel"
+  direction="Long"
+  setup="Après une cascade de liquidations (baisse de 12 % en trois heures, OI −25 %, funding passé de +0,11 % à −0,03 %), structure H4 haussière intacte au-dessus du dernier HL ; entrée sur le retour dans le FVG H1 laissé par le rebond, une fois le volume calmé"
+  entree="61 800"
+  stop="60 400 (2,3 %, sous le point bas de la cascade)"
+  objectif="66 000 (nPOC et EQH d'avant la cascade)"
+  r="+3R">
+
+Compte de 5 000 $, budget 50 $ : taille 50 ÷ 1 400 = 0,036 BTC (notionnel ≈ 2 200 $, levier apparent inférieur à 1). Le trader n'a pas acheté la baisse (il ne sait pas où la cascade s'arrête), ni le premier rebond (il ne sait pas s'il tient). Il a attendu que l'OI ait fortement baissé (le côté long est nettoyé), que le funding soit devenu négatif (les shorts paient maintenant : ils sont devenus le côté chargé), que la structure H4 tienne, et que le prix revienne dans une zone (le FVG H1 du rebond). Coût du funding : négatif, donc il **reçoit** un peu pendant le trade. Cible : la liquidité laissée au-dessus. Trois jours plus tard, atteinte. Le positionnement a fourni le contexte (le carburant est parti) ; la structure et la séquence ont fourni l'entrée.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="BTC/USDT perpétuel"
+  direction="Long"
+  setup="Achat en pleine euphorie (funding +0,11 % par 8 h depuis quatre jours, OI record), levier 10, stop sous les EQL du range"
+  entree="70 200"
+  stop="69 550 (0,93 %, sous les EQL), levier 10"
+  objectif="74 000"
+  r="−1R avec slippage : −1,4R, plus 3 jours de funding payés">
+
+Même compte, quatre jours plus tôt. Le trader achète parce que « ça monte », à levier 10 (notionnel 5 000 $ pour 500 $ de marge), stop juste sous les EQL du range, exactement là où sont les seuils de liquidation de milliers d'autres longs. Il paie 0,11 % de funding par 8 heures sur 5 000 $ : 5,50 $ par période, 16,50 $ par jour, 50 $ en trois jours, soit déjà 1R de son budget avant tout mouvement. Puis la cascade : les EQL cèdent, les liquidations vendent au marché, son stop est exécuté 0,4 % plus bas que prévu dans le trou. Il faisait partie du côté chargé, avec un stop dans la zone de liquidation, en payant pour y être. Le funding lui disait tout cela ; il l'a lu comme un signe de force.
+
+</TradeExample>
+
+:::tip À retenir
+
+- L'**open interest** compte les contrats ouverts ; il ne se confond pas avec le volume et ne dit pas le sens seul. Il se lit **en variation**, hors roulements.
+- **Grille prix / OI** : hausse avec OI en hausse (longs nouveaux, sain), hausse avec OI en baisse (short covering, fragile), baisse avec OI en hausse (shorts nouveaux), baisse avec OI en baisse (long liquidation, capitulation possible).
+- Le **funding** des perpétuels aligne le contrat sur le spot ; son signe dit **qui paie qui**, son niveau dit à quel point un côté est chargé ; c'est un **coût** à compter sur tout swing crypto.
+- Un **squeeze** est la liquidation forcée en cascade d'un côté trop chargé : un sweep géant, pas un retournement en soi ; ne pas être du côté chargé avec un stop dans la zone, ne pas courir après, chercher l'entrée après, dans le sens HTF.
+- Le positionnement **mesure la fragilité, pas le moment** : usage défensif d'abord, opportuniste ensuite.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Volume, OI et lecture">
+
+Sur le pétrole (CL), quatre journées : J1 : prix +2 %, volume élevé, OI +4 % ; J2 : prix +1,5 %, volume élevé, OI −3 % ; J3 : prix −3 %, volume très élevé, OI −8 % ; J4 : prix −1 %, volume moyen, OI +2 %.
+
+1. Qualifiez chaque journée avec la grille prix / OI.
+2. Laquelle ressemble à une capitulation, et pourquoi ?
+3. Que dit la J2 sur la solidité de la hausse ?
+
+<Solution>
+
+1. **J1** : hausse avec OI en hausse : **nouveaux longs**, hausse saine. **J2** : hausse avec OI en baisse : **short covering**, hausse fragile. **J3** : baisse avec OI en forte baisse et volume très élevé : **liquidation longue**, capitulation probable. **J4** : baisse avec OI en hausse : **nouveaux shorts** entrent, la baisse est portée par de l'argent nouveau.
+2. La **J3** : volume climax et OI qui s'effondre : les longs sont sortis de force ; le marché s'est nettoyé. C'est un candidat au retournement, à confirmer par la structure (un CHoCH, un sweep suivi de displacement), pas une certitude : la J4 montre que de nouveaux shorts entrent ensuite.
+3. Que la hausse de J2 n'a pas d'acheteurs de conviction : elle est faite de vendeurs qui rachètent. Elle s'arrête quand ils ont fini ; la J3 le confirme brutalement.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Coût du funding">
+
+Vous envisagez un swing long de cinq jours sur ETH perpétuel, notionnel 6 000 $, funding actuel +0,04 % par 8 heures. Votre R est de 60 $ (stop à 1 % du notionnel).
+
+1. Calculez le coût de funding par jour et sur cinq jours si le taux reste stable, en dollars et en R.
+2. Le funding monte à 0,10 % au bout de deux jours. Recalculez le coût des trois derniers jours et le total.
+3. Que dit ce funding croissant sur votre position, indépendamment de son coût ?
+
+<Solution>
+
+1. Par période : 6 000 × 0,0004 = 2,40 $ ; par jour (3 périodes) : **7,20 $** ; cinq jours : **36 $**, soit **0,6R** de coût avant tout mouvement de prix. À intégrer à l'expectancy : un trade qui vise +2R paie 0,6R de funding, son ratio réel est plus proche de 1,4.
+2. Jours 1-2 : 14,40 $. Jours 3-5 à 0,10 % : 6 000 × 0,001 × 3 × 3 = **54 $**. Total : **68,40 $**, soit **1,14R** : le funding a coûté plus que le risque du trade.
+3. Que le côté long, dont vous faites partie, se charge et paie de plus en plus cher : la **fragilité** monte. Un funding qui passe de 0,04 à 0,10 % en deux jours est un signal d'alerte : le trader vérifie où sont les seuils de liquidation regroupés par rapport à son stop, sécurise ou sort si le ratio ne tient plus, et en tout cas ne rajoute pas.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Avant et après un squeeze">
+
+Sur BTC : funding +0,09 % depuis trois jours, OI record, prix en range étroit au-dessus d'EQL évidents à 64 000, seuils de liquidation concentrés entre 63 000 et 63 800 selon une carte de liquidation. Structure D haussière, dernier HL D à 60 500.
+
+1. Où est le danger pour un long, et quelle règle de conduite s'applique avant tout mouvement ?
+2. Le prix casse 64 000, cascade jusqu'à 62 200 en deux heures, OI −22 %, funding passe à −0,02 %, puis rebond à 63 500 laissant un FVG H1 entre 62 800 et 63 100. Le dernier HL D tient. Quel trade est cohérent, où, et pourquoi pas plus tôt ?
+3. Que serait un mauvais trade dans cette séquence ?
+
+<Solution>
+
+1. Le danger : être long à levier avec un stop entre 63 000 et 64 000, dans la zone de liquidation ; le côté long est chargé (funding, OI) et le sweep des EQL est probable. Règle : **ne pas être du côté chargé avec un stop dans la zone** ; soit pas de long avant le nettoyage, soit un stop sous la zone de liquidation (63 000 moins marge) avec une taille réduite en conséquence, soit une position couverte.
+2. Un **long au retour dans le FVG H1** (62 800-63 100), stop sous le point bas de la cascade (62 200 moins marge), cible la liquidité laissée au-dessus (les EQH d'avant, le nPOC). Pourquoi pas plus tôt : pendant la cascade on ne sait pas où elle s'arrête ; sur le premier rebond on ne sait pas s'il tient. Après : l'OI a chuté (le carburant est parti), le funding est négatif (les shorts sont devenus le côté chargé), la structure D tient (le HL n'est pas cassé), et une zone existe (le FVG). Toutes les conditions du niveau sont réunies.
+3. **Acheter le range avant la cascade** avec un stop dans la zone de liquidation (le trade perdant du chapitre) ; ou **vendre au milieu de la cascade** (courir après des liquidations qui s'arrêteront quand les longs seront à sec) ; ou **acheter le premier tick du rebond** sans zone ni confirmation.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "L'open interest est :",
+      options: [
+        "Le volume de la journée",
+        "Le nombre de contrats ouverts et non clôturés ; il monte quand des positions s'ouvrent des deux côtés, baisse quand elles se ferment",
+        "Le nombre de participants",
+        "Le delta cumulé",
+      ],
+      answer: 1,
+      explain: "Un transfert (un long qui change de main) fait du volume sans changer l'OI. L'OI se lit en variation, hors roulements.",
+    },
+    {
+      q: "Le prix monte et l'OI baisse. C'est :",
+      options: [
+        "Une hausse saine portée par de nouveaux longs",
+        "Du short covering : des shorts rachètent, sans acheteurs nouveaux ; hausse fragile, souvent brève",
+        "Une capitulation",
+        "Sans signification",
+      ],
+      answer: 1,
+      explain: "La hausse de conviction va avec un OI en hausse. La hausse de couverture s'arrête quand les shorts ont fini de couvrir.",
+    },
+    {
+      q: "Un funding positif sur un perpétuel signifie :",
+      options: [
+        "Les shorts paient les longs",
+        "Les longs paient les shorts : le perpétuel cote au-dessus du spot, le marché penche du côté long",
+        "Le prix va monter",
+        "Il n'y a pas de levier",
+      ],
+      answer: 1,
+      explain: "Le funding aligne le perpétuel sur le spot. Son signe dit qui paie qui ; son niveau dit à quel point un côté est chargé, et c'est un coût à compter.",
+    },
+    {
+      q: "Un squeeze est :",
+      options: [
+        "Un retournement de tendance",
+        "La liquidation forcée en cascade d'un côté trop chargé : un sweep géant, dont la suite dépend de la structure HTF",
+        "Une annonce économique",
+        "Un ordre iceberg",
+      ],
+      answer: 1,
+      explain: "Le mouvement s'arrête quand il n'y a plus de positions à liquider dans la zone, et rebondit souvent aussi vite parce qu'il n'avait pas de contrepartie de conviction.",
+    },
+    {
+      q: "Funding +0,10 % par 8 h depuis trois jours, OI record, prix au-dessus d'EQL évidents. Un long avec stop sous les EQL est :",
+      options: [
+        "Un excellent trade",
+        "Une position du côté chargé avec un stop dans la zone de liquidation : la configuration à éviter",
+        "Sans risque",
+        "Un short",
+      ],
+      answer: 1,
+      explain: "Le positionnement mesure la fragilité. Usage défensif d'abord : ne pas faire partie de la cascade. L'entrée se cherche après, dans le sens de la structure.",
+    },
+    {
+      q: "Le positionnement (OI, funding, COT) permet de :",
+      options: [
+        "Prédire le jour du retournement",
+        "Mesurer la fragilité d'un côté du marché, sans donner le moment ; un marché chargé peut le rester longtemps",
+        "Remplacer la structure",
+        "Calculer la taille de position",
+      ],
+      answer: 1,
+      explain: "Les squeezes arrivent souvent après que tout le monde a cessé de les attendre. Le positionnement dit que le carburant est là ; la structure et la séquence donnent l'entrée.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 4 est complet : profil de volume, footprint et delta, DOM et tape, open interest et funding. L'examen du niveau vérifie que ces couches s'empilent correctement sur la structure et les séquences des niveaux 2 et 3. Ensuite, le niveau 5 élargit le cadre au-delà du graphique : macroéconomie pour traders, banques centrales et taux, analyse intermarket, calendrier économique, rapport COT, saisonnalité, sentiment et régimes.
