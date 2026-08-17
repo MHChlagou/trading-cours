@@ -1,0 +1,10 @@
+{
+  "label": "Annexes",
+  "position": 11,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "description": "Avertissement, glossaire, bibliothèque et sources institutionnelles.",
+    "slug": "/annexes"
+  }
+}

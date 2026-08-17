@@ -1,0 +1,10 @@
+{
+  "label": "Niveau 4 · Order flow et volume avancé",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "slug": "/niveau-4-order-flow",
+    "description": "Voir les transactions derrière les bougies : profils, footprint, delta et open interest."
+  }
+}

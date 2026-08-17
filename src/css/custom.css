@@ -1,0 +1,539 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/**
+ * Identité : terminal financier raffiné.
+ * Encre bleu nuit, accent or (les niveaux, la navigation),
+ * vert et rouge strictement réservés au P&L.
+ */
+
+:root {
+  --ifm-color-primary: #8a6a1f;
+  --ifm-color-primary-dark: #7c5f1c;
+  --ifm-color-primary-darker: #755a1a;
+  --ifm-color-primary-darkest: #614a16;
+  --ifm-color-primary-light: #987522;
+  --ifm-color-primary-lighter: #a07b24;
+  --ifm-color-primary-lightest: #b58b29;
+
+  --ifm-font-family-base: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --ifm-font-family-monospace: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --ifm-heading-font-family: 'Archivo', 'Instrument Sans', sans-serif;
+  --ifm-heading-font-weight: 700;
+  --ifm-code-font-size: 90%;
+
+  --ifm-background-color: #f7f5f0;
+  --ifm-navbar-background-color: #f2efe8;
+  --ifm-footer-background-color: #14181f;
+
+  --tm-gold: #8a6a1f;
+  --tm-green: #1f7a4f;
+  --tm-red: #b34040;
+  --tm-line: #ddd8cc;
+  --tm-surface: #efece4;
+  --tm-muted: #6b6455;
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #d9b53a;
+  --ifm-color-primary-dark: #c9a227;
+  --ifm-color-primary-darker: #bd9825;
+  --ifm-color-primary-darkest: #9c7d1e;
+  --ifm-color-primary-light: #ddbc4e;
+  --ifm-color-primary-lighter: #e0c159;
+  --ifm-color-primary-lightest: #e8cf7e;
+
+  --ifm-background-color: #0c1017;
+  --ifm-background-surface-color: #131926;
+  --ifm-navbar-background-color: rgba(12, 16, 23, 0.92);
+  --ifm-footer-background-color: #0a0d13;
+
+  --tm-gold: #d9b53a;
+  --tm-green: #35a873;
+  --tm-red: #d45d5d;
+  --tm-line: #232c3b;
+  --tm-surface: #141a24;
+  --tm-muted: #8b93a3;
+
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.navbar {
+  border-bottom: 1px solid var(--tm-line);
+  box-shadow: none;
+}
+
+.navbar__title {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.015em;
+}
+
+/* ---------- Petits éléments partagés ---------- */
+
+.tm-kicker {
+  display: inline-block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tm-gold);
+}
+
+/* ---------- Page d'accueil ---------- */
+
+.tm-hero {
+  padding: 4.5rem 1rem 3.5rem;
+  border-bottom: 1px solid var(--tm-line);
+}
+
+.tm-hero-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.tm-hero-eyebrow {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tm-gold);
+  margin-bottom: 1.1rem;
+}
+
+.tm-hero h1 {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.1rem, 5.5vw, 3.6rem);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+}
+
+.tm-hero-tagline {
+  font-size: 1.1rem;
+  color: var(--tm-muted);
+  max-width: 620px;
+  margin-bottom: 1.8rem;
+}
+
+.tm-hero-ctas {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tm-strip {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--tm-muted);
+  border-bottom: 1px solid var(--tm-line);
+  padding: 0.7rem 1rem;
+  text-align: center;
+}
+
+/* La signature : le programme rendu comme une watchlist de marché. */
+.tm-levels {
+  max-width: 860px;
+  margin: 2.5rem auto 3.5rem;
+  padding: 0 1rem;
+}
+
+.tm-levels-title {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.tm-level-row {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0.75rem;
+  border-top: 1px solid var(--tm-line);
+  border-left: 2px solid transparent;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.tm-level-row:last-child {
+  border-bottom: 1px solid var(--tm-line);
+}
+
+.tm-level-row:hover,
+.tm-level-row:focus-visible {
+  background: var(--tm-surface);
+  border-left-color: var(--tm-gold);
+  color: inherit;
+  text-decoration: none;
+}
+
+.tm-level-code {
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 600;
+  color: var(--tm-gold);
+}
+
+.tm-level-name {
+  font-weight: 600;
+  display: block;
+}
+
+.tm-level-desc {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--tm-muted);
+  margin-top: 0.15rem;
+}
+
+.tm-level-count {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--tm-muted);
+  white-space: nowrap;
+}
+
+/* ---------- Figures et schémas SVG ---------- */
+
+.tm-figure {
+  margin: 1.8rem 0;
+  text-align: center;
+}
+
+.tm-figure svg,
+.tm-figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+.tm-figure figcaption {
+  font-size: 0.85rem;
+  color: var(--tm-muted);
+  margin-top: 0.6rem;
+}
+
+.tm-svg text {
+  fill: var(--ifm-font-color-base);
+  font-family: var(--ifm-font-family-base);
+}
+
+.tm-svg .mono {
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.tm-svg .muted {
+  fill: var(--tm-muted);
+}
+
+.tm-svg .gold {
+  fill: var(--tm-gold);
+}
+
+.tm-svg .green {
+  fill: var(--tm-green);
+}
+
+.tm-svg .red {
+  fill: var(--tm-red);
+}
+
+.tm-svg .line {
+  stroke: var(--tm-line);
+}
+
+.tm-svg .box {
+  fill: var(--tm-surface);
+  stroke: var(--tm-line);
+}
+
+/* ---------- Quiz ---------- */
+
+.tm-quiz {
+  border: 1px solid var(--tm-line);
+  border-radius: 10px;
+  padding: 1.25rem 1.25rem 1rem;
+  margin: 2rem 0;
+  background: var(--tm-surface);
+}
+
+.tm-quiz-head h3 {
+  margin: 0.2rem 0 0.8rem;
+}
+
+.tm-quiz-question {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.tm-quiz-opts {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.tm-quiz-opt {
+  text-align: left;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--tm-line);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+.tm-quiz-opt:hover {
+  border-color: var(--tm-gold);
+}
+
+.tm-quiz-opt.is-selected {
+  border-color: var(--tm-gold);
+  box-shadow: inset 0 0 0 1px var(--tm-gold);
+}
+
+.tm-quiz-opt.is-correct {
+  border-color: var(--tm-green);
+  box-shadow: inset 0 0 0 1px var(--tm-green);
+}
+
+.tm-quiz-opt.is-wrong {
+  border-color: var(--tm-red);
+  box-shadow: inset 0 0 0 1px var(--tm-red);
+}
+
+.tm-quiz-explain {
+  font-size: 0.87rem;
+  color: var(--tm-muted);
+  border-left: 2px solid var(--tm-gold);
+  padding-left: 0.7rem;
+  margin: -0.3rem 0 1rem;
+}
+
+.tm-quiz-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.4rem;
+}
+
+.tm-quiz-score {
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 600;
+}
+
+/* ---------- Exercices ---------- */
+
+.tm-exercise {
+  border: 1px solid var(--tm-line);
+  border-left: 3px solid var(--tm-gold);
+  border-radius: 8px;
+  padding: 1.1rem 1.25rem;
+  margin: 1.6rem 0;
+}
+
+.tm-exercise h4 {
+  margin: 0.25rem 0 0.6rem;
+}
+
+.tm-solution {
+  margin-top: 0.8rem;
+}
+
+.tm-solution-toggle {
+  background: none;
+  border: 1px solid var(--tm-line);
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--tm-gold);
+  cursor: pointer;
+}
+
+.tm-solution-toggle:hover {
+  border-color: var(--tm-gold);
+}
+
+.tm-solution-body {
+  margin-top: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  background: var(--tm-surface);
+  font-size: 0.93rem;
+}
+
+/* ---------- Trades décortiqués ---------- */
+
+.tm-trade {
+  border: 1px solid var(--tm-line);
+  border-radius: 10px;
+  margin: 1.6rem 0;
+  overflow: hidden;
+}
+
+.tm-trade--gain {
+  border-top: 3px solid var(--tm-green);
+}
+
+.tm-trade--perte {
+  border-top: 3px solid var(--tm-red);
+}
+
+.tm-trade-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1.1rem;
+  background: var(--tm-surface);
+}
+
+.tm-trade-badge {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tm-trade--gain .tm-trade-badge {
+  color: var(--tm-green);
+}
+
+.tm-trade--perte .tm-trade-badge {
+  color: var(--tm-red);
+}
+
+.tm-trade-r {
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 600;
+}
+
+.tm-trade--gain .tm-trade-r {
+  color: var(--tm-green);
+}
+
+.tm-trade--perte .tm-trade-r {
+  color: var(--tm-red);
+}
+
+.tm-trade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.8rem 1rem;
+  padding: 0.9rem 1.1rem;
+  margin: 0;
+  border-top: 1px solid var(--tm-line);
+}
+
+.tm-trade-cell dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--tm-muted);
+}
+
+.tm-trade-cell dd {
+  margin: 0.1rem 0 0;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.9rem;
+}
+
+.tm-trade-body {
+  padding: 0.9rem 1.1rem;
+  border-top: 1px solid var(--tm-line);
+  font-size: 0.94rem;
+}
+
+/* ---------- Checklists ---------- */
+
+.tm-checklist {
+  border: 1px solid var(--tm-line);
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+  margin: 1.6rem 0;
+}
+
+.tm-checklist-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.tm-checklist-head h4 {
+  margin: 0.2rem 0 0.6rem;
+}
+
+.tm-checklist-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.tm-checklist-count {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.85rem;
+  color: var(--tm-muted);
+}
+
+.tm-checklist ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.3rem 0 0;
+}
+
+.tm-checklist li {
+  border-top: 1px solid var(--tm-line);
+  padding: 0.5rem 0.2rem;
+}
+
+.tm-checklist label {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  cursor: pointer;
+}
+
+/* ---------- Impression (checklists et chapitres) ---------- */
+
+@media print {
+  .navbar,
+  .theme-doc-sidebar-container,
+  .theme-doc-toc-desktop,
+  .theme-doc-toc-mobile,
+  .footer,
+  .pagination-nav,
+  .theme-doc-breadcrumbs,
+  .tm-checklist-tools .button,
+  .tm-quiz-actions {
+    display: none !important;
+  }
+
+  .tm-checklist,
+  .tm-exercise,
+  .tm-trade,
+  .tm-quiz {
+    break-inside: avoid;
+  }
+}
