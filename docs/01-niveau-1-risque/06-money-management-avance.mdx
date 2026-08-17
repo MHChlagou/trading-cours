@@ -1,0 +1,347 @@
+---
+title: "Money management avancé"
+description: "Pyramider une position gagnante sans augmenter le risque initial, entrer et sortir en plusieurs fois à bon escient, organiser les budgets de risque par jour, semaine et session, ajuster le risque à la courbe de capital et faire progresser sa taille dans le temps sans se mettre en danger."
+---
+
+# Money management avancé
+
+Les cinq chapitres précédents ont fixé les fondations : un risque par trade, une unité de mesure, une expectancy, un drawdown attendu, un heat maximal. Ce dernier chapitre du niveau assemble ces briques dans le temps. Comment ajouter à une position qui fonctionne sans reprendre du risque ? Quand entrer ou sortir en plusieurs fois ? Comment répartir le risque sur la journée, la semaine, la session ? Comment le faire évoluer avec la courbe de capital, et comment grandir sans se casser ? Ce sont des questions de gestion, pas d'analyse ; elles décident d'une part importante du résultat final.
+
+## Pyramider une position gagnante proprement
+
+**Pyramider** (pyramiding), c'est ajouter à une position déjà en gain, dans le sens du trade, pour profiter davantage d'un mouvement qui se confirme. Bien fait, c'est l'un des rares moyens d'augmenter le rendement sans augmenter le risque initial. Mal fait, c'est le moyen le plus rapide de transformer un gagnant en perdant.
+
+La règle qui sépare les deux : **le risque total ouvert de la position pyramidée ne doit jamais dépasser le risque initial de 1R.** Concrètement, on n'ajoute une tranche que quand le stop de l'ensemble a pu être remonté de façon à ce que la perte maximale, si tout se retourne, reste inférieure ou égale à 1R (idéalement, à zéro).
+
+La forme correcte est une **pyramide** au sens propre : la première tranche est la plus grosse, les suivantes sont de plus en plus petites. Ainsi, le prix moyen d'entrée reste proche de l'entrée initiale et un retournement ne détruit pas le gain acquis. La forme incorrecte, la **pyramide inversée** (on ajoute de plus en plus gros à mesure que le prix monte), fait grimper le prix moyen près du dernier cours : un petit repli suffit à effacer tout le gain et à faire perdre l'ensemble.
+
+Un exemple sur MNQ, R = 60 $ :
+
+1. **Tranche 1** : long 3 MNQ à 18 400, stop à 18 390 (10 points × 2 $ × 3 = 60 $ = 1R).
+2. Le prix monte à 18 425. Le stop de l'ensemble est remonté à 18 405 : la tranche 1 est maintenant protégée en gain (+5 points × 2 × 3 = +30 $).
+3. **Tranche 2** : long 2 MNQ à 18 425, stop commun à 18 405. Risque de la tranche 2 : 20 points × 2 × 2 = 80 $. Risque total si le stop est touché : −80 + 30 = **−50 $**, inférieur à 1R. Conforme.
+4. Le prix monte à 18 445. Stop commun remonté à 18 428. Tranche 1 : +28 × 2 × 3 = +168 $ ; tranche 2 : +3 × 2 × 2 = +12 $. Position protégée à +180 $ (3R).
+5. **Tranche 3** : long 1 MNQ à 18 445, stop commun à 18 428 : risque de la tranche 3, 17 × 2 = 34 $. Pire cas de l'ensemble : +180 − 34 = **+146 $**. La position pyramidée à 6 contrats ne peut plus perdre.
+6. Sortie de l'ensemble à 18 470 : (70 × 3 + 45 × 2 + 25 × 1) × 2 = (210 + 90 + 25) × 2 = **650 $, soit +10,8R**, pour un risque initial qui n'a jamais dépassé 60 $.
+
+Sans pyramide, les 3 contrats initiaux auraient rapporté 70 × 2 × 3 = 420 $ (7R). La pyramide a ajouté 3,8R sans jamais exposer plus de 1R. C'est cela, pyramider proprement.
+
+<Figure caption="Figure 1 · Pyramide correcte (tranches décroissantes, stop remonté avant chaque ajout, risque total toujours inférieur ou égal à 1R) contre pyramide inversée (tranches croissantes, prix moyen près du dernier cours).">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Comparaison d'une pyramide correcte et d'une pyramide inversée" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="28" fontSize="14" fontWeight="600" textAnchor="middle">Pyramide correcte</text>
+  <line x1="60" y1="60" x2="60" y2="270" className="line" strokeWidth="1" />
+  <polyline points="70,250 110,235 150,215 190,190 230,165 270,140 310,110" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="80" y="238" width="60" height="18" rx="3" className="green" opacity="0.85" /><text x="110" y="251" fontSize="10" textAnchor="middle" fill="#ffffff">3 MNQ</text>
+  <rect x="160" y="203" width="40" height="18" rx="3" className="green" opacity="0.85" /><text x="180" y="216" fontSize="10" textAnchor="middle" fill="#ffffff">2</text>
+  <rect x="240" y="153" width="20" height="18" rx="3" className="green" opacity="0.85" /><text x="250" y="166" fontSize="10" textAnchor="middle" fill="#ffffff">1</text>
+  <line x1="70" y1="262" x2="150" y2="262" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="5 3" />
+  <line x1="150" y1="227" x2="230" y2="227" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="5 3" />
+  <line x1="230" y1="180" x2="320" y2="180" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="5 3" />
+  <text x="325" y="184" fontSize="10" className="red">stop commun</text>
+  <text x="180" y="295" fontSize="11" textAnchor="middle" className="muted">pire cas après chaque ajout : ≤ 1R, puis positif</text>
+
+  <text x="540" y="28" fontSize="14" fontWeight="600" textAnchor="middle">Pyramide inversée</text>
+  <line x1="420" y1="60" x2="420" y2="270" className="line" strokeWidth="1" />
+  <polyline points="430,250 470,235 510,215 550,190 590,165 630,140 670,110" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="440" y="238" width="20" height="18" rx="3" className="red" opacity="0.85" /><text x="450" y="251" fontSize="10" textAnchor="middle" fill="#ffffff">1</text>
+  <rect x="520" y="203" width="40" height="18" rx="3" className="red" opacity="0.85" /><text x="540" y="216" fontSize="10" textAnchor="middle" fill="#ffffff">2</text>
+  <rect x="600" y="153" width="60" height="18" rx="3" className="red" opacity="0.85" /><text x="630" y="166" fontSize="10" textAnchor="middle" fill="#ffffff">3 MNQ</text>
+  <line x1="430" y1="262" x2="690" y2="262" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="5 3" />
+  <text x="600" y="258" fontSize="10" className="red">stop initial jamais remonté</text>
+  <text x="540" y="295" fontSize="11" textAnchor="middle" className="muted">prix moyen près du dernier cours : un repli efface tout, risque 6R</text>
+</svg>
+</Figure>
+
+Trois conditions pratiques : pyramider seulement dans un contexte de tendance (le niveau 2 dira comment le reconnaître), seulement avec un stop commun remonté à chaque ajout, et seulement si le heat total (chapitre 5) le permet.
+
+## Scaling in et scaling out : quand et pourquoi
+
+Le **scaling in** consiste à construire une position en plusieurs entrées ; le **scaling out** à la solder en plusieurs sorties. Ni l'un ni l'autre n'est bon ou mauvais en soi ; chacun a un usage précis et une dérive dangereuse.
+
+### Scaling in
+
+**Usage légitime** : quand la zone d'entrée est large et que l'analyse ne permet pas de préciser un niveau exact. On divise le 1R en deux ou trois entrées à des prix échelonnés dans la zone, avec **un seul stop pour l'ensemble**, calculé pour que le risque total, si toutes les entrées sont servies, reste de 1R. Si le prix ne va pas chercher les entrées les plus basses, la position est plus petite que prévu, ce qui est acceptable.
+
+**Dérive dangereuse** : ajouter à une position **perdante** pour « améliorer le prix moyen » (averaging down). C'est l'inverse exact du pyramidage : on met de plus en plus d'argent sur une idée que le marché est en train d'invalider. Le prix moyen baisse, la taille grandit, le stop est repoussé, et le trade unique devient une perte de 3R ou 5R. La règle : **on n'ajoute jamais à une position qui n'a pas atteint le prix prévu pour l'ajout dans le plan initial**, et jamais au-delà de 1R de risque total.
+
+### Scaling out
+
+**Usage légitime** : quand la distribution des résultats montre que le système gagne souvent une première cible et rarement la seconde. Sortir une partie à la première cible (par exemple la moitié à +1R ou +1,5R), remonter le stop de l'autre moitié à l'entrée, et laisser courir le reste vers la cible lointaine. Cela lisse la courbe et rend le drawdown plus supportable, au prix d'un peu d'expectancy sur les trades qui auraient atteint la grande cible en entier.
+
+**Dérive dangereuse** : sortir « un peu » dès que le trade est en gain, par peur de rendre, sans que cela figure dans le plan. Le chapitre 3 a montré ce que coûte l'amputation de la queue droite. Un scaling out qui n'est pas défini à l'avance (à quel prix, quelle fraction, que fait le stop ensuite) est de l'émotion habillée en méthode.
+
+Un test simple : reprendre son historique et calculer l'expectancy « en sortie unique à la cible » et « avec scaling out selon la règle envisagée ». Si la seconde est nettement inférieure, la règle coûte plus qu'elle ne rassure. Si elle est proche et que le drawdown est plus faible, elle est utile.
+
+## Budgets de risque par jour, par semaine, par session
+
+Le 1 % par trade ne suffit pas : dix trades à 1 % le même jour font 10 % de risque potentiel. Le chapitre 1 a posé les plafonds de survie ; voici comment les organiser en système.
+
+**Budget quotidien : 2R à 3R.** C'est la perte maximale acceptée sur une journée. Une fois atteinte, plus aucun nouveau trade, quel que soit le setup. Ce budget a deux effets : il coupe le sur-trading de vengeance (chapitre 1) et il rend chaque journée « survivable » : à −2R par jour, il faut dix mauvaises journées d'affilée pour faire un drawdown de 20R.
+
+**Budget hebdomadaire : 5R à 6R.** Atteint, la semaine est terminée pour le trading réel ; le reste sert à la revue. Il empêche l'accumulation de journées moyennes qui, sans être catastrophiques, creusent un trou.
+
+**Budget par session.** Pour un intraday qui trade plusieurs sessions (Londres puis New York), un sous-budget par session (par exemple 1,5R sur Londres, 1,5R sur New York) évite de « brûler » la journée entière dans la première heure. Le professionnel sait que la session américaine offre en général plus d'opportunités que la nuit : il ne consomme pas son budget quotidien à 3 h du matin.
+
+**Ce que le budget ne fait pas** : il ne limite pas les gains. Une journée à +4R n'oblige à rien ; certains traders s'arrêtent après un gros gain pour ne pas le rendre par euphorie, c'est une règle personnelle possible, pas une obligation. Il ne se « reporte » pas non plus : un budget quotidien non consommé lundi ne s'ajoute pas à celui de mardi.
+
+<Figure caption="Figure 2 · Les budgets emboîtés : trade, session, journée, semaine. Chaque niveau plafonne le suivant. Toucher un plafond arrête le niveau concerné, pas les autres.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Budgets de risque emboîtés par trade, session, jour et semaine" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="680" height="220" rx="10" className="box" strokeWidth="1.5" />
+  <text x="40" y="46" fontSize="13" fontWeight="600">Semaine : −5R maximum</text>
+  <text x="680" y="46" fontSize="11" textAnchor="end" className="muted">atteint → revue jusqu'à lundi</text>
+
+  <rect x="40" y="60" width="200" height="160" rx="8" className="box" strokeWidth="1.5" />
+  <text x="140" y="82" fontSize="12" fontWeight="600" textAnchor="middle">Lundi : −2R max</text>
+  <rect x="55" y="95" width="80" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="95" y="112" fontSize="10" textAnchor="middle">Londres</text>
+  <text x="95" y="126" fontSize="10" textAnchor="middle" className="muted">−1R max</text>
+  <rect x="62" y="140" width="66" height="22" rx="4" className="gold" opacity="0.6" /><text x="95" y="155" fontSize="10" textAnchor="middle" fill="#141414">trade 1R</text>
+  <rect x="145" y="95" width="80" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="185" y="112" fontSize="10" textAnchor="middle">New York</text>
+  <text x="185" y="126" fontSize="10" textAnchor="middle" className="muted">−1,5R max</text>
+  <rect x="152" y="140" width="66" height="22" rx="4" className="gold" opacity="0.6" /><text x="185" y="155" fontSize="10" textAnchor="middle" fill="#141414">trade 1R</text>
+  <rect x="152" y="168" width="66" height="22" rx="4" className="gold" opacity="0.6" /><text x="185" y="183" fontSize="10" textAnchor="middle" fill="#141414">trade 0,5R</text>
+
+  <rect x="260" y="60" width="200" height="160" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="82" fontSize="12" fontWeight="600" textAnchor="middle">Mardi : −2R max</text>
+  <rect x="275" y="95" width="170" height="110" rx="6" className="red" opacity="0.15" />
+  <text x="360" y="140" fontSize="11" textAnchor="middle" className="red" fontWeight="600">−2R atteint à 16 h 40</text>
+  <text x="360" y="158" fontSize="10" textAnchor="middle" className="muted">plateforme fermée</text>
+  <text x="360" y="172" fontSize="10" textAnchor="middle" className="muted">le mercredi reste ouvert</text>
+
+  <rect x="480" y="60" width="200" height="160" rx="8" className="box" strokeWidth="1.5" />
+  <text x="580" y="82" fontSize="12" fontWeight="600" textAnchor="middle">Mercredi à vendredi</text>
+  <text x="580" y="120" fontSize="11" textAnchor="middle" className="muted">budget hebdo restant :</text>
+  <text x="580" y="140" fontSize="13" textAnchor="middle" className="mono">5R − (résultat lun + mar)</text>
+  <text x="580" y="170" fontSize="10" textAnchor="middle" className="muted">si le cumul atteint −5R,</text>
+  <text x="580" y="184" fontSize="10" textAnchor="middle" className="muted">la semaine s'arrête</text>
+</svg>
+</Figure>
+
+## Ajuster le risque selon la courbe d'equity
+
+L'**equity curve** est la courbe du capital dans le temps. Le chapitre 4 a introduit les paliers de réduction dans le drawdown. On peut aller plus loin et faire du risque une fonction de l'état de la courbe, dans les deux sens.
+
+**Réduction en drawdown** (rappel) : −10R depuis le plus haut → risque divisé par deux ; −15R → divisé par quatre ; −20R → arrêt et revue. Retour au risque normal après récupération de la moitié du drawdown ou après un nombre de trades conformes.
+
+**Augmentation en période favorable** : certains traders augmentent légèrement le risque (par exemple de 1 % à 1,25 %) quand la courbe est à un nouveau plus haut et que les 30 derniers trades sont conformes au plan avec une expectancy dans la norme. L'idée est de « miser un peu plus l'argent du marché ». C'est défendable si l'augmentation est modeste, définie à l'avance et annulée dès le premier palier de drawdown. C'est dangereux si elle est décidée dans l'euphorie d'une bonne semaine.
+
+**Filtre sur la courbe elle-même** : une technique plus avancée consiste à réduire ou suspendre le trading quand la courbe passe sous sa propre moyenne mobile (par exemple la moyenne des 20 derniers points d'equity), et à reprendre quand elle repasse au-dessus. L'hypothèse : les périodes de sous-performance d'un système discrétionnaire se regroupent (fatigue, régime de marché défavorable). Ce filtre est à tester sur son propre historique avant de l'adopter : sur certains systèmes il améliore le rapport rendement / drawdown, sur d'autres il coupe les reprises et coûte de l'expectancy.
+
+Le principe commun : **le risque n'est pas un chiffre figé, c'est une règle qui lit l'état du compte**. Mais cette règle est écrite d'avance, elle est simple, et elle ne s'applique jamais à chaud.
+
+<Figure caption="Figure 3 · Le risque par trade comme fonction de la courbe d'equity : pleine taille près des plus hauts, réduction par paliers dans le drawdown, arrêt au seuil. Tout est décidé avant.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Courbe d'equity avec paliers de risque associés" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="200" className="line" strokeWidth="1" />
+  <text x="380" y="222" fontSize="11" textAnchor="middle" className="muted">temps</text>
+  <polyline points="60,150 100,140 140,120 180,110 220,125 260,140 300,155 340,170 380,160 420,140 460,120 500,100 540,80 580,90 620,70 660,55 700,45" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <line x1="180" y1="110" x2="700" y2="110" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="190" y="104" fontSize="10" className="muted">plus haut</text>
+  <line x1="180" y1="140" x2="440" y2="140" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="230" y="136" fontSize="10" className="red">−10R</text>
+  <line x1="180" y1="170" x2="440" y2="170" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="230" y="166" fontSize="10" className="red">−15R</text>
+
+  <text x="40" y="250" fontSize="12" fontWeight="600">Risque</text>
+  <rect x="60" y="238" width="200" height="16" className="gold" opacity="0.9" /><text x="160" y="250" fontSize="10" textAnchor="middle" fill="#141414">1 %</text>
+  <rect x="260" y="238" width="80" height="16" className="gold" opacity="0.55" /><text x="300" y="250" fontSize="10" textAnchor="middle" fill="#141414">0,5 %</text>
+  <rect x="340" y="238" width="80" height="16" className="gold" opacity="0.3" /><text x="380" y="250" fontSize="10" textAnchor="middle">0,25 %</text>
+  <rect x="420" y="238" width="60" height="16" className="gold" opacity="0.55" /><text x="450" y="250" fontSize="10" textAnchor="middle" fill="#141414">0,5 %</text>
+  <rect x="480" y="238" width="220" height="16" className="gold" opacity="0.9" /><text x="590" y="250" fontSize="10" textAnchor="middle" fill="#141414">1 % (retour après récupération de la moitié)</text>
+  <text x="380" y="285" fontSize="11" textAnchor="middle" className="muted">Le palier se déclenche sur le drawdown en R, se lève sur la récupération : jamais sur l'humeur.</text>
+</svg>
+</Figure>
+
+## Plans de progression du risque dans le temps
+
+La dernière question du niveau : comment un trader qui commence à 0,5 % sur un petit compte arrive-t-il, un jour, à trader une taille significative sans se détruire en route ? Par un plan écrit, en étapes, avec des critères objectifs pour passer de l'une à l'autre.
+
+Un plan type, à adapter :
+
+| Étape | Risque par trade | Condition d'entrée dans l'étape | Condition de retour à l'étape précédente |
+| --- | --- | --- | --- |
+| 0 · Simulation | 0 (compte démo, taille réelle simulée) | Plan écrit, journal prêt | — |
+| 1 · Réel minimal | 0,25 % (ou la plus petite taille possible) | 100 trades simulés à expectancy positive et 90 % de conformité au plan | — |
+| 2 · Débutant | 0,5 % | 100 trades réels à l'étape 1, expectancy positive, drawdown dans la norme, conformité 90 % | Drawdown supérieur à 15R ou conformité sous 80 % |
+| 3 · Standard | 1 % | 150 trades à l'étape 2, mêmes critères | Idem |
+| 4 · Confirmé | 1 % avec augmentation à 1,25 % près des plus hauts | 300 trades à l'étape 3, un drawdown traversé conformément | Idem |
+
+Trois principes structurent ce plan :
+
+- **On progresse sur des critères de process, pas de profit.** Cent trades conformes avec une expectancy positive valent plus qu'un mois à +30 % obtenu en violant le plan. Le second cas est un signal de retour à l'étape précédente, pas de promotion.
+- **La taille grandit aussi par la croissance du compte**, sans changer le pourcentage. À 1 % sur un compte qui passe de 5 000 à 8 000 €, R passe de 50 à 80 € sans qu'aucune décision soit prise. C'est le mode de progression le plus sain, parce qu'il est prouvé par le compte lui-même.
+- **Les ajouts de capital externes suivent la même logique** : ajouter 5 000 € à un compte de 5 000 € double R d'un coup ; il est raisonnable de le faire par tranches, ou de garder le R précédent quelques semaines pour s'habituer aux nouveaux montants. Le cerveau ne s'adapte pas à un R doublé aussi vite que le tableur.
+
+Ce qui distingue le trader qui progresse de celui qui stagne n'est pas la vitesse d'augmentation de la taille : c'est le fait que chaque augmentation soit **gagnée** par un échantillon conforme, et **réversible** par une règle écrite.
+
+## Deux gestions du même trade
+
+Reconstitutions pédagogiques : la même entrée sur l'or, en tendance, deux gestions différentes.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Achat sur repli en tendance H4, pyramide en deux tranches, sortie partielle planifiée"
+  entree="2 380,0 (2 MGC), puis 2 388,0 (1 MGC)"
+  stop="2 375,0 (5 $ sur 2 contrats = 100 $ = 1R), remonté à 2 383,0 avant l'ajout"
+  objectif="Moitié à 2 395,0, reste vers 2 410,0"
+  r="+4,7R">
+
+R = 100 $. Tranche 1 : 2 MGC à 2 380,0, stop 2 375,0 (5 $ × 10 × 2 = 100 $). À 2 388,0, stop remonté à 2 383,0 (tranche 1 protégée à +60 $), ajout de 1 MGC ; risque de l'ajout : 5 $ × 10 = 50 $ ; pire cas de l'ensemble : +60 − 50 = +10 $. À 2 395,0, sortie planifiée de 1 contrat de la tranche 1 : +150 $ ; stop de l'ensemble remonté à 2 388,0. Le prix atteint 2 407,0 puis se retourne, stop suiveur touché à 2 401,0 : tranche 1 restante +21 × 10 = 210 $, tranche 2 : +13 × 10 = 130 $. Total : 150 + 210 + 130 = **490 $, soit +4,9R** brut ; net d'un slippage de 1 $ sur les deux contrats restants (−20 $) et des commissions, le trader note **+4,7R**. Le point : à aucun moment le risque ouvert n'a dépassé 1R, et le plan de sortie était écrit avant l'entrée.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Même entrée, mais moyenne à la baisse puis budget quotidien ignoré"
+  entree="2 380,0 (2 MGC), puis 2 374,0 (2 MGC), puis 2 369,0 (3 MGC)"
+  stop="2 375,0 au départ, déplacé à 2 365,0, puis 2 360,0"
+  objectif="« Revenir au prix moyen »"
+  r="−10,9R sur un seul trade">
+
+Même R de 100 $, même première tranche. Le prix ne monte pas : il baisse vers 2 374,0. Au lieu de laisser le stop faire son travail à 2 375,0, le trader ajoute 2 MGC « pour améliorer le prix moyen » et descend le stop à 2 365,0. Le prix continue : à 2 369,0, il ajoute 3 MGC, stop à 2 360,0. Il a maintenant 7 contrats, prix moyen ≈ 2 373,6, risque au stop de (2 373,6 − 2 360) × 10 × 7 ≈ 950 $. Le stop est touché à 2 360,0 avec 2 $ de slippage : perte ≈ (2 373,6 − 2 358,0) × 10 × 7 ≈ **1 090 $, soit −10,9R**. Un seul trade. Le budget quotidien de 2R a été dépassé plus de cinq fois sur une seule position, le trade était initialement correct, et la perte vient entièrement de la gestion : moyenne à la baisse, stop déplacé deux fois, taille multipliée par 3,5. C'est l'anti-pyramide, et c'est le trade qui vide les comptes.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Pyramider proprement** : tranches décroissantes, stop commun remonté avant chaque ajout, risque total toujours inférieur ou égal à 1R. La pyramide inversée et la moyenne à la baisse sont les deux façons de faire perdre 5R à un trade de 1R.
+- **Scaling in** légitime sur une zone d'entrée large avec un stop unique ; **scaling out** légitime s'il est planifié et testé sur l'historique. Jamais par peur, jamais sur une position perdante.
+- **Budgets emboîtés** : 1R par trade, 2 à 3R par jour, 5 à 6R par semaine, sous-budgets par session ; un plafond touché arrête son niveau, sans report.
+- Le **risque suit la courbe d'equity** par des paliers écrits d'avance : réduction dans le drawdown, retour après récupération, éventuelle hausse modeste près des plus hauts.
+- La **progression de la taille** se gagne par des échantillons conformes (100 à 300 trades par étape) et reste réversible ; la croissance du compte fait le reste.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Vérifier une pyramide">
+
+R = 80 $. Vous êtes long 4 MES à 5 300,00, stop à 5 296,00. Le prix monte à 5 306,00. Vous remontez le stop à 5 302,00 et ajoutez 2 MES à 5 306,00 avec le même stop.
+
+1. Quel était le risque de la tranche 1 au départ ? Est-il bien égal à 1R ?
+2. Après l'ajout, quel est le pire cas de l'ensemble si le stop est touché ?
+3. La pyramide est-elle conforme ? Le prix atteint 5 315,00 et vous sortez tout : quel gain en dollars et en R ?
+
+<Solution>
+
+1. 4 points × 5 $ × 4 = **80 $ = 1R**. Conforme.
+2. Tranche 1 au stop 5 302 : +2 × 5 × 4 = +40 $. Tranche 2 : −4 × 5 × 2 = −40 $. Pire cas : **0 $**. La position ne peut plus perdre.
+3. Conforme : tranche décroissante (4 puis 2), stop remonté avant l'ajout, pire cas ≤ 1R. Sortie à 5 315 : tranche 1 : 15 × 5 × 4 = 300 $ ; tranche 2 : 9 × 5 × 2 = 90 $. Total **390 $, soit +4,9R** (contre 300 $, 3,75R, sans pyramide).
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Budgets emboîtés">
+
+Règles : 1R par trade, −2R par jour, −5R par semaine. Résultats de la semaine : lundi −1, +2, −1 ; mardi −1, −1, puis un troisième trade envisagé ; mercredi +3 ; jeudi −1, −1 ; vendredi −1, −1, puis un troisième trade envisagé.
+
+1. Le troisième trade du mardi est-il autorisé ?
+2. Quel est le cumul hebdomadaire vendredi après les deux premières pertes, et le troisième trade du vendredi est-il autorisé ?
+3. Que dit le plan pour le reste de la semaine ?
+
+<Solution>
+
+1. Mardi : −1 −1 = −2R, budget quotidien atteint : **le troisième trade n'est pas autorisé**, quel que soit le setup.
+2. Cumul : lundi 0R ; mardi −2R (cumul −2) ; mercredi +3 (cumul +1) ; jeudi −2 (cumul −1) ; vendredi −2 (cumul **−3R**). Le budget hebdomadaire de −5R n'est pas atteint, mais le budget quotidien du vendredi (−2R) l'est : **le troisième trade est refusé** par la règle du jour.
+3. Vendredi est terminé. La semaine se solde à −3R, dans la norme d'un système à 45 % de réussite. Aucune mesure exceptionnelle : revue habituelle du week-end, et lundi repart avec les budgets pleins (le −3R ne se « rattrape » pas, il ne se reporte pas non plus).
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Plan de progression">
+
+Un trader à l'étape 2 (0,5 %) a fait 120 trades réels : expectancy +0,22R, conformité 84 %, drawdown maximal 9R. Ses règles de passage à l'étape 3 : 100 trades, expectancy positive, conformité 90 %, drawdown dans la norme (moins de 15R).
+
+1. Peut-il passer à 1 % ?
+2. Quel critère bloque, et que devrait-il faire ?
+3. Son compte est passé de 6 000 à 6 900 € sur la période. Comment R a-t-il évolué sans changer d'étape ?
+
+<Solution>
+
+1. **Non.**
+2. La **conformité** (84 % contre 90 % requis). Expectancy et drawdown sont bons, mais 16 % de trades hors plan est trop pour augmenter la taille : doubler le risque doublerait aussi le coût de ces trades non conformes. Il continue à 0,5 % en travaillant la conformité, et réexamine après 100 trades supplémentaires.
+3. À 0,5 %, R est passé de 30 € à 34,50 €, soit **+15 %** sans aucune décision. C'est la progression « gagnée par le compte », la plus saine.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Quelle règle définit une pyramide correcte ?",
+      options: [
+        "Ajouter à chaque nouveau plus haut, en taille croissante",
+        "Tranches décroissantes, stop commun remonté avant chaque ajout, risque total toujours ≤ 1R",
+        "Ajouter quand le prix revient à l'entrée",
+        "Doubler à chaque ajout",
+      ],
+      answer: 1,
+      explain: "La pyramide correcte augmente le rendement sans jamais exposer plus que le risque initial. Tranches croissantes ou stop non remonté transforment un gagnant en risque de plusieurs R.",
+    },
+    {
+      q: "Ajouter à une position perdante pour améliorer le prix moyen, c'est :",
+      options: [
+        "Du scaling in légitime",
+        "De la moyenne à la baisse : on augmente la taille sur une idée que le marché invalide, le risque dépasse 1R",
+        "Une pyramide correcte",
+        "Recommandé si le stop est large",
+      ],
+      answer: 1,
+      explain: "C'est l'inverse du pyramidage. Le prix moyen baisse, la taille grandit, le stop recule, et le trade unique devient une perte de 3R ou 5R.",
+    },
+    {
+      q: "Le scaling out est légitime quand :",
+      options: [
+        "On a peur de rendre le gain",
+        "Il est planifié à l'avance (prix, fraction, gestion du stop) et testé sur l'historique",
+        "Le trade est en perte",
+        "Jamais",
+      ],
+      answer: 1,
+      explain: "Une sortie partielle définie dans le plan et vérifiée sur l'expectancy est une méthode ; une sortie « un peu » par peur est de l'émotion qui ampute la queue droite.",
+    },
+    {
+      q: "Budget quotidien −2R. Vous êtes à −2R à 15 h. Un excellent setup apparaît à 16 h. Vous :",
+      options: [
+        "Le prenez, il est excellent",
+        "Le prenez à moitié taille",
+        "Ne le prenez pas : le budget du jour est consommé",
+        "Le prenez si le précédent était une erreur",
+      ],
+      answer: 2,
+      explain: "Le budget quotidien ne connaît pas la qualité du setup. Il existe précisément pour les moments où l'on se sent capable de « se refaire ». Il n'y a pas d'exception.",
+    },
+    {
+      q: "Comment le risque par trade doit-il suivre la courbe d'equity ?",
+      options: [
+        "Augmenter après chaque perte pour se refaire",
+        "Par des paliers écrits d'avance : réduction dans le drawdown, retour après récupération, hausse modeste éventuelle près des plus hauts",
+        "Rester strictement fixe quoi qu'il arrive",
+        "Doubler à chaque nouveau plus haut",
+      ],
+      answer: 1,
+      explain: "Le risque lit l'état du compte selon une règle décidée à froid. Réduire dans le drawdown prolonge la survie ; augmenter modestement près des plus hauts est défendable si c'est annulé au premier palier.",
+    },
+    {
+      q: "Quel critère autorise le passage à l'étape suivante d'un plan de progression ?",
+      options: [
+        "Un mois très rentable",
+        "Un échantillon de trades (100 à 300) à expectancy positive, drawdown dans la norme et conformité au plan élevée",
+        "L'envie de gagner plus vite",
+        "Un ajout de capital",
+      ],
+      answer: 1,
+      explain: "On progresse sur des critères de process, pas de profit. Un mois à +30 % en violant le plan est un signal de recul, pas de promotion.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 1 est terminé. Vous savez pourquoi les comptes meurent, comment calculer une taille, mesurer une expectancy, anticiper un drawdown, agréger des positions et gérer le risque dans le temps. L'examen du niveau vérifie que ces réflexes sont acquis, chiffres à l'appui. Ensuite seulement viennent les graphiques : le niveau 2 commence par apprendre à lire une bougie et une structure de marché.
