@@ -1,0 +1,370 @@
+---
+title: "Examen · Niveau 1 · Risque et maths du trading"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas chiffrée pour valider le niveau 1 : causes des pertes, position sizing, R et expectancy, drawdown et ruine, corrélation, money management. Score de passage : 80 %."
+---
+
+# Examen · Niveau 1 · Risque et maths du trading
+
+Cet examen valide les six chapitres du niveau 1. Il comporte **25 questions** en cinq blocs, puis **une étude de cas notée sur 20 points** qui enchaîne tous les calculs du niveau sur un cas réaliste.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Faites-le sans revenir aux chapitres, calculatrice autorisée. Les chiffres du niveau 1 sont ceux que vous utiliserez à chaque trade pour le reste de votre pratique : un bloc raté se relit avant de continuer.
+
+## Bloc 1 · Pourquoi la plupart perdent
+
+<Quiz
+  title="Bloc 1 · Coûts, sur-risque, sur-trading, process"
+  questions={[
+    {
+      q: "Stop de 15 pips, coût de 1,2 pip par aller-retour. À décisions aléatoires, l'espérance par trade vaut :",
+      options: [
+        "0",
+        "−0,08R",
+        "−1,2R",
+        "+0,08R",
+      ],
+      answer: 1,
+      explain: "1,2 ÷ 15 = 0,08R de coût par trade. Sans avantage, l'espérance est −0,08R : le jeu est perdant par défaut.",
+    },
+    {
+      q: "Après 7 pertes consécutives à 10 % de risque par trade, il reste environ :",
+      options: [
+        "30 % du compte",
+        "48 % du compte",
+        "70 % du compte",
+        "93 % du compte",
+      ],
+      answer: 1,
+      explain: "0,9⁷ ≈ 0,478. Plus de la moitié du compte a disparu, et il faut ensuite gagner plus de 100 % pour revenir. À 1 %, la même série coûte moins de 7 %.",
+    },
+    {
+      q: "Un setup à +0,35R, 4 fois par semaine, plus 12 trades hors setup à −0,1R. Résultat hebdomadaire attendu :",
+      options: [
+        "+1,40R",
+        "+0,20R",
+        "−0,20R",
+        "+2,60R",
+      ],
+      answer: 1,
+      explain: "4 × 0,35 − 12 × 0,1 = 1,40 − 1,20 = +0,20R. Le sur-trading a mangé 86 % de l'avantage.",
+    },
+    {
+      q: "Sur un trade, le trader contrôle :",
+      options: [
+        "La direction et l'ampleur du mouvement",
+        "L'entrée, le stop et la taille",
+        "Le moment du mouvement",
+        "Rien du tout",
+      ],
+      answer: 1,
+      explain: "Le reste appartient au marché. Entrée et stop fixent la distance, la taille la traduit en euros : la perte est décidée avant le trade.",
+    },
+    {
+      q: "Quelle règle coupe le sur-trading de vengeance ?",
+      options: [
+        "Le stop sur le serveur",
+        "Le budget de perte quotidien (par exemple −2R) et le nombre maximal de trades par jour",
+        "Le journal",
+        "Le choix du broker",
+      ],
+      answer: 1,
+      explain: "Une fois le budget du jour consommé, plus aucun trade, quel que soit le setup. C'est la règle qui empêche les grosses journées rouges.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Position sizing
+
+<Quiz
+  title="Bloc 2 · Taille, budget, Kelly"
+  questions={[
+    {
+      q: "Compte 6 000 €, risque 1 %, stop de 12 points sur MES (5 $ le point). Taille et risque réel ?",
+      options: [
+        "1 MES, 60 $",
+        "2 MES, 120 $",
+        "5 MES, 300 $",
+        "0 MES",
+      ],
+      answer: 0,
+      explain: "Budget 60 $. Risque par contrat : 12 × 5 = 60 $. 60 ÷ 60 = 1 contrat, risque réel 60 $.",
+    },
+    {
+      q: "Le calcul donne 3,9 micro-lots. Vous prenez :",
+      options: [
+        "4",
+        "3",
+        "3,9",
+        "5",
+      ],
+      answer: 1,
+      explain: "On arrondit toujours vers le bas pour ne jamais dépasser le budget. Le risque réel, inférieur au budget, est noté au journal.",
+    },
+    {
+      q: "Le stop indiqué par l'analyse est trop large pour que même un micro-contrat respecte le budget. Vous :",
+      options: [
+        "Rapprochez le stop jusqu'à ce que ça rentre",
+        "Prenez un contrat quand même",
+        "Ne prenez pas le trade, ou cherchez une entrée qui permet un stop plus court sans le mettre dans le bruit",
+        "Doublez le pourcentage de risque",
+      ],
+      answer: 2,
+      explain: "Le stop vient de l'analyse ; la taille s'y adapte, jamais l'inverse. Un stop rapproché artificiellement est une invalidation prématurée.",
+    },
+    {
+      q: "Système à 50 % de réussite, gains 1,5R, pertes 1R. Fraction de Kelly ?",
+      options: [
+        "50 %",
+        "16,7 %",
+        "25 %",
+        "1 %",
+      ],
+      answer: 1,
+      explain: "f* = 0,5 − 0,5 ÷ 1,5 = 0,5 − 0,333 = 0,167. Un dixième de Kelly donne 1,7 %, l'ordre de grandeur de la règle du 1 %.",
+    },
+    {
+      q: "Pourquoi le risque se fixe-t-il en pourcentage du capital courant ?",
+      options: [
+        "Par tradition",
+        "Parce que le risque en euros diminue quand le compte baisse (ruine asymptotique) et augmente quand il monte (croissance composée)",
+        "Parce que le broker l'exige",
+        "Pour simplifier la déclaration fiscale",
+      ],
+      answer: 1,
+      explain: "Le pourcentage s'adapte au capital sans décision : chaque perte dans une mauvaise série est un peu plus petite que la précédente.",
+    },
+  ]}
+/>
+
+## Bloc 3 · R et expectancy
+
+<Quiz
+  title="Bloc 3 · R-multiples, distribution, expectancy"
+  questions={[
+    {
+      q: "R = 60 €. Perte de 84 € sur un stop glissé. Résultat en R ?",
+      options: [
+        "−1R",
+        "−1,4R",
+        "−0,7R",
+        "−84R",
+      ],
+      answer: 1,
+      explain: "84 ÷ 60 = 1,4R. Une perte au-delà de −1R est immédiatement visible comme anomalie d'exécution ou de process.",
+    },
+    {
+      q: "Sur 50 trades : 30 à −1R, 12 à +2R, 8 à +3R. Expectancy ?",
+      options: [
+        "+0,36R",
+        "+0,18R",
+        "−0,12R",
+        "+1,0R",
+      ],
+      answer: 0,
+      explain: "−30 + 24 + 24 = +18R sur 50 trades = +0,36R par trade, avec 40 % de réussite.",
+    },
+    {
+      q: "Que porte le plus souvent la rentabilité d'un système « tendance » ?",
+      options: [
+        "Le taux de réussite",
+        "La queue droite : les quelques trades à +3R et plus",
+        "Les trades à 0R",
+        "La commission",
+      ],
+      answer: 1,
+      explain: "Une poignée de gros gagnants fait souvent plus de la moitié de la somme. Les couper par peur tue l'espérance sans toucher au taux de réussite.",
+    },
+    {
+      q: "Une expectancy de +0,9R sur 18 trades :",
+      options: [
+        "Prouve que le système est excellent",
+        "Ne prouve rien : l'échantillon est trop petit",
+        "Autorise à doubler la taille",
+        "Signifie 90 % de réussite",
+      ],
+      answer: 1,
+      explain: "Sur si peu de trades, un ou deux gros gagnants dominent. Une centaine de trades pour croire au signe, plusieurs centaines pour croire à la valeur.",
+    },
+    {
+      q: "Le levier de progression le plus direct sur un relevé de trades est :",
+      options: [
+        "Changer de broker",
+        "Décomposer l'expectancy par setup, par contexte et par état du trader",
+        "Ajouter des indicateurs",
+        "Augmenter la fréquence",
+      ],
+      answer: 1,
+      explain: "L'expectancy globale cache des sous-systèmes. La décomposition révèle souvent qu'un setup porte le compte et qu'un autre le freine.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Drawdown et ruine
+
+<Quiz
+  title="Bloc 4 · Séries de pertes, drawdown, ruine"
+  questions={[
+    {
+      q: "Système à 50 % de réussite. Sur 100 trades, la probabilité d'au moins une série de 6 pertes consécutives est d'environ :",
+      options: [
+        "1,5 %",
+        "16 %",
+        "55 %",
+        "90 %",
+      ],
+      answer: 2,
+      explain: "0,5⁶ ≈ 1,6 % pour 6 trades donnés, mais sur 100 trades il y a des dizaines de fenêtres : environ 55 %. Les séries sont la norme.",
+    },
+    {
+      q: "Le compte a culminé à 9 000 €, il vaut 7 650 €, R = 90 €. Drawdown ?",
+      options: [
+        "15 %, soit 15R",
+        "10 %, soit 10R",
+        "15 %, soit 9R",
+        "1 350R",
+      ],
+      answer: 0,
+      explain: "1 350 € de baisse sur 9 000 € : 15 %. 1 350 ÷ 90 = 15R.",
+    },
+    {
+      q: "Après un drawdown de 40 %, quel gain pour revenir au plus haut ?",
+      options: [
+        "40 %",
+        "50 %",
+        "67 %",
+        "80 %",
+      ],
+      answer: 2,
+      explain: "1 ÷ 0,6 − 1 = 66,7 %. L'asymétrie entre perte et récupération est la raison de la protection du capital.",
+    },
+    {
+      q: "Drawdown supportable 16 %, drawdown attendu 20R. Risque par trade ?",
+      options: [
+        "0,8 %",
+        "1,6 %",
+        "2 %",
+        "5 %",
+      ],
+      answer: 0,
+      explain: "16 % ÷ 20R = 0,8 % par trade. Le risque se dimensionne sur ce que le système fera subir, pas sur ce qu'on espère gagner.",
+    },
+    {
+      q: "En drawdown de 12R avec des trades conformes au plan, la réaction correcte est :",
+      options: [
+        "Changer de méthode",
+        "Réduire le risque par palier (1 % → 0,5 %), garder le système, continuer",
+        "Doubler la taille",
+        "Arrêter définitivement",
+      ],
+      answer: 1,
+      explain: "Un drawdown dans la fourchette attendue avec un process intact se traverse en réduisant la taille. Changer de méthode jette l'échantillon ; augmenter accélère la ruine.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Corrélation et money management
+
+<Quiz
+  title="Bloc 5 · Heat, corrélation, pyramide, budgets"
+  questions={[
+    {
+      q: "Deux positions de 1R corrélées à 0,9. Risque effectif (écart-type) ?",
+      options: [
+        "1R",
+        "1,41R",
+        "1,95R",
+        "2,5R",
+      ],
+      answer: 2,
+      explain: "√(1 + 1 + 2 × 0,9) = √3,8 ≈ 1,95R. À ce niveau de corrélation, c'est une position doublée.",
+    },
+    {
+      q: "Long ES, long NQ, long RTY, long YM à 1 % chacun. Heat effectif ?",
+      options: [
+        "1 %",
+        "Environ 4 % sur une seule idée : actions US",
+        "0 % car diversifié",
+        "2 %",
+      ],
+      answer: 1,
+      explain: "Corrélations de 0,8 à 0,95 : les quatre stops sautent ensemble. Diversification illusoire, augmentation de taille réelle.",
+    },
+    {
+      q: "Une pyramide correcte impose :",
+      options: [
+        "Des tranches croissantes",
+        "Des tranches décroissantes, un stop commun remonté avant chaque ajout, un risque total ≤ 1R",
+        "D'ajouter sur une position perdante",
+        "De ne jamais remonter le stop",
+      ],
+      answer: 1,
+      explain: "Le rendement augmente sans que le risque initial ne soit jamais dépassé. La pyramide inversée et la moyenne à la baisse font l'inverse.",
+    },
+    {
+      q: "Budget quotidien −2R atteint à 15 h. Un excellent setup à 16 h. Vous :",
+      options: [
+        "Le prenez",
+        "Le prenez à demi-taille",
+        "Ne le prenez pas",
+        "Le prenez si vous êtes sûr",
+      ],
+      answer: 2,
+      explain: "Le budget existe précisément pour les moments où l'on se sent capable de se refaire. Pas d'exception, pas de report.",
+    },
+    {
+      q: "Le passage à un risque par trade supérieur se décide sur :",
+      options: [
+        "Un mois très rentable",
+        "Un échantillon de 100 à 300 trades à expectancy positive, drawdown dans la norme et conformité élevée",
+        "L'envie",
+        "Un conseil",
+      ],
+      answer: 1,
+      explain: "On progresse sur des critères de process, pas de profit, et chaque étape est réversible par une règle écrite.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Une semaine dans la vie d'un compte">
+
+Nadia trade les micro-futures avec un compte de **7 500 $**. Ses règles : risque 1 % par trade, budget −2R par jour, −5R par semaine, heat brut maximal 3 %, positions corrélées au-delà de 0,7 comptées ensemble, palier de réduction à −10R (risque divisé par deux). Son système, mesuré sur 220 trades, affiche 44 % de réussite, gains moyens +2,1R, pertes moyennes −1R, drawdown maximal historique 13R.
+
+**Lundi.** Elle repère un achat MES à 5 280,00 avec stop à 5 274,00, et simultanément un achat MNQ à 18 500,00 avec stop à 18 480,00. Corrélation ES-NQ mesurée : 0,89.
+
+**Mardi.** Un short MCL à 78,90, stop 79,30, objectif 77,70. Le trade atteint l'objectif.
+
+**Mercredi et jeudi.** Quatre trades : −1R, −1R, puis −1R, +0,5R.
+
+**Vendredi.** Elle est en drawdown de 11R depuis son plus haut (elle était déjà à −7R lundi matin).
+
+1. **(3 pts)** Calculez son R en dollars, la taille MES et la taille MNQ du lundi, et le risque réel de chacune.
+2. **(3 pts)** Peut-elle prendre les deux positions du lundi à taille pleine ? Justifiez avec le heat et la corrélation, et proposez une solution conforme.
+3. **(3 pts)** Calculez l'expectancy de son système et le gain hebdomadaire attendu en dollars pour 12 trades par semaine.
+4. **(3 pts)** Mardi : taille MCL, risque réel, résultat en dollars et en R.
+5. **(4 pts)** Mercredi : après les deux premières pertes, un troisième setup apparaît. Autorisé ? Jeudi : le +0,5R est-il possible après le −1R du matin ? Quel est le bilan mer-jeu, et le budget hebdomadaire est-il respecté ?
+6. **(4 pts)** Vendredi : à −11R, que change le palier pour son R et pour la taille d'un MES avec un stop de 6 points ? Ce drawdown est-il inquiétant au regard de ses statistiques ? Que doit-elle vérifier en priorité ?
+
+<Solution>
+
+**1. Tailles du lundi (3 pts).** R = 1 % de 7 500 = **75 $**. MES : stop 6 points × 5 $ = 30 $ par contrat ; 75 ÷ 30 = 2,5 → **2 MES**, risque réel 60 $. MNQ : stop 20 points × 2 $ = 40 $ ; 75 ÷ 40 = 1,875 → **1 MNQ**, risque réel 40 $.
+
+**2. Heat et corrélation (3 pts).** Heat brut : 60 + 40 = 100 $, soit 1,33 % : sous le plafond de 3 %. Mais ES et NQ sont corrélés à 0,89, au-delà de 0,7 : les deux positions **comptent comme une seule idée** de 100 $, soit 1,33 % sur « indices US », au-dessus du 1 % par idée. Risque effectif : √(60² + 40² + 2 × 0,89 × 60 × 40) = √(3 600 + 1 600 + 4 272) = √9 472 ≈ 97 $ : presque le pire cas. Solution conforme : ne prendre qu'une des deux (le MES, mieux dimensionné), ou réduire à 1 MES + 1 MNQ (30 + 40 = 70 $, soit 0,93 %) pour que le bloc reste sous 1R.
+
+**3. Expectancy (3 pts).** E = 0,44 × 2,1 − 0,56 × 1 = 0,924 − 0,56 = **+0,364R** par trade. Semaine : 0,364 × 12 × 75 ≈ **328 $** attendus en moyenne, avant les mauvaises séries.
+
+**4. Mardi, MCL (3 pts).** Stop 0,40 $ = 40 ticks × 1 $ = 40 $ par contrat ; 75 ÷ 40 = 1,875 → **1 MCL**, risque réel 40 $. Objectif : 78,90 − 77,70 = 1,20 $ = 120 ticks = **+120 $**, soit +3R par rapport au risque réel (120 ÷ 40), ou +1,6R par rapport au R nominal de 75 $. Au journal, on note le R de la ligne : **+3R**.
+
+**5. Mercredi et jeudi (4 pts).** Mercredi : −1R −1R = −2R, budget du jour atteint : le troisième setup **n'est pas autorisé**. Jeudi : après −1R le matin, elle est à −1R sur la journée, sous le plafond de −2R : le second trade est **autorisé** ; il fait +0,5R, journée à −0,5R. Bilan mer-jeu : **−2,5R**. Semaine à ce stade, en supposant la position réduite du lundi sortie à l'entrée (0R) : mardi +1,6R nominal, mer-jeu −2,5R, cumul −0,9R : largement au-dessus de −5R. **Budget hebdomadaire respecté.**
+
+**6. Vendredi, palier (4 pts).** À −11R, le palier de −10R est actif : risque divisé par deux, R = **37,50 $**. MES avec stop de 6 points (30 $ par contrat) : 37,50 ÷ 30 = 1,25 → **1 MES** au lieu de 2. Le drawdown de 11R est **dans la norme** : son historique montre 13R, et pour un système à 44 % de réussite avec gains de 2R la simulation attend 10R en médiane et 16R une fois sur dix sur 100 trades. Rien d'anormal. Priorité : vérifier au journal que les trades du drawdown sont **conformes au plan** (setup, stop, taille, budgets). S'ils le sont, elle continue à demi-taille jusqu'à récupération de la moitié du drawdown ; s'ils ne le sont pas, c'est elle qui a dérivé, pas le système, et la revue s'impose avant de continuer.
+
+**Barème.** 1 point par élément juste (chiffre, règle appliquée, justification). Passage : 16 sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Avec 20 bonnes réponses sur 25 et 16 points sur 20, le niveau 1 est validé. Vous détenez les outils qui décident de la survie d'un compte ; ils s'appliqueront à chaque trade des niveaux suivants. Le niveau 2 ouvre enfin les graphiques : lire une bougie, une structure, plusieurs unités de temps, un support, une volatilité et un volume.
