@@ -1,0 +1,332 @@
+---
+title: "Market structure"
+description: "Repérer les swings significatifs, distinguer tendance, range et phases de transition, séparer structure interne et structure externe, définir des invalidations objectives pour placer le stop, et s'entraîner à annoter des graphiques vierges."
+---
+
+# Market structure
+
+Le chapitre précédent a appris à lire une bougie. La **structure de marché** (market structure) est ce que les bougies dessinent ensemble : une suite de plus hauts et de plus bas qui dit si le prix avance, recule ou hésite. C'est la couche de lecture la plus importante de toute l'analyse technique, parce qu'elle répond aux deux questions qui précèdent tout trade : dans quel sens chercher, et où l'idée devient fausse. Ce chapitre la construit à partir de zéro et se termine par l'exercice qui la fait entrer dans l'œil : annoter des graphiques vierges.
+
+## Swings : plus hauts et plus bas significatifs
+
+Un **swing** est un point de retournement local. Un **swing high** (plus haut de swing) est un sommet entouré de bougies plus basses ; un **swing low** (plus bas de swing) est un creux entouré de bougies plus hautes. La définition mécanique la plus courante : un swing high est une bougie dont le plus haut dépasse celui des N bougies à gauche et des N bougies à droite (N = 2 ou 3 sur la plupart des plateformes). Le swing low, symétriquement.
+
+Cette définition a une conséquence : **un swing n'est confirmé qu'après coup**, quand les N bougies de droite ont clôturé. On ne sait qu'un plus haut est un swing high qu'une fois que le prix est reparti à la baisse. C'est normal, et cela protège de la tentation de nommer un sommet pendant qu'il se forme.
+
+Tous les swings n'ont pas la même importance. Sur un graphique, il y a des dizaines de petits creux et de petits sommets ; seuls quelques-uns comptent. Un swing est **significatif** quand :
+
+- il est visible **sur l'unité de temps de structure** (H1 pour un intraday, H4 pour un swing trader), pas seulement sur l'unité d'exécution ;
+- il a été formé par un mouvement d'ampleur comparable aux mouvements précédents, pas par trois bougies de bruit ;
+- il a **provoqué une réaction** : le prix a nettement reculé après l'avoir formé.
+
+Le repérage des swings significatifs est un savoir-faire qui s'acquiert par la pratique (l'exercice final y est consacré). Une aide simple : dézoomer jusqu'à ce que le graphique ne montre plus qu'une dizaine de swings ; ce sont ceux-là.
+
+<Figure caption="Figure 1 · Swings significatifs (marqués) et bruit (non marqué) sur une même séquence. La structure se lit sur les premiers ; les seconds font trébucher.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Séquence de prix avec swings significatifs marqués" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <polyline points="50,230 80,200 100,215 130,170 150,185 170,160 200,120 220,140 240,125 270,90 290,110 310,95 340,60 360,85 380,70 400,110 420,95 450,140 470,125 500,170 520,155 550,200 570,185 600,220 630,205 660,240 690,225" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+
+  <circle cx="130" cy="170" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="130" y="158" fontSize="10" textAnchor="middle" className="green" fontWeight="600">HH</text>
+  <circle cx="150" cy="185" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="150" y="202" fontSize="10" textAnchor="middle" className="red" fontWeight="600">HL</text>
+  <circle cx="200" cy="120" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="200" y="108" fontSize="10" textAnchor="middle" className="green" fontWeight="600">HH</text>
+  <circle cx="220" cy="140" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="220" y="157" fontSize="10" textAnchor="middle" className="red" fontWeight="600">HL</text>
+  <circle cx="270" cy="90" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="270" y="78" fontSize="10" textAnchor="middle" className="green" fontWeight="600">HH</text>
+  <circle cx="290" cy="110" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="290" y="127" fontSize="10" textAnchor="middle" className="red" fontWeight="600">HL</text>
+  <circle cx="340" cy="60" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="340" y="48" fontSize="10" textAnchor="middle" className="green" fontWeight="600">HH</text>
+  <circle cx="400" cy="110" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="400" y="127" fontSize="10" textAnchor="middle" className="red" fontWeight="600">LL</text>
+  <circle cx="420" cy="95" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="420" y="83" fontSize="10" textAnchor="middle" className="green" fontWeight="600">LH</text>
+  <circle cx="450" cy="140" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="450" y="157" fontSize="10" textAnchor="middle" className="red" fontWeight="600">LL</text>
+  <circle cx="470" cy="125" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="470" y="113" fontSize="10" textAnchor="middle" className="green" fontWeight="600">LH</text>
+  <circle cx="500" cy="170" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="500" y="187" fontSize="10" textAnchor="middle" className="red" fontWeight="600">LL</text>
+  <circle cx="550" cy="200" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="550" y="217" fontSize="10" textAnchor="middle" className="red" fontWeight="600">LL</text>
+
+  <text x="240" y="245" fontSize="10" className="muted">petits creux et sommets non marqués : bruit de l'unité inférieure</text>
+  <text x="600" y="60" fontSize="11" fontWeight="600">HH : higher high · HL : higher low</text>
+  <text x="600" y="76" fontSize="11" fontWeight="600">LH : lower high · LL : lower low</text>
+</svg>
+</Figure>
+
+## Tendance, range et phases de transition
+
+Une fois les swings significatifs repérés, la structure se lit dans leur enchaînement. Le vocabulaire est anglais et universel : HH (higher high, plus haut plus haut), HL (higher low, plus bas plus haut), LH (lower high, plus haut plus bas), LL (lower low, plus bas plus bas).
+
+**Tendance haussière** : une suite de HH et de HL. Chaque sommet dépasse le précédent, chaque creux reste au-dessus du précédent. Les acheteurs sont prêts à payer plus cher à chaque repli.
+
+**Tendance baissière** : une suite de LH et de LL. Symétrique.
+
+**Range** : les sommets et les creux se forment à peu près aux mêmes niveaux ; le prix oscille entre un plancher et un plafond sans construire de HH ni de LL durables. Ni les acheteurs ni les vendeurs ne gagnent de terrain.
+
+**Phases de transition** : le passage d'un état à un autre. La transition n'est pas instantanée ; elle laisse des traces :
+
+- Une tendance haussière qui **échoue à faire un HH** (le sommet suivant reste sous le précédent : premier LH) est le premier avertissement. Elle n'est pas finie pour autant.
+- Si le prix casse ensuite **le dernier HL** (il fait un LL), la séquence haussière est rompue : la structure a changé. C'est le moment où l'on cesse de chercher des achats sur repli.
+- Il faut alors une confirmation dans l'autre sens (un LH suivi d'un nouveau LL) pour parler de tendance baissière ; entre-temps, on est en transition, souvent en range.
+
+<Figure caption="Figure 2 · Les trois états et la transition. La tendance haussière échoue (LH), casse son dernier HL (LL), passe en range, puis la tendance baissière s'installe (LH, LL).">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Tendance haussière, transition, range et tendance baissière" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <polyline points="50,240 90,180 110,205 150,140 170,170 210,100 240,135 270,115 300,175 330,145 360,180 390,150 420,185 450,155 480,220 510,190 540,245 570,215 600,260" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+
+  <rect x="45" y="40" width="200" height="22" rx="4" className="green" opacity="0.2" />
+  <text x="145" y="55" fontSize="11" textAnchor="middle" fontWeight="600">tendance haussière · HH / HL</text>
+  <rect x="250" y="40" width="200" height="22" rx="4" className="gold" opacity="0.25" />
+  <text x="350" y="55" fontSize="11" textAnchor="middle" fontWeight="600">transition puis range</text>
+  <rect x="455" y="40" width="200" height="22" rx="4" className="red" opacity="0.2" />
+  <text x="555" y="55" fontSize="11" textAnchor="middle" fontWeight="600">tendance baissière · LH / LL</text>
+
+  <text x="270" y="105" fontSize="10" className="red" fontWeight="600">LH : premier échec</text>
+  <line x1="170" y1="170" x2="310" y2="170" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="312" y="188" fontSize="10" className="red" fontWeight="600">LL : dernier HL cassé</text>
+  <line x1="300" y1="145" x2="460" y2="145" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="300" y1="185" x2="460" y2="185" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="380" y="140" fontSize="10" textAnchor="middle" className="muted">plafond du range</text>
+  <text x="380" y="200" fontSize="10" textAnchor="middle" className="muted">plancher du range</text>
+  <text x="520" y="235" fontSize="10" className="red" fontWeight="600">LL sous le range : baissier</text>
+</svg>
+</Figure>
+
+Une précision qui évite un malentendu classique : **la structure n'est pas un indicateur de retournement précoce**. Elle confirme après coup. Son rôle n'est pas d'attraper le sommet ; c'est de dire, à chaque instant, dans quel sens le rapport de force penche et à partir de quel prix ce jugement devient faux. Attraper des sommets est le travail d'autres outils (niveaux 3 et 4), et un travail à faible taux de réussite.
+
+## Structure interne et structure externe
+
+Un même graphique contient plusieurs structures emboîtées, selon l'unité de temps de lecture.
+
+La **structure externe** (ou majeure) est celle des swings de l'unité de temps de contexte : les grands HH et HL du H4 ou du quotidien. Elle donne la direction de fond.
+
+La **structure interne** (ou mineure) est celle des swings de l'unité de temps d'exécution, à l'intérieur d'un mouvement de la structure externe. Pendant qu'un HL externe se forme en H4 (un repli de la tendance haussière), la structure interne en M15 est **baissière** : elle fait des LH et des LL pendant tout le repli.
+
+Cette emboîtement est la source de la confusion la plus fréquente chez les débutants : « le marché est haussier » et « le marché est baissier » sont tous les deux vrais, à des échelles différentes. La lecture correcte est : **structure externe haussière, structure interne baissière, donc repli dans une tendance haussière**. Ce qui se traduit par une attente précise : la fin du repli, c'est-à-dire le moment où la structure interne redevient haussière (elle fait un HH interne après avoir formé un creux), à un endroit cohérent avec la structure externe (au-dessus du dernier HL externe).
+
+C'est le mécanisme d'entrée le plus général de tout le trading de tendance : **attendre que la structure interne se réaligne sur la structure externe**. Le niveau 3 le raffinera (avec le vocabulaire BOS et CHoCH), le chapitre suivant l'organisera en routine multi-timeframe.
+
+<Figure caption="Figure 3 · Structure externe haussière (H4, en gras) et structure interne baissière pendant le repli (M15, en fin). L'entrée se cherche quand l'interne redevient haussière au-dessus du dernier HL externe.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Structure externe et structure interne emboîtées" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <polyline points="50,240 160,120 300,190 460,60 560,140 690,30" fill="none" stroke="var(--tm-gold)" strokeWidth="3.5" opacity="0.5" />
+  <polyline points="460,60 475,80 490,72 505,100 520,90 535,120 550,110 560,140 575,125 585,135 600,110 615,120 640,85 660,95 690,30" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+
+  <text x="160" y="110" fontSize="10" textAnchor="middle" fontWeight="600">HH ext.</text>
+  <text x="300" y="206" fontSize="10" textAnchor="middle" fontWeight="600">HL ext.</text>
+  <text x="460" y="50" fontSize="10" textAnchor="middle" fontWeight="600">HH ext.</text>
+  <line x1="300" y1="190" x2="700" y2="190" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="640" y="205" fontSize="10" className="red" fontWeight="600">dernier HL externe : invalidation</text>
+
+  <text x="505" y="115" fontSize="9" className="red">LL int.</text>
+  <text x="535" y="135" fontSize="9" className="red">LL int.</text>
+  <text x="520" y="86" fontSize="9" className="red">LH int.</text>
+  <circle cx="600" cy="110" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="600" y="100" fontSize="9" textAnchor="middle" className="green" fontWeight="600">HH interne : réalignement</text>
+  <text x="380" y="245" fontSize="11" textAnchor="middle" className="muted">externe haussier + interne baissier = repli ; l'entrée attend le HH interne au-dessus du HL externe</text>
+</svg>
+</Figure>
+
+## Définir des invalidations objectives
+
+Une **invalidation** est le prix à partir duquel une lecture est fausse. C'est la traduction structurelle de la question posée au niveau 1 : « où mon idée n'a-t-elle plus de raison d'être ? ». C'est là que va le stop, et pas ailleurs.
+
+Le principe : **une idée haussière est invalidée quand la structure qui la justifie est rompue**. Concrètement :
+
+- Pour un achat sur repli dans une tendance haussière externe, l'invalidation est **sous le dernier HL externe** : si le prix casse ce creux, la séquence HH/HL est rompue et il n'y a plus de tendance haussière à acheter.
+- Pour un achat au réalignement de la structure interne, on peut resserrer : l'invalidation est **sous le creux interne qui a lancé le HH interne**. C'est plus proche (donc un R plus petit et une taille plus grande), mais plus exposé au bruit.
+- Pour un achat dans un range, l'invalidation est **sous le plancher du range**, avec une marge : le prix teste souvent les bornes de quelques ticks.
+
+Trois qualités d'une bonne invalidation :
+
+1. **Objective** : elle est définie par un swing visible, que n'importe qui d'autre placerait au même endroit à quelques ticks près. « Je sors si ça a l'air mauvais » n'est pas une invalidation.
+2. **Structurelle** : elle correspond à un endroit où la lecture change de sens, pas à un montant en euros. Le montant en euros est réglé par la taille (niveau 1), jamais par le déplacement du stop.
+3. **Avec une marge contre le bruit** : quelques ticks sous le swing, pas exactement dessus. Les niveaux évidents sont testés (le niveau 3 expliquera pourquoi et par qui) ; un stop posé au tick sur un swing évident est un stop qui sera touché juste avant que l'idée fonctionne.
+
+Le rapport entre distance d'invalidation et objectif fixe le ratio gain/risque du trade **avant** l'entrée. Si l'invalidation objective est trop loin pour que le ratio soit acceptable, le trade ne se prend pas ; on ne rapproche pas le stop pour améliorer le ratio sur le papier.
+
+## Exercice : annoter dix graphiques vierges
+
+C'est l'exercice qui installe la lecture de structure. Il se fait sur papier ou sur des captures d'écran sans indicateur, sur l'unité de temps de structure de votre profil (H1 pour un intraday, H4 pour un swing trader), sur des périodes passées que vous n'avez pas étudiées.
+
+Pour chacun des dix graphiques :
+
+1. Marquez les **swings significatifs** (pas plus de 8 à 12 par graphique).
+2. Étiquetez chacun **HH, HL, LH ou LL** par rapport au swing précédent de même nature.
+3. Délimitez les **phases** : tendance haussière, tendance baissière, range, transition, avec un trait vertical à chaque changement.
+4. Marquez le point exact où la **structure a été rompue** (le premier LL après une séquence haussière, ou le premier HH après une séquence baissière).
+5. À la dernière bougie visible, écrivez en une ligne : la structure externe, la structure interne, et le **prix d'invalidation** d'un trade dans le sens de la structure externe.
+6. Comparez ensuite avec ce qui s'est passé après (faites défiler) : non pas pour savoir si vous « aviez raison » (la structure ne prédit pas), mais pour vérifier que votre invalidation était **respectée avant que le mouvement ne parte**, ou **touchée avant un retournement réel**.
+
+Le but n'est pas la perfection : deux traders compétents ne marquent pas exactement les mêmes swings. Le but est la **cohérence** : le même critère appliqué partout, et une invalidation que vous pourriez défendre. Refaites l'exercice chaque semaine ; après quelques dizaines de graphiques, la structure se voit sans effort.
+
+## Deux trades lus par la structure
+
+Reconstitutions pédagogiques : deux entrées, une avec la structure, une contre elle.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Structure H1 haussière (HH/HL), repli interne M5 terminé par un HH interne au-dessus du dernier HL H1"
+  entree="18 462,00"
+  stop="18 446,00 (16 points, sous le creux interne, marge de 3 points)"
+  objectif="18 502,00 (proche du HH H1 précédent)"
+  r="+2,5R">
+
+H1 : trois HH et trois HL depuis la veille, dernier HL H1 à 18 440. Le prix replie ; en M5, la structure interne devient baissière (LH, LL) pendant 45 minutes, sans casser 18 440. Puis un creux à 18 449, et une bougie M5 qui dépasse le dernier LH interne : premier HH interne, réalignement. Entrée à 18 462 sur le retour, stop à 18 446 (3 points sous le creux interne, et surtout au-dessus du HL H1 : deux invalidations cohérentes). Objectif sous le HH H1 précédent. La structure a fourni le sens (haussier), le moment (réalignement interne), et le stop (creux interne). Le trade a atteint l'objectif en une heure ; il aurait pu perdre sans que rien ne soit à changer.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Short"
+  setup="Vente « parce que ça baisse » en M5 pendant le même repli, contre la structure H1"
+  entree="18 455,00"
+  stop="18 471,00 (16 points)"
+  objectif="18 415,00"
+  r="−1R">
+
+Même repli, autre trader. Il regarde le M5, voit trois LL de suite, conclut « tendance baissière » et vend. Il n'a pas lu le H1 : la structure externe est haussière, le repli n'a pas cassé le dernier HL, et son objectif à 18 415 est **sous** ce HL, c'est-à-dire qu'il parie sur une rupture de la structure externe sans aucun signe de cette rupture. Le prix fait son creux à 18 449, se réaligne, et touche son stop à 18 471. Perte de 1R sur un trade correct en interne et faux en externe. La leçon n'est pas « il ne faut jamais vendre un repli » ; c'est qu'un trade contre la structure externe demande une raison structurelle (une rupture visible), pas trois bougies rouges.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Un **swing** est un retournement local confirmé après coup ; seuls les swings **significatifs** (visibles sur l'unité de structure, ayant provoqué une réaction) comptent.
+- **Tendance haussière = HH et HL ; baissière = LH et LL ; range = sommets et creux aux mêmes niveaux.** La transition passe par un échec (LH) puis une rupture (LL du dernier HL).
+- **Structure externe** (contexte) et **structure interne** (exécution) sont emboîtées ; un repli est « externe haussier, interne baissier », et l'entrée attend le réalignement.
+- L'**invalidation** est objective, structurelle et protégée du bruit : c'est là que va le stop, et le montant en euros se règle par la taille, jamais en déplaçant le stop.
+- La structure **confirme, elle ne prédit pas** ; sa fonction est de donner le sens et le prix où l'on a tort.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Étiqueter une séquence">
+
+Voici les swings significatifs successifs d'un instrument en H1, dans l'ordre : creux 100 · sommet 112 · creux 105 · sommet 118 · creux 110 · sommet 116 · creux 108 · sommet 113 · creux 104.
+
+1. Étiquetez chaque swing (HH, HL, LH, LL) par rapport au swing précédent de même nature.
+2. Où la structure haussière échoue-t-elle pour la première fois ? Où est-elle rompue ?
+3. Quel est l'état de la structure au dernier swing ?
+
+<Solution>
+
+1. 112 : premier sommet (référence). 105 : HL (au-dessus de 100). 118 : **HH**. 110 : **HL** (au-dessus de 105). 116 : **LH** (sous 118). 108 : **LL** (sous 110). 113 : **LH** (sous 116). 104 : **LL** (sous 108).
+2. Premier échec : le sommet à **116** (LH). Rupture : le creux à **108**, qui casse le dernier HL à 110.
+3. Après 108, la séquence est LH (113) puis LL (104) : **tendance baissière installée** en H1. Un trade long dans le sens de « l'ancienne » tendance n'a plus de justification structurelle.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Placer une invalidation">
+
+Structure H4 haussière sur l'or : dernier HL H4 à 2 340,0, dernier HH H4 à 2 372,0. Le prix replie ; en H1, il forme un creux à 2 348,5 puis casse le dernier LH interne à 2 356,0. Vous voulez acheter à 2 355,0 avec un objectif à 2 371,0.
+
+1. Donnez deux invalidations possibles, la serrée et la large, avec une marge de 1,5 $ contre le bruit.
+2. Calculez le ratio gain/risque pour chacune.
+3. Laquelle choisir, et pourquoi la seconde peut être préférable malgré un ratio inférieur ?
+
+<Solution>
+
+1. Serrée : sous le creux interne H1, **2 347,0** (2 348,5 − 1,5). Large : sous le dernier HL H4, **2 338,5** (2 340,0 − 1,5).
+2. Serrée : risque 8,0 $, gain 16,0 $, ratio **2 pour 1**. Large : risque 16,5 $, gain 16,0 $, ratio **≈ 1 pour 1**.
+3. La serrée offre le meilleur ratio et est cohérente avec l'entrée sur réalignement interne ; c'est le choix normal. La large est préférable si le creux interne est peu net ou si l'or est très volatil ce jour-là (chapitre 5) : elle est touchée moins souvent par le bruit. Ce que l'on ne fait pas : choisir la serrée pour le ratio, puis la déplacer vers la large quand le prix s'en approche. On choisit avant, on dimensionne la taille en conséquence, on ne bouge plus.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Dix graphiques">
+
+Réalisez l'exercice d'annotation décrit dans le chapitre sur dix graphiques passés de votre marché, unité de temps de structure. Conservez vos annotations. Puis, pour chaque graphique, notez si l'invalidation que vous aviez écrite à la dernière bougie a été respectée avant un mouvement dans le sens de la structure, touchée avant un retournement réel, ou touchée par du bruit avant que le mouvement ne parte dans le bon sens.
+
+<Solution>
+
+Il n'y a pas de corrigé unique. Le résultat attendu après dix graphiques : une majorité d'invalidations « respectées » ou « touchées avant un retournement réel » (les deux sont des lectures correctes) et une minorité de « touchées par du bruit ». Si cette dernière catégorie domine, vos invalidations sont trop serrées ou posées sur des swings non significatifs : reprenez la définition de swing significatif et ajoutez de la marge. Si vous n'avez presque aucune invalidation touchée, elles sont peut-être trop larges pour offrir un ratio utile. Refaites l'exercice la semaine suivante sur dix autres graphiques.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Une tendance haussière se définit par :",
+      options: [
+        "Une moyenne mobile qui monte",
+        "Une suite de plus hauts plus hauts (HH) et de plus bas plus hauts (HL) sur les swings significatifs",
+        "Plus de bougies vertes que de rouges",
+        "Un RSI au-dessus de 50",
+      ],
+      answer: 1,
+      explain: "La structure se lit sur les swings : chaque sommet dépasse le précédent, chaque creux reste au-dessus du précédent. Aucun indicateur n'est nécessaire.",
+    },
+    {
+      q: "Quand un swing high est-il confirmé ?",
+      options: [
+        "Dès que le prix arrête de monter",
+        "Après que les N bougies de droite ont clôturé sous son plus haut",
+        "Quand un indicateur le signale",
+        "Il ne l'est jamais",
+      ],
+      answer: 1,
+      explain: "Un swing se confirme après coup, quand le prix est reparti. Cela empêche de nommer un sommet pendant qu'il se forme.",
+    },
+    {
+      q: "Le premier signe d'affaiblissement d'une tendance haussière est :",
+      options: [
+        "Un LL sous le dernier HL",
+        "Un LH : le sommet suivant reste sous le précédent",
+        "Une bougie rouge",
+        "Un range",
+      ],
+      answer: 1,
+      explain: "L'échec à faire un HH est l'avertissement ; la rupture du dernier HL (un LL) est la confirmation que la séquence est rompue.",
+    },
+    {
+      q: "Structure H4 haussière, structure M15 baissière. La lecture correcte est :",
+      options: [
+        "Le marché est baissier",
+        "Le marché est haussier",
+        "Repli dans une tendance haussière ; on attend le réalignement de l'interne pour acheter",
+        "Contradiction, on ne trade pas",
+      ],
+      answer: 2,
+      explain: "Externe et interne sont emboîtées. Un repli est précisément « externe haussier, interne baissier ». L'entrée se cherche au HH interne au-dessus du dernier HL externe.",
+    },
+    {
+      q: "Une bonne invalidation est :",
+      options: [
+        "Un montant fixe en euros",
+        "Objective (un swing visible), structurelle (là où la lecture change), avec une marge contre le bruit",
+        "Le plus proche possible pour un bon ratio",
+        "Déplaçable si le prix s'en approche",
+      ],
+      answer: 1,
+      explain: "Le stop va là où l'idée devient fausse. Le montant en euros se règle par la taille. Un stop au tick sur un swing évident est touché par le bruit.",
+    },
+    {
+      q: "L'invalidation objective est trop loin pour un ratio gain/risque acceptable. Vous :",
+      options: [
+        "Rapprochez le stop",
+        "Prenez le trade quand même",
+        "Ne prenez pas le trade, ou attendez une entrée plus proche de l'invalidation",
+        "Doublez l'objectif",
+      ],
+      answer: 2,
+      explain: "Le stop ne se rapproche pas pour améliorer le ratio sur le papier. Une entrée plus proche du swing d'invalidation, ou pas de trade.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Structure externe, structure interne : vous avez déjà touché du doigt la lecture sur plusieurs unités de temps. Le chapitre suivant en fait une routine complète : la hiérarchie des unités, l'analyse top-down du contexte à l'exécution, la gestion des signaux alignés ou en conflit, et les erreurs multi-timeframe qui coûtent le plus cher.
