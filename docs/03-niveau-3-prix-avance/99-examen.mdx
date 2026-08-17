@@ -1,0 +1,366 @@
+---
+title: "Examen · Niveau 3 · Prix avancé : SMC, ICT, Wyckoff"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider le niveau 3 : liquidité et sweeps, displacement et FVG, order blocks et breakers, BOS et CHoCH, outils ICT, Wyckoff. Score de passage : 80 %."
+---
+
+# Examen · Niveau 3 · Prix avancé : SMC, ICT, Wyckoff
+
+Cet examen valide les huit chapitres du niveau 3. Il comporte **25 questions** en cinq blocs, puis **une étude de cas notée sur 20 points** : une séquence complète décrite en texte, à lire à deux échelles (Wyckoff pour le contexte, SMC pour l'exécution), à annoter et à chiffrer avec les outils des niveaux 1 et 2.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Les définitions strictes du niveau (clôture, displacement, FVG sur trois bougies) sont ce que l'examen teste : un bloc raté se relit avant le niveau 4.
+
+## Bloc 1 · Liquidité et sweeps
+
+<Quiz
+  title="Bloc 1 · Où est la liquidité, sweep contre cassure"
+  questions={[
+    {
+      q: "Pourquoi le prix dépasse-t-il souvent un plus bas évident avant de repartir ?",
+      options: [
+        "Par hasard",
+        "Parce que les stops regroupés sous ce plus bas fournissent la liquidité dont les gros acheteurs ont besoin",
+        "Parce que le broker le décide",
+        "Parce que les indicateurs sont en retard",
+      ],
+      answer: 1,
+      explain: "Des milliers de stops au même endroit forment un réservoir ; les participants qui exécutent en taille vont là où se trouve la contrepartie.",
+    },
+    {
+      q: "Le critère décisif pour distinguer un sweep d'une cassure est :",
+      options: [
+        "Le volume seul",
+        "La clôture sur l'unité de temps qui a défini le niveau : mèche au-delà et corps en deçà pour un sweep",
+        "La couleur de la bougie",
+        "L'heure",
+      ],
+      answer: 1,
+      explain: "Vitesse du retour, amplitude, volume et structure sont des indices ; la clôture est le juge.",
+    },
+    {
+      q: "Un sweep sans displacement ensuite est :",
+      options: [
+        "Un signal d'achat",
+        "Une information, pas une entrée : personne n'a poussé, le niveau peut encore casser",
+        "Une cassure",
+        "Impossible",
+      ],
+      answer: 1,
+      explain: "La réaction valide l'hypothèse « un gros participant s'est servi ». Sans réaction, pas de setup.",
+    },
+    {
+      q: "Quand entre-t-on sur un sweep ?",
+      options: [
+        "Sur la mèche",
+        "Au retour dans la zone laissée par le displacement, après la clôture, stop sous la mèche + marge",
+        "Jamais",
+        "À la clôture du jour",
+      ],
+      answer: 1,
+      explain: "Sur la mèche, on ne sait pas encore si c'est un sweep ou le début d'une cassure. Le prix manqué est le prix de la confirmation.",
+    },
+    {
+      q: "Les réservoirs de liquidité les plus fiables sont :",
+      options: [
+        "Le milieu des ranges",
+        "Les plus hauts et plus bas égaux, les swings nets, les extrêmes de la veille, de la semaine et des sessions",
+        "Les moyennes mobiles",
+        "Les niveaux de Fibonacci",
+      ],
+      answer: 1,
+      explain: "La liquidité est proportionnelle à l'évidence du niveau : ce que tout le monde voit, tout le monde le trade de la même façon.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Displacement, FVG, order blocks
+
+<Quiz
+  title="Bloc 2 · Les zones : FVG, OB, breaker"
+  questions={[
+    {
+      q: "Un FVG haussier existe quand :",
+      options: [
+        "Une bougie verte est grande",
+        "Sur trois bougies, le plus haut de la première est inférieur au plus bas de la troisième",
+        "Le prix monte vite",
+        "Il y a un gap d'ouverture",
+      ],
+      answer: 1,
+      explain: "Les mèches de la bougie 1 et de la bougie 3 ne se chevauchent pas ; le rectangle entre high(1) et low(3) est le FVG. Vérifiable au tick près.",
+    },
+    {
+      q: "Un displacement significatif se reconnaît à :",
+      options: [
+        "Une seule bougie de 1,2 ATR",
+        "Des bougies de 2 à 3 ATR, corps dominants, cassure d'une structure interne, départ logique, volume",
+        "Une longue mèche de retour",
+        "Un volume faible",
+      ],
+      answer: 1,
+      explain: "C'est la preuve qu'un participant a poussé en taille. Sans displacement, le sweep n'est qu'un dépassement et la bougie contraire qu'une bougie contraire.",
+    },
+    {
+      q: "Le prix traverse un FVG haussier en clôture puis revient le tester par-dessous et rebaisse. Le FVG est :",
+      options: [
+        "Mitigé",
+        "Inversé : il agit désormais comme résistance",
+        "Toujours haussier",
+        "Invalidé sans suite",
+      ],
+      answer: 1,
+      explain: "L'inversion est le changement de polarité appliqué au FVG ; elle accompagne en général un CHoCH.",
+    },
+    {
+      q: "Un order block haussier valide est :",
+      options: [
+        "Toute bougie rouge",
+        "La dernière bougie baissière avant un displacement significatif qui casse une structure, idéalement précédée d'un sweep et suivie d'un FVG, frais",
+        "Un support",
+        "Une bougie verte de grande taille",
+      ],
+      answer: 1,
+      explain: "L'hypothèse : la position a été construite pendant la dernière bougie contraire. Seul le displacement qui suit en fait une zone d'intérêt.",
+    },
+    {
+      q: "Dans la hiérarchie du niveau, le FVG est :",
+      options: [
+        "La condition",
+        "La zone d'entrée quand il existe, plus précise que l'OB ; l'OB est la zone par défaut ou la borne d'invalidation ; le sweep est la condition",
+        "Inutile",
+        "L'objectif",
+      ],
+      answer: 1,
+      explain: "Le sweep dit pourquoi le prix est venu, l'OB où la position a été construite, le FVG où le trou a été laissé. Trois angles sur le même endroit.",
+    },
+  ]}
+/>
+
+## Bloc 3 · BOS, CHoCH et structure
+
+<Quiz
+  title="Bloc 3 · Cassures valides et cassures de liquidité"
+  questions={[
+    {
+      q: "Un BOS est :",
+      options: [
+        "Un signal d'achat",
+        "La cassure en clôture du dernier swing dans le sens de la tendance ; il confirme la continuation et valide le dernier HL / LH",
+        "Un retournement",
+        "Une mèche",
+      ],
+      answer: 1,
+      explain: "L'entrée se cherche sur le repli qui suit, dans les zones du mouvement de cassure, jamais sur la cassure elle-même.",
+    },
+    {
+      q: "Une mèche passe sous le dernier HL, la bougie H1 clôture au-dessus, puis un displacement haussier. C'est :",
+      options: [
+        "Un CHoCH",
+        "Un sweep du HL : la continuation haussière est probable",
+        "Un BOS baissier",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "L'erreur la plus coûteuse du niveau. La clôture juge : au-dessus du HL, la structure haussière est intacte et renforcée.",
+    },
+    {
+      q: "Un CHoCH sérieux :",
+      options: [
+        "Confirme le retournement",
+        "Est un indice : produit par un displacement après un sweep du côté opposé, cassant un HL significatif en clôture, laissant une zone ; il faut un BOS dans le nouveau sens pour confirmer",
+        "Est une mèche sous le HL",
+        "Se trade sur la bougie de cassure",
+      ],
+      answer: 1,
+      explain: "Beaucoup de CHoCH échouent. L'entrée se prend au retour dans la zone laissée par le displacement du CHoCH, stop au-dessus du sweep.",
+    },
+    {
+      q: "Le cycle complet de structure SMC est :",
+      options: [
+        "BOS, BOS, BOS",
+        "Sweep bas → CHoCH haussier → BOS → tendance (BOS, sweeps de HL) → sweep haut → CHoCH baissier → BOS baissier",
+        "CHoCH, CHoCH",
+        "Imprévisible",
+      ],
+      answer: 1,
+      explain: "Il se déroule à toutes les échelles et s'emboîte : le cycle LTF est la structure interne d'une phase HTF.",
+    },
+    {
+      q: "Dans le protocole d'annotation, un dépassement en mèche est étiqueté :",
+      options: [
+        "BOS ou CHoCH",
+        "« Sweep » avec le réservoir concerné, jamais BOS ni CHoCH",
+        "FVG",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Étiqueter une mèche BOS ou CHoCH, c'est confondre la prise de liquidité avec la construction de structure.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Outils ICT
+
+<Quiz
+  title="Bloc 4 · Killzones, PO3, premium / discount, modèles"
+  questions={[
+    {
+      q: "Une killzone est :",
+      options: [
+        "Une garantie de mouvement",
+        "Une fenêtre horaire de forte participation où sweeps et displacements sont plus fréquents ; on y cherche, on ne trade pas les heures creuses",
+        "Une zone de prix",
+        "Un niveau de Fibonacci",
+      ],
+      answer: 1,
+      explain: "C'est là qu'il y a du volume pour faire les mouvements. Les bornes exactes sont des conventions.",
+    },
+    {
+      q: "Le Power of Three donne :",
+      options: [
+        "La direction de la journée",
+        "La forme d'une session (accumulation, manipulation contre le biais, distribution) ; la direction vient du contexte HTF",
+        "L'heure du sommet",
+        "Un signal",
+      ],
+      answer: 1,
+      explain: "Sans biais, le PO3 se lit dans les deux sens et ne sert à rien. Avec un biais, il dit d'attendre la manipulation avant la distribution.",
+    },
+    {
+      q: "L'OTE est :",
+      options: [
+        "Un niveau magique",
+        "La zone de 62 à 79 % de retracement où les retours profonds offrent les meilleures entrées, en confluence avec un FVG ou un OB, dans le discount pour un achat",
+        "L'ouverture de New York",
+        "Un stop",
+      ],
+      answer: 1,
+      explain: "Les pourcentages sont des conventions regardées par assez de participants ; la fourchette dépend du choix des swings ; le filtre n'a de sens qu'avec un biais.",
+    },
+    {
+      q: "Le silver bullet est :",
+      options: [
+        "Une méthode infaillible",
+        "Un gabarit : FVG dans une fenêtre horaire précise, dans le sens du biais, après une prise de liquidité ; un cas particulier de la séquence sweep-FVG-retour",
+        "Une killzone",
+        "Un indicateur",
+      ],
+      answer: 1,
+      explain: "Sa valeur est de discipliner l'exécution ; ses statistiques se mesurent au niveau 7 sur son propre marché.",
+    },
+    {
+      q: "Le test à appliquer à tout outil ICT est :",
+      options: [
+        "Explique-t-il le graphique d'hier ?",
+        "Puis-je écrire la règle avant, de façon à ce qu'un autre l'applique de la même manière, et compter ensuite ?",
+        "Est-il populaire ?",
+        "A-t-il un nom ?",
+      ],
+      answer: 1,
+      explain: "Une méthode dit à l'avance ce qu'elle attend et se trompe de façon mesurable. Tout expliquer après coup est le contraire d'une méthode.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Wyckoff
+
+<Quiz
+  title="Bloc 5 · Lois, phases, springs, réaccumulation"
+  questions={[
+    {
+      q: "La loi de l'effort et du résultat dit que :",
+      options: [
+        "Le volume prédit la direction",
+        "Un gros volume qui ne produit qu'un petit mouvement signale une absorption : un changement se prépare",
+        "Le volume est inutile",
+        "Plus de volume = plus de hausse",
+      ],
+      answer: 1,
+      explain: "Harmonie : tendance saine ; divergence : quelqu'un absorbe. La loi la plus utile en intraday.",
+    },
+    {
+      q: "Le spring de phase C est :",
+      options: [
+        "Une cassure valide",
+        "Un sweep du bas du range qui piège les vendeurs et prend les stops, puis revient ; il vérifie qu'il ne reste plus d'offre",
+        "Le premier événement de l'accumulation",
+        "Un signal de vente",
+      ],
+      answer: 1,
+      explain: "On n'achète pas le spring, on achète son test (volume faible) ou le LPS après le SOS, stop sous le point bas du spring.",
+    },
+    {
+      q: "Sur un test (ST, test du spring, LPS), le volume souhaité est :",
+      options: [
+        "Élevé",
+        "Faible : il n'y a plus de vendeurs",
+        "Maximal",
+        "Indifférent",
+      ],
+      answer: 1,
+      explain: "Un test sur volume élevé est un mauvais test ; une sortie (SOS) demande au contraire un volume élevé.",
+    },
+    {
+      q: "En tendance haussière, un range de plusieurs semaines est par défaut :",
+      options: [
+        "Une distribution",
+        "Une réaccumulation, jusqu'à un SOW confirmé (clôture sous le range avec volume)",
+        "Un signal de vente",
+        "Sans lecture",
+      ],
+      answer: 1,
+      explain: "Contexte (cause restante), absence de BC, tests du bas sur volume faible. On ne trade pas le range ; on attend la sortie.",
+    },
+    {
+      q: "Le dialogue Wyckoff / SMC consiste à :",
+      options: [
+        "Choisir l'un contre l'autre",
+        "Lire le contexte en Wyckoff (campagne, volume, ampleur) et exécuter en SMC (sweep mineur, FVG, stop court)",
+        "Ne trader que les springs",
+        "Ignorer le volume",
+      ],
+      answer: 1,
+      explain: "Le spring et le sweep sont le même événement ; le test et le retour dans la zone, le même moment d'entrée. Deux échelles, deux vocabulaires cohérents.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Une campagne, deux échelles">
+
+Vous tradez les micro-futures avec un compte de **12 000 $**, risque 1 %. Instrument : MNQ (2 $ le point). Voici la situation.
+
+**Quotidien (contexte Wyckoff).** Après une baisse de 19 200 à 18 100 : le 3 du mois, bougie de 180 points sur le plus gros volume du trimestre, longue mèche basse, plus bas à 18 060, clôture 18 190. Rebond à 18 420 en trois jours. Retour à 18 110 sur volume moitié moindre. Puis trois semaines entre 18 100 et 18 420, avec deux montées vers 18 400 sur volume faible qui échouent. Le 26 : mèche à 18 040 sous le range, clôture 18 150, volume modéré. Le 27 : retour à 18 095 sur volume très faible, clôture 18 170. Le 28 : bougie de 220 points sur volume élevé, clôture 18 460, au-dessus du range. Le 29 : repli à 18 415 sur volume faible. Le comptage P&F du range (boîte 10, retournement 3) donne 12 colonnes.
+
+**H1 (exécution SMC), le 29 à 15 h.** Le repli du 29 forme deux plus bas égaux à 18 412 et 18 414 (EQL) en fin de matinée. À 15 h 40 (New York AM), une bougie H1 descend à 18 396, fait un plus haut à 18 428 et clôture à 18 424 ; la bougie H1 suivante monte à 18 480 (corps de 52 points, ATR H1 = 20) et casse le dernier LH interne à 18 452 ; ses bornes : ouverture 18 424, plus haut 18 480, plus bas 18 420. La bougie H1 d'après : plus bas 18 452, plus haut 18 496. À 17 h 30, le prix revient à 18 448.
+
+1. **(4 pts)** Nommez les événements Wyckoff du quotidien (PS s'il y en a un, SC, AR, ST, phase B, spring, test, SOS, LPS) avec leur date et ce que le volume dit de chacun. Quelle est la phase le 29 ?
+2. **(3 pts)** Calculez la cause et la fourchette d'objectifs (depuis le bas du range et depuis le LPS du 29 à 18 415).
+3. **(4 pts)** En H1 : qualifiez la bougie de 15 h 40 (sweep ou cassure, critère), le mouvement suivant (displacement ? significatif ? critères), et donnez les bornes exactes du FVG H1 s'il existe. Nommez la structure produite (BOS ou CHoCH interne).
+4. **(3 pts)** Où est l'order block H1 ? Le prix à 18 448 est-il dans le FVG, dans l'OB, ou ni l'un ni l'autre ? Justifiez l'entrée à 18 448.
+5. **(3 pts)** Placez le stop (sous le sweep mineur + 0,5 ATR M5 avec ATR M5 = 6 points), calculez la taille et le risque réel, et le ratio vers la première borne de la projection Wyckoff.
+6. **(3 pts)** Trois variantes : (a) le 28, la bougie de sortie s'était faite sur volume faible ; (b) le 26, la mèche à 18 040 avait clôturé à 18 070 avec la bougie du 27 à 18 030 ; (c) le repli du 29 en H1 s'était fait dans le premium de la fourchette 18 060-18 460 plutôt que dans le discount. Que change chacune ?
+
+<Solution>
+
+**1. Événements Wyckoff (4 pts).** Le 3 : **SC** (bougie de 180 points, volume maximal, mèche basse). Rebond à 18 420 : **AR**, haut du range. Retour à 18 110 sur volume moitié moindre : **ST**. Trois semaines avec montées échouées sur volume faible : **phase B** (les montées ne sont pas des SOS, le volume le dit). Le 26 : **spring** (mèche sous le range, clôture dedans, volume modéré). Le 27 : **test** du spring sur volume très faible qui tient. Le 28 : **SOS** (220 points, volume élevé, clôture au-dessus du range). Le 29 : **LPS** (repli sur volume faible vers l'ancien haut du range). Pas de PS net dans les données. Phase le 29 : **D**, début de E.
+
+**2. Cause (3 pts).** 12 colonnes × 10 × 3 = **360 points**. Depuis le bas du range (18 100) : **18 460**, déjà atteint par le SOS, ce qui n'est pas absurde pour un objectif minimal ; depuis le SC (18 060) : 18 420 ; depuis le LPS (18 415) : **18 775**. Fourchette utile : **18 460-18 775**, la borne basse étant atteinte, on retient la projection depuis le LPS comme cible de swing, avec des cibles intermédiaires (liquidité H1). Toute réponse qui calcule 360 et donne une fourchette cohérente a les points.
+
+**3. H1 (4 pts).** Bougie de 15 h 40 : bas 18 396 sous les EQL 18 412-18 414, clôture 18 424 au-dessus : **sweep** (critère : clôture du bon côté). Bougie suivante : corps 52 points sur ATR 20, soit **2,6 ATR**, corps dominant, casse le LH interne à 18 452 : **displacement significatif**, produisant un **CHoCH interne** (le repli H1 faisait des LH / LL ; la cassure du dernier LH est le changement de caractère de la structure interne, dans le sens de la structure externe : c'est le réalignement du niveau 2). FVG H1 : plus haut de la bougie 1 (15 h 40) = 18 428 ; plus bas de la bougie 3 = 18 452 ; 18 452 supérieur à 18 428 : **FVG haussier entre 18 428 et 18 452** (24 points).
+
+**4. OB et entrée (3 pts).** L'OB H1 est la dernière bougie baissière avant le displacement : la bougie de 15 h 40 (**18 396-18 424** environ, sweep et OB confondus). Le prix à 18 448 est **dans le FVG H1** (18 428-18 452), pas dans l'OB. L'entrée à 18 448 est un retour dans le FVG du displacement, après sweep, avec CHoCH interne, dans le sens du contexte Wyckoff (phase D, LPS), en killzone : la séquence complète.
+
+**5. Stop et taille (3 pts).** Sweep mineur à 18 396 ; marge 0,5 × 6 = 3 points ; stop **18 393**. Distance : 55 points × 2 $ = 110 $ par contrat. Budget : 120 $. Taille : **1 MNQ**, risque réel 110 $ (0,92 %). Ratio vers 18 775 : (18 775 − 18 448) ÷ 55 = 327 ÷ 55 ≈ **5,9**. Note : un stop sous le FVG (18 425) donnerait 23 points, 46 $ par contrat, 2 MNQ, ratio 14, avec une probabilité de stop plus élevée ; l'un ou l'autre est acceptable s'il est justifié.
+
+**6. Variantes (3 pts).** (a) SOS sur volume faible : suspect ; ce peut être un test du haut de phase B qui échoue (upthrust du range d'accumulation) ; on n'achète pas le LPS avant un SOS sur volume ; on attend. (b) La mèche du 26 qui ne revient pas dans le range et une clôture plus basse le 27 : ce n'est pas un spring, c'est une **cassure** ; l'accumulation a échoué ou était une redistribution ; pas d'achat, surveiller le retest de 18 100 par-dessous. (c) Un repli qui reste dans le premium de la fourchette pertinente (ici celle du dernier mouvement H1, 18 396-18 480, équilibre 18 438) laisse le FVG loin de l'invalidation et proche de la liquidité : entrée de moindre qualité, à réduire ou à attendre plus bas. À 18 448, l'entrée est légèrement au-dessus de l'équilibre : acceptable grâce au contexte Wyckoff (LPS après SOS), mais à noter au journal comme entrée « premium ».
+
+**Barème.** 1 point par élément juste (événement nommé avec volume, chiffre, critère appliqué, justification). Passage : 16 sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Avec 20 bonnes réponses sur 25 et 16 points sur 20, le niveau 3 est validé. Vous lisez le pourquoi des mouvements et vous savez placer une séquence dans une campagne. Le niveau 4 descend au niveau du carnet d'ordres pour voir ces mêmes mécanismes au tick près : volume profile, footprint et delta, DOM et tape reading, open interest et funding.
