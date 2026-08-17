@@ -1,0 +1,348 @@
+---
+title: "R-multiples et expectancy"
+description: "Définir le R et penser tous ses trades dans cette unité, lire la distribution des résultats d'un système, calculer et interpréter l'expectancy, la décomposer par setup et par contexte, et lire un relevé de trades comme un professionnel."
+---
+
+# R-multiples et expectancy
+
+Le chapitre précédent a fixé le risque de chaque trade à un montant connu d'avance. Ce montant s'appelle R. Ce chapitre en fait l'unité de mesure de tout le reste : chaque résultat, chaque série, chaque statistique s'exprime en R. Une fois cette habitude prise, un relevé de trades cesse d'être une liste de gains et de pertes en euros et devient un objet mesurable, comparable d'un mois à l'autre, d'un marché à l'autre, d'un trader à l'autre.
+
+## Définir le R et penser tous ses trades en R
+
+**R est le risque initial du trade** : la perte en euros si le stop de départ est touché. Il est fixé au moment de l'entrée par la taille et la distance du stop, et il ne change plus. Le résultat d'un trade se lit ensuite comme un multiple de R :
+
+```text
+Résultat en R = (Prix de sortie − Prix d'entrée) × Taille × Valeur du point ÷ R
+```
+
+ou, plus simplement, gain ou perte en euros divisé par le risque initial en euros.
+
+Quelques exemples avec R = 50 € :
+
+- Stop touché exactement : −50 €, soit **−1R**.
+- Sortie à l'objectif à 3 fois la distance du stop : +150 €, soit **+3R**.
+- Sortie anticipée en gain de 30 € : **+0,6R**.
+- Stop touché avec slippage, perte de 65 € : **−1,3R**.
+- Sortie à l'entrée : **0R**.
+
+Trois raisons de penser en R plutôt qu'en euros :
+
+1. **La comparabilité.** Un trade à +2R sur un compte de 2 000 € et un trade à +2R sur un compte de 200 000 € sont le même trade. Le R rend les statistiques indépendantes de la taille du compte, donc comparables dans le temps, alors que le compte grossit ou maigrit.
+2. **La discipline.** Un stop touché est −1R : un événement normal, prévu, dimensionné. Une perte de −2,5R n'est pas « une grosse perte », c'est une erreur d'exécution ou de process, immédiatement visible.
+3. **La distance émotionnelle.** « J'ai perdu 340 € » appelle une réaction ; « −1R » appelle la ligne suivante du journal.
+
+À partir de maintenant, ce cours n'exprime plus jamais un résultat autrement qu'en R, sauf pour montrer un calcul.
+
+## La distribution des résultats d'un système
+
+Prenez cent trades d'un même système et classez-les par résultat en R. Vous obtenez une distribution : combien de trades à −1R, combien à −0,5R, à +1R, à +2R, à +4R. Cette forme dit tout du système.
+
+<Figure caption="Figure 1 · Distribution des résultats de 100 trades d'un système « tendance » typique : beaucoup de petites pertes, quelques gros gains. Le système gagne 40 % du temps et reste rentable.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Histogramme des résultats en R sur 100 trades" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="260" x2="700" y2="260" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="260" className="line" strokeWidth="1" />
+  <text x="380" y="300" fontSize="12" textAnchor="middle" className="muted">résultat du trade en R</text>
+  <text x="50" y="264" fontSize="11" textAnchor="end" className="mono muted">0</text>
+  <text x="50" y="164" fontSize="11" textAnchor="end" className="mono muted">20</text>
+  <text x="50" y="64" fontSize="11" textAnchor="end" className="mono muted">40</text>
+  <text x="30" y="40" fontSize="11" className="muted">trades</text>
+
+  <rect x="90" y="235" width="50" height="25" className="red" opacity="0.85" />
+  <text x="115" y="278" fontSize="11" textAnchor="middle" className="mono">−1,3</text>
+  <text x="115" y="228" fontSize="11" textAnchor="middle" className="mono">5</text>
+
+  <rect x="150" y="60" width="50" height="200" className="red" opacity="0.85" />
+  <text x="175" y="278" fontSize="11" textAnchor="middle" className="mono">−1</text>
+  <text x="175" y="53" fontSize="11" textAnchor="middle" className="mono">40</text>
+
+  <rect x="210" y="185" width="50" height="75" className="red" opacity="0.85" />
+  <text x="235" y="278" fontSize="11" textAnchor="middle" className="mono">−0,5</text>
+  <text x="235" y="178" fontSize="11" textAnchor="middle" className="mono">15</text>
+
+  <rect x="270" y="235" width="50" height="25" className="box" strokeWidth="1" />
+  <text x="295" y="278" fontSize="11" textAnchor="middle" className="mono">0</text>
+  <text x="295" y="228" fontSize="11" textAnchor="middle" className="mono">5</text>
+
+  <rect x="330" y="210" width="50" height="50" className="green" opacity="0.85" />
+  <text x="355" y="278" fontSize="11" textAnchor="middle" className="mono">+1</text>
+  <text x="355" y="203" fontSize="11" textAnchor="middle" className="mono">10</text>
+
+  <rect x="390" y="185" width="50" height="75" className="green" opacity="0.85" />
+  <text x="415" y="278" fontSize="11" textAnchor="middle" className="mono">+2</text>
+  <text x="415" y="178" fontSize="11" textAnchor="middle" className="mono">15</text>
+
+  <rect x="450" y="210" width="50" height="50" className="green" opacity="0.85" />
+  <text x="475" y="278" fontSize="11" textAnchor="middle" className="mono">+3</text>
+  <text x="475" y="203" fontSize="11" textAnchor="middle" className="mono">10</text>
+
+  <rect x="510" y="235" width="50" height="25" className="green" opacity="0.85" />
+  <text x="535" y="278" fontSize="11" textAnchor="middle" className="mono">+5</text>
+  <text x="535" y="228" fontSize="11" textAnchor="middle" className="mono">5</text>
+
+  <rect x="580" y="30" width="120" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="640" y="50" fontSize="11" textAnchor="middle" fontWeight="600">Somme : +41R</text>
+  <text x="640" y="68" fontSize="11" textAnchor="middle" className="mono">gains : +95R</text>
+  <text x="640" y="86" fontSize="11" textAnchor="middle" className="mono">pertes : −54R</text>
+</svg>
+</Figure>
+
+Vérifions la figure à la main, comme il faudra toujours le faire sur son propre relevé. Pertes : 5 × (−1,3) + 40 × (−1) + 15 × (−0,5) = −6,5 − 40 − 7,5 = **−54R**. Gains : 10 × 1 + 15 × 2 + 10 × 3 + 5 × 5 = 10 + 30 + 30 + 25 = **+95R**. Les 5 trades à 0R ne comptent pour rien. Somme : **+41R** sur 100 trades, alors que 60 trades sur 100 n'ont pas gagné.
+
+Ce qu'on lit dans une distribution :
+
+- **La masse à gauche est concentrée à −1R** : le stop fait son travail. Une masse importante au-delà de −1R (à −1,5R, −2R) signale du slippage ou des stops déplacés.
+- **La queue à droite** (les +3R, +5R) porte souvent la rentabilité entière du système. Couper ces trades trop tôt (par peur de rendre) tue l'espérance sans que rien ne paraisse sur le taux de réussite.
+- **La zone autour de zéro** (sorties à l'entrée, petites pertes après avoir été en gain) est le signe d'une gestion active. Elle n'est ni bonne ni mauvaise en soi ; elle se juge sur la somme.
+
+Deux systèmes peuvent avoir la même espérance avec des formes très différentes : un système « tendance » gagne rarement et gros ; un système « retour à la moyenne » gagne souvent et petit, avec quelques pertes plus larges. Ni l'un ni l'autre n'est supérieur ; mais ils ne se vivent pas de la même façon, et le chapitre 4 montrera qu'ils n'ont pas les mêmes séries de pertes.
+
+## Calculer l'expectancy et l'interpréter
+
+L'**expectancy** (espérance) est la moyenne des résultats en R sur la série :
+
+```text
+Expectancy = Somme des résultats en R ÷ Nombre de trades
+```
+
+Sur la distribution ci-dessus : +41R ÷ 100 = **+0,41R par trade**. Formulation équivalente, celle du niveau 0 : taux de réussite × gain moyen − taux d'échec × perte moyenne. Ici, 40 gagnants sur 100 (les 0R comptent comme non gagnants) : gain moyen 95 ÷ 40 = 2,375R ; 60 non gagnants avec une perte moyenne de 54 ÷ 60 = 0,9R. E = 0,40 × 2,375 − 0,60 × 0,9 = 0,95 − 0,54 = +0,41R. Les deux méthodes concordent, forcément.
+
+Comment interpréter le chiffre :
+
+- **Signe.** Positif : le système gagne en moyenne. Négatif : il perd. C'est le premier test, avant tout autre.
+- **Ordre de grandeur.** Pour un système discrétionnaire intraday, une expectancy durable de +0,2R à +0,5R par trade est déjà très bonne. Au-delà de +1R sur un échantillon long, méfiez-vous : c'est rare, et souvent le signe d'un petit échantillon ou d'une période exceptionnelle.
+- **Traduction en euros et en temps.** Expectancy × nombre de trades × R en euros. Un système à +0,3R, 12 trades par semaine, R = 50 € : 0,3 × 12 × 50 = 180 € par semaine attendus, avant les mauvaises séries. C'est ce calcul, et pas un rêve de pourcentage, qui dit ce qu'un compte peut produire.
+- **Robustesse aux coûts.** L'expectancy se calcule après coûts si le journal note les résultats nets. Sinon, retirez le coût moyen par trade en R (chapitre 1) : une expectancy brute de +0,12R avec des coûts de 0,08R par trade est presque nulle.
+
+Une précaution qui reviendra au niveau 7 : **une expectancy calculée sur 20 trades ne veut rien dire.** Sur un si petit échantillon, une ou deux queues à droite suffisent à la faire passer de négative à positive. Comptez au minimum une centaine de trades avant de croire au signe, plusieurs centaines avant de croire à la valeur.
+
+<Figure caption="Figure 2 · Même système, deux courbes de capital en R sur 100 trades, selon l'ordre dans lequel les mêmes résultats arrivent. La somme finale est identique ; le chemin ne l'est pas. L'expectancy décrit la somme, pas le chemin.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Deux courbes de capital en R avec la même expectancy" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="220" x2="700" y2="220" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="60" y1="30" x2="60" y2="270" className="line" strokeWidth="1" />
+  <text x="50" y="224" fontSize="11" textAnchor="end" className="mono muted">0R</text>
+  <text x="50" y="124" fontSize="11" textAnchor="end" className="mono muted">+20R</text>
+  <text x="50" y="24" fontSize="11" textAnchor="end" className="mono muted">+40R</text>
+  <text x="380" y="292" fontSize="12" textAnchor="middle" className="muted">trades 1 à 100</text>
+
+  <polyline points="60,220 124,205 188,196 252,180 316,150 380,138 444,120 508,95 572,70 636,45 700,15" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="470" y="60" fontSize="12" fontWeight="600" className="gold">chemin A : régulier</text>
+
+  <polyline points="60,220 124,240 188,262 252,250 316,268 380,240 444,225 508,190 572,140 636,90 700,15" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="240" y="285" fontSize="12" fontWeight="600" className="red">chemin B : −10R d'abord, puis tout à la fin</text>
+
+  <circle cx="700" cy="15" r="5" className="gold" />
+  <text x="690" y="12" fontSize="11" textAnchor="end" className="muted">+41R dans les deux cas</text>
+</svg>
+</Figure>
+
+## Expectancy par setup et par contexte
+
+Une expectancy globale cache souvent plusieurs systèmes mélangés. La décomposer est le geste qui fait progresser le plus vite.
+
+**Par setup.** Si vous tradez deux setups (par exemple un achat sur repli et une cassure de range), calculez l'expectancy de chacun. Il est fréquent de découvrir qu'un setup à +0,6R porte le compte pendant que l'autre, à −0,2R, le freine. La décision est alors évidente : arrêter ou retravailler le second. Sans décomposition, on voit une expectancy globale de +0,2R et on continue les deux.
+
+**Par contexte.** Le même setup peut avoir une expectancy différente selon : la session (Londres, New York, nuit), le jour de la semaine, la présence d'une annonce dans l'heure, la tendance de l'unité de temps supérieure, la volatilité du jour. Un achat sur repli à +0,7R quand la tendance H4 est haussière et à −0,3R quand elle est baissière n'est pas un setup à +0,2R : c'est un bon setup mal filtré.
+
+**Par état du trader.** Les traders qui notent leur état (fatigue, agacement, après une perte, après un gain) découvrent souvent une expectancy nettement inférieure sur les trades pris dans les trente minutes qui suivent une perte. C'est la mesure objective du trade de vengeance.
+
+La méthode : une colonne par variable de contexte dans le journal, puis un tableau croisé (tableur ou script, niveau 7) qui donne, pour chaque valeur, le nombre de trades, l'expectancy et le taux de réussite. On ne conclut qu'avec assez de trades dans chaque case (au moins 30, idéalement plus) : découper trop finement fabrique des résultats qui n'existent pas.
+
+## Lire un relevé de trades comme un professionnel
+
+Voici un extrait de journal, 12 trades sur deux semaines, tel qu'un débutant le tient (colonnes essentielles).
+
+| # | Date | Instrument | Setup | Contexte | R |
+| --- | --- | --- | --- | --- | --- |
+| 1 | L 03 | MES | Repli | Tendance H4 pour | +2,0 |
+| 2 | L 03 | MES | Repli | Tendance H4 pour | −1,0 |
+| 3 | Ma 04 | MNQ | Cassure | Range asiatique | −1,0 |
+| 4 | Me 05 | MES | Repli | Tendance H4 pour | +2,5 |
+| 5 | Me 05 | MNQ | Cassure | Range asiatique | −1,2 |
+| 6 | J 06 | MES | Repli | Tendance H4 contre | −1,0 |
+| 7 | V 07 | MGC | Repli | Tendance H4 pour | +1,5 |
+| 8 | L 10 | MES | Cassure | Range asiatique | +0,5 |
+| 9 | Ma 11 | MES | Repli | Tendance H4 pour | −1,0 |
+| 10 | Me 12 | MNQ | Repli | Tendance H4 contre | −1,0 |
+| 11 | J 13 | MES | Repli | Tendance H4 pour | +3,0 |
+| 12 | V 14 | MNQ | Cassure | Range asiatique | −1,0 |
+
+Le débutant regarde la dernière colonne, additionne, trouve **+3,3R** sur 12 trades, expectancy +0,275R, et se dit que ça va. Le professionnel décompose :
+
+- **Setup « Repli », tendance H4 pour** (trades 1, 2, 4, 7, 9, 11) : +2 −1 +2,5 +1,5 −1 +3 = **+7,0R sur 6 trades**, expectancy +1,17R, 4 gagnants sur 6.
+- **Setup « Repli », tendance H4 contre** (trades 6, 10) : **−2,0R sur 2 trades**.
+- **Setup « Cassure », range asiatique** (trades 3, 5, 8, 12) : −1 −1,2 +0,5 −1 = **−2,7R sur 4 trades**, expectancy −0,675R.
+
+Conclusion provisoire (l'échantillon est minuscule, c'est une piste, pas une preuve) : tout le résultat vient d'un seul setup dans un seul contexte ; les deux autres lignes coûtent 4,7R. Sans les cassures et sans les replis contre-tendance, la période aurait fait +7R. La prochaine action est claire : continuer le setup porteur, cesser les deux autres jusqu'à en avoir compris le problème, et vérifier sur 50 trades de plus que la piste tient.
+
+Autres lectures que le professionnel fait sur ce relevé : la perte à −1,2R (trade 5, slippage sur cassure : à surveiller), le fait que le meilleur trade suit une perte (trade 4 après le 3 : pas de vengeance, bon signe), et l'absence de trade hors setup (les 12 lignes ont un nom de setup, la discipline tient).
+
+## Deux trades décortiqués
+
+Reconstitutions pédagogiques : deux trades qui n'ont d'intérêt qu'à travers ce qu'ils font à la distribution.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Achat sur repli, tendance H4 haussière, session de Londres"
+  entree="2 366,0"
+  stop="2 361,0 (5,0 $, R = 50 $ sur 1 contrat)"
+  objectif="2 386,0 (4R), puis laissé courir partiellement"
+  r="+4,6R">
+
+R = 50 $. Le prix atteint l'objectif à 4R. Sur un seul contrat, impossible de sortir « la moitié » ; le système prévoit donc une règle pour ce cas : stop remonté à 2 380,0 (gain verrouillé de 2,8R) et objectif étendu à 2 392,0. Sortie finale à 2 389,0 : (2 389 − 2 366) × 10 = 230 $, soit **+4,6R**. Ce trade est un trade de queue droite : sur 100 trades, il y en a cinq ou six comme lui, et ils font la moitié de la somme. Sortir à +1,5R « pour sécuriser » sur ce trade aurait retiré 3,1R à la série. La règle du système sur les objectifs n'est pas de la gourmandise ; c'est la protection de la queue.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Cassure de range asiatique, avant l'ouverture européenne"
+  entree="18 340,00 (au marché, servi à 18 341,50)"
+  stop="18 330,00 (10 points, R = 20 $ sur 1 contrat), exécuté à 18 327,50"
+  objectif="18 370,00"
+  r="−1,4R">
+
+Le trade est un stop ordinaire, mais il vaut −1,4R et non −1R : 1,5 point de slippage à l'entrée, 2,5 points à la sortie, sur un stop de 10 points. Sur le relevé, il rejoint la barre « −1,3 » de la figure 1. Isolé, il ne dit rien. Répété dix fois sur le même setup dans le même contexte (cassure, carnet mince), il fait de ce setup un système à −0,4R de coût structurel avant même de parler de sa qualité. C'est ce que la décomposition par contexte rend visible, et ce qu'aucune analyse graphique ne montrera jamais.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **R = risque initial** ; tout résultat s'exprime en multiple de R. Un stop touché fait −1R, un événement normal ; −2R est une erreur.
+- La **distribution** des résultats dit tout d'un système : masse à −1R, queue à droite, zone autour de zéro.
+- **Expectancy = somme des R ÷ nombre de trades.** Signe d'abord, ordre de grandeur ensuite, traduction en euros et en temps enfin. Jamais sur moins d'une centaine de trades.
+- L'expectancy globale cache des sous-systèmes : **décomposer par setup, par contexte, par état** est le levier de progression le plus puissant.
+- La **queue droite** porte souvent toute la rentabilité ; la couper par peur détruit l'espérance sans le montrer sur le taux de réussite.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Distribution et expectancy">
+
+Un système a produit sur 80 trades : 30 trades à −1R, 6 trades à −1,5R, 8 trades à 0R, 16 trades à +1R, 14 trades à +2,5R, 6 trades à +4R.
+
+1. Calculez la somme des pertes, la somme des gains, la somme totale et l'expectancy.
+2. Quel est le taux de réussite (trades strictement gagnants) ?
+3. Retirez les 6 trades à +4R : que devient l'expectancy ? Que conclure ?
+
+<Solution>
+
+1. Pertes : 30 × 1 + 6 × 1,5 = 30 + 9 = **−39R**. Gains : 16 × 1 + 14 × 2,5 + 6 × 4 = 16 + 35 + 24 = **+75R**. Total : **+36R**. Expectancy : 36 ÷ 80 = **+0,45R** par trade.
+2. Gagnants : 16 + 14 + 6 = 36 sur 80, soit **45 %**.
+3. Sans les +4R : total 36 − 24 = +12R sur 74 trades, expectancy **+0,16R**. Six trades sur quatre-vingts, soit 7,5 % de la série, font près des deux tiers du résultat. Un trader qui aurait coupé ces six trades à +2R aurait une expectancy de (36 − 12) ÷ 80 = +0,30R : encore positive, mais amputée d'un tiers. La queue droite est fragile et précieuse.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Décomposer un relevé">
+
+Reprenez le relevé de 12 trades du chapitre. Le trader décide de ne garder que le setup « Repli » et uniquement quand la tendance H4 est dans le sens du trade.
+
+1. Quelle aurait été la somme en R sur la période, et l'expectancy ?
+2. Combien de trades aurait-il pris au lieu de 12 ?
+3. Pourquoi ne faut-il pas conclure définitivement à partir de ces chiffres ?
+
+<Solution>
+
+1. Trades 1, 2, 4, 7, 9, 11 : **+7,0R**, expectancy 7 ÷ 6 = **+1,17R**.
+2. **6 trades** au lieu de 12 : moitié moins de trades, plus du double de résultat.
+3. Parce que 6 trades ne sont pas un échantillon. Une expectancy de +1,17R sur 6 trades peut être un hasard favorable ; le vrai chiffre peut être +0,4R comme +0,1R. La bonne réponse est de traiter ce résultat comme une hypothèse à vérifier sur 50 à 100 trades supplémentaires, en continuant à noter le contexte, pas comme une vérité.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Traduire une expectancy en euros">
+
+Un trader a mesuré, sur 150 trades, une expectancy nette de +0,28R avec 10 trades par semaine en moyenne. Son R est de 60 €.
+
+1. Quel gain hebdomadaire et annuel (46 semaines) peut-il attendre en moyenne ?
+2. Il envisage de passer R à 120 € pour doubler ce résultat. Qu'est-ce que cela change, et qu'est-ce que cela ne change pas ?
+3. Si ses coûts par trade augmentent de 0,05R (nouveau broker plus cher), que devient le résultat annuel ?
+
+<Solution>
+
+1. Semaine : 0,28 × 10 × 60 = **168 €**. Année : 168 × 46 = **7 728 €**.
+2. Cela double le résultat attendu en euros (336 € par semaine) **et** double les pertes en euros de chaque mauvaise série ; en R, rien ne change. La question n'est pas l'expectancy, c'est si le compte supporte le drawdown attendu à R = 120 € (chapitre suivant) et si 120 € respecte toujours le 1 % du capital.
+3. Expectancy nette : 0,28 − 0,05 = 0,23R. Année : 0,23 × 10 × 60 × 46 = **6 348 €**, soit 1 380 € de moins. Un coût de 0,05R par trade retire ici 18 % du résultat annuel.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "R = 40 €. Un trade sort avec 100 € de gain. Résultat en R ?",
+      options: [
+        "+4R",
+        "+2,5R",
+        "+1,4R",
+        "+40R",
+      ],
+      answer: 1,
+      explain: "100 ÷ 40 = 2,5R. Le R est le risque initial du trade, pas un pourcentage du compte ni une distance de prix.",
+    },
+    {
+      q: "Pourquoi exprimer les résultats en R plutôt qu'en euros ?",
+      options: [
+        "Parce que c'est plus impressionnant",
+        "Pour rendre les statistiques comparables quel que soit le capital, repérer les erreurs (au-delà de −1R) et prendre de la distance émotionnelle",
+        "Parce que le broker l'exige",
+        "Pour ne pas payer d'impôts",
+      ],
+      answer: 1,
+      explain: "Le R normalise. Un stop touché est −1R sur tout compte ; une perte de −2R est une anomalie visible ; les mois deviennent comparables même si le compte a changé.",
+    },
+    {
+      q: "Un système : 30 % de réussite, gains moyens +3R, pertes moyennes −1R. Expectancy ?",
+      options: [
+        "+0,2R",
+        "−0,1R",
+        "+0,9R",
+        "+2R",
+      ],
+      answer: 0,
+      explain: "0,30 × 3 − 0,70 × 1 = 0,90 − 0,70 = +0,20R par trade. Rentable en perdant sept fois sur dix.",
+    },
+    {
+      q: "Que porte le plus souvent la rentabilité d'un système « tendance » ?",
+      options: [
+        "Le taux de réussite élevé",
+        "La queue droite de la distribution : les quelques trades à +3R, +5R",
+        "Les trades à 0R",
+        "Les petites pertes",
+      ],
+      answer: 1,
+      explain: "Une poignée de gros gagnants fait souvent la moitié ou plus de la somme. Les couper par peur de rendre détruit l'espérance sans changer le taux de réussite.",
+    },
+    {
+      q: "Une expectancy de +0,8R mesurée sur 15 trades signifie :",
+      options: [
+        "Que le système est excellent",
+        "Pas grand-chose : l'échantillon est trop petit, un ou deux gros trades suffisent à la produire",
+        "Que le trader peut augmenter sa taille",
+        "Que le taux de réussite est de 80 %",
+      ],
+      answer: 1,
+      explain: "Sur si peu de trades, l'expectancy est dominée par le hasard. Il faut une centaine de trades pour croire au signe, plusieurs centaines pour croire à la valeur.",
+    },
+    {
+      q: "Une expectancy globale de +0,2R sur deux setups mélangés. La bonne action est :",
+      options: [
+        "Continuer les deux, c'est positif",
+        "Décomposer par setup et par contexte : l'un peut être à +0,6R et l'autre à −0,2R",
+        "Arrêter les deux",
+        "Doubler la taille sur les deux",
+      ],
+      answer: 1,
+      explain: "L'expectancy globale cache des sous-systèmes. La décomposition révèle souvent qu'un setup porte le compte et qu'un autre le freine. C'est le levier de progression le plus direct.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Vous savez mesurer ce qu'un système rapporte en moyenne. Le chapitre suivant regarde ce qu'il coûte en chemin : le drawdown, les séries de pertes que la statistique promet à tout système, la probabilité de ruine, et comment dimensionner son compte et son risque pour traverser ces périodes sans casser.
