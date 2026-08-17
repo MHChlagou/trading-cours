@@ -1,0 +1,323 @@
+---
+title: "Analyse intermarket"
+description: "Obligations, dollar, actions, matières premières : le carré directeur, les corrélations structurelles et leurs ruptures, risk-on et risk-off en pratique, le DXY comme boussole des marchés, et la construction d'un tableau de bord intermarket."
+---
+
+# Analyse intermarket
+
+Aucun marché ne bouge seul. Le dollar monte et l'or baisse ; les taux montent et le Nasdaq souffre ; le pétrole grimpe et le dollar canadien suit. L'**analyse intermarket** lit ces relations pour situer un marché dans son environnement : le trader d'or qui sait ce que font le dollar et les taux réels comprend la moitié du graphique avant de l'ouvrir. Ce chapitre décrit les quatre grands marchés et leurs liens, avertit que ces liens changent de régime, formalise le couple risk-on / risk-off, met le dollar au centre, et construit le tableau de bord qui tient sur un écran.
+
+## Obligations, dollar, actions, matières premières : le carré directeur
+
+Quatre marchés forment l'ossature : les **obligations** (les taux d'intérêt), le **dollar**, les **actions** et les **matières premières**. Chacun influence les autres par des canaux identifiables.
+
+**Obligations et taux.** Le prix d'une obligation baisse quand les taux montent (et inversement). Les taux montent quand l'inflation et la croissance montent, ou quand la banque centrale resserre. Le 10 ans américain est la référence mondiale ; sa variation se propage partout.
+
+**Le dollar.** Il monte quand les taux américains montent par rapport aux autres (différentiel de taux), quand la croissance américaine surpasse le reste du monde, ou quand le monde a peur (refuge et devise de réserve). Un dollar fort pèse sur les matières premières (libellées en dollars, elles deviennent plus chères pour les acheteurs étrangers), sur les émergents (endettés en dollars) et sur les bénéfices des multinationales américaines.
+
+**Les actions.** Elles montent avec la croissance des bénéfices et baissent quand les taux montent trop (les valorisations, surtout des valeurs de croissance, se compriment). Elles sont l'actif de « risque » par excellence dans le vocabulaire intermarket.
+
+**Les matières premières.** Le pétrole, les métaux industriels et les grains montent avec la croissance mondiale et l'inflation ; l'or monte avec la peur, la baisse des taux réels et la baisse du dollar. Les matières premières sont un moteur d'inflation (le pétrole surtout), donc de taux, donc de dollar : la boucle se referme.
+
+Le schéma classique des relations, tel qu'on l'observe la plupart du temps :
+
+- Taux ↑ → dollar ↑, actions ↓ (surtout croissance), or ↓, matières premières ↓ (par le dollar).
+- Dollar ↑ → matières premières ↓, or ↓, émergents ↓, EUR/USD ↓.
+- Croissance ↑ → actions ↑, matières premières ↑, taux ↑ (à terme), dollar variable (selon le différentiel).
+- Peur ↑ → obligations d'État ↑ (taux ↓), dollar ↑, yen et franc ↑, or ↑ (souvent, pas toujours), actions ↓, pétrole ↓.
+
+<Figure caption="Figure 1 · Le carré directeur et ses canaux principaux : les taux tirent le dollar ; le dollar pèse sur les matières premières ; les matières premières nourrissent l'inflation donc les taux ; les actions arbitrent entre croissance et taux. Chaque flèche a un signe habituel, qui peut s'inverser selon le régime.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Relations entre obligations, dollar, actions et matières premières" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="40" width="180" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="150" y="65" fontSize="13" fontWeight="600" textAnchor="middle">Taux / obligations</text>
+  <text x="150" y="85" fontSize="10" textAnchor="middle" className="muted">10 ans US, 2 ans, Fed funds</text>
+  <rect x="480" y="40" width="180" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="570" y="65" fontSize="13" fontWeight="600" textAnchor="middle">Dollar</text>
+  <text x="570" y="85" fontSize="10" textAnchor="middle" className="muted">DXY, EUR/USD, USD/JPY</text>
+  <rect x="60" y="240" width="180" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="150" y="265" fontSize="13" fontWeight="600" textAnchor="middle">Actions</text>
+  <text x="150" y="285" fontSize="10" textAnchor="middle" className="muted">ES, NQ, secteurs</text>
+  <rect x="480" y="240" width="180" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="570" y="265" fontSize="13" fontWeight="600" textAnchor="middle">Matières premières</text>
+  <text x="570" y="285" fontSize="10" textAnchor="middle" className="muted">pétrole, or, métaux, grains</text>
+
+  <line x1="240" y1="70" x2="470" y2="70" className="line" strokeWidth="2" /><polygon points="480,70 468,64 468,76" className="gold" />
+  <text x="355" y="62" fontSize="10" textAnchor="middle">taux ↑ → dollar ↑</text>
+  <line x1="570" y1="100" x2="570" y2="230" className="line" strokeWidth="2" /><polygon points="570,240 564,228 576,228" className="gold" />
+  <text x="640" y="170" fontSize="10" textAnchor="middle">dollar ↑ →</text><text x="640" y="184" fontSize="10" textAnchor="middle">matières ↓</text>
+  <line x1="480" y1="270" x2="250" y2="270" className="line" strokeWidth="2" /><polygon points="240,270 252,264 252,276" className="gold" />
+  <text x="360" y="288" fontSize="10" textAnchor="middle">croissance : les deux montent ; inflation : matières ↑ actions ↓</text>
+  <line x1="150" y1="230" x2="150" y2="110" className="line" strokeWidth="2" /><polygon points="150,100 144,112 156,112" className="gold" />
+  <text x="80" y="170" fontSize="10" textAnchor="middle">taux ↑ →</text><text x="80" y="184" fontSize="10" textAnchor="middle">actions ↓</text>
+  <line x1="470" y1="250" x2="250" y2="100" className="line" strokeWidth="1.5" strokeDasharray="5 3" /><polygon points="242,94 256,96 246,106" className="gold" />
+  <text x="380" y="160" fontSize="10" textAnchor="middle" className="muted">pétrole ↑ → inflation ↑ → taux ↑</text>
+</svg>
+</Figure>
+
+## Les corrélations structurelles et leurs ruptures
+
+Le niveau 1 (chapitre 5) a défini la corrélation et averti qu'elle change. L'intermarket est le domaine où cette précaution compte le plus, parce que les relations ci-dessus **dépendent du régime**.
+
+**L'exemple central : actions et obligations.** Pendant une longue période (des années 2000 au début des années 2020), la corrélation entre les actions et les obligations d'État était **négative** : quand les actions baissaient, les obligations montaient (les taux baissaient) ; le portefeuille classique 60 / 40 fonctionnait parce que l'un couvrait l'autre. Ce régime correspond à une inflation basse et stable, où le risque dominant est la croissance : la peur fait fuir vers les obligations. Quand l'inflation redevient le risque dominant (comme en 2022), la corrélation devient **positive** : les taux montent, ce qui fait baisser à la fois les obligations et les actions ; il n'y a plus de refuge dans le carré. Le trader qui appliquait la vieille règle « actions en baisse donc obligations en hausse » se trompait des deux côtés.
+
+**Or et dollar.** Négative en général, mais l'or peut monter avec le dollar en période de peur extrême (les deux sont des refuges) ou de forte demande de banques centrales.
+
+**Pétrole et actions.** Positive en période de croissance (les deux montent avec l'activité), négative en cas de choc d'offre (le pétrole monte parce que l'offre manque, ce qui pèse sur la croissance et les actions).
+
+**Yen et risque.** Le yen monte quand le monde a peur (dénouement des positions financées en yen), mais cette relation s'affaiblit ou se renforce selon la politique de la BoJ.
+
+Ce qu'il faut en retenir :
+
+1. **On mesure, on ne suppose pas** (niveau 1) : la corrélation glissante sur 60 jours entre les actifs de son tableau de bord dit dans quel régime on est aujourd'hui.
+2. **La rupture d'une corrélation est une information** : quand une relation stable se casse (les actions et les obligations se mettent à baisser ensemble), le régime a changé, et les scénarios construits sur l'ancien régime sont caducs.
+3. **Le régime se déduit du risque dominant** : croissance ou inflation. La question « qu'est-ce que le marché craint le plus en ce moment ? » prédit le signe des corrélations mieux que n'importe quelle règle mémorisée.
+
+<Figure caption="Figure 2 · Corrélation glissante actions / obligations : négative quand le risque dominant est la croissance (les obligations couvrent), positive quand c'est l'inflation (tout baisse ensemble). La rupture est l'information.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Corrélation glissante actions obligations selon le régime" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="150" x2="700" y2="150" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="260" className="line" strokeWidth="1" />
+  <text x="50" y="44" fontSize="10" textAnchor="end" className="mono muted">+1</text>
+  <text x="50" y="154" fontSize="10" textAnchor="end" className="mono muted">0</text>
+  <text x="50" y="264" fontSize="10" textAnchor="end" className="mono muted">−1</text>
+  <polyline points="70,210 120,225 170,205 220,230 270,215 320,220 370,200 400,170 420,130 450,90 500,75 550,95 600,80 650,110 690,120" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <rect x="70" y="40" width="310" height="220" className="green" opacity="0.06" />
+  <text x="225" y="60" fontSize="11" fontWeight="600" textAnchor="middle" className="green">risque dominant : croissance</text>
+  <text x="225" y="76" fontSize="10" textAnchor="middle" className="muted">corrélation négative, les obligations couvrent</text>
+  <rect x="420" y="40" width="270" height="220" className="red" opacity="0.06" />
+  <text x="555" y="60" fontSize="11" fontWeight="600" textAnchor="middle" className="red">risque dominant : inflation</text>
+  <text x="555" y="76" fontSize="10" textAnchor="middle" className="muted">corrélation positive, pas de refuge dans le carré</text>
+  <circle cx="420" cy="130" r="6" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="420" y="250" fontSize="10" textAnchor="middle" className="red" fontWeight="600">rupture : le régime a changé</text>
+</svg>
+</Figure>
+
+## Risk-on, risk-off en pratique
+
+Le vocabulaire le plus utilisé de l'intermarket résume l'humeur du marché en deux états :
+
+- **Risk-on** : les participants cherchent le rendement et acceptent le risque. Montent : actions (surtout croissance, petites capitalisations, émergents), matières premières industrielles, devises « à risque » (AUD, NZD, CAD, devises émergentes), crédit à haut rendement, crypto. Baissent : obligations d'État (les taux montent), yen, franc suisse, dollar (souvent), or (souvent).
+- **Risk-off** : les participants fuient le risque. L'inverse : obligations d'État, yen, franc, dollar, parfois or montent ; actions, matières industrielles, devises à risque, crédit, crypto baissent.
+
+Ce que cela apporte au trader :
+
+**Une lecture de cohérence.** Si l'ES monte mais que le yen monte aussi, que les obligations montent et que le pétrole baisse, la hausse de l'ES est isolée et suspecte : le reste du carré est en risk-off. À l'inverse, un ES en hausse avec AUD/JPY en hausse, taux en hausse et pétrole ferme est une hausse cohérente. La cohérence intermarket est un filtre de qualité pour un biais.
+
+**Une lecture de rotation.** Le passage de risk-on à risk-off se voit souvent d'abord sur les actifs les plus sensibles (les devises à risque, le crédit à haut rendement, les petites capitalisations) avant les indices majeurs. Un trader d'ES qui voit AUD/JPY casser un support et les petites capitalisations sous-performer depuis trois jours a un avertissement.
+
+**Une lecture des paires forex.** AUD/JPY et NZD/JPY sont les baromètres risk-on / risk-off du forex : une devise à risque contre une devise refuge. Leur tendance dit l'humeur mieux qu'un commentaire.
+
+Deux mises en garde. Le couple risk-on / risk-off est une **simplification** : il décrit bien les journées de forte peur ou de forte confiance, moins bien les périodes de rotation sectorielle ou de divergence régionale. Et il **s'inverse selon le régime** (section précédente) : en régime d'inflation, le risk-off ne fait plus monter les obligations ; l'or lui-même est ambigu. On l'utilise comme grille de lecture rapide, pas comme loi.
+
+## Le DXY comme boussole des marchés
+
+Le **DXY** (US Dollar Index) mesure le dollar contre un panier de six devises, l'euro pesant près de 58 %, puis le yen, la livre, le dollar canadien, la couronne suédoise et le franc suisse. Il est imparfait (trop d'euro, pas de yuan) mais c'est la référence que tout le monde regarde, et sa direction résume la moitié des relations du carré.
+
+Pourquoi le dollar est central : il est la devise de réserve, de facturation des matières premières, de financement de la dette mondiale, et le refuge en cas de stress. Sa force ou sa faiblesse **transmet** la politique de la Fed au reste du monde.
+
+Ce que le DXY dit au trader de chaque marché :
+
+- **Or (et argent)** : le DXY est, avec les taux réels, l'une des deux variables explicatives principales. Un or qui monte avec un DXY qui monte est une hausse forte (l'or monte malgré le vent contraire) ; un or qui monte avec un DXY qui baisse est une hausse « normale », qui dépend du dollar.
+- **Pétrole** : un DXY fort est un frein ; mais l'offre et la géopolitique dominent souvent.
+- **Indices US** : un DXY qui monte vite pèse sur les bénéfices des multinationales et signale souvent du stress mondial ; un DXY qui baisse doucement est favorable au risque.
+- **Forex** : le DXY est la « moitié » de toutes les paires en USD ; un trader d'EUR/USD lit le DXY comme le contexte, la structure d'EUR/USD comme l'exécution.
+- **Émergents et crypto** : un dollar fort resserre les conditions financières mondiales ; ces actifs souffrent.
+
+Comment le lire : structure et niveaux du niveau 2 sur le DXY en quotidien (le DXY est un graphique comme un autre), et surtout **sa direction par rapport aux taux américains** : DXY et taux qui montent ensemble = resserrement classique ; DXY qui monte alors que les taux baissent = fuite vers la sécurité (risk-off) ; DXY qui baisse alors que les taux montent = le reste du monde resserre plus vite, ou l'appétit pour le risque domine.
+
+<Figure caption="Figure 3 · Le DXY au centre : sa lecture croisée avec les taux américains distingue le resserrement classique, le refuge en risk-off et l'appétit pour le risque. Chaque marché a sa sensibilité au dollar.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Le DXY et sa lecture croisée avec les taux" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="360" cy="150" r="60" className="gold" opacity="0.9" />
+  <text x="360" y="146" fontSize="16" fontWeight="700" textAnchor="middle" fill="#141414">DXY</text>
+  <text x="360" y="164" fontSize="9" textAnchor="middle" fill="#141414">58 % EUR · JPY · GBP · CAD · SEK · CHF</text>
+  <line x1="300" y1="150" x2="150" y2="150" className="line" strokeWidth="1.5" /><rect x="30" y="130" width="120" height="40" rx="6" className="box" strokeWidth="1" /><text x="90" y="148" fontSize="11" fontWeight="600" textAnchor="middle">Or</text><text x="90" y="162" fontSize="9" textAnchor="middle" className="muted">DXY ↑ → or ↓ (souvent)</text>
+  <line x1="420" y1="150" x2="570" y2="150" className="line" strokeWidth="1.5" /><rect x="570" y="130" width="120" height="40" rx="6" className="box" strokeWidth="1" /><text x="630" y="148" fontSize="11" fontWeight="600" textAnchor="middle">Matières premières</text><text x="630" y="162" fontSize="9" textAnchor="middle" className="muted">DXY ↑ → prix ↓</text>
+  <line x1="360" y1="90" x2="360" y2="60" className="line" strokeWidth="1.5" /><rect x="280" y="20" width="160" height="40" rx="6" className="box" strokeWidth="1" /><text x="360" y="38" fontSize="11" fontWeight="600" textAnchor="middle">Taux US</text><text x="360" y="52" fontSize="9" textAnchor="middle" className="muted">le moteur habituel du DXY</text>
+  <line x1="360" y1="210" x2="360" y2="240" className="line" strokeWidth="1.5" /><rect x="260" y="240" width="200" height="40" rx="6" className="box" strokeWidth="1" /><text x="360" y="258" fontSize="11" fontWeight="600" textAnchor="middle">Indices, émergents, crypto</text><text x="360" y="272" fontSize="9" textAnchor="middle" className="muted">DXY ↑ vite → stress, risque ↓</text>
+  <text x="120" y="60" fontSize="10" className="muted">DXY ↑ + taux ↑ : resserrement</text>
+  <text x="120" y="76" fontSize="10" className="muted">DXY ↑ + taux ↓ : refuge (risk-off)</text>
+  <text x="120" y="92" fontSize="10" className="muted">DXY ↓ + taux ↑ : appétit pour le risque</text>
+</svg>
+</Figure>
+
+## Construire un tableau de bord intermarket
+
+L'intermarket se lit sur un écran unique, une fois par jour (le matin, cinq minutes) et le week-end (quinze minutes, avec les corrélations). Voici un tableau de bord qui tient sur une page, à adapter à ses marchés.
+
+**Colonne 1 · Taux.** Le 10 ans américain (rendement), le 2 ans, le spread 2-10, les futures de Fed funds (probabilité de la prochaine réunion). Lecture : direction sur cinq jours, position par rapport aux niveaux clés (par exemple un 10 ans qui repasse 4,5 %).
+
+**Colonne 2 · Dollar.** Le DXY (structure quotidienne, direction), EUR/USD, USD/JPY, et la paire baromètre AUD/JPY. Lecture : DXY contre taux (resserrement, refuge, appétit).
+
+**Colonne 3 · Actions.** ES et NQ (le ratio NQ / ES dit si la croissance mène), les petites capitalisations (RTY) et le crédit à haut rendement (les avertisseurs de rotation), le VIX (chapitre 7).
+
+**Colonne 4 · Matières premières.** Pétrole (WTI), or, cuivre (le baromètre industriel), l'or contre le pétrole. Lecture : cohérence avec le dollar et les taux.
+
+**Ligne du bas · Corrélations glissantes (60 jours)** entre les actifs que vous tradez et leurs pilotes : or / DXY, or / 10 ans réel, ES / 10 ans, ES / obligations, pétrole / ES. Recalculées chaque semaine (niveau 1, chapitre 5 ; niveau 7 pour l'automatiser). C'est la ligne qui dit dans quel régime on est et si les règles du chapitre s'appliquent aujourd'hui.
+
+**Ligne de synthèse**, en une phrase, chaque matin : « Taux stables, DXY en repli doux, AUD/JPY en hausse, cuivre ferme : risk-on modéré, cohérent ; corrélation ES / obligations redevenue négative : régime croissance. Biais macro : favorable au risque, or freiné par des taux réels stables. » Cette phrase se compare au biais technique de la structure ; en cas de conflit, la règle du chapitre 1 s'applique (la macro filtre, la structure décide), et l'on note le conflit au journal : c'est souvent là que quelque chose se prépare.
+
+Ce que le tableau de bord ne fait pas : donner une entrée. Il donne un environnement, une cohérence, un régime, et parfois un avertissement (une divergence, une rupture de corrélation). Le reste vient des niveaux 2 à 4.
+
+## Deux trades sous l'angle intermarket
+
+Reconstitutions pédagogiques : la même hausse de l'or, avec et sans lecture croisée.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Or en structure D haussière ; tableau de bord : DXY en baisse (structure D baissière), 10 ans réel en baisse, corrélation or / DXY à −0,7 : la hausse est « normale » et portée ; entrée sur retour dans un FVG H4 après sweep"
+  entree="2 356,0"
+  stop="2 344,0 (12 $, sous le sweep)"
+  objectif="2 400,0 (nPOC et EQH hebdomadaires)"
+  r="+3,7R">
+
+Le tableau de bord du matin : DXY qui casse un HL quotidien et fait un LL, 10 ans qui repasse sous 4,2 %, corrélation glissante or / DXY à −0,7 : les deux moteurs de l'or poussent dans le même sens et la relation est active. Le trader sait que le vent est avec lui ; il attend la séquence (sweep du plus bas de la semaine, displacement H4, FVG) et entre au retour. Cible : la liquidité hebdomadaire au-dessus. L'intermarket n'a rien décidé ; il a dit que le biais technique haussier était **cohérent** avec l'environnement, et il a justifié de viser loin. Atteinte en quatre séances.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Même structure D haussière ; mais DXY en forte hausse (refuge, risk-off sur un choc), 10 ans en hausse, corrélation or / DXY passée à +0,3 en deux semaines (rupture) ; le trader achète « parce que la structure est haussière et que l'or est un refuge »"
+  entree="2 372,0"
+  stop="2 360,0 (12 $)"
+  objectif="2 410,0"
+  r="−1R">
+
+Un mois plus tard, autre configuration. Le DXY monte fort (stress mondial, fuite vers le dollar), les taux montent (l'inflation revient dans les craintes), et la corrélation or / DXY est devenue positive : le régime a changé, l'or ne se comporte plus comme d'habitude, il hésite. Le trader garde son biais technique haussier et sa vieille règle « l'or est un refuge » sans regarder le tableau de bord ; il achète un retour ; le dollar accélère, l'or décroche de 20 $ en une séance sur un mouvement de liquidation d'actifs (tout baisse ensemble, y compris les refuges habituels), stop touché. La structure était haussière ; l'environnement ne l'était plus, et la rupture de corrélation le disait depuis deux semaines. La macro filtre : ici, elle aurait filtré ce trade, ou réduit sa taille.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **carré directeur** : taux → dollar → matières premières → inflation → taux, et les actions qui arbitrent croissance contre taux. Chaque flèche a un signe habituel.
+- Les **corrélations dépendent du régime** (croissance ou inflation comme risque dominant) ; on les **mesure** (60 jours glissants) ; leur **rupture** est une information : les scénarios de l'ancien régime sont caducs.
+- **Risk-on / risk-off** : une grille rapide de cohérence et de rotation (AUD/JPY, petites capitalisations, crédit comme avertisseurs), qui s'inverse en partie selon le régime.
+- Le **DXY** est la boussole : sa lecture croisée avec les taux distingue resserrement, refuge et appétit ; chaque marché a sa sensibilité au dollar (l'or d'abord).
+- Le **tableau de bord** (taux, dollar, actions, matières, corrélations, une phrase de synthèse) donne l'environnement et la cohérence, jamais l'entrée ; en conflit avec la structure, il filtre ou réduit.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Cohérence intermarket">
+
+Ce matin : ES +0,8 %, NQ +1,2 %, RTY +0,2 %, obligations 10 ans en hausse de prix (rendement −6 pb), DXY +0,4 %, USD/JPY −0,6 % (le yen monte), AUD/JPY −0,5 %, pétrole −1,5 %, or +0,7 %, VIX en hausse.
+
+1. La hausse de l'ES est-elle cohérente avec le reste du tableau ? Listez ce qui va dans le sens du risque et ce qui va contre.
+2. Comment qualifiez-vous l'humeur globale ?
+3. Que faites-vous d'un biais technique haussier sur MES ce matin ?
+
+<Solution>
+
+1. Dans le sens du risque : ES et NQ en hausse. Contre : RTY à la traîne (les petites capitalisations ne suivent pas), obligations en hausse (taux ↓ : fuite vers la sécurité), DXY ↑ avec taux ↓ (refuge), yen ↑, AUD/JPY ↓ (le baromètre risk-off), pétrole ↓, or ↑, VIX ↑. **Presque tout le carré est en risk-off ; la hausse des indices est isolée**, probablement portée par quelques grandes valeurs de croissance (le NQ mène) sur la baisse des taux.
+2. **Risk-off avec une hausse d'indices étroite** : une configuration fragile, souvent suivie d'un rattrapage à la baisse des indices ou d'un rebond du reste ; dans les deux cas, l'incohérence est l'information.
+3. On garde le biais technique s'il est là (la structure décide), mais on **réduit la taille**, on prend des cibles plus proches, et on note le conflit : un long MES contre un tableau de bord risk-off est un trade à contexte défavorable. On surveille AUD/JPY et RTY : s'ils continuent de baisser, l'ES risque de suivre.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Régime et corrélation">
+
+Corrélations glissantes 60 jours, il y a trois mois puis aujourd'hui : ES / obligations : −0,45 → +0,35 ; or / DXY : −0,65 → −0,20 ; pétrole / ES : +0,40 → −0,30 ; ES / 10 ans (rendement) : +0,30 → −0,50.
+
+1. Quel changement de régime ces quatre évolutions racontent-elles ensemble ?
+2. Quelle règle intermarket « classique » ne s'applique plus, et laquelle s'applique désormais ?
+3. Que devient un scénario construit il y a trois mois du type « si les actions baissent, j'achète des obligations pour couvrir » ?
+
+<Solution>
+
+1. Le passage d'un régime où le risque dominant était la **croissance** (ES et obligations en sens inverse, ES et taux dans le même sens, pétrole avec les actions) à un régime où le risque dominant est l'**inflation** (ES et obligations baissent ensemble, ES en sens inverse des taux, pétrole contre les actions : choc d'offre ou inflation par l'énergie). L'or perd son lien avec le dollar : il hésite entre refuge et actif sensible aux taux réels.
+2. Ne s'applique plus : « risk-off = obligations en hausse » et « les obligations couvrent les actions ». S'applique désormais : « taux ↑ = tout baisse », « pétrole ↑ = actions ↓ », « le cash est le seul refuge dans le carré ».
+3. Il est **caduc** : dans le régime actuel, une baisse des actions s'accompagne d'une baisse des obligations ; la couverture ne couvre plus, elle double la perte. La rupture de corrélation, mesurée, oblige à réécrire les scénarios ; c'est exactement pour cela qu'on la mesure chaque semaine.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Votre tableau de bord">
+
+Construisez votre tableau de bord intermarket sur une page (ou un écran) : les quatre colonnes avec les instruments qui comptent pour vos marchés, la ligne des corrélations glissantes (calculées ou lues sur une plateforme), et la phrase de synthèse. Tenez-le chaque matin pendant deux semaines et notez, chaque soir, si votre phrase de synthèse était cohérente avec ce que la séance a fait.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend : quatre colonnes tenant sur un écran (taux : 10 ans, 2 ans, 2-10, Fed funds ; dollar : DXY, EUR/USD, USD/JPY, AUD/JPY ; actions : ES, NQ, RTY, VIX ; matières : WTI, or, cuivre), une ligne de trois à cinq corrélations qui concernent **vos** instruments, une phrase de synthèse conditionnelle. Après deux semaines : combien de matins la synthèse était-elle « cohérente », combien « incohérente », et qu'a fait le marché les jours d'incohérence ? Vous constaterez que les jours d'incohérence précèdent souvent des mouvements ; c'est ce que le tableau de bord sert à repérer.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Une hausse des taux américains a typiquement pour effet :",
+      options: [
+        "Dollar en baisse, or en hausse",
+        "Dollar en hausse, actions de croissance sous pression, or et matières premières en baisse par le dollar",
+        "Tout monte",
+        "Aucun effet",
+      ],
+      answer: 1,
+      explain: "Le carré directeur : taux → dollar → matières premières ; les actions arbitrent croissance contre taux. Chaque flèche a un signe habituel, modulé par le régime.",
+    },
+    {
+      q: "La corrélation actions / obligations :",
+      options: [
+        "Est toujours négative",
+        "Dépend du régime : négative quand le risque dominant est la croissance, positive quand c'est l'inflation ; sa rupture est une information",
+        "Est toujours positive",
+        "N'a pas d'importance",
+      ],
+      answer: 1,
+      explain: "On mesure, on ne suppose pas. En régime d'inflation, il n'y a plus de refuge dans le carré ; les scénarios de l'ancien régime sont caducs.",
+    },
+    {
+      q: "AUD/JPY sert de baromètre parce que :",
+      options: [
+        "C'est la paire la plus liquide",
+        "C'est une devise à risque contre une devise refuge : sa tendance dit l'humeur risk-on / risk-off",
+        "L'Australie produit de l'or",
+        "Le yen est stable",
+      ],
+      answer: 1,
+      explain: "Avec les petites capitalisations et le crédit à haut rendement, c'est un avertisseur de rotation : il bouge souvent avant les indices majeurs.",
+    },
+    {
+      q: "Le DXY monte alors que les taux américains baissent. Lecture :",
+      options: [
+        "Resserrement classique",
+        "Fuite vers la sécurité (risk-off) : le dollar monte comme refuge, pas par le différentiel de taux",
+        "Appétit pour le risque",
+        "Erreur de données",
+      ],
+      answer: 1,
+      explain: "DXY et taux ensemble = resserrement ; DXY ↑ taux ↓ = refuge ; DXY ↓ taux ↑ = appétit pour le risque ou reste du monde qui resserre plus vite.",
+    },
+    {
+      q: "L'or monte alors que le DXY monte aussi. C'est :",
+      options: [
+        "Impossible",
+        "Une hausse forte de l'or : il monte malgré le vent contraire ; à surveiller si la corrélation habituelle s'est rompue (peur extrême, achats de banques centrales)",
+        "Une baisse déguisée",
+        "Une erreur de graphique",
+      ],
+      answer: 1,
+      explain: "L'or dépend du dollar et des taux réels ; quand il monte contre le dollar, un autre moteur domine. On le lit avec la corrélation glissante.",
+    },
+    {
+      q: "Le tableau de bord intermarket sert à :",
+      options: [
+        "Trouver l'entrée du jour",
+        "Donner l'environnement, la cohérence, le régime et parfois un avertissement ; en conflit avec la structure, il filtre ou réduit la taille",
+        "Remplacer la structure",
+        "Prédire le prix à trois mois",
+      ],
+      answer: 1,
+      explain: "La macro filtre, la structure décide. Le conflit entre biais macro et biais technique se note au journal : c'est souvent là que quelque chose se prépare.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le tableau de bord se lit chaque matin ; certaines heures de certaines journées le bousculent en une seconde. Le chapitre suivant hiérarchise les publications économiques, décrit l'anatomie du CPI, du NFP et du FOMC, oppose les deux écoles (trader les news ou s'en protéger), décrit le comportement type du prix autour des annonces, et impose un protocole news écrit.
