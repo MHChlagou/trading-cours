@@ -1,0 +1,330 @@
+---
+title: "Footprint et delta"
+description: "Lire un graphique footprint cellule par cellule (bid × ask par prix), le delta et le delta cumulé avec leurs limites, l'absorption et les déséquilibres agressifs, les divergences de delta aux extrêmes, avec des exemples décortiqués sur l'ES."
+---
+
+# Footprint et delta
+
+Le profil de volume dit à quel prix on a échangé. Le **footprint** dit, à chaque prix et dans chaque bougie, **qui a pris l'initiative** : combien de contrats ont été achetés au marché (en frappant l'ask) et combien vendus au marché (en frappant le bid). C'est la vue la plus fine du carnet accessible à un particulier sur les futures, et c'est là que l'absorption du niveau 2, le displacement du niveau 3 et l'effort contre résultat de Wyckoff se voient au tick près. Ce chapitre apprend à lire une cellule, un delta, un déséquilibre, une divergence, et montre sur l'ES ce que cela change à l'entrée et au stop.
+
+## Lire un graphique footprint cellule par cellule
+
+Un footprint est une bougie ouverte : au lieu d'un rectangle, chaque niveau de prix de la bougie affiche deux nombres, séparés en général par un « × » :
+
+- à gauche, le **volume au bid** : les contrats échangés parce qu'un vendeur a frappé le bid (vente agressive, au marché) ;
+- à droite, le **volume à l'ask** : les contrats échangés parce qu'un acheteur a frappé l'ask (achat agressif).
+
+Rappel du niveau 0 : chaque transaction a un acheteur et un vendeur ; ce que le footprint distingue, c'est **lequel des deux était pressé**. Un contrat « au bid » a un vendeur agressif et un acheteur passif (un ordre limite d'achat qui attendait). Un contrat « à l'ask » a un acheteur agressif et un vendeur passif.
+
+Un exemple sur une bougie M5 de l'ES (chiffres pédagogiques), qui a ouvert à 5 290,50, est descendue à 5 289,00 et a clôturé à 5 290,50 :
+
+| Prix | Bid (ventes agressives) | Ask (achats agressifs) |
+| --- | --- | --- |
+| 5 290,75 | 0 | 42 |
+| 5 290,50 | 18 | 96 |
+| 5 290,25 | 35 | 120 |
+| 5 290,00 | 60 | 88 |
+| 5 289,75 | 72 | 55 |
+| 5 289,50 | 110 | 30 |
+| 5 289,25 | 140 | 12 |
+| 5 289,00 | 85 | 0 |
+
+Ce qu'on lit, ligne par ligne :
+
+- **En bas** (5 289,00-5 289,50) : les ventes agressives dominent largement (85, 140, 110 au bid contre 0, 12, 30 à l'ask). Des vendeurs ont frappé fort ; et pourtant le prix n'est pas descendu sous 5 289,00 : quelqu'un a **absorbé** avec des ordres limites d'achat.
+- **En haut** (5 290,25-5 290,75) : les achats agressifs dominent (120, 96, 42 à l'ask). Une fois les vendeurs épuisés, les acheteurs ont repris la main et le prix a clôturé sur son ouverture.
+- **La lecture verticale** : où le volume est-il concentré ? Ici sur 5 289,25-5 290,25 : c'est le POC de la bougie (la cellule la plus grosse, 5 289,25 avec 152 contrats), qui est aussi le lieu de la bataille.
+
+Chaque plateforme (Sierra Chart, NinjaTrader avec les modules ad hoc, Bookmap, Quantower, TradingView pour certains flux) affiche cela avec ses codes couleur ; les nombres sont les mêmes. Le footprint demande du **volume avec agressivité** (données « bid / ask »), disponible sur les futures et les actions ; le forex spot n'en a pas (niveau 2).
+
+<Figure caption="Figure 1 · La bougie M5 de l'exemple en footprint. À gauche de chaque ligne, le volume au bid (ventes agressives) ; à droite, à l'ask (achats agressifs). Les ventes dominent en bas mais le prix ne baisse plus : absorption ; les achats dominent en haut : reprise.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Footprint d'une bougie avec volumes bid et ask par prix" xmlns="http://www.w3.org/2000/svg">
+  <text x="120" y="30" fontSize="11" fontWeight="600" textAnchor="end">prix</text>
+  <text x="230" y="30" fontSize="11" fontWeight="600" textAnchor="middle" className="red">bid (ventes agressives)</text>
+  <text x="330" y="30" fontSize="11" fontWeight="600" textAnchor="middle">×</text>
+  <text x="430" y="30" fontSize="11" fontWeight="600" textAnchor="middle" className="green">ask (achats agressifs)</text>
+
+  <text x="120" y="60" fontSize="12" textAnchor="end" className="mono">5 290,75</text><rect x="330" y="46" width="42" height="18" className="green" opacity="0.6" /><text x="378" y="60" fontSize="12" className="mono">42</text><text x="320" y="60" fontSize="12" textAnchor="end" className="mono muted">0</text>
+  <text x="120" y="90" fontSize="12" textAnchor="end" className="mono">5 290,50</text><rect x="312" y="76" width="18" height="18" className="red" opacity="0.5" /><text x="306" y="90" fontSize="12" textAnchor="end" className="mono">18</text><rect x="330" y="76" width="96" height="18" className="green" opacity="0.7" /><text x="432" y="90" fontSize="12" className="mono">96</text>
+  <text x="120" y="120" fontSize="12" textAnchor="end" className="mono">5 290,25</text><rect x="295" y="106" width="35" height="18" className="red" opacity="0.5" /><text x="289" y="120" fontSize="12" textAnchor="end" className="mono">35</text><rect x="330" y="106" width="120" height="18" className="green" opacity="0.8" /><text x="456" y="120" fontSize="12" className="mono">120</text>
+  <text x="120" y="150" fontSize="12" textAnchor="end" className="mono">5 290,00</text><rect x="270" y="136" width="60" height="18" className="red" opacity="0.6" /><text x="264" y="150" fontSize="12" textAnchor="end" className="mono">60</text><rect x="330" y="136" width="88" height="18" className="green" opacity="0.7" /><text x="424" y="150" fontSize="12" className="mono">88</text>
+  <text x="120" y="180" fontSize="12" textAnchor="end" className="mono">5 289,75</text><rect x="258" y="166" width="72" height="18" className="red" opacity="0.7" /><text x="252" y="180" fontSize="12" textAnchor="end" className="mono">72</text><rect x="330" y="166" width="55" height="18" className="green" opacity="0.6" /><text x="391" y="180" fontSize="12" className="mono">55</text>
+  <text x="120" y="210" fontSize="12" textAnchor="end" className="mono">5 289,50</text><rect x="220" y="196" width="110" height="18" className="red" opacity="0.8" /><text x="214" y="210" fontSize="12" textAnchor="end" className="mono">110</text><rect x="330" y="196" width="30" height="18" className="green" opacity="0.5" /><text x="366" y="210" fontSize="12" className="mono">30</text>
+  <text x="120" y="240" fontSize="12" textAnchor="end" className="mono">5 289,25</text><rect x="190" y="226" width="140" height="18" className="red" opacity="0.9" /><text x="184" y="240" fontSize="12" textAnchor="end" className="mono">140</text><rect x="330" y="226" width="12" height="18" className="green" opacity="0.5" /><text x="348" y="240" fontSize="12" className="mono">12</text>
+  <text x="120" y="270" fontSize="12" textAnchor="end" className="mono">5 289,00</text><rect x="245" y="256" width="85" height="18" className="red" opacity="0.7" /><text x="239" y="270" fontSize="12" textAnchor="end" className="mono">85</text><text x="340" y="270" fontSize="12" className="mono muted">0</text>
+
+  <rect x="500" y="46" width="200" height="90" rx="6" className="box" strokeWidth="1" />
+  <text x="600" y="66" fontSize="11" textAnchor="middle" fontWeight="600">Totaux de la bougie</text>
+  <text x="510" y="88" fontSize="11" className="mono">bid : 520 · ask : 443</text>
+  <text x="510" y="106" fontSize="11" className="mono">volume : 963</text>
+  <text x="510" y="124" fontSize="11" className="mono red">delta : 443 − 520 = −77</text>
+  <text x="600" y="220" fontSize="10" textAnchor="middle" className="muted">ventes agressives dominantes,</text>
+  <text x="600" y="234" fontSize="10" textAnchor="middle" className="muted">clôture sur l'ouverture :</text>
+  <text x="600" y="252" fontSize="11" textAnchor="middle" className="green" fontWeight="600">absorption des vendeurs</text>
+  <text x="330" y="310" fontSize="10" textAnchor="middle" className="muted">POC de la bougie : 5 289,25 (152 contrats), lieu de la bataille</text>
+</svg>
+</Figure>
+
+## Delta, delta cumulé et leurs limites
+
+Le **delta** d'une bougie est la différence entre le volume à l'ask et le volume au bid : achats agressifs moins ventes agressives. Dans l'exemple : 443 − 520 = **−77**. Un delta positif signifie que les acheteurs ont été plus agressifs sur la bougie ; négatif, les vendeurs.
+
+Le **delta cumulé** (cumulative delta, CVD) additionne les deltas bougie après bougie depuis un point de départ (l'ouverture de la séance en général). C'est la courbe de l'agressivité nette : elle monte quand les acheteurs frappent, descend quand les vendeurs frappent. On la trace sous le graphique et on la lit comme un prix.
+
+Ce que le delta mesure : **l'initiative**, l'urgence, qui traverse le spread. Ce qu'il ne mesure pas, et c'est la première limite : **la passivité**. Un delta de −77 dit que 77 contrats de plus ont été vendus au marché qu'achetés au marché ; il ne dit pas si ces ventes ont rencontré des acheteurs limites solides (absorption) ou un carnet vide (le prix s'effondre). Le même delta, avec deux résultats opposés sur le prix. C'est pourquoi le delta se lit **toujours avec le prix** : delta négatif et prix qui baisse, cohérent ; delta négatif et prix qui ne baisse pas, absorption.
+
+Autres limites à connaître :
+
+- **La classification bid / ask est imparfaite.** Les transactions au milieu du spread, les gros ordres fractionnés en icebergs (chapitre suivant), les exécutions sur plusieurs niveaux d'un coup sont attribuées par des règles qui varient selon les fournisseurs. Deux plateformes montrent des deltas légèrement différents pour la même bougie.
+- **Le delta ne compte pas les intentions.** Un algorithme d'exécution qui achète 2 000 contrats en frappant l'ask par tranches de 5 pendant une heure produit un delta positif diffus ; un particulier qui achète 50 contrats d'un coup produit un pic. Le delta voit les deux de la même façon.
+- **Le point de départ du cumulé est arbitraire.** Le CVD depuis l'ouverture de la séance et le CVD depuis le début de la semaine racontent des histoires différentes ; on choisit le point de départ selon la question (la séance pour l'intraday) et on ne le compare pas d'un instrument à l'autre.
+- **Le delta absolu n'a de sens qu'en relatif.** Un delta de −500 sur l'ES à 16 h est ordinaire ; à 4 h du matin, il est énorme. Comme le volume (niveau 2), il se compare à la même heure des jours précédents.
+
+En pratique, le delta est le plus utile dans deux situations, développées ci-dessous : quand il **diverge du prix** (absorption, épuisement) et quand il **s'accumule au même endroit** (déséquilibres empilés).
+
+## Absorption et déséquilibres agressifs
+
+**L'absorption** est le phénomène central de l'order flow, déjà décrit au niveau 2 (volume élevé sans progression du prix) et chez Wyckoff (effort sans résultat). Le footprint le montre à la cellule : **de gros volumes au bid (ou à l'ask) sur un ou deux niveaux, sans que le prix ne franchisse ces niveaux**. Les vendeurs frappent, et un acheteur passif absorbe tout avec des ordres limites, renouvelés à mesure qu'ils sont servis (souvent un iceberg, chapitre suivant). L'exemple ci-dessus en est un : 335 contrats vendus au marché sur 5 289,00-5 289,50, et le plus bas tient à 5 289,00.
+
+Signes d'une absorption sérieuse : le volume absorbé est nettement supérieur au volume habituel de ces niveaux ; le prix ne progresse pas malgré lui, sur plusieurs bougies ; il se produit sur un niveau qui compte (HVN, bord de value area, zone SMC, support du niveau 2) ; et il est suivi d'un mouvement dans le sens de l'absorbeur (les acheteurs passifs deviennent agressifs une fois les vendeurs épuisés : le delta se retourne, le prix part). Une absorption sans suite est un vendeur qui a simplement fini de vendre ; le mouvement de retour est ce qui la valide.
+
+**Les déséquilibres agressifs** (imbalances) sont l'inverse : un côté domine si nettement à un prix donné que le déséquilibre est visible en une cellule. La convention la plus répandue compare **en diagonale** : le volume à l'ask d'un prix contre le volume au bid du prix **juste en dessous** (parce qu'un acheteur agressif à 5 290,25 est en concurrence avec un vendeur agressif à 5 290,00 : ce sont les deux transactions qui se disputent le spread). Un ratio de 3 pour 1 ou plus (certains prennent 4) est un déséquilibre : un **déséquilibre acheteur** si l'ask domine, **vendeur** si le bid domine.
+
+Dans l'exemple : au bid de 5 289,25 (140) contre l'ask de 5 289,50 (30) : ratio 4,7, **déséquilibre vendeur** ; au bid de 5 289,00 (85) contre l'ask de 5 289,25 (12) : ratio 7, déséquilibre vendeur. Deux déséquilibres vendeurs **empilés** (stacked imbalances) sur les deux niveaux les plus bas… et le prix a clôturé sur son ouverture. C'est la combinaison la plus parlante : **des déséquilibres agressifs qui n'obtiennent rien** sont de l'absorption caractérisée. À l'inverse, des déséquilibres acheteurs empilés qui font monter le prix sont un displacement vu de l'intérieur (niveau 3) ; ils laissent souvent, sur le footprint, des cellules à volume faible au-dessus (le FVG en version cellule).
+
+<Figure caption="Figure 2 · Déséquilibres en diagonale : on compare l'ask d'un prix au bid du prix inférieur. Deux déséquilibres vendeurs empilés au bas de la bougie (ratios 4,7 et 7) sans progression du prix : absorption. Trois déséquilibres acheteurs empilés qui font monter le prix : displacement.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Déséquilibres diagonaux vendeurs absorbés et acheteurs qui déplacent le prix" xmlns="http://www.w3.org/2000/svg">
+  <text x="170" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Déséquilibres vendeurs absorbés</text>
+  <text x="120" y="60" fontSize="11" textAnchor="end" className="mono">5 289,50</text><text x="150" y="60" fontSize="11" className="mono red">110</text><text x="215" y="60" fontSize="11" className="mono">×</text><text x="235" y="60" fontSize="11" className="mono green">30</text>
+  <text x="120" y="90" fontSize="11" textAnchor="end" className="mono">5 289,25</text><text x="150" y="90" fontSize="11" className="mono red" fontWeight="700">140</text><text x="215" y="90" fontSize="11" className="mono">×</text><text x="235" y="90" fontSize="11" className="mono green">12</text>
+  <text x="120" y="120" fontSize="11" textAnchor="end" className="mono">5 289,00</text><text x="150" y="120" fontSize="11" className="mono red" fontWeight="700">85</text><text x="215" y="120" fontSize="11" className="mono">×</text><text x="235" y="120" fontSize="11" className="mono muted">0</text>
+  <line x1="180" y1="82" x2="240" y2="64" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="270" y="72" fontSize="10" className="red">140 vs 30 : ×4,7</text>
+  <line x1="180" y1="112" x2="240" y2="94" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="270" y="102" fontSize="10" className="red">85 vs 12 : ×7</text>
+  <text x="170" y="160" fontSize="10" textAnchor="middle" className="muted">le plus bas tient à 5 289,00 malgré 335 contrats vendus au marché</text>
+  <text x="170" y="180" fontSize="11" textAnchor="middle" className="green" fontWeight="600">→ absorption par des acheteurs passifs</text>
+
+  <text x="530" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Déséquilibres acheteurs qui déplacent</text>
+  <text x="480" y="60" fontSize="11" textAnchor="end" className="mono">5 292,00</text><text x="510" y="60" fontSize="11" className="mono red">6</text><text x="560" y="60" fontSize="11" className="mono">×</text><text x="580" y="60" fontSize="11" className="mono green" fontWeight="700">95</text>
+  <text x="480" y="90" fontSize="11" textAnchor="end" className="mono">5 291,75</text><text x="510" y="90" fontSize="11" className="mono red">14</text><text x="560" y="90" fontSize="11" className="mono">×</text><text x="580" y="90" fontSize="11" className="mono green" fontWeight="700">128</text>
+  <text x="480" y="120" fontSize="11" textAnchor="end" className="mono">5 291,50</text><text x="510" y="120" fontSize="11" className="mono red">22</text><text x="560" y="120" fontSize="11" className="mono">×</text><text x="580" y="120" fontSize="11" className="mono green" fontWeight="700">110</text>
+  <text x="480" y="150" fontSize="11" textAnchor="end" className="mono">5 291,25</text><text x="510" y="150" fontSize="11" className="mono red">40</text><text x="560" y="150" fontSize="11" className="mono">×</text><text x="580" y="150" fontSize="11" className="mono green">60</text>
+  <line x1="600" y1="68" x2="530" y2="84" stroke="var(--tm-green)" strokeWidth="1.5" /><line x1="600" y1="98" x2="530" y2="114" stroke="var(--tm-green)" strokeWidth="1.5" /><line x1="600" y1="128" x2="530" y2="144" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="640" y="90" fontSize="10" className="green">×6,8 · ×5,8 · ×2,75</text>
+  <text x="530" y="190" fontSize="10" textAnchor="middle" className="muted">le prix monte de 5 291,25 à 5 292,25 : les acheteurs obtiennent</text>
+  <text x="530" y="210" fontSize="11" textAnchor="middle" className="green" fontWeight="600">→ displacement vu de l'intérieur</text>
+  <text x="360" y="270" fontSize="10" textAnchor="middle" className="muted">le même chiffre (un déséquilibre) se lit avec le prix : sans résultat, absorption ; avec résultat, impulsion</text>
+</svg>
+</Figure>
+
+## Divergences de delta aux extrêmes
+
+La **divergence de delta** est le signal de footprint le plus utilisé aux points de retournement, et le plus mal utilisé partout ailleurs. Définition : le prix fait un nouvel extrême (un plus haut plus haut, par exemple), mais le delta cumulé ne suit pas (il fait un sommet plus bas), ou le delta de la bougie d'extrême est contraire au mouvement (un nouveau plus haut sur delta négatif).
+
+Ce qu'elle signifie : le prix est monté, mais **avec moins d'agressivité acheteuse** que sur le sommet précédent ; ou pire, il est monté alors que les vendeurs agressifs dominaient (ce qui n'est possible que si des acheteurs passifs très gros ont tiré le prix : un cas d'absorption inversée, ou simplement de stops de vendeurs déclenchés). Dans les deux cas, la hausse manque de conviction agressive : elle est **fragile**.
+
+Deux formes utiles :
+
+- **Divergence sur le CVD** : prix en HH, CVD en LH. Lecture de contexte sur plusieurs bougies : l'agressivité s'épuise. À croiser avec la structure (un sweep des EQH, un CHoCH qui se prépare) et les niveaux (une résistance, un HVN composite, un nPOC).
+- **Delta contraire sur la bougie d'extrême** : la bougie qui fait le nouveau plus haut a un delta négatif ou nul. Souvent la bougie de sweep : les acheteurs de cassure ont acheté (ask), mais quelqu'un a vendu davantage au bid dans la même bougie, et le prix a fait sa mèche. C'est le sweep du niveau 3 vu de l'intérieur.
+
+Trois précautions, sans lesquelles la divergence est un piège :
+
+1. **Elle ne vaut qu'aux extrêmes**, sur des niveaux qui comptent. Une divergence au milieu d'un range, en pleine tendance, est du bruit : le CVD diverge en permanence sur les petites unités.
+2. **Elle n'est pas un signal d'entrée**, c'est un indice d'épuisement. L'entrée demande une réaction du prix (une clôture qui rejette, un CHoCH interne, un retour dans une zone) ; vendre une divergence sans réaction, c'est vendre un marché qui monte.
+3. **La divergence peut durer** : un marché peut faire trois HH sur CVD décroissant avant de se retourner, parce que la hausse est portée par des acheteurs passifs (des limites qui montent) ou par des vendeurs à découvert forcés de couvrir. La divergence dit « fragile », pas « fini ».
+
+<Figure caption="Figure 3 · Divergence de delta au sommet : le prix fait un plus haut plus haut (sweep des EQH), le CVD fait un plus haut plus bas, et la bougie d'extrême a un delta négatif. Épuisement de l'agressivité acheteuse ; l'entrée attend la réaction (clôture de rejet, CHoCH interne).">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Divergence entre prix et delta cumulé au sommet" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="170" x2="700" y2="170" className="line" strokeWidth="1" />
+  <text x="50" y="50" fontSize="11" textAnchor="end" className="muted">prix</text>
+  <polyline points="70,150 110,120 150,140 190,90 230,110 270,75 310,100 350,60 390,85 430,50 470,80 500,95 540,130" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="270" y1="75" x2="440" y2="75" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="290" y="70" fontSize="9" className="red">EQH</text>
+  <circle cx="430" cy="50" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="450" y="45" fontSize="10" className="red" fontWeight="600">HH : sweep, delta de la bougie −180</text>
+  <text x="350" y="50" fontSize="9" textAnchor="middle" className="muted">HH</text>
+  <circle cx="500" cy="95" r="4" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="520" y="112" fontSize="9" className="gold">réaction : clôture de rejet, CHoCH interne → entrée</text>
+
+  <line x1="60" y1="300" x2="700" y2="300" className="line" strokeWidth="1" />
+  <text x="50" y="200" fontSize="11" textAnchor="end" className="muted">CVD</text>
+  <polyline points="70,290 110,262 150,275 190,235 230,250 270,215 310,240 350,222 390,245 430,238 470,262 500,275 540,292" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="270" y="208" fontSize="9" textAnchor="middle" className="muted">HH</text>
+  <text x="350" y="216" fontSize="9" textAnchor="middle" className="red">LH</text>
+  <text x="430" y="232" fontSize="9" textAnchor="middle" className="red">LH</text>
+  <text x="620" y="245" fontSize="10" className="red" fontWeight="600">prix HH, CVD LH :</text>
+  <text x="620" y="260" fontSize="10" className="red" fontWeight="600">divergence baissière</text>
+</svg>
+</Figure>
+
+## Exemples décortiqués sur ES
+
+**Exemple 1 : absorption au VAL, continuation.** Contexte : structure H1 haussière, prix qui revient sur le VAL de la veille (5 286-5 288), qui est aussi un HVN composite et le bord d'un OB H1. En M5, trois bougies successives montrent, sur 5 286,50-5 287,25, des volumes au bid de 180, 220, 160 contre des asks de 30, 45, 40 : déséquilibres vendeurs empilés ; le plus bas ne descend pas sous 5 286,50 ; le delta cumulé baisse de 600 points sur ces trois bougies. Le prix ne bouge pas : **absorption**. Quatrième bougie : delta +240, déséquilibres acheteurs sur 5 287,50-5 288,25, clôture à 5 289 : les acheteurs passifs deviennent agressifs. Entrée sur cette clôture ou sur le premier retour vers 5 288, stop sous 5 286 (sous l'absorption), cible le VAH / nPOC. La zone venait des niveaux 2 et 3 et du profil ; le footprint a donné le **moment** (l'absorption puis le retournement du delta) et le **stop** (sous le niveau absorbé).
+
+**Exemple 2 : divergence sur sweep, retournement.** Contexte : EQH à 5 312 formés le matin, structure H1 haussière étirée (trois BOS, prix loin du HL). À 16 h 10, une bougie M5 dépasse 5 312 (plus haut 5 314,25) et clôture à 5 310 : sweep. Son footprint : ask 210, bid 390, delta −180 ; les cellules au-dessus de 5 312 montrent 40 × 15, 25 × 8 : peu d'achats agressifs là-haut, ce sont des stops déclenchés et des vendeurs qui frappent. CVD : plus haut plus bas par rapport au sommet de 15 h 30. Divergence caractérisée sur un extrême qui compte. Bougie suivante : delta −320, clôture 5 306, cassure du dernier LH M5 : CHoCH interne. Entrée short sur le retour vers 5 309-5 310 (le FVG M5 laissé), stop au-dessus de 5 314,25, cible le POC du jour. Le footprint a **qualifié** le sweep (delta négatif, pas d'achats agressifs au-dessus des EQH) et donné une raison de plus de le vendre.
+
+**Exemple 3 : le faux signal.** Même séance, 17 h 45, prix au milieu de la value area, en range depuis une heure. Une bougie M5 montre un déséquilibre acheteur isolé (5 300,25 : 12 × 85). Un trader achète « le déséquilibre ». Il n'y avait ni niveau, ni structure, ni contexte : un déséquilibre au milieu de rien, dans un range, à une heure creuse. Le prix revient au POC. Le footprint ne crée pas de setup ; il **qualifie** un setup qui existe déjà. Isolé, il produit des dizaines de faux signaux par jour.
+
+## Deux trades lus au footprint
+
+Reconstitutions pédagogiques : le même niveau, avec et sans le footprint.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Retour sur le VAL de la veille (HVN composite, bord d'OB H1), absorption visible au footprint (déséquilibres vendeurs empilés sans progression), retournement du delta, entrée sur la clôture de reprise"
+  entree="5 289,00"
+  stop="5 285,75 (13 ticks, sous le niveau absorbé)"
+  objectif="5 302,00 (VAH de la veille, nPOC)"
+  r="+4R">
+
+L'exemple 1, exécuté. Sans footprint, l'entrée se serait prise sur le réalignement M5 (niveau 2), un peu plus haut et un peu plus tard, avec un stop sous le creux M5 : 5 288 environ, stop 5 284, 16 ticks. Avec le footprint, l'entrée se prend dès la bougie de retournement du delta, avec un stop juste sous le niveau où 560 contrats ont été absorbés : si ce niveau cède, l'absorbeur a perdu, et l'idée est fausse. Le stop est plus court **et** mieux justifié. Le ratio passe de 3,5 à 4 pour la même cible ; sur cent trades, c'est ce qui sépare une méthode correcte d'une bonne méthode.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Short"
+  setup="Vente d'une divergence de delta au milieu d'un range, sans extrême, sans niveau, sans réaction du prix"
+  entree="5 297,50"
+  stop="5 300,50 (12 ticks)"
+  objectif="5 290,00"
+  r="−1R, puis −1R sur un second essai « la divergence est encore là »">
+
+Même trader, deux jours plus tard. Il voit le CVD baisser pendant que le prix stagne à 5 297-5 298, en plein milieu de la value area, à 18 h. « Divergence baissière », vend. Le prix monte de 3 points sur des achats passifs qui absorbent ses ventes et celles des autres divergenceurs. Il revend au sommet suivant : même résultat. Aucune des trois précautions n'était respectée : pas d'extrême, pas de niveau, pas de réaction. La divergence dit « fragile » ; au milieu d'un range, tout est fragile, et rien ne bouge. Le footprint qualifie ; il ne remplace ni le contexte, ni la structure, ni la patience d'attendre la réaction.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **footprint** ouvre la bougie : à chaque prix, volume au **bid** (ventes agressives) × volume à l'**ask** (achats agressifs). Il montre qui a pris l'initiative ; il demande du volume bid / ask (futures, actions).
+- **Delta** = ask − bid par bougie ; **CVD** = delta cumulé. Il mesure l'agressivité, pas la passivité : il se lit **toujours avec le prix**, en relatif, et sa classification est imparfaite.
+- **Absorption** : gros volume agressif d'un côté sans progression du prix, sur un niveau qui compte, suivi d'un retournement du delta. **Déséquilibres** : ratio ≥ 3 en diagonale ; empilés et sans résultat, absorption ; empilés avec résultat, displacement.
+- **Divergence de delta** : prix en nouvel extrême, CVD ou delta de bougie contraires. Vaut **aux extrêmes sur des niveaux qui comptent**, n'est **pas une entrée** (attendre la réaction), et peut **durer**.
+- Le footprint **qualifie** un setup issu du contexte, de la structure et du profil ; il donne le moment et le stop. Isolé, il produit des dizaines de faux signaux par jour.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire un footprint">
+
+Bougie M5 sur MNQ (prix : bid × ask) : 18 412 : 5 × 60 · 18 411 : 12 × 95 · 18 410 : 30 × 140 · 18 409 : 48 × 70 · 18 408 : 90 × 35 · 18 407 : 130 × 18 · 18 406 : 70 × 0. Ouverture 18 408, clôture 18 411.
+
+1. Calculez le volume, le delta, et le POC de la bougie.
+2. Repérez les déséquilibres diagonaux (ratio ≥ 3) et leur sens.
+3. Interprétez la bougie en une phrase.
+
+<Solution>
+
+1. Bid : 5 + 12 + 30 + 48 + 90 + 130 + 70 = **385**. Ask : 60 + 95 + 140 + 70 + 35 + 18 + 0 = **418**. Volume : **803**. Delta : 418 − 385 = **+33**. POC : **18 410** (170 contrats).
+2. Déséquilibres **vendeurs** (bid d'un prix vs ask du prix supérieur) : 18 407 : 130 vs ask 18 408 (35) : ratio 3,7 ; 18 406 : 70 vs ask 18 407 (18) : ratio 3,9. Deux déséquilibres vendeurs empilés en bas. Déséquilibres **acheteurs** (ask d'un prix vs bid du prix inférieur) : 18 410 : 140 vs bid 18 409 (48) : ratio 2,9 (juste sous 3) ; 18 411 : 95 vs bid 18 410 (30) : ratio 3,2 ; 18 412 : 60 vs bid 18 411 (12) : ratio 5. Deux déséquilibres acheteurs empilés en haut (trois en tolérant 2,9).
+3. Les vendeurs ont frappé fort en bas sans faire baisser le prix sous 18 406 (**absorption**), puis les acheteurs ont pris l'initiative en haut et la bougie clôture 3 points au-dessus de son ouverture avec un delta légèrement positif : une bougie de retournement intrabar, à valider par le contexte et le niveau.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Delta et prix : quatre cas">
+
+Pour chaque cas, dites ce que la combinaison signifie et ce qu'elle appelle comme action (rien, surveiller, chercher une entrée) :
+
+- (a) Delta −450 sur une bougie M5, prix qui baisse de 8 points, au milieu d'un LVN, à 15 h 50.
+- (b) Delta −450, prix qui ne baisse pas (fourchette de 1,5 point), sur le VAL de la veille et un HVN composite.
+- (c) Delta +300 sur la bougie qui fait un nouveau HH au-dessus d'EQH, avec des cellules d'ask élevées au-dessus des EQH.
+- (d) Delta −120 sur la bougie qui fait un nouveau HH au-dessus d'EQH, cellules d'ask faibles au-dessus, CVD en LH.
+
+<Solution>
+
+- **(a)** Cohérent : ventes agressives, prix qui baisse, dans un vide. Un displacement baissier ordinaire ; **rien à faire** sur cette bougie (on ne vend pas au marché dans un LVN), éventuellement chercher un short sur le retour dans la zone laissée, si le contexte le permet.
+- **(b)** **Absorption** sur un niveau qui compte : les ventes agressives n'obtiennent rien. **Surveiller** le retournement du delta ; si la bougie suivante montre des achats agressifs et une clôture au-dessus, **chercher une entrée long**, stop sous le niveau absorbé.
+- **(c)** Le HH est porté par de vrais achats agressifs, y compris au-dessus des EQH : ce n'est pas un sweep, c'est une **cassure avec acceptation** probable. **Ne pas vendre** ; attendre le retest par-dessus pour un long, ou rien.
+- **(d)** Le HH s'est fait sans achats agressifs (stops déclenchés, vendeurs au bid), CVD divergent : **sweep qualifié par le footprint**. **Chercher un short** après la réaction (clôture de rejet, CHoCH interne), stop au-dessus de la mèche.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le footprint qualifie, il ne crée pas">
+
+Reprenez trois zones d'entrée que vous auriez identifiées avec les niveaux 2 et 3 sur des graphiques passés (un retour dans un FVG, un retest de VAL, un sweep d'EQH). Si vous disposez d'un outil footprint (même en réplay), regardez ce que le footprint montrait au moment de chaque zone et classez : absorption confirmante, déséquilibres dans le sens attendu, divergence qualifiante, ou rien de particulier. Sinon, écrivez pour chaque zone ce que vous vous **attendriez** à voir au footprint si le setup est bon, et ce qui vous ferait renoncer.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend, par exemple : sur un retour dans un FVG haussier, des déséquilibres vendeurs qui s'épuisent puis des déséquilibres acheteurs et un delta qui se retourne ; sur un retest de VAL, une absorption au bid ; sur un sweep d'EQH, un delta négatif sur la bougie de sweep et des cellules d'ask faibles au-dessus. Ce qui fait renoncer : des déséquilibres qui obtiennent du prix contre le setup (le FVG traversé sur achats… ou ventes agressives soutenues), un delta cohérent avec la cassure plutôt qu'avec le sweep. L'exercice installe la bonne habitude : le footprint est la dernière couche, celle qui confirme ou infirme au moment d'exécuter.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Dans une cellule de footprint « 140 × 12 », les 140 sont :",
+      options: [
+        "Des achats agressifs à l'ask",
+        "Des ventes agressives au bid (des vendeurs ont frappé le bid) ; les 12 sont des achats agressifs à l'ask",
+        "Le volume total",
+        "Le delta",
+      ],
+      answer: 1,
+      explain: "Le footprint distingue qui était pressé : bid = vendeur agressif, ask = acheteur agressif. Chaque transaction a aussi une contrepartie passive, non comptée séparément.",
+    },
+    {
+      q: "Un delta de −77 sur une bougie qui clôture sur son ouverture signifie :",
+      options: [
+        "Le prix va baisser",
+        "Les vendeurs agressifs ont dominé mais n'ont pas fait baisser le prix : absorption par des acheteurs passifs",
+        "Une erreur de données",
+        "Un déséquilibre acheteur",
+      ],
+      answer: 1,
+      explain: "Le delta mesure l'initiative, pas la passivité. Il se lit toujours avec le prix : delta négatif et prix qui ne baisse pas, quelqu'un absorbe.",
+    },
+    {
+      q: "Un déséquilibre diagonal se calcule en comparant :",
+      options: [
+        "Le bid et l'ask du même prix",
+        "L'ask d'un prix au bid du prix juste en dessous (ratio ≥ 3 : déséquilibre)",
+        "Le delta de deux bougies",
+        "Le volume total de deux prix",
+      ],
+      answer: 1,
+      explain: "L'acheteur agressif à un prix et le vendeur agressif au prix inférieur sont les deux transactions qui se disputent le spread. Empilés sans résultat : absorption ; avec résultat : displacement.",
+    },
+    {
+      q: "Une divergence de delta (prix en HH, CVD en LH) :",
+      options: [
+        "Est un signal de vente immédiat",
+        "Est un indice d'épuisement, valable aux extrêmes sur des niveaux qui comptent, qui demande une réaction du prix avant toute entrée, et qui peut durer",
+        "Vaut partout",
+        "N'existe pas",
+      ],
+      answer: 1,
+      explain: "Vendre une divergence sans réaction, c'est vendre un marché qui monte. Au milieu d'un range, le CVD diverge en permanence.",
+    },
+    {
+      q: "Le footprint, isolé du contexte, de la structure et du profil :",
+      options: [
+        "Est le meilleur système de trading",
+        "Produit des dizaines de faux signaux par jour ; il qualifie un setup existant, donne le moment et le stop",
+        "Remplace le stop",
+        "Est inutile",
+      ],
+      answer: 1,
+      explain: "La zone vient des niveaux 2 et 3 et du profil ; le footprint dit qui a acheté et vendu dedans, et où placer le stop (sous le niveau absorbé).",
+    },
+    {
+      q: "Le footprint est disponible sur :",
+      options: [
+        "Tous les marchés",
+        "Les futures et les actions (données bid / ask) ; pas sur le forex spot",
+        "Le forex spot uniquement",
+        "Les CFD",
+      ],
+      answer: 1,
+      explain: "Il demande du volume avec agressivité. Le forex spot n'a ni volume réel ni classification bid / ask ; les futures de devises en ont.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le footprint montre ce qui a été exécuté. Le carnet montre ce qui attend. Le chapitre suivant lit le DOM (la profondeur de marché) et le tape (le défilement des transactions) : icebergs, spoofing et fausses tailles, la lecture aux moments clés, l'usage du DOM pour affiner l'exécution, et ce que le particulier peut réellement en tirer.
