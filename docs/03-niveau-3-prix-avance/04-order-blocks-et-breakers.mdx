@@ -1,0 +1,337 @@
+---
+title: "Order Blocks et Breaker Blocks"
+description: "Définition et critères de validité d'un order block, sélection des order blocks haussiers et baissiers, raffinement sur unité de temps inférieure, breaker blocks et changements de polarité, et hiérarchie pratique entre order block, FVG et sweep."
+---
+
+# Order Blocks et Breaker Blocks
+
+Le displacement part de quelque part. Juste avant qu'un gros participant ne pousse le prix, il a dû construire sa position ; et pour acheter en taille sans faire monter le prix, il a acheté pendant que le prix baissait, c'est-à-dire pendant la ou les dernières bougies **contraires** au mouvement qui allait suivre. Cette dernière bougie contraire est l'**order block** : la zone où, par hypothèse, une position importante a été bâtie. Ce chapitre en donne une définition stricte, apprend à sélectionner les bons, à les raffiner, à lire ce qui se passe quand ils cèdent (le **breaker**), et à les situer par rapport au FVG et au sweep.
+
+## Définition et critères de validité d'un order block
+
+**Order block haussier** (bullish OB) : la **dernière bougie baissière** (ou le dernier groupe de bougies baissières consécutives) avant un displacement haussier significatif qui casse une structure. La zone va du plus bas de cette bougie à son plus haut (certains ne prennent que le corps ; le cours prend la bougie entière pour l'unité de structure et raffine ensuite).
+
+**Order block baissier** (bearish OB) : la dernière bougie haussière avant un displacement baissier significatif.
+
+La logique : pendant cette bougie contraire, le prix baissait ; les vendeurs étaient actifs ; un gros acheteur a pu absorber leurs ventes avec des ordres limites (c'est l'absorption du niveau 2) et construire sa position au meilleur prix, avant de la révéler par le displacement. Au retour du prix sur cette zone, deux choses se passent : le gros acheteur, s'il n'a pas fini d'acheter, en profite pour compléter ; et les ordres limites non servis pendant la bougie sont encore là. D'où la réaction.
+
+Ce n'est qu'une hypothèse sur les intentions ; ce qui la rend utilisable, ce sont les **critères de validité**, tous observables :
+
+1. **Le displacement qui suit est significatif** (chapitre 3) : 2 à 3 ATR, corps dominants, cassure d'une structure. Sans displacement, la bougie contraire n'est qu'une bougie contraire ; il y en a une sur deux.
+2. **Le displacement casse une structure** : un CHoCH ou un BOS de l'unité (chapitre 5). L'order block « valide » est celui qui a produit un changement dans la lecture du marché, pas un simple rebond interne.
+3. **Le displacement a pris de la liquidité avant** ou **en laisse un FVG** : idéalement les deux. Un order block précédé d'un sweep et suivi d'un FVG est le cas complet.
+4. **L'order block n'a pas encore été retesté** (« frais », unmitigated). Chaque retour consomme une partie des ordres ; le premier retour est le plus probable.
+5. **Il est sur l'unité de temps du trade** ou au-dessus. Un OB M1 pour un trade H1 est du bruit ; un OB H4 pour un trade M5 est une zone de contexte, à raffiner.
+
+<Figure caption="Figure 1 · Order block haussier : la dernière bougie baissière avant le displacement qui casse le LH et laisse un FVG. Le sweep préalable complète la séquence. La zone est la bougie entière, du bas au haut.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Order block haussier dans une séquence sweep, displacement, FVG" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <line x1="90" y1="140" x2="90" y2="185" className="line" strokeWidth="1.5" /><rect x="84" y="150" width="12" height="28" className="red" opacity="0.9" />
+  <line x1="120" y1="150" x2="120" y2="200" className="line" strokeWidth="1.5" /><rect x="114" y="160" width="12" height="32" className="red" opacity="0.9" />
+  <line x1="150" y1="170" x2="150" y2="215" className="line" strokeWidth="1.5" /><rect x="144" y="180" width="12" height="28" className="green" opacity="0.9" />
+  <line x1="180" y1="180" x2="180" y2="250" className="line" strokeWidth="1.5" /><rect x="174" y="192" width="12" height="40" className="red" opacity="0.9" />
+  <line x1="210" y1="120" x2="210" y2="238" className="line" strokeWidth="1.5" /><rect x="204" y="125" width="12" height="105" className="green" opacity="0.9" />
+  <line x1="240" y1="70" x2="240" y2="130" className="line" strokeWidth="1.5" /><rect x="234" y="72" width="12" height="55" className="green" opacity="0.9" />
+  <line x1="270" y1="50" x2="270" y2="90" className="line" strokeWidth="1.5" /><rect x="264" y="55" width="12" height="30" className="green" opacity="0.9" />
+  <line x1="300" y1="65" x2="300" y2="110" className="line" strokeWidth="1.5" /><rect x="294" y="70" width="12" height="35" className="red" opacity="0.9" />
+  <line x1="330" y1="95" x2="330" y2="150" className="line" strokeWidth="1.5" /><rect x="324" y="100" width="12" height="45" className="red" opacity="0.9" />
+  <line x1="360" y1="130" x2="360" y2="200" className="line" strokeWidth="1.5" /><rect x="354" y="140" width="12" height="55" className="red" opacity="0.9" />
+  <line x1="390" y1="185" x2="390" y2="235" className="line" strokeWidth="1.5" /><rect x="384" y="192" width="12" height="35" className="red" opacity="0.9" />
+  <line x1="420" y1="160" x2="420" y2="232" className="line" strokeWidth="1.5" /><rect x="414" y="165" width="12" height="60" className="green" opacity="0.9" />
+  <line x1="450" y1="100" x2="450" y2="170" className="line" strokeWidth="1.5" /><rect x="444" y="105" width="12" height="60" className="green" opacity="0.9" />
+  <line x1="480" y1="60" x2="480" y2="110" className="line" strokeWidth="1.5" /><rect x="474" y="65" width="12" height="42" className="green" opacity="0.9" />
+
+  <rect x="168" y="180" width="540" height="70" className="green" opacity="0.15" />
+  <line x1="168" y1="180" x2="708" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="168" y1="250" x2="708" y2="250" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="600" y="176" fontSize="10" className="green" fontWeight="600">order block haussier (bougie entière)</text>
+  <circle cx="180" cy="250" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="180" y="272" fontSize="9" textAnchor="middle" className="green">sweep + OB</text>
+  <rect x="204" y="130" width="60" height="20" className="gold" opacity="0.3" />
+  <text x="235" y="126" fontSize="9" textAnchor="middle" className="gold">FVG</text>
+  <line x1="60" y1="140" x2="250" y2="140" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="70" y="136" fontSize="9" className="muted">LH cassé par le displacement</text>
+  <circle cx="390" cy="235" r="5" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="390" y="266" fontSize="9" textAnchor="middle" className="gold" fontWeight="600">retour sur l'OB : entrée</text>
+</svg>
+</Figure>
+
+Une précision utile : le sweep et l'order block sont souvent **la même bougie** ou deux bougies adjacentes. La bougie qui plonge sous les EQL (le sweep) est fréquemment la dernière baissière avant le displacement, donc l'order block. Ce n'est pas une coïncidence : c'est là que le gros acheteur a été servi.
+
+## Order blocks haussiers et baissiers : sélection
+
+Sur un graphique, il y a une bougie contraire avant chaque mouvement. Sélectionner, c'est ne garder que celles qui satisfont les critères et qui comptent pour le trade envisagé. Quelques règles de tri, dans l'ordre :
+
+**D'abord la structure.** Un order block haussier n'a d'intérêt que dans une structure haussière ou en train de le devenir (après CHoCH). Un OB haussier au milieu d'une tendance baissière H4 est un rebond de repli, pas une zone d'achat de swing. On sélectionne les OB dans le sens de la structure de l'unité supérieure, ou ceux qui ont **créé** le changement de structure.
+
+**Ensuite le displacement.** Entre plusieurs bougies contraires possibles avant un mouvement, on retient celle qui précède immédiatement la partie la plus violente du displacement. Si un mouvement haussier a démarré mollement puis explosé trois bougies plus tard, l'OB « fort » est la dernière baissière avant l'explosion, pas la première.
+
+**Puis la fraîcheur.** Entre un OB déjà retesté une fois et un OB frais, le frais. Entre deux OB frais, le plus proche du prix actuel a plus de chances d'être atteint ; le plus profond (le plus loin dans le sens du repli) a en général la réaction la plus forte, car il est le dernier avant l'invalidation.
+
+**Enfin la taille.** Un OB de 3 ATR est une zone trop large pour un stop raisonnable : il se raffine (section suivante) ou se remplace par le FVG voisin. Un OB minuscule (une bougie de 0,3 ATR) est fragile : le stop est dans le bruit.
+
+**Ce qu'on écarte** : les OB sans displacement (bougie contraire suivie d'un mouvement ordinaire), les OB à contre-structure sans CHoCH, les OB entièrement traversés en clôture (ils deviennent des candidats breakers, section suivante), les OB de très petite unité de temps hors du moment d'exécution.
+
+Le nombre : sur l'écran de travail, **deux ou trois OB au plus** : celui de la structure en cours, l'OB HTF au-dessous (pour un biais haussier), éventuellement un OB HTF au-dessus comme obstacle.
+
+## Raffiner un order block sur unité de temps inférieure
+
+Un OB H4 fait souvent 20 à 40 points sur l'ES : trop large pour un stop. Le raffinement consiste à descendre d'unité de temps **à l'intérieur** de la bougie H4 pour trouver la zone précise où la position a été construite.
+
+Méthode :
+
+1. Repérer l'OB sur l'unité de structure (H4, H1).
+2. Descendre à l'unité inférieure (M15, M5) et regarder ce qui s'est passé pendant cette bougie : on y trouve en général une petite séquence complète, avec son propre sweep, sa propre bougie contraire et son propre displacement.
+3. Retenir comme zone raffinée : l'OB de l'unité inférieure (la dernière bougie contraire M15 avant le displacement M15 qui a lancé la hausse), ou le FVG de l'unité inférieure laissé au départ du mouvement, ou, à défaut, le **corps** de la bougie HTF plutôt que sa mèche.
+4. Placer le stop sous la zone raffinée (avec la marge ATR du niveau 2), et non sous l'OB HTF entier, sauf si le trade est de l'échelle HTF.
+
+Le raffinement peut faire passer un stop de 30 points à 8 points pour la même cible : c'est le même gain de ratio que le raffinement de FVG du chapitre précédent, et pour la même raison. Le prix à payer : le prix peut réagir sur une autre partie de l'OB HTF que la zone raffinée, et le trade est manqué. C'est le compromis habituel entre précision et taux d'exécution.
+
+<Figure caption="Figure 2 · Raffinement : l'OB H4 (à gauche, 32 points) contient, en M15, une séquence complète ; l'OB M15 (à droite, 9 points) est la zone raffinée. Même cible, stop presque quatre fois plus court.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Raffinement d'un order block H4 en M15" xmlns="http://www.w3.org/2000/svg">
+  <text x="160" y="24" fontSize="12" fontWeight="600" textAnchor="middle">H4 : order block de 32 points</text>
+  <line x1="60" y1="270" x2="300" y2="270" className="line" strokeWidth="1" />
+  <line x1="120" y1="80" x2="120" y2="140" className="line" strokeWidth="1.5" /><rect x="110" y="88" width="20" height="45" className="red" opacity="0.9" />
+  <line x1="160" y1="110" x2="160" y2="240" className="line" strokeWidth="1.5" /><rect x="150" y="120" width="20" height="110" className="red" opacity="0.9" />
+  <line x1="200" y1="40" x2="200" y2="200" className="line" strokeWidth="1.5" /><rect x="190" y="45" width="20" height="145" className="green" opacity="0.9" />
+  <line x1="240" y1="30" x2="240" y2="70" className="line" strokeWidth="1.5" /><rect x="230" y="34" width="20" height="30" className="green" opacity="0.9" />
+  <rect x="140" y="110" width="160" height="130" className="green" opacity="0.15" />
+  <text x="160" y="258" fontSize="9" textAnchor="middle" className="muted">OB H4 entier : 5 240 à 5 272</text>
+  <polygon points="320,150 340,140 340,160" className="gold" />
+
+  <text x="530" y="24" fontSize="12" fontWeight="600" textAnchor="middle">M15 : à l'intérieur de la bougie H4</text>
+  <line x1="380" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <line x1="400" y1="110" x2="400" y2="140" className="line" strokeWidth="1.5" /><rect x="395" y="115" width="10" height="20" className="red" opacity="0.9" />
+  <line x1="420" y1="130" x2="420" y2="165" className="line" strokeWidth="1.5" /><rect x="415" y="135" width="10" height="25" className="red" opacity="0.9" />
+  <line x1="440" y1="150" x2="440" y2="185" className="line" strokeWidth="1.5" /><rect x="435" y="155" width="10" height="25" className="green" opacity="0.9" />
+  <line x1="460" y1="165" x2="460" y2="200" className="line" strokeWidth="1.5" /><rect x="455" y="170" width="10" height="25" className="red" opacity="0.9" />
+  <line x1="480" y1="180" x2="480" y2="240" className="line" strokeWidth="1.5" /><rect x="475" y="188" width="10" height="42" className="red" opacity="0.9" />
+  <line x1="500" y1="130" x2="500" y2="228" className="line" strokeWidth="1.5" /><rect x="495" y="135" width="10" height="88" className="green" opacity="0.9" />
+  <line x1="520" y1="90" x2="520" y2="140" className="line" strokeWidth="1.5" /><rect x="515" y="95" width="10" height="40" className="green" opacity="0.9" />
+  <line x1="540" y1="60" x2="540" y2="100" className="line" strokeWidth="1.5" /><rect x="535" y="65" width="10" height="30" className="green" opacity="0.9" />
+  <line x1="560" y1="40" x2="560" y2="75" className="line" strokeWidth="1.5" /><rect x="555" y="45" width="10" height="25" className="green" opacity="0.9" />
+  <rect x="470" y="180" width="230" height="60" className="green" opacity="0.25" />
+  <text x="600" y="176" fontSize="9" className="green" fontWeight="600">OB M15 raffiné : 5 243 à 5 252</text>
+  <circle cx="480" cy="240" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="480" y="260" fontSize="9" textAnchor="middle" className="green">sweep mineur</text>
+  <rect x="495" y="140" width="40" height="15" className="gold" opacity="0.3" />
+  <text x="515" y="136" fontSize="8" textAnchor="middle" className="gold">FVG M15</text>
+</svg>
+</Figure>
+
+## Breaker blocks et changements de polarité
+
+Un order block **cède** quand le prix le traverse entièrement en clôture (sur l'unité qui l'a défini) : l'hypothèse « une grosse position a été construite ici et sera défendue » est fausse, ou la position a été liquidée. Cet OB traversé devient un **breaker block** : au retour du prix, il agit dans le **sens opposé**. L'OB haussier traversé à la baisse devient une zone de vente au retest ; l'OB baissier traversé à la hausse devient une zone d'achat.
+
+La logique est celle du changement de polarité du niveau 2, précisée par les participants : les acheteurs qui ont défendu l'OB sont en perte après la traversée ; au retour du prix sur la zone, ils sortent à zéro (ils vendent) ; les vendeurs qui ont provoqué la traversée rajoutent ; et les acheteurs en attente sous l'OB, qui n'ont pas été servis, ont annulé. Le déséquilibre s'est inversé.
+
+Le breaker s'accompagne presque toujours d'un **changement de structure** : la traversée d'un OB haussier significatif est en général le mouvement qui produit un CHoCH baissier (le dernier HL est cassé). D'où sa valeur : ce n'est pas seulement une zone inversée, c'est la première zone d'entrée **dans le nouveau sens** après un retournement de structure. Beaucoup de traders SMC considèrent le breaker (avec l'IFVG du chapitre précédent) comme leur entrée de retournement préférée, parce qu'il combine une zone précise, un CHoCH et une invalidation nette (au-delà de l'ancien OB).
+
+Critères de validité d'un breaker, en miroir de ceux de l'OB : traversée nette en clôture (pas une mèche), displacement significatif de traversée (avec FVG idéalement), CHoCH ou BOS produit par cette traversée, premier retest.
+
+<Figure caption="Figure 3 · Breaker block : l'order block haussier est traversé en clôture par un displacement baissier qui casse le HL (CHoCH). Au retour du prix sur l'ancien OB, il agit comme résistance : entrée short, stop au-dessus de l'ancien OB.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Order block haussier devenu breaker après traversée" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <polyline points="70,200 110,240 140,225 170,150 200,120 230,140 260,90 290,110 320,70 350,95 380,150 410,135 440,215 470,235 500,190 530,175 560,180 590,220 620,250 660,270" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="120" y="215" width="380" height="30" className="green" opacity="0.15" />
+  <text x="130" y="211" fontSize="9" className="green">order block haussier (origine du displacement)</text>
+  <line x1="120" y1="215" x2="700" y2="215" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="120" y1="245" x2="700" y2="245" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <rect x="500" y="215" width="200" height="30" className="red" opacity="0.15" />
+  <text x="600" y="211" fontSize="9" textAnchor="middle" className="red" fontWeight="600">breaker : même zone, sens inversé</text>
+  <line x1="200" y1="150" x2="440" y2="150" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="300" y="164" fontSize="9" className="muted">dernier HL</text>
+  <text x="440" y="200" fontSize="9" textAnchor="middle" className="red">traversée en clôture + CHoCH</text>
+  <circle cx="530" cy="175" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="530" y="165" fontSize="9" textAnchor="middle" className="red" fontWeight="600">retest : entrée short</text>
+  <text x="640" y="205" fontSize="8" textAnchor="middle" className="muted">stop au-dessus de l'ancien OB</text>
+</svg>
+</Figure>
+
+## Hiérarchie pratique entre OB, FVG et sweep
+
+Les trois concepts décrivent souvent le même endroit sous trois angles : le sweep dit **pourquoi** le prix est allé là (la liquidité), l'order block dit **où** la position a été construite (la dernière bougie contraire), le FVG dit **où** le prix a laissé un trou en partant (le déséquilibre). Sur un graphique, ils se superposent fréquemment : le sweep est dans l'OB, le FVG démarre juste au-dessus. Quand ils sont distincts, il faut choisir. Voici l'ordre de priorité que le cours propose, à tester au niveau 7 :
+
+1. **Le sweep prime comme condition.** Sans prise de liquidité préalable, l'OB et le FVG sont plus faibles. Le sweep n'est pas une zone d'entrée ; c'est le feu vert.
+2. **Le FVG prime comme zone d'entrée quand il existe**, parce qu'il est plus précis (souvent plus étroit qu'un OB) et défini au tick près. L'entrée se cherche dans le FVG, le stop sous l'OB ou sous le sweep.
+3. **L'OB sert de zone quand il n'y a pas de FVG** (le displacement était puissant mais continu, sans trou), ou comme **borne d'invalidation** derrière le FVG : si le prix traverse l'OB en clôture, la thèse est fausse, FVG compris.
+4. **Le breaker et l'IFVG sont les zones de retournement**, après un CHoCH, quand la structure change de sens.
+
+En pratique, un setup complet se lit ainsi : « sweep de X, displacement qui casse Y (CHoCH / BOS) et laisse un FVG entre A et B ; OB à C ; entrée dans le FVG, stop sous l'OB (ou sous le sweep, le plus proche des deux qui reste logique), cible : liquidité Z ». Chaque mot correspond à un critère observable. Si l'un manque, le setup est incomplet, et il vaut mieux le dire que de le forcer.
+
+Enfin, une mise en garde contre la prolifération : les auteurs SMC ont inventé des dizaines de sous-catégories (mitigation blocks, rejection blocks, propulsion blocks, vacuum blocks). Elles décrivent des variantes des trois objets ci-dessus. Le trader qui maîtrise sweep, FVG et OB avec des définitions strictes lit tout ce qui compte ; le vocabulaire supplémentaire ajoute de la confusion, pas de l'expectancy.
+
+## Deux trades sur un order block
+
+Reconstitutions pédagogiques : le même OB, deux lectures.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Sweep du PDL, OB H1 (dernière bougie baissière), displacement avec FVG H1 et CHoCH, raffinement M15, entrée sur le FVG M15 dans l'OB H1"
+  entree="2 363,5"
+  stop="2 358,0 (5,5 $, sous l'OB M15 raffiné et sous le sweep mineur)"
+  objectif="2 386,0 (EQH)"
+  r="+4R">
+
+Contexte D haussier, PDL à 2 359,0. 9 h 15 : bougie H1 qui plonge à 2 356,5 (sweep) et clôture à 2 364 ; c'est aussi la dernière baissière avant une bougie H1 de +18 $ qui casse le dernier LH à 2 371 et laisse un FVG H1 entre 2 366 et 2 370. OB H1 : 2 356,5 à 2 366,0, dix dollars, trop large. En M15, à l'intérieur : sweep mineur à 2 358,5, dernière baissière M15 entre 2 360 et 2 364, displacement M15 avec FVG entre 2 362 et 2 365. Zone raffinée : ce FVG M15. Entrée à 2 363,5 sur le retour de 10 h 30, stop à 2 358,0. Cible : les EQH à 2 386. La séquence complète était là : sweep, OB, displacement, CHoCH, FVG, raffinement. Le stop de 5,5 $ au lieu de 10 : c'est le raffinement qui a rendu le ratio de 4 possible.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Achat sur une « bougie baissière avant hausse » sans displacement ni cassure de structure, contre la structure H4"
+  entree="2 371,0"
+  stop="2 367,0 (4 $)"
+  objectif="2 386,0"
+  r="−1R">
+
+Même semaine, autre séance. Le trader repère en M15 une bougie baissière suivie de trois bougies vertes ordinaires (1,1 ATR chacune, sans casser le LH M15 à 2 376) et l'étiquette « order block ». Il achète le retour dessus. Il n'y avait ni sweep, ni displacement, ni CHoCH, ni FVG ; et la structure H4 faisait des LH depuis la veille. Le prix traverse sa « zone » en clôture M15 sans hésiter et continue 15 $ plus bas. La bougie était bien une bougie contraire avant une hausse ; elle ne cochait aucun critère de validité. Un OB sans displacement, c'est une bougie rouge.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Order block** : la dernière bougie contraire avant un displacement significatif qui casse une structure ; hypothèse : la position a été construite là. Valide s'il est suivi d'un displacement, s'il produit un CHoCH / BOS, s'il est précédé d'un sweep ou suivi d'un FVG, frais, sur l'unité du trade.
+- **Sélection** : dans le sens de la structure supérieure (ou celui qui a créé le changement), avant la partie la plus violente du displacement, frais, de taille raisonnable ; deux ou trois OB au plus à l'écran.
+- **Raffinement** : descendre d'unité à l'intérieur de la bougie HTF pour trouver l'OB ou le FVG LTF ; stop sous la zone raffinée. Ratio nettement meilleur, taux d'exécution un peu plus faible.
+- **Breaker** : OB traversé en clôture par un displacement qui casse la structure ; au retour, il agit dans le sens inverse. Avec l'IFVG, c'est l'entrée de retournement type.
+- **Hiérarchie** : le sweep est la condition, le FVG la zone d'entrée quand il existe, l'OB la zone par défaut ou la borne d'invalidation, breaker et IFVG les zones de retournement. Trois objets suffisent.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Identifier et valider un order block">
+
+Séquence H1 sur MNQ (haut · bas · clôture, ordre chronologique) : (18 430 · 18 405 · 18 410) ; (18 415 · 18 388 · 18 392) ; (18 400 · 18 372 · 18 378) ; (18 396 · 18 380 · 18 393) ; (18 452 · 18 385 · 18 449) ; (18 478 · 18 440 · 18 470). Le dernier LH interne avant cette séquence est à 18 428. ATR H1 : 22 points. Deux plus bas égaux antérieurs à 18 375.
+
+1. Quelle bougie est l'order block haussier ? Donnez ses bornes.
+2. Vérifiez les critères : displacement significatif, cassure de structure, sweep, FVG (donnez les bornes du FVG s'il existe).
+3. Le prix revient à 18 390 quatre heures plus tard. Où est l'entrée, où est le stop (marge 3 points), et quel est le ratio pour une cible à 18 470 ?
+
+<Solution>
+
+1. Le displacement est la 5e bougie (18 385 → 18 449, corps de 56 points). La dernière bougie **baissière** avant elle est la 3e (clôture 18 378, sous son ouverture) ; la 4e est haussière (clôture 18 393 au-dessus de 18 378). L'OB haussier est donc la **3e bougie : 18 372 à 18 400**. Note : certains prendraient le groupe 3-4 ; le cours retient la dernière baissière.
+2. **Displacement** : 5e bougie, fourchette 67 points, corps 64 : environ **3 ATR**, corps dominant : significatif. **Cassure** : la clôture à 18 449 dépasse le LH à 18 428 : **CHoCH interne**. **Sweep** : la 3e bougie descend à 18 372, sous les EQL à 18 375, et clôture au-dessus : **sweep validé**, et il est dans l'OB. **FVG** : bougies 4, 5, 6 : high(4) = 18 396, low(6) = 18 440 : FVG haussier **18 396 à 18 440** (44 points, large : le displacement était très rapide). Les quatre critères sont réunis.
+3. Le prix à 18 390 est **dans l'OB** (18 372-18 400) et sous le FVG : l'entrée se prend dans l'OB, par exemple à 18 390 sur signal M5, avec un **stop sous l'OB et le sweep** : 18 372 − 3 = **18 369**. Risque : 21 points. Cible 18 470 : gain 80 points, ratio **3,8**. Avec un raffinement M15 le stop serait probablement plus court encore.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Order block ou breaker ?">
+
+Un OB haussier H1 entre 2 340,0 et 2 346,0 sur l'or. Trois scénarios :
+
+- (a) Le prix revient à 2 344, réagit, repart à la hausse et fait un HH.
+- (b) Le prix descend à 2 337 en mèche, clôture H1 à 2 347, repart à la hausse.
+- (c) Une bougie H1 de 14 $ clôture à 2 331, cassant le dernier HL à 2 335 ; deux heures plus tard, le prix remonte à 2 343 et rebaisse.
+
+1. Qualifiez chaque scénario (OB mitigé, OB tenu malgré une mèche, breaker).
+2. Dans le cas (c), où va l'entrée et où va le stop d'un short ?
+3. Dans le cas (b), la mèche à 2 337 invalide-t-elle l'OB ?
+
+<Solution>
+
+1. **(a) OB mitigé** : réaction dans la zone, reprise, nouveau HH ; l'OB a joué son rôle et est désormais « utilisé ». **(b) OB tenu** : la mèche a traversé mais la clôture est au-dessus ; c'est un sweep de la liquidité sous l'OB, souvent la meilleure réaction possible. **(c) Breaker** : traversée en clôture par un displacement (14 $, avec CHoCH puisque le HL est cassé), puis retest de la zone par-dessous.
+2. Entrée dans l'ancien OB au retest, par exemple 2 343-2 345 sur signal M15 ; **stop au-dessus de l'ancien OB** avec marge : 2 346 + 1,5 = **2 347,5**. Cible : la liquidité en dessous (PDL, EQL).
+3. **Non**, tant que la clôture H1 reste dans ou au-dessus de l'OB. Une mèche est un test, pas une traversée. C'est exactement la logique sweep contre cassure du chapitre 2, appliquée à l'OB.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Choisir la zone dans une séquence complète">
+
+Après un sweep du PDL sur l'ES à 5 262, un displacement H1 casse le LH et laisse : un OB H1 entre 5 262 et 5 271 ; un FVG H1 entre 5 274 et 5 279 ; en M15, à l'intérieur de l'OB, un FVG M15 entre 5 265 et 5 268. Cible : EQH à 5 304.
+
+1. Selon la hiérarchie du chapitre, quelle est la zone d'entrée principale ? Quelle est la borne d'invalidation ?
+2. Calculez le ratio pour une entrée à 5 276 (FVG H1) avec stop sous l'OB (5 260), et pour une entrée à 5 267 (FVG M15) avec stop sous le sweep (5 260).
+3. Quel est le risque de choisir uniquement le FVG M15 ?
+
+<Solution>
+
+1. Zone d'entrée principale : le **FVG H1** (5 274-5 279), plus précis et défini au tick près ; l'**OB H1** (5 262-5 271) est la borne d'invalidation : une clôture sous 5 262 tue la thèse. Le FVG M15 dans l'OB est la zone raffinée pour une entrée plus profonde si le prix y descend.
+2. Entrée 5 276, stop 5 260 : risque 16, gain 28, ratio **1,75**. Entrée 5 267, stop 5 260 : risque 7, gain 37, ratio **5,3**.
+3. Que le prix réagisse sur le FVG H1 (5 274-5 279) sans jamais descendre au FVG M15 : le trade est manqué. C'est le compromis précision / taux d'exécution. Une solution courante : une entrée partielle sur le FVG H1 et le solde sur le FVG M15, chaque tranche avec son propre R dans le budget total (niveau 1, scaling in planifié).
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Un order block haussier est :",
+      options: [
+        "N'importe quelle bougie verte",
+        "La dernière bougie baissière avant un displacement haussier significatif qui casse une structure",
+        "Un support horizontal",
+        "Une moyenne mobile",
+      ],
+      answer: 1,
+      explain: "L'hypothèse : la position a été construite pendant la dernière bougie contraire, par absorption. Sans displacement ensuite, ce n'est qu'une bougie rouge.",
+    },
+    {
+      q: "Le critère indispensable pour qu'une bougie contraire soit un OB valide est :",
+      options: [
+        "Sa couleur",
+        "Le displacement significatif qui la suit, avec cassure de structure",
+        "Sa taille",
+        "L'heure",
+      ],
+      answer: 1,
+      explain: "Il y a une bougie contraire avant chaque mouvement. Seul le displacement qui suit (2 à 3 ATR, CHoCH / BOS) en fait une zone d'intérêt.",
+    },
+    {
+      q: "Le raffinement d'un OB H4 consiste à :",
+      options: [
+        "L'élargir",
+        "Descendre d'unité à l'intérieur de la bougie H4 pour trouver l'OB ou le FVG LTF, et placer le stop sous cette zone",
+        "L'ignorer",
+        "Prendre le milieu au hasard",
+      ],
+      answer: 1,
+      explain: "Le stop passe de 30 points à 8 pour la même cible ; le prix à payer est un taux d'exécution un peu plus faible.",
+    },
+    {
+      q: "Un breaker block est :",
+      options: [
+        "Un OB très grand",
+        "Un OB traversé en clôture par un displacement qui casse la structure ; au retour, il agit dans le sens inverse",
+        "Un FVG",
+        "Un support cassé sans suite",
+      ],
+      answer: 1,
+      explain: "C'est le changement de polarité appliqué à l'OB, accompagné d'un CHoCH : la première zone d'entrée dans le nouveau sens.",
+    },
+    {
+      q: "Dans la hiérarchie du chapitre, le sweep est :",
+      options: [
+        "La zone d'entrée",
+        "La condition (le feu vert) ; le FVG est la zone d'entrée quand il existe, l'OB la zone par défaut ou la borne d'invalidation",
+        "Inutile",
+        "L'objectif",
+      ],
+      answer: 1,
+      explain: "Le sweep dit pourquoi le prix est venu ; l'OB dit où la position a été construite ; le FVG dit où le trou a été laissé. Trois angles sur le même endroit.",
+    },
+    {
+      q: "Une mèche traverse un OB haussier de 3 $ mais la bougie H1 clôture dans l'OB. L'OB est :",
+      options: [
+        "Invalidé",
+        "Tenu : une mèche est un test (souvent un sweep de la liquidité sous l'OB), pas une traversée",
+        "Devenu breaker",
+        "À effacer",
+      ],
+      answer: 1,
+      explain: "La logique sweep contre cassure s'applique : la clôture juge. Une mèche sous l'OB suivie d'une clôture dedans est souvent la meilleure réaction possible.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Sweep, displacement, FVG, order block : chaque brique a été définie par rapport à une « cassure de structure ». Le chapitre suivant précise enfin ce terme : le break of structure comme continuation confirmée, le change of character comme premier indice de retournement, la différence entre cassure valide et cassure de liquidité, la structure SMC sur un cycle entier, et un protocole d'annotation systématique.
