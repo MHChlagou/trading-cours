@@ -1,0 +1,369 @@
+---
+title: "Market mechanics : bid, ask, spread, liquidité, slippage"
+description: "Comment le carnet d'ordres forme le prix, qui paie le spread, pourquoi la liquidité change avec l'heure, et comment mesurer le slippage sur des cas concrets."
+---
+
+# Market mechanics : bid, ask, spread, liquidité, slippage
+
+Un graphique montre une ligne. Derrière cette ligne, il y a une machine : le carnet d'ordres. Comprendre cette machine explique pourquoi un ordre s'exécute à un prix plutôt qu'à un autre, pourquoi certains trades coûtent plus cher que prévu, et pourquoi la même stratégie peut être rentable à 16 h et perdante à 3 h du matin. Ce chapitre ouvre le capot.
+
+## Le carnet d'ordres et la formation du prix
+
+Sur un marché centralisé (futures, actions), tous les ordres en attente sont rassemblés dans le **carnet d'ordres** (order book). Il y a deux côtés :
+
+- Les **ordres d'achat en attente**, appelés bids. Le meilleur bid est le prix le plus élevé qu'un acheteur est prêt à payer.
+- Les **ordres de vente en attente**, appelés asks (ou offers). Le meilleur ask est le prix le plus bas qu'un vendeur accepte.
+
+Entre le meilleur bid et le meilleur ask, il n'y a personne : c'est le **spread**. Le « prix » que vous voyez sur le graphique est en général le prix de la dernière transaction (last), qui se situe soit sur le bid, soit sur l'ask.
+
+Une transaction a lieu quand un participant accepte de traverser le spread : un acheteur pressé achète au prix de l'ask, ou un vendeur pressé vend au prix du bid. Ces participants pressés utilisent des ordres au marché ; ils **prennent** la liquidité que d'autres ont **fournie** en plaçant des ordres limites dans le carnet.
+
+<Figure caption="Figure 1 · Un carnet d'ordres sur l'ES à un instant donné. Le prix bouge quand un côté est consommé.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Carnet d'ordres avec bids, asks et spread" xmlns="http://www.w3.org/2000/svg">
+  <text x="90" y="28" fontSize="13" fontWeight="600" textAnchor="middle">Bids (acheteurs)</text>
+  <text x="360" y="28" fontSize="13" fontWeight="600" textAnchor="middle">Prix</text>
+  <text x="630" y="28" fontSize="13" fontWeight="600" textAnchor="middle">Asks (vendeurs)</text>
+
+  <text x="360" y="62" fontSize="13" textAnchor="middle" className="mono">5 201,00</text>
+  <rect x="440" y="48" width="180" height="20" rx="3" className="red" opacity="0.5" />
+  <text x="630" y="62" fontSize="12" textAnchor="middle" className="mono">96</text>
+
+  <text x="360" y="92" fontSize="13" textAnchor="middle" className="mono">5 200,75</text>
+  <rect x="440" y="78" width="130" height="20" rx="3" className="red" opacity="0.5" />
+  <text x="630" y="92" fontSize="12" textAnchor="middle" className="mono">71</text>
+
+  <text x="360" y="122" fontSize="13" textAnchor="middle" className="mono">5 200,50</text>
+  <rect x="440" y="108" width="100" height="20" rx="3" className="red" opacity="0.5" />
+  <text x="630" y="122" fontSize="12" textAnchor="middle" className="mono">54</text>
+
+  <text x="360" y="152" fontSize="13" fontWeight="700" textAnchor="middle" className="mono">5 200,25</text>
+  <rect x="440" y="138" width="60" height="20" rx="3" className="red" opacity="0.85" />
+  <text x="630" y="152" fontSize="12" fontWeight="700" textAnchor="middle" className="mono">32</text>
+  <text x="520" y="152" fontSize="11" className="gold" fontWeight="600">meilleur ask</text>
+
+  <line x1="60" y1="168" x2="660" y2="168" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="360" y="184" fontSize="12" textAnchor="middle" className="gold" fontWeight="600">spread = 1 tick = 0,25 pt = 12,50 $</text>
+  <line x1="60" y1="192" x2="660" y2="192" className="line" strokeWidth="1" strokeDasharray="4 3" />
+
+  <text x="360" y="212" fontSize="13" fontWeight="700" textAnchor="middle" className="mono">5 200,00</text>
+  <rect x="220" y="198" width="60" height="20" rx="3" className="green" opacity="0.85" />
+  <text x="90" y="212" fontSize="12" fontWeight="700" textAnchor="middle" className="mono">28</text>
+  <text x="140" y="212" fontSize="11" className="gold" fontWeight="600">meilleur bid</text>
+
+  <text x="360" y="242" fontSize="13" textAnchor="middle" className="mono">5 199,75</text>
+  <rect x="160" y="228" width="120" height="20" rx="3" className="green" opacity="0.5" />
+  <text x="90" y="242" fontSize="12" textAnchor="middle" className="mono">63</text>
+
+  <text x="360" y="272" fontSize="13" textAnchor="middle" className="mono">5 199,50</text>
+  <rect x="130" y="258" width="150" height="20" rx="3" className="green" opacity="0.5" />
+  <text x="90" y="272" fontSize="12" textAnchor="middle" className="mono">80</text>
+
+  <text x="360" y="302" fontSize="13" textAnchor="middle" className="mono">5 199,25</text>
+  <rect x="100" y="288" width="180" height="20" rx="3" className="green" opacity="0.5" />
+  <text x="90" y="302" fontSize="12" textAnchor="middle" className="mono">102</text>
+
+  <text x="360" y="330" fontSize="12" textAnchor="middle" className="muted">Les nombres sont des contrats en attente à chaque prix. Exemple pédagogique.</text>
+</svg>
+</Figure>
+
+Le mécanisme de formation du prix se résume ainsi : si les acheteurs au marché consomment les 32 contrats offerts à 5 200,25, le meilleur ask devient 5 200,50 et le prix « monte ». Si les vendeurs au marché consomment les 28 contrats demandés à 5 200,00, le prix « baisse ». **Le prix bouge parce qu'un côté du carnet est vidé, pas parce qu'il y a « plus d'acheteurs que de vendeurs »** : à chaque transaction, il y a exactement autant d'achats que de ventes. Ce qui compte, c'est qui est pressé et qui attend.
+
+Sur les marchés de gré à gré comme le forex de détail, il n'y a pas de carnet unique : le broker vous montre un bid et un ask qu'il construit à partir de ses fournisseurs de liquidité (banques) et de sa propre marge. Le principe reste le même, mais la transparence est moindre.
+
+## Bid, ask et spread : qui paie quoi
+
+Règle simple, à mémoriser :
+
+- **Vous achetez à l'ask** (le prix des vendeurs, le plus élevé des deux).
+- **Vous vendez au bid** (le prix des acheteurs, le plus bas des deux).
+
+Donc, si vous achetez au marché et revendez immédiatement au marché, vous perdez le spread. C'est un coût réel, payé à celui qui a fourni la liquidité (le market maker ou tout participant qui avait posé un ordre limite). Ce n'est pas une commission, cela n'apparaît sur aucun relevé, mais c'est de l'argent qui sort de votre poche à chaque aller-retour agressif.
+
+Exemple sur EUR/USD chez un broker de détail : bid 1,08500, ask 1,08512, spread 1,2 pip. Un lot standard (100 000 €) : le pip vaut 10 $, le spread coûte donc 12 $ par aller-retour au marché. Sur un mini-lot, 1,20 $. Sur l'ES en séance, le spread est presque toujours de 1 tick, soit 12,50 $ par contrat, 1,25 $ par MES.
+
+Deux façons de ne pas payer le spread, ou d'en payer moins : utiliser des ordres limites (vous devenez celui qui fournit la liquidité et attend d'être servi, au risque de ne pas l'être), et trader aux heures où le spread est le plus serré. Le chapitre suivant détaille les types d'ordres.
+
+## La liquidité selon les heures et les instruments
+
+La liquidité n'est pas un nombre fixe. Elle respire avec l'heure, la session et l'actualité.
+
+**Sur l'ES**, le carnet est profond de 15 h 30 à 22 h (heure de Paris), avec des dizaines à des centaines de contrats à chaque niveau. La nuit, entre la clôture américaine et l'ouverture européenne, il peut n'y avoir que quelques contrats par niveau : un ordre de taille modeste fait alors bouger le prix de plusieurs ticks. Le spread lui-même s'élargit parfois à 2 ou 3 ticks.
+
+**Sur le forex**, le spread EUR/USD est le plus serré pendant le chevauchement Londres et New York (environ 14 h à 18 h à Paris) et s'élargit fortement dans la première heure asiatique et autour de la fermeture du vendredi soir. Certains brokers affichent des spreads dix fois plus larges à 23 h qu'à 15 h.
+
+**Sur l'or et le pétrole**, la liquidité suit Londres puis New York, avec un pic autour des annonces économiques américaines et, pour le pétrole, autour des chiffres hebdomadaires de stocks.
+
+**Sur la crypto**, la profondeur baisse le week-end et la nuit américaine, ce qui explique les mèches longues et les cascades de liquidations dans ces créneaux.
+
+**Autour des annonces** (chiffres de l'emploi, inflation, décision de banque centrale), la liquidité **disparaît** quelques secondes avant et après : les market makers retirent leurs ordres pour ne pas être pris à contre-pied. Le carnet devient creux, le spread s'ouvre, et n'importe quel ordre au marché s'exécute à un prix imprévisible. C'est le moment le plus dangereux de la journée pour un exécutant.
+
+<Figure caption="Figure 2 · Le même carnet ES, en séance américaine et en pleine nuit. Un ordre d'achat de 40 contrats coûte 1 tick le jour, 4 ticks la nuit.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Comparaison de la profondeur du carnet le jour et la nuit" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="28" fontSize="14" fontWeight="600" textAnchor="middle">Séance américaine (16 h)</text>
+  <text x="540" y="28" fontSize="14" fontWeight="600" textAnchor="middle">Nuit (3 h du matin)</text>
+
+  <text x="60" y="66" fontSize="12" className="mono">5 201,00</text>
+  <rect x="140" y="52" width="150" height="18" rx="3" className="red" opacity="0.5" />
+  <text x="300" y="66" fontSize="12" className="mono">120</text>
+  <text x="60" y="96" fontSize="12" className="mono">5 200,75</text>
+  <rect x="140" y="82" width="110" height="18" rx="3" className="red" opacity="0.5" />
+  <text x="300" y="96" fontSize="12" className="mono">85</text>
+  <text x="60" y="126" fontSize="12" className="mono">5 200,50</text>
+  <rect x="140" y="112" width="90" height="18" rx="3" className="red" opacity="0.5" />
+  <text x="300" y="126" fontSize="12" className="mono">70</text>
+  <text x="60" y="156" fontSize="12" fontWeight="700" className="mono">5 200,25</text>
+  <rect x="140" y="142" width="80" height="18" rx="3" className="red" opacity="0.85" />
+  <text x="300" y="156" fontSize="12" fontWeight="700" className="mono">64</text>
+  <line x1="50" y1="172" x2="340" y2="172" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="60" y="196" fontSize="12" fontWeight="700" className="mono">5 200,00</text>
+  <rect x="140" y="182" width="70" height="18" rx="3" className="green" opacity="0.85" />
+  <text x="300" y="196" fontSize="12" fontWeight="700" className="mono">58</text>
+  <text x="180" y="236" fontSize="12" textAnchor="middle" className="gold" fontWeight="600">Achat de 40 au marché :</text>
+  <text x="180" y="254" fontSize="12" textAnchor="middle">tout servi à 5 200,25</text>
+  <text x="180" y="272" fontSize="12" textAnchor="middle" className="muted">prix moyen 5 200,25</text>
+
+  <text x="420" y="66" fontSize="12" className="mono">5 201,00</text>
+  <rect x="500" y="52" width="30" height="18" rx="3" className="red" opacity="0.5" />
+  <text x="660" y="66" fontSize="12" className="mono">12</text>
+  <text x="420" y="96" fontSize="12" className="mono">5 200,75</text>
+  <rect x="500" y="82" width="22" height="18" rx="3" className="red" opacity="0.5" />
+  <text x="660" y="96" fontSize="12" className="mono">9</text>
+  <text x="420" y="126" fontSize="12" className="mono">5 200,50</text>
+  <rect x="500" y="112" width="28" height="18" rx="3" className="red" opacity="0.5" />
+  <text x="660" y="126" fontSize="12" className="mono">11</text>
+  <text x="420" y="156" fontSize="12" fontWeight="700" className="mono">5 200,25</text>
+  <rect x="500" y="142" width="20" height="18" rx="3" className="red" opacity="0.85" />
+  <text x="660" y="156" fontSize="12" fontWeight="700" className="mono">8</text>
+  <line x1="410" y1="172" x2="700" y2="172" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="420" y="196" fontSize="12" fontWeight="700" className="mono">5 199,75</text>
+  <rect x="500" y="182" width="15" height="18" rx="3" className="green" opacity="0.85" />
+  <text x="660" y="196" fontSize="12" fontWeight="700" className="mono">6</text>
+  <text x="540" y="236" fontSize="12" textAnchor="middle" className="gold" fontWeight="600">Achat de 40 au marché :</text>
+  <text x="540" y="254" fontSize="12" textAnchor="middle">8 + 11 + 9 + 12 = 40, jusqu'à 5 201,00</text>
+  <text x="540" y="272" fontSize="12" textAnchor="middle" className="muted">prix moyen ≈ 5 200,66, spread 2 ticks</text>
+</svg>
+</Figure>
+
+## Le slippage mesuré sur des cas concrets
+
+Le **slippage** (glissement) est la différence entre le prix auquel vous vouliez être exécuté et le prix auquel vous l'avez réellement été. Il a trois causes : le carnet n'est pas assez profond au prix visé, le prix a bougé entre l'envoi de l'ordre et son arrivée, ou l'ordre stop s'est déclenché dans un trou de liquidité.
+
+Le slippage se mesure. Trois cas reconstitués :
+
+**Cas 1 : ordre au marché sur MES en séance.** Vous cliquez « acheter » avec le meilleur ask à 5 200,25 ; exécuté à 5 200,25. Slippage : 0. Coût du trade : le spread (vous avez payé l'ask alors que la valeur « milieu » est 5 200,125), soit un demi-tick de coût implicite, plus la commission.
+
+**Cas 2 : ordre stop de protection sur NQ pendant une annonce.** Vous êtes long NQ avec un stop de vente à 18 250,00. Le chiffre de l'emploi tombe, le carnet se vide, le prix saute de 18 252 à 18 241 sans passer par les niveaux intermédiaires. Votre stop devient un ordre au marché à 18 250 et s'exécute à 18 241,50 : slippage de 8,5 points, soit 170 $ par contrat NQ, 17 $ par MNQ. Votre perte prévue de 1R est devenue 1,4R si le stop faisait 20 points.
+
+**Cas 3 : stop sur une action peu liquide à l'ouverture.** Vous détenez 500 actions d'une valeur moyenne avec un stop à 42,00 $. Le titre ouvre en gap à 40,20 $ après une mauvaise nouvelle du soir. Le stop se déclenche et s'exécute vers 40,15 $ : slippage de 1,85 $ par action, 925 $ au total, sur une perte prévue de 500 $. Ici, la perte réelle fait presque le double de la perte planifiée.
+
+La règle qui en découle : **le slippage se paie surtout à la sortie forcée, dans les moments où tout le monde veut sortir en même temps**. C'est pourquoi le trader professionnel évite de tenir des positions à travers les annonces majeures avec un stop serré, réduit sa taille aux heures creuses, et intègre une estimation de slippage dans le calcul de son risque (le niveau 1 montre comment).
+
+<Figure caption="Figure 3 · Slippage sur un stop pendant une annonce : le prix saute par-dessus le niveau du stop, l'exécution a lieu au premier prix disponible en dessous.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Slippage d'un ordre stop pendant une annonce" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="260" x2="700" y2="260" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="260" className="line" strokeWidth="1" />
+  <text x="30" y="90" fontSize="11" className="mono muted">18 260</text>
+  <text x="30" y="150" fontSize="11" className="mono muted">18 250</text>
+  <text x="30" y="210" fontSize="11" className="mono muted">18 240</text>
+
+  <polyline points="80,110 130,100 180,108 230,95 280,102 330,98 360,104" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="360" y1="104" x2="392" y2="206" stroke="var(--tm-red)" strokeWidth="2" strokeDasharray="5 3" />
+  <polyline points="392,206 440,212 490,200 540,208 590,196 640,204 690,198" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+
+  <line x1="60" y1="150" x2="700" y2="150" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="6 4" />
+  <text x="600" y="144" fontSize="12" className="red" fontWeight="600">stop placé à 18 250,00</text>
+
+  <circle cx="392" cy="206" r="5" className="red" />
+  <text x="404" y="226" fontSize="12" className="red" fontWeight="600">exécuté à 18 241,50</text>
+
+  <line x1="360" y1="40" x2="360" y2="260" className="line" strokeWidth="1" strokeDasharray="2 3" />
+  <text x="360" y="32" fontSize="12" textAnchor="middle" className="muted">14 h 30 · publication</text>
+
+  <rect x="470" y="60" width="200" height="50" rx="6" className="box" strokeWidth="1" />
+  <text x="570" y="80" fontSize="12" textAnchor="middle">Slippage : 8,5 points</text>
+  <text x="570" y="98" fontSize="12" textAnchor="middle" className="mono">NQ : 170 $ · MNQ : 17 $</text>
+</svg>
+</Figure>
+
+## Conséquences directes sur les stratégies court terme
+
+Tout ce qui précède se traduit en règles concrètes pour qui trade sur des horizons courts.
+
+**Le spread et le slippage sont un pourcentage de votre gain cible.** Un scalp de 4 ticks sur l'ES paie 1 tick de spread à l'entrée si vous entrez au marché, plus les commissions, plus le slippage éventuel à la sortie. Près de 30 à 40 % du gain brut part en péages. Le même coût sur un trade qui vise 40 ticks pèse 3 à 4 %. **Plus la cible est courte, plus l'exécution doit être parfaite**, et plus le choix du marché et de l'heure devient déterminant.
+
+**La liquidité fixe la taille maximale.** Si le carnet montre 8 contrats au meilleur prix la nuit, un ordre de 10 contrats au marché traversera plusieurs niveaux. Le trader adapte sa taille à la profondeur, pas l'inverse.
+
+**Les heures creuses et les annonces sont des zones à règles spéciales.** Beaucoup de traders intraday ne prennent tout simplement aucun trade dans les 2 minutes qui entourent une annonce majeure, et réduisent leur taille de moitié en dehors des heures de forte liquidité. Ce n'est pas de la timidité, c'est de l'arithmétique.
+
+**Le stop n'est pas une garantie de prix, c'est une garantie de sortie.** Il sera exécuté, mais au prix disponible. La perte réelle peut dépasser la perte planifiée. Ce n'est pas une raison de ne pas en mettre (l'absence de stop transforme un slippage en catastrophe), mais c'est une raison de dimensionner ses positions avec une marge de sécurité.
+
+## Deux trades décortiqués
+
+Reconstitutions pédagogiques centrées sur l'exécution.
+
+<TradeExample
+  resultat="gain"
+  instrument="Futures MES (S&P 500)"
+  direction="Short"
+  setup="Retour sur un plus haut de séance rejeté, 16 h 45, carnet profond"
+  entree="5 214,50 (ordre limite servi sur l'ask)"
+  stop="5 218,50 (16 ticks)"
+  objectif="5 204,50"
+  r="+2,5R">
+
+L'entrée se fait par ordre limite de vente placé à 5 214,50 : le trader fournit la liquidité et est servi quand le prix vient toucher son niveau. Il ne paie pas le spread à l'entrée. La sortie sur objectif est aussi un ordre limite. Coût total du trade : 2 × 0,60 $ de commission, aucun slippage. Sur un compte de 6 000 $ avec un risque de 1 % (60 $), le stop de 16 ticks à 1,25 $ vaut 20 $ par contrat : 3 MES, risque 60 $, gain 150 $ brut. Le trade a été pris en pleine séance, sur un carnet profond : l'exécution a fait ce qu'elle devait faire, ni plus ni moins.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Cassure d'un range à 4 h 50 du matin (heure de Paris), carnet mince"
+  entree="18 302,00 (au marché, exécuté à 18 303,50)"
+  stop="18 292,00 (10 points prévus)"
+  objectif="18 322,00"
+  r="−1,45R">
+
+Deux fautes d'exécution. D'abord, l'entrée au marché dans un carnet de nuit : le trader voulait 18 302,00, il est servi 1,5 point plus haut. Ensuite, le stop est touché sur une mèche : le prix passe de 18 293 à 18 289 en une transaction, le stop à 18 292 est exécuté à 18 289,00. Perte prévue : 10 points, soit 20 $ par MNQ. Perte réelle : 18 303,50 − 18 289,00 = 14,5 points, soit 29 $. Le trade a perdu 45 % de plus que prévu, sans qu'aucune règle d'analyse n'ait été violée. La règle violée était une règle d'exécution : pas d'ordre au marché, pas de taille normale, dans un carnet creux.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le prix bouge parce qu'**un côté du carnet est consommé** par des ordres pressés, pas parce qu'il y a « plus d'acheteurs ».
+- **On achète à l'ask, on vend au bid** : le spread est un coût réel payé à chaque aller-retour agressif.
+- La **liquidité change avec l'heure et l'actualité** : elle disparaît autour des annonces et la nuit, et le spread s'ouvre.
+- Le **slippage** frappe surtout les stops déclenchés dans un trou de liquidité ; le stop garantit la sortie, pas le prix.
+- Plus la cible est courte, plus l'exécution pèse : les scalpers vivent et meurent par le spread.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Coût d'un aller-retour au marché">
+
+Sur EUR/USD, votre broker affiche bid 1,08640 et ask 1,08651. Vous achetez 2 mini-lots (20 000 €) au marché puis revendez immédiatement au marché, sans que le prix ait bougé. La commission est de 0,50 $ par mini-lot et par côté.
+
+1. Quel est le spread en pips ?
+2. Combien vous coûte le spread sur cet aller-retour ?
+3. Quel est le coût total, commissions incluses ?
+
+<Solution>
+
+1. 1,08651 − 1,08640 = 0,00011, soit **1,1 pip**.
+2. Un pip vaut 1 $ par mini-lot, donc 1,1 pip × 1 $ × 2 mini-lots = **2,20 $**.
+3. Commissions : 0,50 $ × 2 mini-lots × 2 côtés = 2 $. Total : 2,20 + 2,00 = **4,20 $** pour un trade qui n'a rien fait. Sur 200 trades semblables, 840 $ de péages.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Marcher dans le carnet">
+
+Le carnet de l'ES montre, côté ask : 12 contrats à 5 180,25 ; 9 à 5 180,50 ; 15 à 5 180,75 ; 30 à 5 181,00. Vous envoyez un ordre d'achat au marché de 30 contrats.
+
+1. À quels prix êtes-vous servi, et pour combien de contrats à chaque niveau ?
+2. Quel est votre prix moyen d'exécution ?
+3. Combien vous coûte le fait d'avoir « marché dans le carnet » par rapport à une exécution intégrale au meilleur ask, en dollars ?
+
+<Solution>
+
+1. 12 à 5 180,25 ; 9 à 5 180,50 ; 9 à 5 180,75 (il en reste 6 sur les 15). Total 30.
+2. (12 × 5 180,25 + 9 × 5 180,50 + 9 × 5 180,75) ÷ 30 = (62 163,00 + 46 624,50 + 46 626,75) ÷ 30 = 155 414,25 ÷ 30 = **5 180,475**.
+3. Écart avec 5 180,25 : 0,225 point par contrat, soit 0,225 × 50 $ × 30 contrats = **337,50 $** de coût d'impact. Un trader qui doit passer cette taille fractionne son ordre ou utilise des limites.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Perte réelle après slippage">
+
+Vous êtes long 2 MNQ à 18 400,00 avec un stop à 18 385,00. Le stop se déclenche pendant une annonce et s'exécute à 18 379,50.
+
+1. Quelle était la perte planifiée ?
+2. Quelle est la perte réelle ?
+3. Exprimée en R (R = perte planifiée), que vaut cette perte ?
+
+<Solution>
+
+1. 15 points × 2 $ × 2 contrats = **60 $**.
+2. 18 400,00 − 18 379,50 = 20,5 points × 2 $ × 2 = **82 $**.
+3. 82 ÷ 60 = **1,37R**. Le trade a coûté 37 % de plus que prévu, uniquement à cause de l'exécution.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le meilleur bid est à 100,00 et le meilleur ask à 100,02. Vous achetez au marché. À quel prix êtes-vous servi ?",
+      options: [
+        "100,00, le prix des acheteurs",
+        "100,01, le milieu",
+        "100,02, le prix des vendeurs",
+        "Cela dépend du broker",
+      ],
+      answer: 2,
+      explain: "Un acheteur pressé prend la liquidité offerte par les vendeurs : il achète à l'ask. Il vendra au bid. L'écart entre les deux est le spread qu'il paie.",
+    },
+    {
+      q: "Pourquoi le prix monte-t-il ?",
+      options: [
+        "Parce qu'il y a plus d'acheteurs que de vendeurs",
+        "Parce que les ordres d'achat au marché consomment les ordres de vente en attente, niveau après niveau",
+        "Parce que le broker décide de le monter",
+        "Parce que le volume augmente",
+      ],
+      answer: 1,
+      explain: "À chaque transaction, achats et ventes sont égaux. Le prix monte quand le côté ask est vidé par des acheteurs agressifs et que le meilleur ask suivant est plus haut.",
+    },
+    {
+      q: "Que se passe-t-il dans le carnet quelques secondes avant une annonce économique majeure ?",
+      options: [
+        "La liquidité augmente car tout le monde se positionne",
+        "Les market makers retirent leurs ordres, le carnet se creuse et le spread s'élargit",
+        "Le spread se resserre",
+        "Rien de particulier",
+      ],
+      answer: 1,
+      explain: "Personne ne veut fournir de la liquidité juste avant un chiffre imprévisible. Le carnet se vide, et tout ordre au marché ou stop déclenché s'exécute à un prix éloigné.",
+    },
+    {
+      q: "Un stop de vente placé à 50,00 est-il une garantie d'être exécuté à 50,00 ?",
+      options: [
+        "Oui, toujours",
+        "Non : il garantit la sortie, mais au premier prix disponible une fois déclenché",
+        "Oui, sauf sur le forex",
+        "Non, un stop peut ne jamais s'exécuter",
+      ],
+      answer: 1,
+      explain: "Le stop devient un ordre au marché quand son prix est touché. Dans un trou de liquidité, il s'exécute plus bas : c'est le slippage. La perte réelle peut dépasser la perte prévue.",
+    },
+    {
+      q: "Pour quel type de trader le spread pèse-t-il le plus lourd ?",
+      options: [
+        "Le swing trader qui vise 200 pips",
+        "Le scalper qui vise 3 ticks",
+        "L'investisseur long terme",
+        "Le spread pèse pareil pour tous",
+      ],
+      answer: 1,
+      explain: "Le spread est un coût fixe par aller-retour. Rapporté à une cible de 3 ticks, 1 tick de spread représente un tiers du gain ; rapporté à 200 pips, 1 pip est négligeable.",
+    },
+    {
+      q: "Comment un trader peut-il éviter de payer le spread à l'entrée ?",
+      options: [
+        "En utilisant un ordre au marché très rapidement",
+        "En plaçant un ordre limite et en attendant d'être servi, au risque de ne pas l'être",
+        "En tradant la nuit",
+        "En augmentant sa taille",
+      ],
+      answer: 1,
+      explain: "L'ordre limite fournit de la liquidité au lieu d'en prendre : le trader est servi à son prix, ou pas du tout. C'est l'échange classique entre coût et certitude d'exécution.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Vous connaissez maintenant la machine. Le chapitre suivant décrit les leviers de commande : ordres au marché, limites, stops, stop-limits, OCO et brackets, durée de validité. Et les erreurs d'exécution que tous les débutants font au moins une fois.
