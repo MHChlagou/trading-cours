@@ -1,0 +1,364 @@
+---
+title: "Examen · Niveau 0 · Fondations"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider les fondations : nature du trading, classes d'actifs, mécanique du marché, types d'ordres, broker et infrastructure. Score de passage : 80 %."
+---
+
+# Examen · Niveau 0 · Fondations
+
+Cet examen valide les six chapitres du niveau 0. Il comporte **25 questions** réparties en cinq blocs thématiques, puis **une étude de cas notée** sur 20 points.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 au quiz **et** au moins 16 points sur 20 à l'étude de cas. Faites l'examen sans revenir aux chapitres. Si vous échouez à un bloc, relisez le chapitre correspondant avant de recommencer : le niveau 1 s'appuie sur chacune de ces notions.
+
+## Bloc 1 · Qu'est-ce que le trading
+
+<Quiz
+  title="Bloc 1 · Nature du trading et espérance"
+  questions={[
+    {
+      q: "Un système gagne 35 % du temps avec des gains moyens de +3R et des pertes moyennes de −1R. Son espérance par trade est :",
+      options: [
+        "−0,30R",
+        "+0,40R",
+        "+1,05R",
+        "+0,05R",
+      ],
+      answer: 1,
+      explain: "E = 0,35 × 3 − 0,65 × 1 = 1,05 − 0,65 = +0,40R. Un système qui perd deux fois sur trois peut être nettement rentable.",
+    },
+    {
+      q: "Quelle affirmation distingue correctement le trading de l'investissement ?",
+      options: [
+        "Le trading est toujours plus rentable",
+        "Le trader raisonne en séries de trades à risque défini ; l'investisseur en valeur à long terme",
+        "L'investisseur utilise des stops, pas le trader",
+        "Le trading ne se pratique que sur le forex",
+      ],
+      answer: 1,
+      explain: "La différence est dans l'horizon, la source de gain et surtout la répétition : la performance d'un trader émerge d'une série, pas d'un pari unique.",
+    },
+    {
+      q: "Pourquoi un trade isolé ne prouve-t-il rien sur la qualité d'une stratégie ?",
+      options: [
+        "Parce que le marché est truqué",
+        "Parce que chaque trade est un tirage incertain ; seule la série révèle l'espérance",
+        "Parce qu'un trade dure trop peu de temps",
+        "Parce que le broker cache le résultat réel",
+      ],
+      answer: 1,
+      explain: "Un bon trade peut perdre, un mauvais trade peut gagner. La qualité se juge sur le process ; la rentabilité, sur l'échantillon.",
+    },
+    {
+      q: "Que signifie « le marché est à espérance légèrement négative par défaut » ?",
+      options: [
+        "Les prix baissent en moyenne",
+        "Sans avantage réel, commission, spread et slippage rendent des décisions aléatoires perdantes",
+        "Les particuliers n'ont pas le droit de gagner",
+        "Il faut toujours vendre à découvert",
+      ],
+      answer: 1,
+      explain: "À décisions aléatoires, l'espérance brute est proche de zéro ; les coûts la font passer sous zéro. L'avantage doit d'abord battre les frais.",
+    },
+    {
+      q: "Vous risquez 80 € sur un trade et le fermez avec 200 € de gain. Le résultat en R est :",
+      options: [
+        "+2,5R",
+        "+2R",
+        "+0,4R",
+        "+200R",
+      ],
+      answer: 0,
+      explain: "R est le risque initial : 200 ÷ 80 = 2,5R. Cette unité permet de comparer des trades de tailles différentes.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Les classes d'actifs
+
+<Quiz
+  title="Bloc 2 · Marchés, contrats, levier"
+  questions={[
+    {
+      q: "Le NQ passe de 18 400 à 18 385. Un long avec 2 MNQ perd :",
+      options: [
+        "30 $",
+        "60 $",
+        "300 $",
+        "600 $",
+      ],
+      answer: 1,
+      explain: "15 points × 2 $ par point × 2 contrats = 60 $. Avec 2 NQ standard, ce serait 15 × 20 × 2 = 600 $.",
+    },
+    {
+      q: "Quelle classe d'actifs se négocie de gré à gré, sans carnet d'ordres central ?",
+      options: [
+        "Les futures CME",
+        "Les actions du NYSE",
+        "Le forex spot",
+        "Les options du CBOE",
+      ],
+      answer: 2,
+      explain: "Le forex spot est un marché OTC : le broker construit son bid et son ask à partir de ses fournisseurs de liquidité. Pas de volume consolidé fiable.",
+    },
+    {
+      q: "Pourquoi les micro-contrats sont-ils recommandés aux débutants sur futures ?",
+      options: [
+        "Ils n'ont pas de commission",
+        "Ils permettent un risque par trade réaliste sur un petit compte, avec une exposition dix fois plus faible",
+        "Ils cotent en dehors des heures de marché",
+        "Ils ne subissent pas de slippage",
+      ],
+      answer: 1,
+      explain: "MES vaut 5 $ le point contre 50 $ pour ES. Un stop de 8 points coûte 40 $ au lieu de 400 $ : le risque de 1 % devient possible sur quelques milliers d'euros.",
+    },
+    {
+      q: "Le levier :",
+      options: [
+        "Améliore l'espérance d'une stratégie",
+        "Multiplie gains et pertes sans changer l'espérance ; la taille se déduit du risque accepté",
+        "N'existe que sur la crypto",
+        "Est obligatoire sur les futures",
+      ],
+      answer: 1,
+      explain: "Le levier dilate le résultat d'un même mouvement de prix. Il ne crée aucun avantage et accélère la ruine si le risque n'est pas contrôlé.",
+    },
+    {
+      q: "Un salarié européen libre de 19 h à 23 h trouve la meilleure liquidité sur :",
+      options: [
+        "La session asiatique du forex",
+        "La séance américaine des futures et la fin de session de New York sur le forex",
+        "Le week-end en crypto",
+        "L'ouverture de Tokyo",
+      ],
+      answer: 1,
+      explain: "De 15 h 30 à 22 h à Paris, ES, NQ, or, pétrole et les grandes paires forex sont actifs. C'est le créneau naturel d'un trader européen disponible le soir.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Market mechanics
+
+<Quiz
+  title="Bloc 3 · Carnet, spread, liquidité, slippage"
+  questions={[
+    {
+      q: "Meilleur bid 2 340,0 ; meilleur ask 2 340,2 sur MGC. Vous vendez au marché 1 contrat. Vous êtes servi à :",
+      options: [
+        "2 340,2",
+        "2 340,1",
+        "2 340,0",
+        "Cela dépend de la volatilité",
+      ],
+      answer: 2,
+      explain: "On vend au bid, le prix des acheteurs. Le spread de 0,2 $ (2 ticks, soit 2 $ sur MGC) est le coût implicite d'un aller-retour au marché.",
+    },
+    {
+      q: "Le prix monte parce que :",
+      options: [
+        "Il y a plus d'acheteurs que de vendeurs",
+        "Les ordres d'achat au marché consomment les asks niveau après niveau",
+        "Le volume augmente",
+        "Le broker le décide",
+      ],
+      answer: 1,
+      explain: "À chaque transaction, achats et ventes sont égaux. Le prix monte quand le côté ask est vidé par des acheteurs pressés.",
+    },
+    {
+      q: "Que se passe-t-il typiquement dans le carnet quelques secondes avant une annonce majeure ?",
+      options: [
+        "La profondeur augmente",
+        "Les market makers retirent leurs ordres, le carnet se creuse, le spread s'ouvre",
+        "Le spread se resserre",
+        "Le marché ferme",
+      ],
+      answer: 1,
+      explain: "Personne ne veut fournir de la liquidité juste avant un chiffre imprévisible. Tout ordre au marché ou stop déclenché à ce moment glisse.",
+    },
+    {
+      q: "Vous êtes long 2 MES à 5 200 avec un stop à 5 195, exécuté à 5 192,50 sur une annonce. Votre perte réelle en R vaut :",
+      options: [
+        "1R",
+        "1,5R",
+        "2R",
+        "0,5R",
+      ],
+      answer: 1,
+      explain: "Perte prévue : 5 points ; perte réelle : 7,5 points. 7,5 ÷ 5 = 1,5R (soit 75 $ au lieu de 50 $ sur 2 MES).",
+    },
+    {
+      q: "Pour quel profil le spread pèse-t-il le plus dans l'espérance ?",
+      options: [
+        "Le swing trader visant 150 pips",
+        "Le scalper visant 3 ticks",
+        "L'investisseur",
+        "C'est identique pour tous",
+      ],
+      answer: 1,
+      explain: "Le spread est un coût fixe par aller-retour. Rapporté à 3 ticks de cible, 1 tick de spread représente un tiers du gain.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Les types d'ordres
+
+<Quiz
+  title="Bloc 4 · Market, limit, stop, OCO, durée"
+  questions={[
+    {
+      q: "Quel ordre garantit l'exécution mais pas le prix ?",
+      options: [
+        "Limit",
+        "Market",
+        "Stop-limit",
+        "GTC",
+      ],
+      answer: 1,
+      explain: "L'ordre au marché consomme le carnet immédiatement, au prix disponible. C'est l'ordre qui produit le slippage à l'entrée.",
+    },
+    {
+      q: "Le prix cote 5 200. Vous voulez acheter sur repli à 5 192. Vous placez :",
+      options: [
+        "Buy stop 5 192",
+        "Buy limit 5 192",
+        "Sell limit 5 192",
+        "Buy market",
+      ],
+      answer: 1,
+      explain: "Pour acheter en dessous du prix courant, on utilise un buy limit qui attend le repli. Un buy stop se place au-dessus du prix, pour une cassure.",
+    },
+    {
+      q: "Pourquoi le stop-limit ne doit-il pas servir de stop de protection ?",
+      options: [
+        "Il coûte plus cher",
+        "Si le prix traverse la limite sans servir l'ordre, la position reste ouverte",
+        "Il n'existe pas sur le forex",
+        "Il expire à la fin de la séance",
+      ],
+      answer: 1,
+      explain: "Le stop-limit refuse d'être exécuté au-delà de sa limite. C'est exactement ce qui se produit dans un trou de liquidité : la perte n'a plus de borne.",
+    },
+    {
+      q: "Vous êtes long, stop et objectif placés sans OCO. L'objectif est touché. Le stop :",
+      options: [
+        "Est annulé automatiquement",
+        "Reste actif et peut ouvrir un short si le prix redescend",
+        "Devient un objectif",
+        "Est exécuté aussitôt",
+      ],
+      answer: 1,
+      explain: "Sans lien OCO, l'ordre restant est orphelin. Un sell stop actif sans position ouvre une position inverse s'il est touché.",
+    },
+    {
+      q: "Le stop de protection d'une position gardée plusieurs jours doit être en :",
+      options: [
+        "DAY",
+        "IOC",
+        "FOK",
+        "GTC",
+      ],
+      answer: 3,
+      explain: "GTC reste actif jusqu'à annulation. Un stop DAY expire en fin de séance et laisse la position sans protection la nuit.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Broker et infrastructure
+
+<Quiz
+  title="Bloc 5 · Broker, coûts, exécution, poste de travail"
+  questions={[
+    {
+      q: "Le premier critère de choix d'un broker est :",
+      options: [
+        "Le spread affiché",
+        "L'agrément vérifié à la source auprès d'un régulateur reconnu et l'entité juridique exacte",
+        "Le bonus de dépôt",
+        "Le nombre d'instruments",
+      ],
+      answer: 1,
+      explain: "La sécurité des fonds passe avant les coûts. Un broker non régulé peut afficher les meilleurs spreads du monde, ils ne servent à rien si les retraits sont bloqués.",
+    },
+    {
+      q: "Broker A : 1,70 $ par contrat aller-retour + 144 $ de frais fixes annuels. Broker B : 0,70 $ + 600 $. Le point d'équilibre est d'environ :",
+      options: [
+        "150 contrats par an",
+        "456 contrats par an",
+        "1 000 contrats par an",
+        "Il n'y en a pas, A est toujours moins cher",
+      ],
+      answer: 1,
+      explain: "144 + 1,70N = 600 + 0,70N donne N = 456. En dessous, A est moins cher ; au-dessus, B. Le coût se calcule pour votre profil.",
+    },
+    {
+      q: "Le conflit d'intérêt d'un broker en dealing desk vient de ce que :",
+      options: [
+        "Il facture des commissions",
+        "Il est votre contrepartie et profite de vos pertes s'il ne couvre pas",
+        "Il route vos ordres vers la Bourse",
+        "Il n'y a aucun conflit",
+      ],
+      answer: 1,
+      explain: "En prenant l'autre côté du trade, le broker gagne le spread et, s'il internalise, votre perte. La structure d'incitation est défavorable au client.",
+    },
+    {
+      q: "Un stop « côté client » (géré localement par la plateforme) :",
+      options: [
+        "Est plus rapide qu'un stop sur le serveur",
+        "Disparaît si l'ordinateur ou la plateforme s'éteint, car il n'est envoyé qu'au déclenchement",
+        "Est obligatoire sur les futures",
+        "Est identique à un stop GTC",
+      ],
+      answer: 1,
+      explain: "Seul un stop transmis au broker ou à la Bourse survit à une panne locale. C'est la règle qui rend une panne supportable.",
+    },
+    {
+      q: "Votre écran s'éteint avec une position ouverte et vous ne pouvez pas vérifier votre stop en deux minutes. La bonne conduite est :",
+      options: [
+        "Attendre le retour de la connexion",
+        "Fermer la position par le premier moyen disponible : mobile, connexion de secours, téléphone du desk",
+        "Redémarrer et voir ensuite",
+        "Ouvrir une position inverse pour couvrir",
+      ],
+      answer: 1,
+      explain: "L'incapacité à vérifier vaut ordre de fermer. Le coût de sortir d'un bon trade est faible ; celui de rester exposé sans savoir peut être le compte.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Un premier trade, du choix du marché à la panne">
+
+Karim dispose de 4 000 € (on prendra 1 € ≈ 1 $), est disponible de 15 h à 22 h, et veut apprendre l'intraday sur indices. Il a ouvert un compte chez un broker de futures régulé (NFA/CFTC), commission 0,60 $ par micro-contrat et par côté, avec données CME temps réel. Il utilise un bracket dont le stop est envoyé au serveur.
+
+Un jour, il repère un achat sur repli sur le Nasdaq : entrée limite à 18 250,00, stop à 18 238,00, objectif à 18 280,00. Le carnet est profond, il est 16 h 10 (heure de Paris), aucune annonce avant 20 h. Il veut risquer 1 % de son compte.
+
+1. **(3 pts)** Justifiez le choix du micro-contrat MNQ plutôt que du NQ, chiffres à l'appui.
+2. **(3 pts)** Combien de MNQ prend-il pour respecter son budget de risque ? Quel est le risque réel en dollars ?
+3. **(3 pts)** Quels ordres composent son bracket (type, sens, prix, durée) et pourquoi le stop doit-il être un stop-market ?
+4. **(3 pts)** Calculez le gain brut si l'objectif est atteint, le coût total en commissions, le gain net, et le résultat en R.
+5. **(4 pts)** Variante : le trade se déroule à 3 h du matin dans un carnet mince, il entre au marché et est servi à 18 251,50 ; le stop est touché sur une mèche et exécuté à 18 236,00. Calculez la perte réelle en dollars et en R, et nommez les deux erreurs d'exécution.
+6. **(4 pts)** Retour au scénario principal : dix minutes après l'entrée, la box redémarre. Décrivez le plan de secours en quatre étapes et expliquez pourquoi, dans son cas, le pire scénario est borné.
+
+<Solution>
+
+**1. Micro plutôt que standard (3 pts).** Le stop fait 12 points. Sur NQ, 12 × 20 $ = 240 $ par contrat, soit 6 % du compte : impossible avec un budget de 1 % (40 $). Sur MNQ, 12 × 2 $ = 24 $ par contrat, compatible avec le budget. Le micro rend le risque de 1 % réalisable.
+
+**2. Taille (3 pts).** Budget : 1 % de 4 000 = 40 $. 40 ÷ 24 = 1,67, donc **1 MNQ** (arrondi vers le bas). Risque réel : **24 $**, soit 0,6 % du compte.
+
+**3. Bracket (3 pts).** Entrée : **buy limit 18 250,00**, DAY. Protection : **sell stop-market 18 238,00**, GTC. Objectif : **sell limit 18 280,00**, GTC ; stop et objectif liés en **OCO**. Le stop doit être un stop-market parce qu'un stop-limit peut ne pas être exécuté si le prix traverse la limite : la position resterait ouverte avec une perte sans borne.
+
+**4. Résultat (3 pts).** Gain brut : 30 points × 2 $ × 1 = **60 $**. Commissions : 0,60 × 2 côtés = **1,20 $**. Net : **58,80 $**. En R : 30 ÷ 12 = **+2,5R** brut (2,45R net des commissions).
+
+**5. Variante de nuit (4 pts).** Entrée à 18 251,50, sortie à 18 236,00 : 15,5 points × 2 $ = **31 $** de perte, plus 1,20 $ de commission, soit 32,20 $. Perte prévue : 24 $. En R : 15,5 ÷ 12 = **1,29R** (environ 1,3R). Les deux erreurs : **ordre au marché dans un carnet creux** (slippage de 1,5 point à l'entrée) et **trader la nuit en taille normale**, heure où les stops glissent sur les mèches. Aucune erreur d'analyse : uniquement de l'exécution.
+
+**6. Plan de secours (4 pts).** 1) Vérifier sur l'application mobile du broker que position, stop et objectif sont actifs. 2) Basculer l'ordinateur sur le partage de connexion du téléphone et rétablir la plateforme. 3) Si la vérification est impossible en deux minutes, fermer la position au marché depuis le mobile ; à défaut, appeler le desk du broker (numéro sous l'écran). 4) Noter l'incident au journal et corriger la cause. Le pire cas est borné parce que **le stop a été envoyé au serveur avec le bracket** : même si l'ordinateur ne revient jamais, le CME exécutera le stop à 18 238,00 (slippage éventuel mis à part). Sa perte maximale reste de l'ordre de 24 $, pas du compte.
+
+**Barème.** Comptez 1 point par élément juste dans chaque question (chiffre, type d'ordre, justification). Passage : 16 points sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Si vous avez au moins 20 bonnes réponses sur 25 et 16 points sur 20 à l'étude de cas, le niveau 0 est validé. Le niveau 1 commence par la question qui décide de tout le reste : pourquoi la plupart des traders perdent, et comment dimensionner une position pour ne pas en faire partie.
