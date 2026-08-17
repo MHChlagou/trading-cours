@@ -1,0 +1,311 @@
+---
+title: "Volume Profile avancé"
+description: "Profils composites sur plusieurs semaines, naked POC et niveaux résiduels, migration de la value area comme lecture de tendance, profils d'événements (annonces, ouvertures, expirations), et intégration du profil à la structure et aux séquences SMC."
+---
+
+# Volume Profile avancé
+
+Le chapitre précédent a lu une séance et un range. Ce chapitre élargit la focale : plusieurs semaines de volume empilées, les POC que le marché n'a jamais retestés, la façon dont la value area se déplace de jour en jour, les profils particuliers que laissent les annonces et les ouvertures, et enfin la question qui justifie tout le niveau : comment le profil se combine avec la structure du niveau 2 et les séquences du niveau 3. À la fin, le profil n'est plus une image à côté du graphique ; c'est une couche de lecture qui dit, pour chaque zone SMC, si du volume s'y est réellement échangé.
+
+## Profils composites sur plusieurs semaines
+
+Un **profil composite** additionne le volume par prix sur plusieurs séances : une semaine, un mois, un range de plusieurs semaines, ou une période définie par la structure (depuis le dernier swing majeur du quotidien). Il répond à la question de contexte : **où le marché a-t-il accepté de traiter sur la période, et où sont les vides ?**
+
+Ce que le composite fait apparaître et que la session ne montre pas :
+
+- **Les HVN de contexte** : des prix où plusieurs séances ont construit de la valeur. Ce sont des zones d'acceptation profondes ; le prix y ralentit, y revient, y tourne. Ils correspondent souvent aux supports et résistances majeurs du niveau 2 et aux zones d'absorption Wyckoff.
+- **Les LVN de contexte** : des prix traversés vite sur toute la période, entre deux HVN. Ce sont des vides ; le prix les franchit d'un coup. Ils correspondent souvent aux FVG HTF non mitigés et aux queues des profils de session.
+- **Le POC composite** : le prix le plus négocié de la période ; le centre de gravité. Sa position par rapport au prix actuel dit si le marché est « cher » ou « bon marché » par rapport à la période (une lecture de premium / discount fondée sur le volume plutôt que sur la géométrie).
+- **La value area composite** : la zone d'acceptation de la période, avec son VAH et son VAL, qui sont des bornes de contexte au même titre que les extrêmes hebdomadaires.
+
+Le composite se recalcule à chaque période (chaque lundi pour un composite hebdomadaire glissant, ou après chaque changement de structure pour un composite structurel). Il ne se superpose pas au profil de session : on garde les deux séparés, ou l'on affiche le composite en fond et le profil du jour en surimpression, avec deux couleurs.
+
+<Figure caption="Figure 1 · Composite de trois semaines sur l'ES : deux HVN de contexte (5 220 et 5 290) séparés par un LVN (5 250-5 262), POC composite à 5 290, value area 5 214-5 302. Le prix actuel dans le LVN est en zone de traversée.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Profil composite avec HVN, LVN, POC et value area" xmlns="http://www.w3.org/2000/svg">
+  <line x1="240" y1="30" x2="240" y2="320" className="line" strokeWidth="1" />
+  <text x="230" y="46" fontSize="10" textAnchor="end" className="mono muted">5 320</text>
+  <text x="230" y="180" fontSize="10" textAnchor="end" className="mono muted">5 260</text>
+  <text x="230" y="314" fontSize="10" textAnchor="end" className="mono muted">5 200</text>
+  <rect x="240" y="40" width="20" height="9" className="gold" opacity="0.4" /><rect x="240" y="51" width="45" height="9" className="gold" opacity="0.5" /><rect x="240" y="62" width="90" height="9" className="gold" opacity="0.7" /><rect x="240" y="73" width="150" height="9" className="gold" opacity="0.8" /><rect x="240" y="84" width="200" height="9" className="gold" opacity="0.9" /><rect x="240" y="95" width="230" height="9" className="gold" opacity="1" /><rect x="240" y="106" width="205" height="9" className="gold" opacity="0.9" /><rect x="240" y="117" width="160" height="9" className="gold" opacity="0.8" /><rect x="240" y="128" width="100" height="9" className="gold" opacity="0.7" /><rect x="240" y="139" width="55" height="9" className="gold" opacity="0.5" /><rect x="240" y="150" width="25" height="9" className="gold" opacity="0.4" /><rect x="240" y="161" width="12" height="9" className="gold" opacity="0.3" /><rect x="240" y="172" width="8" height="9" className="gold" opacity="0.3" /><rect x="240" y="183" width="10" height="9" className="gold" opacity="0.3" /><rect x="240" y="194" width="14" height="9" className="gold" opacity="0.3" /><rect x="240" y="205" width="40" height="9" className="gold" opacity="0.5" /><rect x="240" y="216" width="95" height="9" className="gold" opacity="0.7" /><rect x="240" y="227" width="150" height="9" className="gold" opacity="0.8" /><rect x="240" y="238" width="180" height="9" className="gold" opacity="0.9" /><rect x="240" y="249" width="165" height="9" className="gold" opacity="0.8" /><rect x="240" y="260" width="120" height="9" className="gold" opacity="0.7" /><rect x="240" y="271" width="70" height="9" className="gold" opacity="0.6" /><rect x="240" y="282" width="35" height="9" className="gold" opacity="0.4" /><rect x="240" y="293" width="15" height="9" className="gold" opacity="0.3" />
+  <line x1="240" y1="99" x2="560" y2="99" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="565" y="103" fontSize="10" className="gold" fontWeight="700">POC composite 5 290</text>
+  <text x="565" y="70" fontSize="10" className="muted">HVN de contexte</text>
+  <text x="565" y="243" fontSize="10" className="muted">HVN de contexte 5 220</text>
+  <rect x="240" y="161" width="320" height="42" className="red" opacity="0.08" />
+  <text x="565" y="185" fontSize="10" className="red" fontWeight="600">LVN 5 250-5 262 : vide</text>
+  <line x1="240" y1="52" x2="560" y2="52" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="565" y="48" fontSize="9" className="red">VAH 5 302</text>
+  <line x1="240" y1="284" x2="560" y2="284" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="565" y="296" fontSize="9" className="green">VAL 5 214</text>
+  <circle cx="200" cy="182" r="5" className="gold" /><text x="190" y="186" fontSize="10" textAnchor="end">prix actuel</text>
+</svg>
+</Figure>
+
+## Naked POC et niveaux résiduels
+
+Un **naked POC** (nPOC, ou virgin POC) est le POC d'un profil de session passé que le prix **n'a pas retesté** depuis. Le marché a jugé ce prix « juste » un jour, puis s'en est éloigné sans revenir. Ces niveaux ont une propriété statistique bien documentée par les praticiens du market profile : **le prix finit très souvent par y revenir**, parfois des jours ou des semaines plus tard, et y réagit au premier contact.
+
+La logique : un POC est un prix d'accord ; des positions y ont été construites des deux côtés ; les participants qui l'ont vu comme valeur ont des ordres autour. Tant qu'il n'a pas été retesté, ces ordres sont intacts. Une fois retesté (« comblé »), le POC perd l'essentiel de son intérêt.
+
+Usage :
+
+- **Comme cible.** Un nPOC au-dessus du prix, dans le sens de la structure, est une cible naturelle pour un long : le prix y va, et y ralentit. Il complète la liste des réservoirs de liquidité du niveau 3 (PDH, EQH…) avec un niveau fondé sur le volume.
+- **Comme zone de réaction.** Le premier contact avec un nPOC produit souvent un rebond ou un rejet ; ce n'est pas une entrée en soi, mais c'est un endroit où chercher un signal d'exécution, ou où prendre des profits partiels.
+- **Comme repère de « trou à combler ».** Une série de nPOC non testés au-dessus du prix après une baisse rapide indique une zone où le prix a des raisons de remonter un jour ; c'est une lecture de contexte, pas de timing.
+
+Les autres **niveaux résiduels** suivent la même logique, avec un poids moindre : les VAH / VAL de sessions passées non retestés, les extrêmes de queues, les LVN de session. On ne les garde pas tous : les nPOC des cinq à dix dernières séances et les extrêmes hebdomadaires suffisent ; le reste encombre.
+
+## Migration de la value area et lecture de tendance
+
+Alignez les profils de session jour après jour et regardez comment la value area se déplace : c'est la **migration de la valeur**, et c'est une lecture de tendance fondée sur le volume plutôt que sur les swings.
+
+- **Value areas qui montent** (le VAL d'aujourd'hui au-dessus du VAL d'hier, le POC plus haut) : le marché accepte des prix de plus en plus hauts ; tendance haussière saine. Les replis reviennent au VAL du jour ou au POC de la veille et repartent.
+- **Value areas qui descendent** : tendance baissière.
+- **Value areas qui se chevauchent** au même endroit plusieurs jours : équilibre, range ; le composite se construit, un HVN de contexte se forme.
+- **Value area qui s'élargit** brutalement (une séance en tendance après des séances en D) : sortie du range, changement de régime.
+- **Value area qui se rétrécit** de jour en jour : contraction (niveau 2), le marché se resserre avant un mouvement.
+
+Trois lectures directement utilisables :
+
+**Le test du POC de la veille.** En tendance haussière, le prix revient souvent tester le POC de la veille dans la première partie de la séance ; s'il tient et que la value area du jour se construit au-dessus, la tendance continue. Si le prix s'installe sous le POC de la veille et construit sa valeur en dessous, la migration s'inverse : premier signal de changement.
+
+**L'écart entre value areas.** Deux value areas consécutives qui ne se chevauchent pas (un gap de valeur) signalent un mouvement fort ; le vide entre les deux est un LVN de contexte, à traverser vite si le prix y revient.
+
+**La value area par rapport au composite.** Une session dont la value area sort de la value area composite est une session de tendance par rapport au contexte ; si les jours suivants confirment (nouvelles value areas au-delà), le composite migre lui aussi.
+
+<Figure caption="Figure 2 · Migration de la value area sur sept séances : trois jours de hausse (VA qui montent), deux jours de chevauchement (équilibre), un gap de valeur (mouvement fort), un jour dont la VA s'installe sous le POC de la veille (premier signal d'inversion).">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Migration de la value area sur sept séances" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <text x="90" y="288" fontSize="9" textAnchor="middle" className="muted">J1</text><text x="180" y="288" fontSize="9" textAnchor="middle" className="muted">J2</text><text x="270" y="288" fontSize="9" textAnchor="middle" className="muted">J3</text><text x="360" y="288" fontSize="9" textAnchor="middle" className="muted">J4</text><text x="450" y="288" fontSize="9" textAnchor="middle" className="muted">J5</text><text x="540" y="288" fontSize="9" textAnchor="middle" className="muted">J6</text><text x="630" y="288" fontSize="9" textAnchor="middle" className="muted">J7</text>
+  <rect x="60" y="180" width="60" height="60" className="gold" opacity="0.3" /><line x1="60" y1="212" x2="120" y2="212" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="150" y="150" width="60" height="55" className="gold" opacity="0.3" /><line x1="150" y1="178" x2="210" y2="178" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="240" y="120" width="60" height="55" className="gold" opacity="0.3" /><line x1="240" y1="146" x2="300" y2="146" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="330" y="118" width="60" height="58" className="gold" opacity="0.3" /><line x1="330" y1="150" x2="390" y2="150" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="420" y="122" width="60" height="52" className="gold" opacity="0.3" /><line x1="420" y1="148" x2="480" y2="148" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="510" y="50" width="60" height="45" className="gold" opacity="0.3" /><line x1="510" y1="72" x2="570" y2="72" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="600" y="85" width="60" height="50" className="red" opacity="0.25" /><line x1="600" y1="112" x2="660" y2="112" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="180" y="40" fontSize="10" textAnchor="middle" className="green" fontWeight="600">VA qui montent : tendance</text>
+  <text x="405" y="40" fontSize="10" textAnchor="middle" className="muted">chevauchement : équilibre</text>
+  <rect x="510" y="95" width="60" height="27" className="red" opacity="0.08" /><text x="540" y="140" fontSize="9" textAnchor="middle" className="red">gap de valeur</text>
+  <text x="630" y="160" fontSize="9" textAnchor="middle" className="red">VA sous le POC de J6 :</text>
+  <text x="630" y="172" fontSize="9" textAnchor="middle" className="red">premier signal d'inversion</text>
+  <text x="80" y="256" fontSize="9" className="muted">trait = POC · rectangle = value area</text>
+</svg>
+</Figure>
+
+## Profils d'événements : news, ouvertures, expirations
+
+Certains moments laissent des profils particuliers, à connaître pour ne pas les lire comme des séances ordinaires.
+
+**Les annonces (news).** Le profil d'une annonce majeure (emploi, inflation, décision de banque centrale) présente presque toujours un **LVN brutal** : le prix traverse plusieurs dizaines de points en secondes sans volume par prix (le carnet était vide, niveau 0), puis construit un HVN là où il s'arrête. Ce LVN post-annonce est un vide durable : le prix le retraverse vite quand il y revient, et les stops placés dedans sont exécutés loin. Le HVN post-annonce est au contraire un niveau solide : c'est là que le marché a « digéré » l'information.
+
+**Les ouvertures.** La première heure de la séance américaine construit souvent son propre mini-profil (l'**initial balance**, IB : la fourchette de la première heure, dont les bornes servent de référence toute la journée). Une IB étroite annonce souvent une extension (le marché n'a pas trouvé sa valeur, il va la chercher) ; une IB large, une séance de rotation. La sortie de l'IB avec volume est un des signaux de journée de tendance les plus utilisés en market profile.
+
+**Les expirations et roulements.** Autour des expirations trimestrielles des futures d'indices (le troisième vendredi de mars, juin, septembre, décembre) et des grosses expirations d'options, le volume explose pour des raisons mécaniques (roulement des positions d'un contrat à l'autre, couverture des options). Le profil de ces jours a un HVN énorme qui **ne signifie pas une acceptation** au sens habituel ; il faut le lire avec cette réserve, et ne pas construire de niveau de contexte sur le POC d'un jour d'expiration sans le recouper.
+
+**Les fins de mois et de trimestre.** Les rééquilibrages de portefeuilles institutionnels produisent des volumes anormaux dans la dernière heure, souvent au VWAP ; même réserve.
+
+La règle générale : **un profil d'événement se lit avec sa cause** ; ses HVN sont des niveaux, ses LVN des vides, mais leur poids dépend de ce qui les a produits.
+
+## Intégrer le profil à la structure et aux SMC
+
+Le profil n'est ni un système ni un signal ; c'est une **couche de vérification** pour tout ce qui précède. Voici comment il s'articule.
+
+**Avec la structure (niveau 2).** Les swings significatifs se trouvent souvent aux bords des HVN (le marché a négocié, puis s'est retourné) ; les LVN sont les zones où la structure « saute » (peu de swings, mouvement rapide). Un support du niveau 2 qui coïncide avec un HVN composite est un support où du volume a réellement été échangé ; un support tracé dans un LVN est un trait sur du vide, à traiter avec méfiance.
+
+**Avec les zones SMC (niveau 3).** C'est l'articulation la plus utile :
+
+- **FVG et LVN** : un FVG est, par construction, une zone traversée vite ; le profil montre s'il est aussi un LVN sur la période (le cas normal) ou si du volume s'y est échangé ensuite (le FVG a été partiellement comblé). Un FVG dans un LVN profond est un vide dans un vide : le prix y revient vite, y passe vite ; l'entrée se cherche au bord du HVN voisin plutôt qu'au milieu du FVG.
+- **Order block et HVN** : un order block valide correspond souvent à un HVN de session ou de range (la bougie contraire où la position a été construite a du volume). Un OB sans volume par prix (une bougie contraire dans un LVN) est un OB faible : personne n'y a rien construit. C'est un filtre de sélection des OB, en plus des critères du niveau 3.
+- **Sweep et queue** : le sweep laisse une queue dans le profil (exploration rapide, peu de volume au-delà du niveau). Un « sweep » avec un HVN au-delà du niveau n'en est pas un : le marché a négocié là, c'est une acceptation.
+- **Cible et nPOC / HVN** : les cibles SMC (PDH, EQH) se complètent des nPOC et des bords de HVN composite ; quand ils coïncident, la cible est solide.
+- **POC et équilibre (premium / discount)** : le POC composite est une mesure d'équilibre fondée sur le volume ; un FVG haussier sous le POC composite est en discount « réel », pas seulement géométrique.
+
+**Avec Wyckoff (niveau 3).** Le profil de range d'une accumulation montre le HVN où l'absorption a eu lieu (souvent la partie basse du range, là où le SC et les ST ont échangé le plus) et le LVN par lequel le SOS est sorti. Le LPS revient typiquement au bord supérieur du HVN, pas au POC.
+
+Le fil pratique : **le niveau 2 donne le sens, le niveau 3 donne la séquence et la zone, le profil dit si du volume s'y est échangé**, et le chapitre suivant (footprint) montrera, à l'intérieur de la zone, qui a acheté et qui a vendu.
+
+<Figure caption="Figure 3 · Intégration : le FVG H1 (zone SMC) est un LVN sur le profil de range ; l'OB coïncide avec le HVN où le sweep a échangé ; la cible SMC (EQH) coïncide avec un nPOC. L'entrée se cherche au bord du HVN, pas au milieu du vide.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Superposition profil et séquence SMC" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="480" y2="290" className="line" strokeWidth="1" />
+  <polyline points="50,120 90,180 120,160 150,215 175,245 195,220 220,140 250,165 280,120 310,145 350,90 380,110 420,60 460,80" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="200" y="150" width="60" height="22" className="gold" opacity="0.3" /><text x="230" y="146" fontSize="9" textAnchor="middle" className="gold">FVG H1</text>
+  <rect x="165" y="215" width="35" height="32" className="green" opacity="0.3" /><text x="150" y="265" fontSize="9" className="green">OB + sweep</text>
+  <line x1="40" y1="60" x2="480" y2="60" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="46" y="56" fontSize="9" className="red">EQH · cible</text>
+  <circle cx="250" cy="165" r="5" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="262" y="180" fontSize="9" className="gold">entrée : bord du HVN</text>
+
+  <line x1="520" y1="30" x2="520" y2="300" className="line" strokeWidth="1" />
+  <rect x="520" y="52" width="120" height="8" className="gold" opacity="0.9" /><rect x="520" y="62" width="70" height="8" className="gold" opacity="0.7" /><rect x="520" y="72" width="30" height="8" className="gold" opacity="0.4" /><rect x="520" y="82" width="20" height="8" className="gold" opacity="0.4" /><rect x="520" y="92" width="45" height="8" className="gold" opacity="0.5" /><rect x="520" y="102" width="80" height="8" className="gold" opacity="0.7" /><rect x="520" y="112" width="110" height="8" className="gold" opacity="0.8" /><rect x="520" y="122" width="90" height="8" className="gold" opacity="0.7" /><rect x="520" y="132" width="50" height="8" className="gold" opacity="0.5" /><rect x="520" y="142" width="18" height="8" className="gold" opacity="0.3" /><rect x="520" y="152" width="8" height="8" className="gold" opacity="0.3" /><rect x="520" y="162" width="6" height="8" className="gold" opacity="0.3" /><rect x="520" y="172" width="12" height="8" className="gold" opacity="0.3" /><rect x="520" y="182" width="40" height="8" className="gold" opacity="0.5" /><rect x="520" y="192" width="90" height="8" className="gold" opacity="0.7" /><rect x="520" y="202" width="140" height="8" className="gold" opacity="0.9" /><rect x="520" y="212" width="160" height="8" className="gold" opacity="1" /><rect x="520" y="222" width="130" height="8" className="gold" opacity="0.9" /><rect x="520" y="232" width="80" height="8" className="gold" opacity="0.7" /><rect x="520" y="242" width="35" height="8" className="gold" opacity="0.5" /><rect x="520" y="252" width="15" height="8" className="gold" opacity="0.3" />
+  <text x="650" y="58" fontSize="9" className="muted">nPOC : cible</text>
+  <text x="640" y="166" fontSize="9" className="red">LVN = FVG</text>
+  <text x="690" y="216" fontSize="9" textAnchor="end" className="green">HVN = OB</text>
+</svg>
+</Figure>
+
+## Deux trades avec le profil en couche de vérification
+
+Reconstitutions pédagogiques : la même zone SMC, avec et sans le profil.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Sweep du PDL, displacement, FVG H1 dans un LVN composite ; entrée au bord supérieur du HVN sous le FVG plutôt qu'au milieu du FVG ; cible nPOC + EQH"
+  entree="5 247,50 (bord haut du HVN 5 240-5 248)"
+  stop="5 238,50 (36 ticks, sous le HVN et sous le sweep)"
+  objectif="5 274,00 (nPOC de la semaine précédente, confondu avec des EQH)"
+  r="+2,9R">
+
+Composite de deux semaines : HVN 5 240-5 248, LVN 5 249-5 262, HVN 5 264-5 272, nPOC à 5 274 jamais retesté. La séquence SMC : sweep du PDL à 5 236, displacement H1 à 5 268 laissant un FVG entre 5 252 et 5 258. Sans le profil, l'entrée se cherche dans le FVG. Avec le profil : le FVG est au milieu du LVN, le prix le traversera vite dans les deux sens ; l'ordre limite est placé au bord haut du HVN, 5 247,50, où du volume a été échangé et où le prix devrait ralentir. Il y est servi ; le stop, sous le HVN, est proche du stop SMC (sous le sweep). Cible : le nPOC à 5 274, qui coïncide avec des EQH. Atteinte. Le profil n'a pas changé le trade ; il a précisé l'entrée et confirmé la cible.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat d'un order block H1 « propre » situé dans un LVN composite, sans volume par prix ; le prix le traverse sans réagir"
+  entree="5 256,00"
+  stop="5 251,00 (20 ticks)"
+  objectif="5 274,00"
+  r="−1R">
+
+Même semaine, autre trader. Il repère un OB H1 entre 5 254 et 5 258, valide selon les critères du niveau 3 (displacement, FVG au-dessus, structure). Le profil composite montre que cette bougie s'est formée en plein LVN : presque aucun volume par prix, personne n'y a construit de position. Le retour du prix traverse l'OB comme un vide, touche le stop, et réagit deux points plus bas, sur le HVN 5 240-5 248 (l'entrée du premier trader). L'OB était géométriquement correct et volumétriquement vide. Le profil est le filtre qui l'aurait écarté, ou déplacé.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **composite** empile plusieurs séances : ses **HVN** sont des zones d'acceptation profondes, ses **LVN** des vides, son POC un centre de gravité, sa value area des bornes de contexte.
+- Les **naked POC** (POC de sessions non retestés) sont des cibles et des zones de réaction fondées sur le volume ; on garde ceux des dernières séances.
+- La **migration de la value area** est une lecture de tendance par le volume : VA qui montent, qui se chevauchent, qui s'écartent (gap de valeur), qui se resserrent ; le test du POC de la veille est le premier signal d'inversion.
+- Les **profils d'événements** (annonces, initial balance, expirations, fins de mois) se lisent avec leur cause : LVN durables après annonce, HVN mécaniques d'expiration.
+- **Intégration** : FVG ↔ LVN, OB ↔ HVN, sweep ↔ queue, cible ↔ nPOC. Le niveau 2 donne le sens, le niveau 3 la séquence, **le profil dit si du volume s'y est échangé**.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire un composite">
+
+Composite de trois semaines sur MNQ : HVN à 18 200-18 240 (POC composite 18 224), LVN 18 250-18 300, HVN 18 310-18 350, nPOC de la semaine dernière à 18 372, VAH composite 18 356, VAL composite 18 196. Le prix est à 18 280, structure H4 haussière depuis un CHoCH à 18 210.
+
+1. Où le prix se situe-t-il par rapport au composite, et qu'est-ce que cela implique pour la volatilité locale ?
+2. Quelles sont les cibles haussières successives, dans l'ordre ?
+3. Où placer une entrée long si le prix replie, et où ne pas placer de stop ?
+
+<Solution>
+
+1. À 18 280, le prix est **dans le LVN** : zone de traversée, peu de volume ; attendez-vous à des mouvements rapides et peu de réactions jusqu'aux bords (18 250 en bas, 18 300 en haut). Ce n'est pas un endroit où chercher un signal.
+2. **18 300-18 310** (bord bas du HVN supérieur, première réaction probable), **18 350-18 356** (haut du HVN et VAH composite), **18 372** (nPOC : cible principale, jamais retesté).
+3. Entrée long au **bord haut du HVN inférieur** (18 236-18 240) sur signal, cohérent avec le CHoCH à 18 210 ; stop sous le HVN et sous 18 210. **Pas de stop dans le LVN** (18 250-18 300) : il serait traversé d'un coup.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Migration et signal">
+
+Cinq séances sur l'or (VAL / POC / VAH) : J1 : 2 340 / 2 348 / 2 356 ; J2 : 2 346 / 2 354 / 2 362 ; J3 : 2 352 / 2 360 / 2 368 ; J4 : 2 350 / 2 359 / 2 369 ; J5 : ouverture à 2 358, première heure entre 2 351 et 2 357, VA du jour qui se construit 2 350-2 356.
+
+1. Qualifiez la migration J1 à J3, puis J3 à J4.
+2. Que se passe-t-il le J5 par rapport au POC de la veille, et qu'est-ce que cela signale ?
+3. Quel niveau observez-vous pour décider si le J5 est un simple repli ou une inversion ?
+
+<Solution>
+
+1. J1 à J3 : **value areas qui montent** (VAL 2 340 → 2 346 → 2 352, POC 2 348 → 2 354 → 2 360) : tendance haussière saine. J3 à J4 : **chevauchement** presque complet, POC quasi identique : équilibre, pause.
+2. Le J5, la valeur se construit **sous le POC de la veille** (2 359) : la première heure n'a pas retesté 2 359 par-dessus, la VA du jour est entièrement sous le POC de J4. C'est le **premier signal d'inversion** de la migration ; pas encore une tendance baissière, mais la hausse ne migre plus.
+3. Le **VAL de J4 (2 350)** et le **VAL de J3 (2 352)** : si le J5 clôture sa VA sous ces niveaux et que le J6 construit encore plus bas, la migration est descendante ; si le prix reprend le POC de J4 (2 359) dans la journée et y construit du volume, ce n'était qu'un repli dans l'équilibre.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Filtrer une zone SMC avec le profil">
+
+Trois zones SMC identifiées sur l'ES en H1 après un sweep et un displacement : (a) un FVG entre 5 262 et 5 268 ; (b) un OB entre 5 254 et 5 260 ; (c) un breaker (ancien OB baissier traversé) entre 5 274 et 5 279. Le profil de range montre : HVN 5 252-5 260, LVN 5 261-5 272, HVN 5 273-5 281, nPOC à 5 290.
+
+1. Classez les trois zones selon leur solidité volumétrique.
+2. Où placer l'entrée d'un long et le stop, en combinant SMC et profil ?
+3. Quelle est la cible principale, et pourquoi le breaker n'est-il pas un obstacle majeur ici ?
+
+<Solution>
+
+1. **(b) l'OB** est dans le HVN 5 252-5 260 : du volume y a été échangé, zone solide. **(c) le breaker** est dans le HVN 5 273-5 281 : solide aussi, mais dans le sens opposé (résistance potentielle). **(a) le FVG** est dans le LVN : un vide, zone de traversée, faible seul.
+2. Entrée long **dans l'OB / HVN** (5 254-5 260), par exemple au bord haut 5 259-5 260 sur signal, ou ordre limite dans le HVN ; **pas au milieu du FVG** (le prix le traverse). Stop **sous le HVN** (5 251) avec marge, cohérent avec le stop SMC sous l'OB.
+3. Cible principale : le **nPOC à 5 290**, au-dessus du HVN supérieur. Le breaker (5 274-5 279) est un HVN où le prix ralentira ; il est un obstacle intermédiaire (prise de profit partielle raisonnable), pas majeur : la structure H1 est haussière après le CHoCH, et un breaker à contre-structure dans un HVN se traverse souvent en seconde tentative. Le nPOC au-delà reste l'aimant.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Un profil composite sert à :",
+      options: [
+        "Trouver l'entrée du jour",
+        "Lire le contexte : HVN d'acceptation profonde, LVN de traversée, POC de gravité, value area de contexte sur plusieurs séances",
+        "Remplacer la structure",
+        "Mesurer le delta",
+      ],
+      answer: 1,
+      explain: "Il se recalcule à chaque période et se garde séparé du profil de session. Ses HVN et LVN correspondent souvent aux supports majeurs et aux FVG HTF.",
+    },
+    {
+      q: "Un naked POC est :",
+      options: [
+        "Le POC de la séance en cours",
+        "Le POC d'une session passée que le prix n'a jamais retesté ; cible et zone de réaction fréquentes",
+        "Le POC composite",
+        "Un LVN",
+      ],
+      answer: 1,
+      explain: "Les ordres construits autour d'un prix d'accord restent intacts tant qu'il n'est pas retesté. On garde les nPOC des dernières séances.",
+    },
+    {
+      q: "Des value areas qui montent jour après jour signalent :",
+      options: [
+        "Un équilibre",
+        "Une tendance haussière saine : le marché accepte des prix de plus en plus hauts",
+        "Une expiration",
+        "Un LVN",
+      ],
+      answer: 1,
+      explain: "La migration de la valeur est une lecture de tendance par le volume ; le premier signal d'inversion est une VA qui se construit sous le POC de la veille.",
+    },
+    {
+      q: "Le LVN laissé par une annonce majeure est :",
+      options: [
+        "Un niveau d'acceptation",
+        "Un vide durable : le prix le retraverse vite quand il y revient, les stops placés dedans sont exécutés loin",
+        "Un bon endroit pour un stop",
+        "Sans importance",
+      ],
+      answer: 1,
+      explain: "Le carnet était vide au moment de l'annonce ; le HVN post-annonce, où le marché a digéré l'information, est au contraire un niveau solide.",
+    },
+    {
+      q: "Un order block H1 valide selon le niveau 3 mais situé dans un LVN composite est :",
+      options: [
+        "Une zone très solide",
+        "Un OB faible : personne n'y a construit de volume ; le profil est un filtre qui l'écarte ou le déplace vers le HVN voisin",
+        "Un breaker",
+        "Un nPOC",
+      ],
+      answer: 1,
+      explain: "OB et HVN vont ensemble ; FVG et LVN aussi. Le profil dit si du volume s'est réellement échangé dans la zone SMC.",
+    },
+    {
+      q: "Le POC d'un jour d'expiration trimestrielle :",
+      options: [
+        "Est le niveau de contexte le plus fiable",
+        "Doit être lu avec réserve : le volume est mécanique (roulements, couvertures), pas une acceptation ordinaire",
+        "N'existe pas",
+        "Est toujours le plus haut de la séance",
+      ],
+      answer: 1,
+      explain: "Un profil d'événement se lit avec sa cause. On ne construit pas de niveau de contexte sur le POC d'une expiration sans le recouper.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le profil dit où le volume s'est échangé. Il ne dit pas **qui** a acheté et qui a vendu à chaque prix. Le chapitre suivant ouvre la bougie elle-même : le footprint, cellule par cellule, le delta et le delta cumulé avec leurs limites, l'absorption et les déséquilibres agressifs, les divergences de delta aux extrêmes, avec des exemples décortiqués sur l'ES.
