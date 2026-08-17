@@ -1,0 +1,374 @@
+---
+title: "Position sizing"
+description: "Le risque fixe en pourcentage du compte, la formule qui transforme un stop en nombre de contrats, de lots ou d'unités sur futures, forex et crypto, la formule de Kelly et ses dangers, et un calculateur pas à pas."
+---
+
+# Position sizing
+
+Le chapitre précédent a posé la règle : 1 % du compte par trade, jamais plus. Ce chapitre la rend opérationnelle. Le position sizing est le calcul qui transforme un stop (en points, en pips, en pourcentage) et un budget de risque (en euros) en une taille de position exacte. C'est le calcul le plus important du métier, et l'un des plus simples. Le faire à chaque trade, sans exception, sépare le trader qui survit de celui qui ne comprend pas pourquoi il perd.
+
+## Le risque fixe en pourcentage du compte
+
+Le principe : **à chaque trade, la perte si le stop est touché représente une fraction fixe du capital**, typiquement 0,5 % à 1 % pour un trader débutant ou intermédiaire, rarement plus de 2 % pour un professionnel discrétionnaire.
+
+Pourquoi un pourcentage plutôt qu'un montant fixe ? Parce que le compte évolue. Un risque de 40 € sur 4 000 € fait 1 % ; le même 40 € sur 2 800 € après un drawdown fait 1,4 %, et sur 6 000 € après une bonne période 0,67 %. Le pourcentage fait mécaniquement deux choses utiles :
+
+- **Il réduit le risque en euros quand le compte baisse.** Chaque perte est un peu plus petite que la précédente ; la ruine devient asymptotique au lieu de brutale (voir la figure 2 du chapitre précédent).
+- **Il augmente le risque en euros quand le compte monte.** La croissance se compose sans qu'il faille prendre de décision.
+
+Le montant de risque du jour se calcule sur le capital du jour : `Risque (€) = Capital × Pourcentage`. Sur 4 000 € à 1 % : 40 €. Sur 4 000 € à 0,5 % : 20 €. Ce montant, une fois calculé, ne se discute plus pendant la séance.
+
+## Calculer la taille de position à partir du stop
+
+La formule générale, valable sur tous les marchés :
+
+```text
+Taille = Risque en euros ÷ (Distance du stop × Valeur d'une unité de distance)
+```
+
+- **Risque en euros** : le budget du jour, par exemple 40 €.
+- **Distance du stop** : l'écart entre l'entrée et le stop, dans l'unité du marché (points, ticks, pips, dollars, pourcentage).
+- **Valeur d'une unité de distance** : ce que vaut un point, un tick ou un pip pour une unité de position (un contrat, un lot, une action).
+
+Le résultat s'arrondit **toujours vers le bas** : si le calcul donne 2,7 contrats, on en prend 2, jamais 3. Arrondir vers le haut, c'est dépasser le budget ; c'est la porte d'entrée du sur-risque.
+
+Une fois la taille arrondie, on recalcule le **risque réel** : `Taille arrondie × Distance × Valeur`. Il est toujours inférieur ou égal au budget. Ce nombre est celui que l'on note au journal.
+
+<Figure caption="Figure 1 · La chaîne du position sizing : le stop vient de l'analyse, le budget vient du compte, la taille en découle. Jamais l'inverse.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Chaîne de calcul du position sizing" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="40" width="200" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="120" y="66" fontSize="13" fontWeight="600" textAnchor="middle">Analyse du marché</text>
+  <text x="120" y="88" fontSize="11" textAnchor="middle" className="muted">entrée et stop → distance</text>
+  <text x="120" y="102" fontSize="11" textAnchor="middle" className="mono">ex. 12 points sur MNQ</text>
+
+  <rect x="20" y="150" width="200" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="120" y="176" fontSize="13" fontWeight="600" textAnchor="middle">Compte du jour</text>
+  <text x="120" y="198" fontSize="11" textAnchor="middle" className="muted">capital × pourcentage → budget</text>
+  <text x="120" y="212" fontSize="11" textAnchor="middle" className="mono">ex. 4 000 € × 1 % = 40 €</text>
+
+  <line x1="220" y1="75" x2="300" y2="120" className="line" strokeWidth="2" />
+  <line x1="220" y1="185" x2="300" y2="140" className="line" strokeWidth="2" />
+  <polygon points="300,130 288,120 288,140" className="gold" />
+
+  <rect x="305" y="95" width="200" height="70" rx="8" className="gold" opacity="0.9" />
+  <text x="405" y="121" fontSize="13" fontWeight="700" textAnchor="middle" fill="#141414">Taille = budget ÷</text>
+  <text x="405" y="141" fontSize="13" fontWeight="700" textAnchor="middle" fill="#141414">(distance × valeur du point)</text>
+  <text x="405" y="157" fontSize="11" textAnchor="middle" fill="#141414">40 ÷ (12 × 2 $) = 1,67 → 1 MNQ</text>
+
+  <line x1="505" y1="130" x2="580" y2="130" className="line" strokeWidth="2" />
+  <polygon points="580,130 568,124 568,136" className="gold" />
+
+  <rect x="585" y="95" width="120" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="645" y="121" fontSize="13" fontWeight="600" textAnchor="middle">Risque réel</text>
+  <text x="645" y="141" fontSize="11" textAnchor="middle" className="mono">1 × 12 × 2 = 24 $</text>
+  <text x="645" y="157" fontSize="11" textAnchor="middle" className="muted">noté au journal</text>
+
+  <text x="360" y="245" fontSize="12" textAnchor="middle" className="muted">Le stop ne se déplace jamais pour « faire rentrer » une taille souhaitée : c'est la taille qui s'adapte au stop.</text>
+</svg>
+</Figure>
+
+Une règle qui découle de la formule : **le stop se place là où l'analyse dit que l'idée est invalidée, puis la taille s'ajuste**. Le débutant fait l'inverse : il choisit une taille (souvent le maximum que la marge autorise), puis rapproche le stop pour que le risque semble acceptable. Le stop devient trop serré, il est touché par le bruit normal du marché, et le trade perd alors que l'idée était bonne. Un stop trop proche n'est pas de la prudence, c'est une invalidation prématurée.
+
+## Adapter la taille aux futures, au forex et à la crypto
+
+La formule ne change pas ; ce qui change, c'est la valeur de l'unité de distance et l'unité de position.
+
+### Futures
+
+Unité de position : le contrat. Valeur d'une unité de distance : donnée par la Bourse (chapitre « Les classes d'actifs » du niveau 0). Rappel des principaux : MES 5 $ par point (1,25 $ par tick), MNQ 2 $ par point (0,50 $ par tick), MGC 10 $ par dollar de mouvement (1 $ par tick de 0,10), MCL 100 $ par dollar (1 $ par tick de 0,01), et les contrats standard valent dix fois plus.
+
+Exemple : budget 50 $, stop de 8 points sur MES. 8 × 5 = 40 $ par contrat. 50 ÷ 40 = 1,25 → **1 MES**, risque réel 40 $. Si le stop faisait 3 points : 3 × 5 = 15 $ ; 50 ÷ 15 = 3,33 → **3 MES**, risque réel 45 $.
+
+Le contrat standard impose des sauts énormes : avec un budget de 50 $ et un stop de 8 points, l'ES coûterait 400 $ par contrat, huit fois le budget. La réponse n'est pas de rapprocher le stop à 1 point ; c'est de trader le micro. **Si même un micro-contrat dépasse le budget, on ne prend pas le trade.**
+
+### Forex
+
+Unité de position : le lot (standard 100 000, mini 10 000, micro 1 000), ou directement le nombre d'unités chez les brokers qui l'autorisent. Valeur d'un pip : pour les paires en XXX/USD, 10 $ par lot standard, 1 $ par mini-lot, 0,10 $ par micro-lot. Pour les autres paires (USD/JPY, EUR/GBP), la valeur du pip dépend du cours et se lit sur la plateforme ou se calcule ; l'ordre de grandeur reste proche.
+
+Exemple : budget 40 $, stop de 25 pips sur EUR/USD. En micro-lots : 25 × 0,10 = 2,50 $ par micro-lot ; 40 ÷ 2,50 = 16 → **16 micro-lots** (0,16 lot), risque réel 40 $. En mini-lots : 25 × 1 = 25 $ ; 40 ÷ 25 = 1,6 → 1 mini-lot, risque réel 25 $ : la granularité plus fine des micro-lots permet de coller au budget.
+
+Attention à la devise du compte : un compte en euros qui trade une paire dont le pip vaut des dollars doit convertir. À 1 € ≈ 1,08 $, un pip à 10 $ vaut environ 9,26 €. La plateforme le fait souvent ; le trader vérifie une fois.
+
+### Crypto
+
+Unité de position : la quantité de jetons (0,05 BTC, 2 ETH), et le stop est le plus souvent exprimé en pourcentage ou en dollars par jeton. Valeur d'une unité de distance : 1 $ de mouvement vaut 1 $ par jeton.
+
+Exemple : budget 40 $, achat de BTC à 64 000 $ avec un stop à 63 200 $ (distance 800 $, soit 1,25 %). Taille = 40 ÷ 800 = **0,05 BTC**, soit une exposition de 3 200 $. Sur un perpétuel avec levier, la marge exigée serait de 320 $ à 10 pour 1 : mais le risque, lui, est toujours de 40 $, parce que c'est la taille et le stop qui le fixent, pas la marge.
+
+Deux pièges propres à la crypto : les frais en pourcentage de l'exposition (0,05 % de 3 200 $ = 1,60 $ par côté, non négligeable devant 40 $ de risque), et le funding sur les perpétuels si la position dure.
+
+<Figure caption="Figure 2 · Le même budget de 40 $ traduit en taille sur trois marchés. La formule est identique ; seule la valeur de l'unité change.">
+<svg className="tm-svg" viewBox="0 0 720 250" role="img" aria-label="Position sizing sur futures, forex et crypto pour un même budget" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="215" height="190" rx="8" className="box" strokeWidth="1.5" />
+  <text x="127" y="56" fontSize="14" fontWeight="600" textAnchor="middle">MES (futures)</text>
+  <text x="127" y="82" fontSize="11" textAnchor="middle" className="muted">stop 8 points · 5 $ le point</text>
+  <text x="127" y="104" fontSize="12" textAnchor="middle" className="mono">40 ÷ (8 × 5) = 1,0</text>
+  <text x="127" y="130" fontSize="15" fontWeight="700" textAnchor="middle" className="gold">1 contrat</text>
+  <text x="127" y="154" fontSize="11" textAnchor="middle" className="muted">risque réel 40 $</text>
+  <text x="127" y="176" fontSize="11" textAnchor="middle" className="muted">exposition ≈ 26 000 $</text>
+  <text x="127" y="198" fontSize="11" textAnchor="middle" className="muted">levier apparent élevé, risque 1 %</text>
+
+  <rect x="252" y="30" width="215" height="190" rx="8" className="box" strokeWidth="1.5" />
+  <text x="359" y="56" fontSize="14" fontWeight="600" textAnchor="middle">EUR/USD (forex)</text>
+  <text x="359" y="82" fontSize="11" textAnchor="middle" className="muted">stop 25 pips · 0,10 $ le pip par micro-lot</text>
+  <text x="359" y="104" fontSize="12" textAnchor="middle" className="mono">40 ÷ (25 × 0,10) = 16</text>
+  <text x="359" y="130" fontSize="15" fontWeight="700" textAnchor="middle" className="gold">16 micro-lots (0,16 lot)</text>
+  <text x="359" y="154" fontSize="11" textAnchor="middle" className="muted">risque réel 40 $</text>
+  <text x="359" y="176" fontSize="11" textAnchor="middle" className="muted">exposition 16 000 €</text>
+  <text x="359" y="198" fontSize="11" textAnchor="middle" className="muted">levier apparent 4 pour 1, risque 1 %</text>
+
+  <rect x="484" y="30" width="215" height="190" rx="8" className="box" strokeWidth="1.5" />
+  <text x="591" y="56" fontSize="14" fontWeight="600" textAnchor="middle">BTC (crypto)</text>
+  <text x="591" y="82" fontSize="11" textAnchor="middle" className="muted">stop 800 $ · 1 $ le dollar par BTC</text>
+  <text x="591" y="104" fontSize="12" textAnchor="middle" className="mono">40 ÷ 800 = 0,05</text>
+  <text x="591" y="130" fontSize="15" fontWeight="700" textAnchor="middle" className="gold">0,05 BTC</text>
+  <text x="591" y="154" fontSize="11" textAnchor="middle" className="muted">risque réel 40 $</text>
+  <text x="591" y="176" fontSize="11" textAnchor="middle" className="muted">exposition 3 200 $</text>
+  <text x="591" y="198" fontSize="11" textAnchor="middle" className="muted">frais en % de l'exposition à surveiller</text>
+</svg>
+</Figure>
+
+## Kelly et fraction de Kelly : intérêt et dangers
+
+La formule de Kelly, issue de la théorie de l'information, donne la fraction du capital à risquer pour maximiser la croissance à long terme d'un pari répété dont on connaît les probabilités. Pour un système de trading avec un taux de réussite p et un ratio gain moyen sur perte moyenne b :
+
+```text
+f* = p − (1 − p) ÷ b
+```
+
+Exemple : p = 45 %, b = 2 (gains de 2R, pertes de 1R). f* = 0,45 − 0,55 ÷ 2 = 0,45 − 0,275 = **0,175**, soit 17,5 % du capital par trade.
+
+Ce chiffre est instructif et dangereux à la fois.
+
+**Instructif**, parce qu'il montre ce qui fait grandir un compte : la combinaison du taux de réussite et du ratio gain/perte, exactement les deux termes de l'espérance. Et parce qu'il donne une borne : risquer **plus** que Kelly réduit la croissance et augmente le risque de ruine, quel que soit le talent. Un système à espérance positive peut ruiner son utilisateur s'il mise trop gros ; Kelly en donne la preuve mathématique.
+
+**Dangereux**, pour trois raisons :
+
+1. **Vous ne connaissez pas p et b.** Vous les estimez sur un échantillon passé, avec une marge d'erreur importante. Si le vrai p est 40 % au lieu de 45 %, f* tombe à 0,10 ; vous étiez à 17,5 %, soit près du double du bon chiffre, ce qui est pire que de sous-miser.
+2. **Kelly maximise la croissance, pas le confort.** À la fraction de Kelly, les drawdowns attendus sont énormes : perdre 50 % du compte est un événement ordinaire. Presque personne ne peut suivre un plan dans ces conditions.
+3. **Les trades ne sont pas indépendants et identiquement distribués** comme le suppose la formule : les régimes de marché changent, les pertes se regroupent.
+
+D'où la pratique des professionnels : la **fraction de Kelly**, typiquement un quart ou moins. Un quart de 17,5 % fait 4,4 %, encore beaucoup pour un discrétionnaire ; un dixième donne 1,75 %. On retombe sur l'ordre de grandeur du 1 à 2 % de la règle de survie, avec cette fois une justification : le 1 % n'est pas un chiffre magique, c'est une fraction très conservatrice de Kelly, qui absorbe l'incertitude sur les paramètres et garde les drawdowns supportables. Le chapitre 4 quantifiera ces drawdowns.
+
+<Figure caption="Figure 3 · Croissance attendue du capital en fonction de la fraction risquée par trade, pour un système à 45 % de réussite et ratio 2. Le sommet est à Kelly (17,5 %) ; à droite, la croissance chute puis devient négative. La zone de travail réelle est tout à gauche.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Courbe de croissance en fonction de la fraction risquée, avec le point de Kelly" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="270" className="line" strokeWidth="1" />
+  <text x="380" y="292" fontSize="12" textAnchor="middle" className="muted">fraction du capital risquée par trade</text>
+  <text x="60" y="284" fontSize="11" textAnchor="middle" className="mono muted">0 %</text>
+  <text x="222" y="284" fontSize="11" textAnchor="middle" className="mono muted">10 %</text>
+  <text x="384" y="284" fontSize="11" textAnchor="middle" className="mono muted">20 %</text>
+  <text x="546" y="284" fontSize="11" textAnchor="middle" className="mono muted">30 %</text>
+  <text x="700" y="284" fontSize="11" textAnchor="middle" className="mono muted">40 %</text>
+  <text x="50" y="204" fontSize="11" textAnchor="end" className="mono muted">0</text>
+  <text x="50" y="60" fontSize="11" textAnchor="end" className="muted">croissance</text>
+
+  <path d="M 60 200 Q 200 40 340 60 Q 500 90 620 200 L 700 268" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+
+  <line x1="340" y1="60" x2="340" y2="200" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <circle cx="340" cy="60" r="5" className="gold" />
+  <text x="348" y="52" fontSize="12" fontWeight="600" className="gold">Kelly : 17,5 %</text>
+
+  <rect x="60" y="30" width="45" height="170" className="green" opacity="0.15" />
+  <text x="82" y="222" fontSize="11" textAnchor="middle" className="green" fontWeight="600">0,5 à 2 %</text>
+  <text x="82" y="236" fontSize="10" textAnchor="middle" className="muted">zone de travail</text>
+
+  <rect x="620" y="30" width="80" height="170" className="red" opacity="0.15" />
+  <text x="660" y="222" fontSize="11" textAnchor="middle" className="red" fontWeight="600">au-delà</text>
+  <text x="660" y="236" fontSize="10" textAnchor="middle" className="muted">ruine à long terme</text>
+</svg>
+</Figure>
+
+## Calculateur pas à pas et cas pratiques
+
+Voici la routine à suivre à chaque trade, dans cet ordre. Elle prend trente secondes une fois apprise ; beaucoup de traders la mettent dans une feuille de calcul ou utilisent le calculateur de leur plateforme, mais il faut savoir la faire à la main.
+
+1. **Capital du jour** (solde en début de séance, sans les positions ouvertes) : par exemple 6 500 €.
+2. **Pourcentage de risque** : 1 %. Budget : 65 €.
+3. **Entrée et stop** issus de l'analyse : par exemple achat MGC à 2 358,0, stop à 2 352,5. Distance : 5,5 $.
+4. **Valeur de l'unité** : MGC, 10 $ par dollar de mouvement.
+5. **Taille théorique** : 65 ÷ (5,5 × 10) = 65 ÷ 55 = 1,18.
+6. **Arrondi vers le bas** : 1 contrat.
+7. **Risque réel** : 1 × 5,5 × 10 = 55 €. Vérification : inférieur au budget. Noté.
+8. **Bracket** avec ce stop, puis seulement l'ordre d'entrée.
+
+Trois cas pratiques supplémentaires :
+
+**Cas A, le stop trop large.** Compte 3 000 €, budget 30 €. Achat MNQ avec un stop de 40 points : 40 × 2 = 80 $ par contrat, supérieur au budget. Taille : 30 ÷ 80 = 0,375 → 0 contrat. **On ne prend pas le trade**, ou on cherche une entrée qui permet un stop plus proche sans le placer dans le bruit. On ne passe pas à un risque de 2,7 % « pour cette fois ».
+
+**Cas B, la position swing en forex.** Compte 10 000 €, budget 100 €. Vente GBP/USD avec un stop de 80 pips. Micro-lots : 80 × 0,10 = 8 $ ; 100 ÷ 8 = 12,5 → 12 micro-lots (0,12 lot), risque réel 96 $. Le swap de plusieurs nuits s'ajoutera aux coûts : à noter, mais il ne change pas la taille.
+
+**Cas C, deux positions le même jour.** Compte 5 000 €, budget 50 € par trade. Un premier trade est ouvert avec 50 € de risque ; une seconde idée se présente. Le budget de la seconde est aussi 50 €, mais le risque ouvert total devient 100 €, soit 2 % : c'est le sujet des budgets quotidiens (chapitre 6) et du risque agrégé (chapitre 5). Le position sizing d'un trade ne dit rien de l'ensemble.
+
+## Deux trades décortiqués
+
+Reconstitutions pédagogiques : la même analyse, deux calculs de taille.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MCL (pétrole WTI)"
+  direction="Short"
+  setup="Vente sur rejet d'un plus haut de la veille, séance américaine"
+  entree="79,60"
+  stop="80,00 (0,40 $, soit 40 ticks)"
+  objectif="78,60"
+  r="+2,5R">
+
+Compte de 4 500 $, risque 1 % : 45 $. Sur MCL, 1 tick de 0,01 $ vaut 1 $ ; le stop de 40 ticks vaut 40 $ par contrat. Taille : 45 ÷ 40 = 1,125 → 1 contrat, risque réel 40 $. Objectif atteint : 100 ticks × 1 $ = 100 $ brut, 2,5R. Le trader avait envie de prendre 2 contrats « parce que le setup était propre » ; la formule a dit 1, il a pris 1. La qualité perçue d'un setup n'entre pas dans le calcul de la taille : elle entre, éventuellement, dans la décision de prendre ou non le trade.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="EUR/USD"
+  direction="Long"
+  setup="Achat sur support H4, stop rapproché pour « faire rentrer » 1 lot"
+  entree="1,0820"
+  stop="1,0808 (12 pips) au lieu des 35 pips indiqués par l'analyse"
+  objectif="1,0890"
+  r="−4 % du compte, sur une idée qui a fonctionné">
+
+Compte de 3 000 $, budget 30 $. L'analyse plaçait le stop sous le support, à 35 pips ; la taille correcte était 30 ÷ 3,5 = 8 micro-lots (0,08 lot). Le trader voulait 1 lot standard, dont le pip vaut 10 $ : 30 $ de budget n'autorisent alors que 3 pips de stop. Il « négocie » avec lui-même et pose le stop à 12 pips, soit un risque de 120 $, 4 % du compte, tout en se disant qu'il est proche du support et que ça ne devrait pas descendre. Le prix fait un aller-retour de 20 pips sous le support, touche le stop, puis remonte de 70 pips jusqu'à l'objectif. Perte : 120 $ au lieu de 30 $, sur une idée qui a fonctionné. Deux erreurs : la taille a été choisie avant le stop, et le stop a été déplacé dans le bruit pour la justifier.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le risque se fixe en **pourcentage du capital du jour** (0,5 à 1 %) ; le pourcentage réduit les pertes en euros quand le compte baisse.
+- **Taille = budget ÷ (distance du stop × valeur de l'unité)**, arrondie vers le bas ; puis on note le risque réel.
+- **Le stop vient de l'analyse, la taille s'y adapte** ; jamais l'inverse. Si même la plus petite taille dépasse le budget, on ne prend pas le trade.
+- La formule est la même sur futures, forex et crypto ; seule change la **valeur de l'unité** (point, pip, dollar par jeton).
+- **Kelly** montre ce qui fait croître un compte et prouve que sur-miser ruine ; en pratique on travaille à une **petite fraction de Kelly**, ce qui justifie le 1 %.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Calculer la taille sur trois marchés">
+
+Compte de 8 000 €, risque 1 %. Calculez la taille et le risque réel pour :
+
+1. Un achat MES à 5 310,00 avec stop à 5 303,50.
+2. Une vente USD/JPY avec un stop de 30 pips, en micro-lots (on prendra 0,07 $ par pip par micro-lot au cours du jour).
+3. Un achat d'ETH à 3 200 $ avec un stop à 3 104 $.
+
+<Solution>
+
+Budget : 80 €.
+
+1. Distance : 6,5 points × 5 $ = 32,50 $ par contrat. 80 ÷ 32,50 = 2,46 → **2 MES**, risque réel 65 $.
+2. 30 pips × 0,07 = 2,10 $ par micro-lot. 80 ÷ 2,10 = 38,1 → **38 micro-lots** (0,38 lot), risque réel 79,80 $.
+3. Distance : 96 $ par ETH. 80 ÷ 96 = 0,833 → **0,83 ETH** (arrondi vers le bas au centième), risque réel 79,68 $, exposition ≈ 2 656 $.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Le trade qu'on ne prend pas">
+
+Compte de 2 500 €, risque 1 %. Vous voulez acheter MGC avec un stop de 4,0 $ sous l'entrée.
+
+1. Quel est le risque par contrat ?
+2. Combien de contrats la formule autorise-t-elle ?
+3. Que faites-vous ? Donnez deux options acceptables et une inacceptable.
+
+<Solution>
+
+1. 4,0 $ × 10 $ = **40 $** par contrat.
+2. Budget : 25 €. 25 ÷ 40 = 0,625 → **0 contrat**.
+3. Acceptable : **ne pas prendre le trade** ; ou attendre une entrée plus proche du niveau d'invalidation qui permette un stop de 2,5 $ ou moins (25 $ de risque) sans le mettre dans le bruit. Inacceptable : prendre 1 contrat quand même (1,6 % de risque) ou rapprocher le stop à 2,5 $ sans raison d'analyse, juste pour faire rentrer la taille.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Kelly et fraction de Kelly">
+
+Un système affiche, sur 200 trades, 52 % de réussite avec des gains moyens de 1,4R et des pertes moyennes de 1R.
+
+1. Calculez la fraction de Kelly.
+2. Que donnent un quart et un dixième de Kelly ?
+3. Si le vrai taux de réussite n'est que de 46 %, que devient Kelly, et que penser d'un trader qui aurait misé la fraction complète calculée en 1 ?
+
+<Solution>
+
+1. f* = 0,52 − 0,48 ÷ 1,4 = 0,52 − 0,343 = **0,177**, soit 17,7 %.
+2. Un quart : **4,4 %**. Un dixième : **1,8 %**.
+3. f* = 0,46 − 0,54 ÷ 1,4 = 0,46 − 0,386 = **0,074**, soit 7,4 %. Le trader à 17,7 % miserait plus du double de la vraie fraction optimale : il serait dans la zone où la croissance chute et où la ruine devient probable, alors que son système est réellement gagnant. C'est l'illustration du danger : l'erreur d'estimation de quelques points sur p change tout. La fraction de Kelly (ici 1,8 %) reste raisonnable dans les deux cas.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Compte de 5 000 €, risque 1 %, stop de 10 points sur MNQ (2 $ le point). Combien de contrats ?",
+      options: [
+        "5",
+        "2",
+        "3",
+        "1",
+      ],
+      answer: 1,
+      explain: "Budget 50 $. Risque par contrat : 10 × 2 = 20 $. 50 ÷ 20 = 2,5 → arrondi vers le bas : 2 contrats, risque réel 40 $.",
+    },
+    {
+      q: "Pourquoi fixe-t-on le risque en pourcentage du capital plutôt qu'en montant fixe ?",
+      options: [
+        "Parce que c'est plus simple à calculer",
+        "Parce que le risque en euros diminue quand le compte baisse et augmente quand il monte, ce qui rend la ruine asymptotique et compose la croissance",
+        "Parce que le broker l'exige",
+        "Parce que le montant fixe est interdit",
+      ],
+      answer: 1,
+      explain: "Le pourcentage s'adapte automatiquement au capital : après une série de pertes, chaque perte est plus petite ; après des gains, la taille suit sans décision.",
+    },
+    {
+      q: "Le calcul de taille donne 2,8 contrats. Vous prenez :",
+      options: [
+        "3, c'est plus proche",
+        "2, on arrondit toujours vers le bas",
+        "2,8 en fractionnant",
+        "4 pour compenser le prochain trade",
+      ],
+      answer: 1,
+      explain: "Arrondir vers le haut dépasse le budget de risque. On arrondit vers le bas et on note le risque réel, inférieur au budget.",
+    },
+    {
+      q: "Que faire quand même un micro-contrat dépasse le budget de risque ?",
+      options: [
+        "Prendre le trade quand même, une fois n'est pas coutume",
+        "Rapprocher le stop jusqu'à ce que ça rentre",
+        "Ne pas prendre le trade, ou chercher une entrée qui permette un stop plus court sans le mettre dans le bruit",
+        "Augmenter le pourcentage de risque du jour",
+      ],
+      answer: 2,
+      explain: "Le stop vient de l'analyse ; la taille s'y adapte. Si aucune taille ne convient, le trade n'existe pas pour ce compte. Rapprocher le stop artificiellement, c'est se faire sortir par le bruit.",
+    },
+    {
+      q: "Un système à 45 % de réussite et ratio 2 a une fraction de Kelly de 17,5 %. Pourquoi ne pas la risquer ?",
+      options: [
+        "Parce que Kelly est faux",
+        "Parce que p et b sont estimés avec erreur, que les drawdowns à Kelly sont énormes, et que les trades ne sont pas indépendants",
+        "Parce que le broker limite le levier",
+        "Il faut la risquer, c'est l'optimum",
+      ],
+      answer: 1,
+      explain: "Kelly maximise la croissance théorique sous des hypothèses que le trading ne respecte pas. Une petite fraction (un dixième) absorbe l'incertitude et garde les drawdowns supportables.",
+    },
+    {
+      q: "Achat de BTC à 60 000 $ avec un stop à 59 000 $, budget 50 $. Quelle taille ?",
+      options: [
+        "0,5 BTC",
+        "0,05 BTC",
+        "0,005 BTC",
+        "1 BTC",
+      ],
+      answer: 1,
+      explain: "Distance 1 000 $, 1 $ par dollar par BTC. 50 ÷ 1 000 = 0,05 BTC, soit 3 000 $ d'exposition. La marge exigée par un éventuel levier ne change pas ce calcul.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+La taille est calculée, le risque de chaque trade est fixé à 1R. Reste à mesurer ce que rapportent les trades. Le chapitre suivant installe le R comme unité de compte universelle, montre à quoi ressemble la distribution des résultats d'un système, et apprend à calculer et à lire une expectancy sur un relevé de trades.
