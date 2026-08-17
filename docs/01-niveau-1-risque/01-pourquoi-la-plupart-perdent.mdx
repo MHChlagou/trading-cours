@@ -1,0 +1,328 @@
+---
+title: "Pourquoi la plupart des traders perdent"
+description: "Ce que montrent les chiffres publiés par les brokers, comment les coûts rendent le jeu perdant par défaut, les trois causes réelles des pertes (sur-risque, sur-trading, absence de process) et les règles de survie à adopter dès aujourd'hui."
+---
+
+# Pourquoi la plupart des traders perdent
+
+Le niveau 0 a décrit les marchés et les outils. Le niveau 1 commence par une question désagréable mais indispensable : pourquoi, avec les mêmes graphiques et les mêmes ordres, la majorité des particuliers finissent-ils par perdre ? La réponse n'a presque rien à voir avec l'analyse technique. Elle tient à trois choses mesurables : les coûts, la taille des positions et l'absence de process. Ce chapitre les met à plat, puis pose les règles de survie qui gouvernent tout le reste du niveau.
+
+## Ce que disent les statistiques publiées par les brokers
+
+Depuis 2018, la réglementation européenne (ESMA) oblige les brokers de CFD et de forex à afficher la proportion de comptes de particuliers qui perdent de l'argent sur leur plateforme. Ces avertissements sont publics, en bas de chaque page d'accueil, et se ressemblent tous : selon les brokers et les périodes, **entre 65 % et 85 % des comptes de particuliers perdent de l'argent** en tradant des CFD. Aux États-Unis, les brokers de forex publient trimestriellement la part de comptes rentables, généralement entre un quart et un tiers.
+
+Trois précautions de lecture :
+
+- Ces chiffres portent sur les CFD et le forex de détail, avec des leviers élevés. Ils ne disent rien de précis sur les futures ou les actions, où les données publiques sont plus rares.
+- Ils mesurent un trimestre : un compte « perdant » peut être en gain l'année suivante, et inversement.
+- Ils ne distinguent pas le trader qui a suivi un process de celui qui a ouvert un compte pour jouer.
+
+Mais l'ordre de grandeur est robuste, il se retrouve chez tous les brokers et sur toutes les périodes : **une large majorité perd**. Un débutant honnête part de là. La question utile n'est pas « comment faire partie des 25 % ? », c'est « qu'est-ce qui distingue, mécaniquement, les comptes qui survivent ? ». Et cela, on peut le décomposer.
+
+## Espérance négative par défaut : le rôle des coûts
+
+Le chapitre 1 du niveau 0 a introduit l'idée : à décisions aléatoires, l'espérance brute d'un trade est proche de zéro ; les coûts la font passer sous zéro. Chiffrons-la.
+
+Prenez un trader qui achète et vend au hasard EUR/USD, avec un stop et un objectif à la même distance, 20 pips. Sans coût, il gagne une fois sur deux 20 pips et perd une fois sur deux 20 pips : espérance nulle. Ajoutez 1 pip de spread et 0,5 pip de commission par aller-retour, soit 1,5 pip. Chaque trade coûte donc 1,5 pip quelle que soit l'issue : l'espérance devient **−1,5 pip par trade**, soit −7,5 % du risque à chaque fois. Sur 400 trades dans l'année, cela représente 600 pips perdus, uniquement à cause des coûts, avant tout talent ou toute erreur.
+
+Le même calcul en R : si le stop fait 20 pips, 1,5 pip de coût représente 0,075R. Un système à décisions aléatoires a une espérance de −0,075R par trade. Pour être rentable, il faut un avantage réel qui apporte **plus** que cela. Plus les coûts sont élevés par rapport au stop, plus l'avantage nécessaire est grand.
+
+<Figure caption="Figure 1 · Ce que devient une courbe de capital à décisions aléatoires, avec et sans coûts, sur 400 trades. Sans coût, elle erre autour de zéro ; avec coûts, elle dérive vers le bas.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Courbes de capital simulées avec et sans coûts" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="150" x2="700" y2="150" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="60" y1="30" x2="60" y2="290" className="line" strokeWidth="1" />
+  <line x1="60" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <text x="30" y="154" fontSize="11" textAnchor="end" className="mono muted">0R</text>
+  <text x="30" y="60" fontSize="11" textAnchor="end" className="mono muted">+20R</text>
+  <text x="30" y="250" fontSize="11" textAnchor="end" className="mono muted">−20R</text>
+  <text x="380" y="310" fontSize="12" textAnchor="middle" className="muted">nombre de trades (0 à 400)</text>
+
+  <polyline points="60,150 100,140 140,158 180,146 220,132 260,150 300,162 340,148 380,138 420,152 460,166 500,150 540,142 580,156 620,146 660,138 700,150" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="560" y="128" fontSize="12" fontWeight="600" className="gold">sans coût : espérance 0</text>
+
+  <polyline points="60,150 100,144 140,166 180,160 220,152 260,176 300,194 340,186 380,182 420,202 460,222 500,212 540,210 580,230 620,226 660,224 700,242" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="470" y="262" fontSize="12" fontWeight="600" className="red">avec 0,075R de coût par trade : −30R attendus</text>
+</svg>
+</Figure>
+
+Ce point explique déjà une partie du chiffre des brokers : les particuliers sur CFD paient des spreads élargis, du financement de nuit et souvent des commissions, sur des stops courts. Le péage est élevé par rapport au risque, et l'avantage nécessaire pour le battre est rarement là.
+
+## Sur-risque, sur-trading et absence de process
+
+Les coûts expliquent une dérive lente. Ils n'expliquent pas les comptes qui perdent 60 % en trois mois. Pour cela, il faut trois autres mécanismes.
+
+### Le sur-risque
+
+Un trader qui risque 10 % de son compte par trade n'a besoin que de sept pertes consécutives pour perdre plus de la moitié de son capital, et il ne lui restera plus de quoi revenir. Or sept pertes de suite arrivent à tout le monde, même avec un bon système : le chapitre 4 calculera à quelle fréquence. Le sur-risque n'est pas un manque de chance, c'est une certitude différée.
+
+Le mécanisme se cache derrière le levier : le compte de 2 000 € qui prend un lot standard sur EUR/USD (100 000 €) risque 10 $ par pip ; un stop de 30 pips vaut 300 $, 15 % du compte. Le trader ne « voit » pas ce risque, il voit une marge de quelques centaines d'euros et une position ouverte. Il découvre le pourcentage quand le stop est touché.
+
+<Figure caption="Figure 2 · Le capital restant après une série de pertes consécutives, selon le risque par trade. À 1 %, dix pertes coûtent moins de 10 % ; à 10 %, elles emportent 65 % du compte.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Capital restant après N pertes selon le risque par trade" xmlns="http://www.w3.org/2000/svg">
+  <line x1="70" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <line x1="70" y1="30" x2="70" y2="270" className="line" strokeWidth="1" />
+  <text x="385" y="300" fontSize="12" textAnchor="middle" className="muted">pertes consécutives</text>
+  <text x="70" y="290" fontSize="11" textAnchor="middle" className="mono muted">0</text>
+  <text x="196" y="290" fontSize="11" textAnchor="middle" className="mono muted">2</text>
+  <text x="322" y="290" fontSize="11" textAnchor="middle" className="mono muted">4</text>
+  <text x="448" y="290" fontSize="11" textAnchor="middle" className="mono muted">6</text>
+  <text x="574" y="290" fontSize="11" textAnchor="middle" className="mono muted">8</text>
+  <text x="700" y="290" fontSize="11" textAnchor="middle" className="mono muted">10</text>
+  <text x="60" y="34" fontSize="11" textAnchor="end" className="mono muted">100 %</text>
+  <text x="60" y="154" fontSize="11" textAnchor="end" className="mono muted">50 %</text>
+  <text x="60" y="274" fontSize="11" textAnchor="end" className="mono muted">0 %</text>
+
+  <polyline points="70,30 133,32 196,35 259,37 322,39 385,42 448,44 511,46 574,49 637,51 700,53" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="600" y="72" fontSize="12" fontWeight="600" className="gold">1 % : reste 90 %</text>
+
+  <polyline points="70,30 133,37 196,44 259,50 322,57 385,63 448,69 511,75 574,80 637,86 700,91" fill="none" stroke="var(--tm-gold)" strokeWidth="2" opacity="0.6" />
+  <text x="600" y="110" fontSize="12" fontWeight="600" className="gold" opacity="0.8">3 % : reste 74 %</text>
+
+  <polyline points="70,30 133,42 196,53 259,64 322,74 385,84 448,93 511,101 574,110 637,117 700,124" fill="none" stroke="var(--tm-red)" strokeWidth="2" opacity="0.6" />
+  <text x="600" y="146" fontSize="12" fontWeight="600" className="red" opacity="0.8">5 % : reste 60 %</text>
+
+  <polyline points="70,30 133,54 196,76 259,95 322,113 385,128 448,142 511,155 574,166 637,177 700,186" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="600" y="210" fontSize="12" fontWeight="600" className="red">10 % : reste 35 %</text>
+</svg>
+</Figure>
+
+### Le sur-trading
+
+Le sur-trading (overtrading) est le fait de prendre plus de trades que le plan n'en prévoit : parce qu'on s'ennuie, parce qu'on veut « se refaire » après une perte, parce que le marché bouge et qu'on a peur de rater. Chaque trade supplémentaire hors plan a deux effets : il paie les coûts, et il est pris avec un avantage nul ou négatif, puisqu'il ne correspond à aucun setup validé. Le sur-trading transforme un système à espérance positive en un système à espérance négative, simplement en diluant les bons trades dans des mauvais.
+
+Un exemple : un trader dispose d'un setup qui rapporte +0,3R en moyenne et se présente 3 fois par semaine. Il prend en plus 7 trades hors setup par semaine, à −0,1R en moyenne (coûts et hasard). Résultat hebdomadaire : 3 × 0,3 − 7 × 0,1 = 0,9 − 0,7 = **+0,2R par semaine** au lieu de +0,9R. Le sur-trading a mangé près de 80 % de l'avantage. Avec 10 trades hors setup, la semaine passe en négatif.
+
+### L'absence de process
+
+Le troisième mécanisme est le plus difficile à voir parce qu'il n'est pas un acte, c'est un vide. Sans process écrit, il n'y a pas de setup défini, donc pas de sur-trading identifiable ; pas de risque fixé, donc pas de sur-risque identifiable ; pas de journal, donc pas de statistiques, donc pas d'espérance mesurable. Le trader sans process ne peut pas apprendre de ses résultats, parce qu'il ne sait pas ce qu'il a fait. Il ne peut que ressentir : euphorie après un gain, colère après une perte, et des décisions prises dans ces états.
+
+Les trois mécanismes se renforcent : la perte due au sur-risque pousse au sur-trading pour se refaire, l'absence de process laisse faire les deux.
+
+## Le risque comme cœur du métier, pas comme contrainte
+
+Le débutant voit la gestion du risque comme un frein : des règles qui l'empêchent de gagner vite. Le professionnel la voit comme la seule chose qu'il contrôle réellement.
+
+Sur un trade, vous ne contrôlez ni la direction du marché, ni le moment où il bougera, ni l'ampleur du mouvement. Vous contrôlez exactement trois choses : **le prix auquel vous entrez, le prix auquel vous reconnaissez avoir tort (le stop), et la taille**. Les deux premières fixent la distance du stop ; la troisième transforme cette distance en un montant en euros. C'est cette combinaison qui décide de la perte, pas le marché.
+
+Une conséquence directe : **la perte est décidée avant l'entrée**. Elle n'est pas un accident, c'est un paramètre. Un trade qui perd exactement le montant prévu est un trade correctement exécuté. Un trade qui perd le double du montant prévu est une erreur, même si l'analyse était bonne. Et un trade qui gagne alors que la taille était le double de la règle est aussi une erreur, qui sera payée plus tard.
+
+Voir le risque ainsi change la question de départ. Ce n'est plus « combien puis-je gagner ? », c'est « combien puis-je perdre sur ce trade, sur cette journée, sur cette semaine, tout en restant capable de continuer ? ». Le reste du niveau répond à cette question chiffre par chiffre : le chapitre 2 calcule la taille, le chapitre 3 mesure l'espérance en R, le chapitre 4 dimensionne le compte face aux séries de pertes, le chapitre 5 agrège plusieurs positions, le chapitre 6 organise les budgets de risque dans le temps.
+
+## Les règles de survie adoptées dès aujourd'hui
+
+Ces règles ne demandent aucune analyse. Elles se mettent en place avant le prochain trade, et elles suffisent à sortir de la partie du graphique où les comptes meurent vite.
+
+1. **Risque maximal de 1 % du compte par trade.** Pas 1 % de la marge, 1 % du capital total. Sur 4 000 €, c'est 40 €. Un débutant peut commencer à 0,5 %. Le chapitre 2 montre le calcul.
+2. **Perte maximale par jour : 2R, soit 2 %.** Deux stops touchés, la journée est terminée. La plateforme est fermée. Cette règle empêche le sur-trading de vengeance, qui est la première cause des grosses journées rouges.
+3. **Perte maximale par semaine : 5R.** Atteinte, on passe en revue au lieu de trader jusqu'au lundi suivant.
+4. **Un stop sur le serveur, à chaque trade, avant toute autre chose.** Bracket systématique. Un trade sans stop n'est pas un trade, c'est un pari.
+5. **Un journal dès le premier trade.** Date, instrument, setup, entrée, stop, sortie, R, respect du plan (oui ou non), une ligne de commentaire. Sans lui, rien de ce qui suit ne peut être mesuré.
+6. **Un nombre maximal de trades par jour**, fixé à l'avance (par exemple trois). Le trade hors setup devient visible et comptable.
+7. **Aucun changement de taille pour « se refaire »**. La taille se calcule à partir du stop et du 1 %, jamais à partir de l'humeur ou du résultat précédent.
+
+Ces sept règles ne rendent pas rentable. Elles rendent **survivant**, c'est-à-dire qu'elles donnent le temps de trouver un avantage et de le mesurer. Aucun trader n'a jamais eu ce temps en risquant 10 % par trade.
+
+<Figure caption="Figure 3 · Les trois causes de perte et la règle qui coupe chacune. Ce sont des règles de survie, pas des règles de rentabilité.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Trois causes de perte et la règle correspondante" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="210" height="70" rx="8" className="red" opacity="0.8" />
+  <text x="125" y="58" fontSize="14" fontWeight="600" textAnchor="middle" fill="#ffffff">Sur-risque</text>
+  <text x="125" y="80" fontSize="11" textAnchor="middle" fill="#ffffff">taille décidée par le levier</text>
+  <polygon points="125,110 118,100 132,100" className="gold" />
+  <line x1="125" y1="100" x2="125" y2="130" className="line" strokeWidth="2" />
+  <rect x="20" y="130" width="210" height="90" rx="8" className="box" strokeWidth="1.5" />
+  <text x="125" y="156" fontSize="13" fontWeight="600" textAnchor="middle">Risque fixe</text>
+  <text x="125" y="176" fontSize="11" textAnchor="middle" className="muted">1 % du compte par trade</text>
+  <text x="125" y="194" fontSize="11" textAnchor="middle" className="muted">taille = risque ÷ distance du stop</text>
+
+  <rect x="255" y="30" width="210" height="70" rx="8" className="red" opacity="0.8" />
+  <text x="360" y="58" fontSize="14" fontWeight="600" textAnchor="middle" fill="#ffffff">Sur-trading</text>
+  <text x="360" y="80" fontSize="11" textAnchor="middle" fill="#ffffff">trades hors setup, vengeance</text>
+  <polygon points="360,110 353,100 367,100" className="gold" />
+  <line x1="360" y1="100" x2="360" y2="130" className="line" strokeWidth="2" />
+  <rect x="255" y="130" width="210" height="90" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="156" fontSize="13" fontWeight="600" textAnchor="middle">Budgets et plafonds</text>
+  <text x="360" y="176" fontSize="11" textAnchor="middle" className="muted">−2R par jour, −5R par semaine</text>
+  <text x="360" y="194" fontSize="11" textAnchor="middle" className="muted">nombre max de trades par jour</text>
+
+  <rect x="490" y="30" width="210" height="70" rx="8" className="red" opacity="0.8" />
+  <text x="595" y="58" fontSize="14" fontWeight="600" textAnchor="middle" fill="#ffffff">Absence de process</text>
+  <text x="595" y="80" fontSize="11" textAnchor="middle" fill="#ffffff">rien de défini, rien de mesuré</text>
+  <polygon points="595,110 588,100 602,100" className="gold" />
+  <line x1="595" y1="100" x2="595" y2="130" className="line" strokeWidth="2" />
+  <rect x="490" y="130" width="210" height="90" rx="8" className="box" strokeWidth="1.5" />
+  <text x="595" y="156" fontSize="13" fontWeight="600" textAnchor="middle">Plan écrit et journal</text>
+  <text x="595" y="176" fontSize="11" textAnchor="middle" className="muted">setup, stop, taille définis avant</text>
+  <text x="595" y="194" fontSize="11" textAnchor="middle" className="muted">chaque trade noté et revu</text>
+
+  <text x="360" y="246" fontSize="12" textAnchor="middle" className="muted">Les coûts s'ajoutent aux trois : ils se combattent par le choix du marché, de l'heure et du broker (niveau 0).</text>
+</svg>
+</Figure>
+
+## Deux trades, deux comptes
+
+Reconstitutions pédagogiques : la même idée de marché, sur deux comptes de 5 000 $, avec et sans règles de survie.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat sur repli en tendance haussière H1, séance américaine, troisième trade de la journée"
+  entree="5 240,00"
+  stop="5 235,00 (20 ticks)"
+  objectif="5 250,00"
+  r="+2R">
+
+Compte de 5 000 $, risque 1 % (50 $). Stop de 20 ticks à 1,25 $ = 25 $ par contrat : 2 MES, risque 50 $. Le trade atteint l'objectif : gain de 100 $. Ce qui compte n'est pas ce gain, c'est le contexte : c'était le troisième et dernier trade autorisé de la journée, les deux premiers avaient perdu (−1R chacun). Le trader était à −2R, exactement à son plafond quotidien... mais ce trade était déjà en cours quand la deuxième perte a été enregistrée, et le plan prévoyait de laisser courir un trade ouvert. Bilan de la journée : 0R. Il n'a rien gagné, mais il n'a rien cassé non plus, et son journal contient trois trades conformes au plan. C'est à quoi ressemble une journée réussie sans profit.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Futures ES (S&P 500), contrat standard"
+  direction="Long"
+  setup="Même achat sur repli, mais après deux pertes et pour « se refaire »"
+  entree="5 240,00"
+  stop="5 235,00 (20 ticks), sur 1 ES"
+  objectif="5 250,00"
+  r="−5R en un trade, −7R sur la journée">
+
+Même compte de 5 000 $, même idée. Le trader a perdu deux fois 50 $ le matin. Agacé, il passe sur 1 contrat ES au lieu de 2 MES : le même stop de 20 ticks vaut maintenant 250 $, soit 5 % du compte. Il se dit qu'un seul gain effacera les deux pertes et plus. Le prix touche le stop de quelques ticks avant de repartir vers l'objectif. Perte : 250 $, 5R selon sa propre règle. Journée : −350 $, soit −7 % du compte, sur une idée qui n'était pas mauvaise. Rien dans le marché n'a changé entre les deux comptes ; ce qui a changé, c'est la taille, décidée par la frustration. Sur ce compte, deux journées comme celle-ci par mois suffisent à perdre un tiers du capital en un trimestre.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Les avertissements réglementaires des brokers convergent : **une large majorité des comptes de particuliers perdent**. Partir de ce fait est le début du sérieux.
+- Les **coûts** rendent l'espérance négative par défaut ; leur poids se mesure en fraction du stop (par exemple 0,075R par trade).
+- Les comptes qui meurent vite le font par **sur-risque** (taille), **sur-trading** (trades hors plan) et **absence de process** (rien de défini ni mesuré).
+- Vous ne contrôlez que **l'entrée, le stop et la taille** : la perte est un paramètre décidé avant le trade, pas un accident.
+- **Sept règles de survie** : 1 % par trade, −2R par jour, −5R par semaine, stop sur le serveur, journal, nombre max de trades, jamais de taille « pour se refaire ».
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Le poids des coûts en R">
+
+Un trader intraday sur MNQ utilise un stop moyen de 10 points. Chaque aller-retour lui coûte 1,20 $ de commission et, en moyenne, 1 tick (0,50 $) de spread ou de slippage.
+
+1. Quel est le coût d'un aller-retour en dollars, puis en R (R = 10 points sur 1 MNQ) ?
+2. S'il prend 300 trades par an à décisions aléatoires, quelle perte attend-il uniquement à cause des coûts, en R et en dollars ?
+3. Quelle espérance brute minimale par trade son avantage doit-il apporter pour être simplement à zéro ?
+
+<Solution>
+
+1. Coût : 1,20 + 0,50 = **1,70 $**. R = 10 points × 2 $ = 20 $. En R : 1,70 ÷ 20 = **0,085R**.
+2. 300 × 0,085 = **−25,5R**, soit 300 × 1,70 = **−510 $**.
+3. Il faut au moins **+0,085R par trade** d'avantage brut pour couvrir les coûts. Toute stratégie dont l'espérance mesurée avant frais est inférieure est perdante en réel.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Sur-risque : combien de pertes avant la moitié du compte">
+
+Calculez le capital restant après 5, puis 10 pertes consécutives pour un risque par trade de 1 %, 3 % et 10 % (les pertes s'appliquent au capital restant, donc le risque en euros diminue à chaque perte).
+
+<Solution>
+
+Le capital restant après n pertes est (1 − r)ⁿ.
+
+- **1 %** : après 5 pertes, 0,99⁵ ≈ 0,951, soit **95,1 %** ; après 10, 0,99¹⁰ ≈ 0,904, soit **90,4 %**.
+- **3 %** : 0,97⁵ ≈ 0,859, soit **85,9 %** ; 0,97¹⁰ ≈ 0,737, soit **73,7 %**.
+- **10 %** : 0,90⁵ ≈ 0,590, soit **59,0 %** ; 0,90¹⁰ ≈ 0,349, soit **34,9 %**.
+
+À 10 %, sept pertes de suite laissent 0,90⁷ ≈ 47,8 % : plus de la moitié du compte a disparu, et il faut ensuite gagner plus de 100 % pour revenir au point de départ. À 1 %, la même série coûte moins de 7 %.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le sur-trading dilue l'avantage">
+
+Un setup rapporte en moyenne +0,35R et se présente 4 fois par semaine. En plus, le trader prend chaque semaine des trades hors setup dont l'espérance est −0,1R (coûts et hasard).
+
+1. Quel est le résultat hebdomadaire attendu avec 0, 5, 10 et 15 trades hors setup ?
+2. À partir de combien de trades hors setup la semaine devient-elle perdante en espérance ?
+
+<Solution>
+
+1. Base : 4 × 0,35 = +1,40R. Avec 5 hors setup : 1,40 − 0,50 = **+0,90R**. Avec 10 : 1,40 − 1,00 = **+0,40R**. Avec 15 : 1,40 − 1,50 = **−0,10R**.
+2. La semaine devient perdante quand 0,1 × n dépasse 1,40, soit **à partir de 15 trades hors setup** (14 donne exactement zéro). Un plafond de trades par jour rend ces trades visibles et comptables : c'est sa fonction.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Que montrent les avertissements réglementaires affichés par les brokers de CFD en Europe ?",
+      options: [
+        "Que le trading est interdit aux particuliers",
+        "Qu'une large majorité des comptes de particuliers perdent de l'argent sur la période mesurée",
+        "Que 50 % des traders gagnent",
+        "Que les pertes viennent des bugs de plateforme",
+      ],
+      answer: 1,
+      explain: "Selon les brokers et les trimestres, entre 65 et 85 % des comptes de particuliers en CFD sont perdants. L'ordre de grandeur est constant.",
+    },
+    {
+      q: "Un stop de 20 pips, un coût de 1,5 pip par aller-retour. À décisions aléatoires, l'espérance par trade vaut :",
+      options: [
+        "0",
+        "−1,5 pip, soit −0,075R",
+        "+1,5 pip",
+        "−20 pips",
+      ],
+      answer: 1,
+      explain: "Sans coût, l'espérance de décisions aléatoires est nulle. Le coût s'y soustrait à chaque trade : −1,5 pip, soit 1,5 ÷ 20 = 0,075R.",
+    },
+    {
+      q: "Quel est le mécanisme du sur-risque ?",
+      options: [
+        "Prendre trop de trades",
+        "Une taille de position telle qu'une série normale de pertes détruit une part irrécupérable du compte",
+        "Trader sans écran de secours",
+        "Utiliser des ordres limites",
+      ],
+      answer: 1,
+      explain: "À 10 % de risque par trade, sept pertes de suite retirent plus de la moitié du compte. Or de telles séries arrivent à tout système. Le sur-risque est une certitude différée.",
+    },
+    {
+      q: "Pourquoi le sur-trading détruit-il l'espérance d'un système rentable ?",
+      options: [
+        "Parce que le broker facture plus cher",
+        "Parce que les trades hors setup ont une espérance nulle ou négative et se mélangent aux bons trades",
+        "Parce que le marché punit la fréquence",
+        "Il ne la détruit pas",
+      ],
+      answer: 1,
+      explain: "Chaque trade hors plan paie les coûts sans avantage. Il dilue les bons trades ; au-delà d'un certain nombre, la somme passe en négatif.",
+    },
+    {
+      q: "Sur un trade, que contrôle réellement le trader ?",
+      options: [
+        "La direction du marché",
+        "L'entrée, le stop et la taille",
+        "Le moment du mouvement",
+        "L'ampleur du mouvement",
+      ],
+      answer: 1,
+      explain: "Le marché décide du reste. Entrée et stop fixent la distance ; la taille la transforme en euros. La perte est donc décidée avant le trade.",
+    },
+    {
+      q: "Après deux pertes le matin, un trader double sa taille pour « se refaire ». Quelle règle de survie viole-t-il ?",
+      options: [
+        "Le stop sur le serveur",
+        "Le journal",
+        "Jamais de changement de taille pour se refaire ; la taille vient du stop et du 1 %",
+        "Aucune, c'est une stratégie valable",
+      ],
+      answer: 2,
+      explain: "La taille se calcule à partir du risque fixe et de la distance du stop, jamais à partir du résultat précédent. Le trade de vengeance est la première cause des grosses journées rouges.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Vous savez maintenant pourquoi les comptes meurent et quelles règles les font survivre. Le chapitre suivant transforme la règle du 1 % en un calcul précis : comment passer d'un stop en points, en pips ou en pourcentage à un nombre de contrats, de lots ou d'unités, sur futures, forex et crypto, et pourquoi la formule de Kelly est à la fois éclairante et dangereuse.
