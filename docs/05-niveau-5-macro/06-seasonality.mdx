@@ -1,0 +1,326 @@
+---
+title: "Saisonnalité, et sa combinaison avec le COT"
+description: "Les saisonnalités robustes par classe d'actifs et leurs causes, la construction d'une carte saisonnière fiable, la combinaison de la saisonnalité avec le positionnement COT, les fenêtres statistiques et la taille d'échantillon, et les pièges du cherry-picking et des années atypiques."
+---
+
+# Saisonnalité, et sa combinaison avec le COT
+
+Certains marchés ont des habitudes calendaires : le gaz naturel se comporte différemment avant l'hiver, les grains autour des récoltes, les actions autour de la fin d'année. La **saisonnalité** est l'étude de ces régularités. Elle est utile quand elle a une cause, qu'elle est mesurée proprement, et qu'elle est combinée à autre chose ; elle est dangereuse quand elle est lue comme une prédiction, sur des échantillons trop courts, avec des fenêtres choisies après coup. Ce chapitre donne les saisonnalités qui tiennent, la méthode pour construire sa carte, la façon de la croiser avec le COT du chapitre précédent, et surtout les précautions statistiques sans lesquelles la saisonnalité fait dire n'importe quoi aux moyennes.
+
+## Les saisonnalités robustes par classe d'actifs
+
+Une saisonnalité est **robuste** quand elle a une **cause économique identifiable**, qu'elle se vérifie sur un **échantillon long** (vingt ans ou plus), et qu'elle reste visible quand on retire les années extrêmes. Peu de saisonnalités passent ces trois filtres ; voici celles qui s'en approchent, avec leur cause.
+
+**Énergie.** Le gaz naturel a une saisonnalité de demande (chauffage en hiver, climatisation en été) et de stockage (les stocks se remplissent d'avril à octobre, se vident ensuite) : les prix ont tendance à se renforcer à l'approche de l'hiver et à se détendre à la fin. L'essence a une saisonnalité de demande estivale (la « driving season ») qui soutient les marges de raffinage au printemps. Le pétrole brut hérite en partie de ces cycles, avec moins de netteté.
+
+**Grains.** Le blé, le maïs, le soja ont une saisonnalité de production : incertitude et prime de risque météo au printemps et en début d'été (les prix intègrent le risque de mauvaise récolte), pression des récoltes à l'automne dans l'hémisphère nord (l'offre arrive, les prix baissent souvent). C'est la saisonnalité la plus fondée du cours, parce que sa cause est physique.
+
+**Métaux précieux.** L'or a une saisonnalité de demande liée aux fêtes et mariages en Inde (automne) et au Nouvel An chinois (janvier-février), qui donne une tendance à des mois d'hiver et de fin d'été plus favorables ; elle est réelle mais modeste, et souvent dominée par le dollar et les taux (chapitre 3).
+
+**Actions.** Les régularités les plus documentées : une tendance à de meilleures performances de novembre à avril qu'entre mai et octobre (le « sell in May », observé sur de longues périodes mais avec de nombreuses exceptions), une force fréquente en fin d'année (le rallye de décembre), une faiblesse relative en septembre. Les causes sont moins claires (flux, fiscalité, psychologie) et l'effet est plus faible que sur les matières premières ; on le prend comme un léger biais de contexte, pas plus.
+
+**Devises et taux.** Des effets de fin de trimestre et de fin d'année liés aux rééquilibrages et aux besoins de financement en dollars, quelques régularités mensuelles fragiles ; peu utilisables seules.
+
+**Intra-mensuel et intra-hebdomadaire.** Des régularités plus courtes existent : la force autour du tournant de mois sur les actions (flux de fonds), les journées d'expiration d'options, la première heure de séance ; elles relèvent plus des chapitres 4 (calendrier) et du niveau 4 (profil d'événements) que de la saisonnalité au sens annuel.
+
+Le fil : **plus la cause est physique et régulière, plus la saisonnalité est robuste** ; les grains et l'énergie d'abord, les métaux ensuite, les actions et devises en dernier.
+
+<Figure caption="Figure 1 · Carte saisonnière moyenne du gaz naturel sur vingt ans (courbe indicative, chaque année ramenée à 100 au 1er janvier) : force à l'approche de l'hiver, faiblesse à la sortie ; la cause est la demande de chauffage et le cycle de stockage. La bande grise montre la dispersion : la moyenne cache des années très différentes.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Carte saisonnière indicative du gaz naturel" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="250" className="line" strokeWidth="1" />
+  <text x="86" y="268" fontSize="10" textAnchor="middle" className="muted">J</text><text x="139" y="268" fontSize="10" textAnchor="middle" className="muted">F</text><text x="192" y="268" fontSize="10" textAnchor="middle" className="muted">M</text><text x="245" y="268" fontSize="10" textAnchor="middle" className="muted">A</text><text x="298" y="268" fontSize="10" textAnchor="middle" className="muted">M</text><text x="351" y="268" fontSize="10" textAnchor="middle" className="muted">J</text><text x="404" y="268" fontSize="10" textAnchor="middle" className="muted">J</text><text x="457" y="268" fontSize="10" textAnchor="middle" className="muted">A</text><text x="510" y="268" fontSize="10" textAnchor="middle" className="muted">S</text><text x="563" y="268" fontSize="10" textAnchor="middle" className="muted">O</text><text x="616" y="268" fontSize="10" textAnchor="middle" className="muted">N</text><text x="669" y="268" fontSize="10" textAnchor="middle" className="muted">D</text>
+  <text x="50" y="154" fontSize="10" textAnchor="end" className="mono muted">100</text>
+  <path d="M 70 130 L 120 150 L 170 175 L 220 190 L 270 185 L 320 170 L 370 165 L 420 160 L 470 150 L 520 130 L 570 110 L 620 95 L 690 100 L 690 60 L 620 45 L 570 60 L 520 85 L 470 105 L 420 115 L 370 120 L 320 125 L 270 140 L 220 145 L 170 130 L 120 105 L 70 90 Z" className="box" opacity="0.5" />
+  <polyline points="70,110 120,128 170,152 220,168 270,162 320,148 370,142 420,138 470,128 520,108 570,85 620,70 690,80" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <rect x="220" y="40" width="250" height="16" rx="3" className="green" opacity="0.15" /><text x="345" y="52" fontSize="9" textAnchor="middle">remplissage des stocks : pression</text>
+  <rect x="520" y="40" width="170" height="16" rx="3" className="red" opacity="0.15" /><text x="605" y="52" fontSize="9" textAnchor="middle">avant l'hiver : force</text>
+  <text x="380" y="290" fontSize="10" textAnchor="middle" className="muted">moyenne (trait) et dispersion (bande) : une cause physique, une régularité, et une dispersion qui interdit d'en faire une prédiction</text>
+</svg>
+</Figure>
+
+## Construire une carte saisonnière fiable
+
+Une carte saisonnière est une courbe : pour chaque jour (ou semaine) de l'année, la performance moyenne du marché sur les N dernières années, ou le pourcentage d'années où le marché a monté. La construire soi-même évite de dépendre de cartes toutes faites dont on ignore la méthode.
+
+**Méthode :**
+
+1. **Les données** : les clôtures quotidiennes du contrat (ou d'un indice continu propre : les futures ont des roulements, il faut une série ajustée) sur au moins **20 ans** ; 30 est mieux. Moins de 15 ans donne des cartes dominées par quelques années.
+2. **La normalisation** : pour chaque année, ramener le prix à 100 au premier jour (ou calculer les rendements quotidiens), pour que les années à prix élevé ne dominent pas.
+3. **L'agrégation** : pour chaque jour de l'année (jour 1 à 252 en jours de bourse), la **moyenne** des valeurs normalisées ; et, séparément, la **médiane** (moins sensible aux années extrêmes) et le **taux de hausse** (le pourcentage d'années où le prix a monté entre deux dates).
+4. **La dispersion** : l'écart-type ou les quantiles par jour, pour dessiner la bande autour de la moyenne (comme dans la figure 1). Une moyenne sans dispersion est un mensonge par omission.
+5. **La robustesse** : recalculer en retirant les deux ou trois années les plus extrêmes ; si la forme change beaucoup, la saisonnalité tenait à ces années, pas à une régularité.
+6. **La cause** : écrire en une ligne pourquoi cette saisonnalité existerait ; si l'on ne trouve pas de cause, la traiter avec une méfiance supplémentaire.
+
+Ce que l'on tire d'une carte fiable : des **fenêtres** (« du 15 septembre au 30 novembre, le marché a monté 15 années sur 20, gain médian de 6 % ») avec leur taux de réussite, leur gain médian, leur pire cas, et le nombre d'années. Ce sont ces quatre nombres qui font la fenêtre, pas la courbe.
+
+Le niveau 7 donnera le code pour construire cette carte en quelques lignes ; le tableur suffit pour commencer.
+
+## Combiner saisonnalité et positionnement COT
+
+Seule, la saisonnalité est un biais faible ; seul, le COT est un biais lent. Combinés, ils décrivent une **fenêtre de contexte** : une période où le marché a l'habitude de monter **et** où les fonds sont short extrême (les commercials long extrême) est une période où le carburant d'une hausse existe et où le calendrier lui est favorable. Ce n'est toujours pas une entrée ; c'est un contexte de swing de bonne qualité.
+
+La combinaison se lit ainsi, pour un marché donné :
+
+| Saisonnalité (fenêtre à venir) | COT (index des fonds) | Lecture |
+| --- | --- | --- |
+| Favorable (haussière) | Bas (fonds short, commercials long) | **Contexte haussier fort** : le calendrier et le positionnement s'accordent ; chercher des achats de swing sur la structure |
+| Favorable | Haut (fonds déjà long) | Contexte haussier **déjà consommé** : la saisonnalité est peut-être dans le prix ; prudence, cibles courtes |
+| Défavorable (baissière) | Haut | **Contexte baissier fort** : chercher des ventes de swing sur la structure |
+| Défavorable | Bas | Contexte baissier déjà consommé ; prudence |
+| Neutre ou contradictoire | Quelconque | Pas de biais de contexte ; structure seule |
+
+L'exemple classique est celui des grains : la fenêtre saisonnière de baisse des récoltes (août-octobre dans l'hémisphère nord) combinée à des fonds encore net long en juillet est une configuration que les traders de matières premières surveillent chaque année ; quand les fonds sont déjà net short en juillet, la baisse saisonnière est souvent atone ou inversée. Même logique sur le gaz naturel avant l'hiver et sur l'or en fin d'été.
+
+Trois règles pour la combinaison :
+
+1. **Le COT donne le sens de la prudence** : quand il contredit la saisonnalité, on réduit l'ambition, pas l'inverse.
+2. **La structure déclenche** : dans une fenêtre de contexte favorable, l'entrée reste un sweep, un CHoCH, un retour dans une zone (niveau 3), sur le quotidien ou le H4.
+3. **La fenêtre a un début et une fin** : on note les dates ; à la fin de la fenêtre, le biais saisonnier disparaît, et si le trade est encore ouvert, il vit sur la structure seule.
+
+<Figure caption="Figure 2 · La combinaison en une image : la fenêtre saisonnière (bande calendaire), l'index COT des fonds (jauge) et la structure quotidienne (le déclencheur). Les trois alignés donnent un contexte de swing de qualité ; aucun ne suffit seul.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Combinaison saisonnalité, COT et structure" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="30" width="640" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="60" y="52" fontSize="12" fontWeight="600">1 · Saisonnalité</text>
+  <rect x="200" y="42" width="440" height="14" rx="3" className="box" opacity="0.6" />
+  <rect x="380" y="42" width="140" height="14" rx="3" className="green" opacity="0.5" />
+  <text x="450" y="76" fontSize="10" textAnchor="middle" className="green">fenêtre haussière : 15 sept. → 30 nov., 15 / 20 ans, médiane +6 %</text>
+  <text x="200" y="76" fontSize="9" className="muted">J</text><text x="630" y="76" fontSize="9" textAnchor="end" className="muted">D</text>
+
+  <rect x="40" y="110" width="640" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="60" y="132" fontSize="12" fontWeight="600">2 · COT</text>
+  <rect x="200" y="122" width="440" height="14" rx="3" className="box" opacity="0.6" />
+  <rect x="200" y="122" width="44" height="14" rx="3" className="red" opacity="0.4" /><rect x="596" y="122" width="44" height="14" rx="3" className="red" opacity="0.4" />
+  <circle cx="240" cy="129" r="7" className="gold" />
+  <text x="200" y="156" fontSize="9" className="muted">0</text><text x="640" y="156" fontSize="9" textAnchor="end" className="muted">100</text>
+  <text x="450" y="156" fontSize="10" textAnchor="middle" className="green">index des fonds à 9 : short extrême, carburant haussier</text>
+
+  <rect x="40" y="190" width="640" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="60" y="212" fontSize="12" fontWeight="600">3 · Structure D</text>
+  <polyline points="200,240 240,225 270,235 300,215 330,246 350,238 380,210 410,222 450,200" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="330" cy="246" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" /><text x="330" y="262" fontSize="8" textAnchor="middle" className="green">sweep</text>
+  <text x="380" y="204" fontSize="8" textAnchor="middle" className="green">CHoCH</text>
+  <text x="560" y="222" fontSize="10" textAnchor="middle" className="green" fontWeight="600">déclencheur : le seul</text>
+  <text x="560" y="238" fontSize="10" textAnchor="middle" className="muted">qui donne l'entrée et le stop</text>
+  <text x="360" y="285" fontSize="10" textAnchor="middle" className="muted">1 + 2 = contexte de swing de qualité ; 3 = entrée. Aucun ne suffit seul.</text>
+</svg>
+</Figure>
+
+## Fenêtres statistiques et taille d'échantillon
+
+C'est ici que la plupart des utilisateurs de saisonnalité se trompent, et il faut être concret.
+
+**Ce qu'un taux de réussite veut dire.** « Le marché a monté 15 années sur 20 sur cette fenêtre » (75 %). Si le marché montait ou baissait au hasard (une pièce), la probabilité d'obtenir 15 hausses ou plus sur 20 est d'environ **2 %** : c'est peu, donc la régularité est probablement réelle. Mais « 7 sur 10 » (70 %) a une probabilité de **17 %** sous le hasard : un cas sur six ; ce n'est pas une preuve. Et « 11 sur 15 » (73 %) : environ **6 %**. La taille d'échantillon change tout : à taux de réussite égal, vingt ans valent bien plus que dix.
+
+**Combien d'années au minimum ?** Vingt pour commencer à croire à une fenêtre à 70-75 %, trente pour être à l'aise ; en dessous de quinze, on ne conclut rien. Le problème : les marchés changent (le gaz naturel de 2005 et celui de 2025 n'ont pas la même structure de production), donc les très longs échantillons mélangent des régimes. Le compromis usuel : vingt à vingt-cinq ans, avec la vérification de robustesse (retirer les extrêmes) et la vérification de **stabilité** (la fenêtre tient-elle sur les dix dernières années comme sur les dix précédentes ?).
+
+**Le nombre de fenêtres testées.** Si l'on cherche, sur une année de 252 jours, toutes les fenêtres possibles de 20 à 60 jours, on en teste des milliers ; **par pur hasard**, des dizaines afficheront 75 % de réussite sur vingt ans. C'est le problème des tests multiples : plus on cherche, plus on trouve des régularités qui n'existent pas. Le remède : partir d'une **cause** (la récolte, le chauffage, la demande festive) et tester **la** fenêtre que la cause prédit, pas toutes les fenêtres.
+
+**Le gain médian et le pire cas** comptent autant que le taux de réussite. Une fenêtre à 75 % avec un gain médian de 1 % et un pire cas de −15 % est inutilisable ; une fenêtre à 65 % avec une médiane de +5 % et un pire cas de −4 % est exploitable. La saisonnalité se lit comme une distribution (niveau 1, chapitre 3), pas comme un pourcentage.
+
+## Les pièges : cherry-picking et années atypiques
+
+**Le cherry-picking (la sélection après coup).** Regarder la carte, repérer visuellement une bosse, mesurer la fenêtre qui commence juste avant la bosse et finit juste après, et annoncer « 80 % de réussite ». La fenêtre a été choisie parce qu'elle marchait ; sur les années suivantes, elle ne marchera pas mieux que le hasard. Le remède : la cause d'abord, la fenêtre ensuite, les bornes fixées avant de mesurer, et une vérification hors échantillon (les cinq dernières années non utilisées pour choisir la fenêtre).
+
+**Les années atypiques.** Une année où le gaz a triplé en trois mois pèse dans une moyenne de vingt ans comme cinq années normales. La moyenne montre alors une « saisonnalité » qui n'est que l'ombre de cette année-là. Le remède : la médiane, la bande de dispersion, et le recalcul sans les extrêmes.
+
+**Le glissement de calendrier.** Les futures roulent ; les jours de bourse varient d'une année à l'autre ; les fêtes se déplacent. Une carte construite sur des dates fixes mélange des semaines différentes ; une carte construite sur le jour de bourse est plus propre. Détail technique, mais il change les résultats sur les fenêtres courtes.
+
+**La confusion avec la tendance de fond.** Un marché qui a monté quinze ans sur vingt a une carte saisonnière « haussière » toute l'année ; ce n'est pas de la saisonnalité, c'est une tendance. Le remède : mesurer les fenêtres en **excès** de la performance annuelle moyenne, ou comparer la fenêtre au reste de l'année.
+
+**La saisonnalité déjà dans le prix.** Les participants connaissent les saisonnalités les plus fortes ; elles s'atténuent quand tout le monde les trade (l'effet janvier sur les actions s'est largement dissipé). C'est la raison de la combinaison avec le COT : si les fonds sont déjà positionnés dans le sens de la saisonnalité, elle est probablement dans le prix.
+
+Le résumé honnête : la saisonnalité est **un biais de contexte modeste, mesurable, à causes physiques**, qui vaut sur les matières premières, un peu sur les métaux, peu sur les actions et les devises ; elle se combine, elle ne se trade pas seule ; et elle s'évalue avec les mêmes exigences statistiques que n'importe quel setup (niveau 7).
+
+<Figure caption="Figure 3 · La même fenêtre saisonnière vue de trois façons : le taux de réussite seul (rassurant), la distribution des résultats annuels (informative : médiane, pire cas, années atypiques), et la probabilité sous le hasard selon la taille d'échantillon (7 / 10 n'est pas une preuve, 15 / 20 commence à l'être).">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Taux de réussite, distribution et significativité d'une fenêtre saisonnière" xmlns="http://www.w3.org/2000/svg">
+  <text x="120" y="28" fontSize="12" fontWeight="600" textAnchor="middle">Taux de réussite</text>
+  <circle cx="120" cy="120" r="55" className="box" strokeWidth="1.5" />
+  <path d="M 120 120 L 120 65 A 55 55 0 1 1 68 137 Z" className="green" opacity="0.6" />
+  <text x="120" y="126" fontSize="16" fontWeight="700" textAnchor="middle">75 %</text>
+  <text x="120" y="200" fontSize="10" textAnchor="middle" className="muted">15 hausses / 20 ans</text>
+  <text x="120" y="216" fontSize="10" textAnchor="middle" className="muted">rassurant, incomplet</text>
+
+  <text x="360" y="28" fontSize="12" fontWeight="600" textAnchor="middle">Distribution des 20 années</text>
+  <line x1="260" y1="180" x2="460" y2="180" className="line" strokeWidth="1" />
+  <line x1="360" y1="60" x2="360" y2="180" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <rect x="270" y="150" width="14" height="30" className="red" opacity="0.7" /><rect x="290" y="165" width="14" height="15" className="red" opacity="0.7" /><rect x="310" y="120" width="14" height="60" className="red" opacity="0.7" /><rect x="330" y="140" width="14" height="40" className="red" opacity="0.7" /><rect x="366" y="90" width="14" height="90" className="green" opacity="0.7" /><rect x="386" y="70" width="14" height="110" className="green" opacity="0.7" /><rect x="406" y="110" width="14" height="70" className="green" opacity="0.7" /><rect x="426" y="150" width="14" height="30" className="green" opacity="0.7" /><rect x="446" y="165" width="14" height="15" className="green" opacity="0.7" />
+  <text x="277" y="196" fontSize="8" textAnchor="middle" className="red">−15 %</text>
+  <text x="360" y="196" fontSize="8" textAnchor="middle" className="muted">0</text>
+  <text x="453" y="196" fontSize="8" textAnchor="middle" className="green">+22 %</text>
+  <text x="360" y="216" fontSize="10" textAnchor="middle" className="muted">médiane +6 % · pire cas −15 % (une année atypique)</text>
+
+  <text x="600" y="28" fontSize="12" fontWeight="600" textAnchor="middle">Probabilité sous le hasard</text>
+  <text x="600" y="80" fontSize="11" textAnchor="middle" className="mono">7 / 10 (70 %) : 17 %</text>
+  <text x="600" y="110" fontSize="11" textAnchor="middle" className="mono">11 / 15 (73 %) : 6 %</text>
+  <text x="600" y="140" fontSize="11" textAnchor="middle" className="mono green" fontWeight="600">15 / 20 (75 %) : 2 %</text>
+  <text x="600" y="170" fontSize="11" textAnchor="middle" className="mono green" fontWeight="600">30 / 40 (75 %) : 0,1 %</text>
+  <text x="600" y="216" fontSize="10" textAnchor="middle" className="muted">à taux égal, l'échantillon fait la preuve</text>
+  <text x="360" y="280" fontSize="10" textAnchor="middle" className="muted">une fenêtre se décrit par quatre nombres : taux, médiane, pire cas, nombre d'années ; et par sa cause</text>
+</svg>
+</Figure>
+
+## Deux trades dans une fenêtre saisonnière
+
+Reconstitutions pédagogiques : la même fenêtre, deux usages.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or), swing"
+  direction="Long"
+  setup="Fenêtre saisonnière de fin d'été (cause : demande festive asiatique ; 14 / 20 ans, médiane +4 %) ; index COT des fonds à 12 (short inhabituel, carburant) ; structure D : sweep du plus bas de juillet puis CHoCH ; entrée au retour dans le FVG D"
+  entree="2 318,0"
+  stop="2 292,0 (26 $, sous le sweep)"
+  objectif="2 396,0 (nPOC mensuel, ≈ +3,4 % depuis l'entrée)"
+  r="+3R">
+
+Le trader a construit sa carte de l'or sur vingt ans, vérifié la fenêtre (cause écrite, bornes fixées avant, robuste sans les deux années extrêmes), et l'a notée dans sa veille. Mi-août, le COT montre les fonds inhabituellement short (index 12) : la saisonnalité et le positionnement s'accordent, contexte haussier fort. Il ne fait rien de plus que noter « chercher des achats de swing sur la structure ». Fin août : sweep du plus bas de juillet, CHoCH quotidien, FVG D. Entrée au retour, stop sous le sweep, cible dans l'ordre de grandeur de la médiane saisonnière et sur un niveau de volume. Le trade a duré cinq semaines ; la fenêtre en a fourni le contexte, le COT le carburant, la structure l'entrée.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or), swing"
+  direction="Long"
+  setup="Achat le premier jour de la fenêtre saisonnière « parce que l'or monte en septembre », sans regarder le COT (fonds long extrême, index 94) ni la structure (D baissière, LH / LL)"
+  entree="2 380,0"
+  stop="2 356,0 (24 $)"
+  objectif="2 470,0"
+  r="−1R">
+
+Autre année. Le trader a lu quelque part que « l'or monte en septembre » et achète le 1er septembre. Le COT montre les fonds net long extrême depuis un mois (la saisonnalité est déjà dans le prix, et le carburant est baissier) ; la structure quotidienne fait des LH et des LL depuis trois semaines après un sweep des plus hauts d'été. La fenêtre saisonnière existe ; cette année-là, elle est l'une des six sur vingt où le prix baisse, et rien dans le positionnement ni la structure ne disait le contraire. Il a tradé une moyenne ; le marché trade une année.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Une saisonnalité est **robuste** si elle a une **cause physique**, un **échantillon long** (20 ans et plus) et qu'elle **survit au retrait des années extrêmes** : grains et énergie d'abord, métaux ensuite, actions et devises peu.
+- La **carte** se construit soi-même : séries ajustées, normalisation, moyenne **et** médiane **et** taux de hausse, **bande de dispersion**, test de robustesse, cause écrite. Une fenêtre = taux, médiane, pire cas, nombre d'années.
+- **Combinée au COT** : saisonnalité favorable + fonds positionnés à l'inverse = contexte de swing fort ; fonds déjà dans le sens = probablement dans le prix. La **structure déclenche** ; la fenêtre a une fin.
+- **Statistique** : 7 / 10 n'est pas une preuve (17 % sous le hasard), 15 / 20 commence à l'être (2 %) ; tester la fenêtre que la cause prédit, pas toutes les fenêtres ; lire la distribution, pas le pourcentage.
+- **Pièges** : cherry-picking, années atypiques, glissement de calendrier, tendance de fond confondue avec saisonnalité, saisonnalité déjà dans le prix. La saisonnalité se combine ; elle ne se trade pas seule.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Juger une fenêtre">
+
+Trois fenêtres saisonnières proposées par un site : (a) blé, 1er juillet-15 septembre, baisse 16 années sur 22, médiane −7 %, pire cas +18 % (une année de sécheresse) ; (b) EUR/USD, 3-17 mars, hausse 8 années sur 11, médiane +0,6 %, pire cas −2,1 % ; (c) ES, 20 décembre-5 janvier, hausse 21 années sur 30, médiane +1,4 %, pire cas −8 %.
+
+1. Pour chacune, donnez la cause probable (ou son absence) et jugez la taille d'échantillon.
+2. Calculez ou estimez la probabilité sous le hasard du taux de réussite (utilisez les repères du chapitre).
+3. Laquelle utiliseriez-vous comme biais de contexte, et avec quelles précautions ?
+
+<Solution>
+
+1. **(a)** Cause physique nette : la pression des récoltes de l'hémisphère nord ; 22 ans, échantillon correct ; le pire cas est une année atypique identifiable. **(b)** Pas de cause claire (peut-être des flux de fin de trimestre, faible) ; 11 ans, échantillon insuffisant ; fenêtre courte et médiane minuscule. **(c)** Cause plausible mais floue (flux de fin d'année, psychologie) ; 30 ans, bon échantillon ; médiane modeste ; pire cas lourd.
+2. **(a)** 16 / 22 (73 %) : de l'ordre de 2 à 3 % sous le hasard (entre les repères 15 / 20 et 18 / 25) : significatif. **(b)** 8 / 11 (73 %) : de l'ordre de 10 à 15 % : pas significatif. **(c)** 21 / 30 (70 %) : de l'ordre de 2 % : significatif, mais l'effet est petit.
+3. **(a)** comme biais de contexte baissier sur le blé en été, combiné au COT (fonds encore long en juin ?) et déclenché par la structure ; précaution : la sécheresse (le pire cas) est un risque météo qui se lit dans les prévisions et le positionnement des commercials. **(c)** comme léger biais haussier de fin d'année sur les indices, sans en attendre grand-chose. **(b)** ne s'utilise pas.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Combiner avec le COT">
+
+Gaz naturel, début octobre : la carte saisonnière (25 ans) donne une fenêtre haussière du 1er octobre au 15 décembre, 17 / 25, médiane +9 %, pire cas −22 %. Cette année, l'index COT des fonds (managed money) est à 88 depuis trois semaines ; les stocks sont au-dessus de leur moyenne quinquennale ; la structure hebdomadaire est haussière mais étirée.
+
+1. Où cette configuration se situe-t-elle dans le tableau de combinaison du chapitre ?
+2. Que dit chacun des trois éléments (saisonnalité, COT, fondamental de stocks) et comment les hiérarchisez-vous ?
+3. Quelle conduite de swing en découle ?
+
+<Solution>
+
+1. **Saisonnalité favorable, fonds déjà haut** : contexte haussier « déjà consommé ». La fenêtre est connue et les fonds sont dedans depuis trois semaines.
+2. La saisonnalité dit « le prix a l'habitude de monter maintenant » ; le COT dit « tout le monde le sait et est déjà positionné : carburant faible pour continuer, fort pour un retournement » ; les stocks élevés disent que la cause physique de cette année (le risque de pénurie hivernale) est plus faible que d'habitude. Hiérarchie : le fondamental de l'année et le positionnement l'emportent sur la moyenne des 25 ans.
+3. **Pas d'achat de swing sur la seule saisonnalité** ; on garde les longs existants avec un stop structurel et une taille prudente ; on surveille le premier sweep des plus hauts suivi d'un CHoCH hebdomadaire, qui, dans ce contexte (fonds pleins, cause affaiblie), serait une configuration de vente de swing malgré la fenêtre haussière. La fenêtre saisonnière n'a pas tort ; cette année, elle est probablement déjà dans le prix.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Construire sa carte">
+
+Sur votre marché principal, construisez une carte saisonnière sur 20 ans au moins (tableur ou script) : normalisation annuelle, moyenne, médiane, taux de hausse par fenêtre mensuelle, bande de dispersion, recalcul sans les trois années extrêmes. Identifiez au plus deux fenêtres qui survivent à tous les filtres et écrivez pour chacune : cause, bornes, taux, médiane, pire cas, nombre d'années, stabilité sur les dix dernières années.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend : la plupart des marchés ne livrent qu'une ou deux fenêtres robustes, parfois aucune (sur les indices et les devises, c'est fréquent). Un résultat « aucune fenêtre robuste » est un bon résultat : il évite d'utiliser un biais qui n'existe pas. Les fenêtres retenues vont dans la fiche de veille hebdomadaire (chapitre 1 de ce niveau) avec leurs dates, et se combinent au COT et à la structure quand elles arrivent.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Une saisonnalité est robuste si :",
+      options: [
+        "Elle est visible sur la carte de l'année dernière",
+        "Elle a une cause physique identifiable, un échantillon de 20 ans ou plus, et survit au retrait des années extrêmes",
+        "Un site la publie",
+        "Elle a marché trois fois",
+      ],
+      answer: 1,
+      explain: "Grains et énergie d'abord (causes physiques), métaux ensuite, actions et devises peu.",
+    },
+    {
+      q: "Une fenêtre saisonnière se décrit par :",
+      options: [
+        "Son taux de réussite seul",
+        "Son taux de réussite, sa médiane, son pire cas, son nombre d'années, et sa cause",
+        "Sa forme sur la carte",
+        "Le nom du site",
+      ],
+      answer: 1,
+      explain: "La saisonnalité se lit comme une distribution, pas comme un pourcentage. Une moyenne sans dispersion est un mensonge par omission.",
+    },
+    {
+      q: "« Hausse 7 années sur 10 » :",
+      options: [
+        "Est une preuve solide",
+        "A environ 17 % de chances de se produire sous le pur hasard : ce n'est pas une preuve ; 15 / 20 (2 %) commence à l'être",
+        "Vaut 15 / 20",
+        "Est significatif à 1 %",
+      ],
+      answer: 1,
+      explain: "À taux de réussite égal, la taille d'échantillon fait la preuve. Et plus on teste de fenêtres, plus on en trouve par hasard : partir de la cause.",
+    },
+    {
+      q: "Saisonnalité favorable + fonds déjà long extrême au COT :",
+      options: [
+        "Contexte haussier renforcé",
+        "Contexte haussier probablement déjà dans le prix : prudence, cibles courtes, surveillance d'un retournement",
+        "Signal de vente immédiat",
+        "Sans lien",
+      ],
+      answer: 1,
+      explain: "Le COT donne le sens de la prudence : quand il contredit la saisonnalité, on réduit l'ambition. La structure déclenche dans tous les cas.",
+    },
+    {
+      q: "Le cherry-picking en saisonnalité consiste à :",
+      options: [
+        "Choisir la cause avant la fenêtre",
+        "Choisir les bornes de la fenêtre après avoir vu la bosse sur la carte : la fenêtre marche parce qu'elle a été choisie pour marcher",
+        "Utiliser la médiane",
+        "Retirer les années extrêmes",
+      ],
+      answer: 1,
+      explain: "Remède : la cause d'abord, les bornes fixées avant de mesurer, une vérification hors échantillon sur les dernières années.",
+    },
+    {
+      q: "La saisonnalité, dans ce cours, est :",
+      options: [
+        "Un système de trading",
+        "Un biais de contexte modeste et mesurable, qui se combine au COT et se déclenche par la structure ; jamais tradé seul",
+        "Une prédiction",
+        "Inutile",
+      ],
+      answer: 1,
+      explain: "Elle s'évalue avec les mêmes exigences statistiques que n'importe quel setup, et elle a une fin de fenêtre au-delà de laquelle le biais disparaît.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Cycle, banques centrales, intermarket, calendrier, positionnement, saisonnalité : il reste à mesurer l'humeur du marché et à nommer son état. Le dernier chapitre du niveau présente les indicateurs de sentiment et leur lecture contrarienne, le VIX et la volatilité implicite comme thermomètres, la définition d'un régime de marché (tendance, range, stress), une matrice de régimes opérationnelle, et l'adaptation des setups au régime en cours.
