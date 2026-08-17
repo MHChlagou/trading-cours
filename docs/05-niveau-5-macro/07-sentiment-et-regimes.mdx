@@ -1,0 +1,350 @@
+---
+title: "Sentiment et détection de régime"
+description: "Les indicateurs de sentiment et leur lecture contrarienne, le VIX et la volatilité implicite comme thermomètres, la définition d'un régime de marché (tendance, range, stress), une matrice de régimes opérationnelle, et l'adaptation des setups au régime en cours."
+---
+
+# Sentiment et détection de régime
+
+Tout ce niveau a construit un contexte : cycle, banques centrales, intermarket, calendrier, positionnement, saisonnalité. Ce dernier chapitre le résume en une question opérationnelle : **dans quel état est le marché en ce moment, et quels setups y ont une chance ?** Le sentiment mesure l'humeur des participants ; la volatilité implicite mesure ce qu'ils craignent ; le régime nomme l'état résultant. La matrice qui en découle est l'outil le plus pratique du niveau : elle dit, chaque semaine, quels chapitres du niveau 3 sortir de la boîte et lesquels y laisser.
+
+## Les indicateurs de sentiment et leur lecture contrarienne
+
+Le **sentiment** est l'humeur agrégée des participants : optimiste (« bullish ») ou pessimiste (« bearish »). On le mesure par des enquêtes, des flux et des positionnements. Les principaux :
+
+- **Enquêtes** : l'AAII (particuliers américains, hebdomadaire : part de haussiers, de baissiers, de neutres), l'Investors Intelligence (lettres de conseil), les enquêtes de gérants de grandes banques (allocation, niveau de cash). Elles disent ce que les gens **déclarent** penser.
+- **Flux et positionnement** : le ratio put / call sur les options (plus de puts achetés que de calls = peur), les flux vers les fonds actions ou monétaires, les niveaux de marge des comptes de courtage, le COT (chapitre 5), le funding crypto (niveau 4). Ils disent ce que les gens **font**, ce qui vaut mieux.
+- **Indices composites** : le « Fear and Greed » de CNN sur les actions, ou son équivalent crypto, qui agrègent plusieurs mesures en un chiffre de 0 à 100. Pratiques, opaques ; à lire comme un thermomètre grossier.
+
+La lecture est **contrarienne aux extrêmes**, pour la même raison que le COT : quand tout le monde est haussier, tout le monde a déjà acheté ; il ne reste plus d'acheteurs marginaux et le carburant de la baisse (les positions à dénouer) est au maximum. Un AAII à 60 % de haussiers, un put / call très bas, un Fear and Greed à 90 sont des lectures d'euphorie ; l'inverse, des lectures de panique. Aux extrêmes de panique, les retournements haussiers sont fréquents (le pessimisme record coïncide souvent avec les creux à quelques semaines près) ; aux extrêmes d'euphorie, la relation est plus lâche (l'euphorie peut durer longtemps).
+
+Trois précautions, les mêmes qu'au chapitre 5 :
+
+1. **Les extrêmes seuls ne datent rien** ; ce sont des conditions, la structure déclenche.
+2. **Entre les extrêmes, le sentiment n'a aucune valeur prédictive** ; un AAII à 42 % de haussiers ne dit rien.
+3. **Le sentiment suit le prix** : après une hausse de deux mois, il est haussier par construction ; ce qui compte est la divergence (un prix qui fait un nouveau plus haut avec un sentiment moins euphorique qu'au sommet précédent, ou un prix qui fait un nouveau plus bas avec moins de panique).
+
+Le sentiment est un **thermomètre de foule** ; il complète le COT (qui mesure les gros) et le funding (qui mesure les leviers). Ensemble, ils disent de quel côté le marché penche et à quel point.
+
+<Figure caption="Figure 1 · Le sentiment (ici un indice composite de 0 à 100) contre le prix : les extrêmes de panique coïncident souvent avec les creux à quelques semaines près ; les extrêmes d'euphorie sont moins fiables et peuvent durer. Entre les deux, aucune information.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Indice de sentiment et prix sur deux ans" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="150" x2="700" y2="150" className="line" strokeWidth="1" />
+  <text x="50" y="50" fontSize="10" textAnchor="end" className="muted">prix</text>
+  <polyline points="70,120 120,100 170,80 220,60 270,75 320,110 370,135 400,140 430,120 470,95 520,70 570,50 620,55 670,70 690,85" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="60" y1="300" x2="700" y2="300" className="line" strokeWidth="1" />
+  <line x1="60" y1="240" x2="700" y2="240" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="50" y="200" fontSize="10" textAnchor="end" className="mono muted">100</text>
+  <text x="50" y="244" fontSize="10" textAnchor="end" className="mono muted">50</text>
+  <text x="50" y="298" fontSize="10" textAnchor="end" className="mono muted">0</text>
+  <polyline points="70,230 120,215 170,205 220,196 270,215 320,262 370,285 400,290 430,265 470,240 520,220 570,205 620,215 670,235 690,245" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <rect x="200" y="190" width="40" height="110" className="red" opacity="0.1" /><text x="220" y="315" fontSize="9" textAnchor="middle" className="red">euphorie</text>
+  <rect x="380" y="190" width="40" height="110" className="green" opacity="0.1" /><text x="400" y="315" fontSize="9" textAnchor="middle" className="green">panique</text>
+  <rect x="550" y="190" width="40" height="110" className="red" opacity="0.1" /><text x="570" y="315" fontSize="9" textAnchor="middle" className="red">euphorie</text>
+  <text x="400" y="128" fontSize="9" textAnchor="middle" className="green">creux 2 semaines après la panique</text>
+  <text x="220" y="45" fontSize="9" textAnchor="middle" className="muted">sommet 4 semaines après</text>
+  <text x="600" y="38" fontSize="9" textAnchor="middle" className="muted">l'euphorie a duré 6 semaines</text>
+  <text x="300" y="228" fontSize="9" textAnchor="middle" className="muted">entre : rien</text>
+</svg>
+</Figure>
+
+## VIX et volatilité implicite comme thermomètres
+
+Le **VIX** mesure la volatilité **implicite** des options sur le S&P 500 à 30 jours : c'est la volatilité annualisée que les prix des options impliquent, donc ce que le marché **paie** pour se protéger. Un VIX à 16 signifie que le marché anticipe une volatilité annualisée d'environ 16 % sur un mois. Ramené au jour (on divise par la racine de 252 séances), un VIX à 16 correspond à un mouvement quotidien attendu d'environ 1 % ; à 12, environ 0,75 % (une quarantaine de points d'ES à 5 300) ; à 25, environ 1,6 % ; à 35, environ 2,2 % (plus de cent points d'ES par jour). Le niveau 6 traite les options ; ici, le VIX est un thermomètre.
+
+Ce qu'il dit :
+
+- **Son niveau** : bas (sous 15) = calme, complaisance ; moyen (15-20) = normal ; élevé (25-30) = stress ; très élevé (au-delà de 35-40) = panique, souvent proche d'un creux de marché à court terme (mais pas toujours du creux final).
+- **Sa direction** : un VIX qui monte pendant que les actions montent est une divergence : le marché achète de la protection dans la hausse, il ne la croit pas ; un VIX qui baisse pendant que les actions baissent est une baisse ordonnée, sans peur.
+- **Sa structure à terme** : les futures VIX à un, deux, trois mois. En temps normal, les échéances lointaines sont plus chères que le spot (contango : l'incertitude croît avec l'horizon) ; en stress, la courbe s'inverse (backwardation : la peur est maintenant). Le passage en backwardation est un des marqueurs de régime de stress les plus nets.
+- **Son écart avec la volatilité réalisée** : quand la volatilité réalisée (celle qu'on mesure, niveau 2, ATR) dépasse la volatilité implicite, le marché est surpris ; quand l'implicite dépasse largement la réalisée, il paie une prime de peur qui finit par se dégonfler.
+
+Il existe des équivalents : le MOVE pour les obligations, des indices de volatilité implicite pour l'or, le pétrole, les devises, la crypto. Le principe est identique.
+
+Le VIX ne se lit pas comme un signal directionnel isolé (« VIX à 30, j'achète ») ; il se lit comme un **régime** : au-dessus de 25 avec une courbe inversée, les setups de continuation calme ne fonctionnent plus, les stops doivent tripler, les sweeps sont énormes ; en dessous de 14, les mouvements sont petits, les ranges dominent, et le risque est la complaisance qui précède l'expansion (niveau 2, contraction / expansion).
+
+<Figure caption="Figure 2 · Le VIX comme thermomètre de régime : niveaux (calme, normal, stress, panique), mouvement quotidien attendu correspondant sur l'ES, et structure à terme (contango en temps normal, backwardation en stress).">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Niveaux du VIX et structure à terme" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="40" width="150" height="120" rx="6" className="green" opacity="0.1" />
+  <text x="115" y="62" fontSize="12" fontWeight="600" textAnchor="middle">VIX sous 15</text>
+  <text x="115" y="84" fontSize="10" textAnchor="middle" className="muted">calme, complaisance</text>
+  <text x="115" y="104" fontSize="10" textAnchor="middle" className="mono">≈ 0,75 % / jour</text>
+  <text x="115" y="120" fontSize="10" textAnchor="middle" className="mono">≈ 40 pts d'ES</text>
+  <text x="115" y="146" fontSize="9" textAnchor="middle" className="muted">ranges, contraction</text>
+  <rect x="200" y="40" width="150" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="275" y="62" fontSize="12" fontWeight="600" textAnchor="middle">15 à 20</text>
+  <text x="275" y="84" fontSize="10" textAnchor="middle" className="muted">normal</text>
+  <text x="275" y="104" fontSize="10" textAnchor="middle" className="mono">≈ 1 % / jour</text>
+  <text x="275" y="120" fontSize="10" textAnchor="middle" className="mono">≈ 55-60 pts</text>
+  <text x="275" y="146" fontSize="9" textAnchor="middle" className="muted">tendances lisibles</text>
+  <rect x="360" y="40" width="150" height="120" rx="6" className="gold" opacity="0.15" />
+  <text x="435" y="62" fontSize="12" fontWeight="600" textAnchor="middle">25 à 30</text>
+  <text x="435" y="84" fontSize="10" textAnchor="middle" className="muted">stress</text>
+  <text x="435" y="104" fontSize="10" textAnchor="middle" className="mono">≈ 1,6 % / jour</text>
+  <text x="435" y="120" fontSize="10" textAnchor="middle" className="mono">≈ 85 pts</text>
+  <text x="435" y="146" fontSize="9" textAnchor="middle" className="muted">stops ×2, sweeps larges</text>
+  <rect x="520" y="40" width="160" height="120" rx="6" className="red" opacity="0.12" />
+  <text x="600" y="62" fontSize="12" fontWeight="600" textAnchor="middle">au-delà de 35</text>
+  <text x="600" y="84" fontSize="10" textAnchor="middle" className="muted">panique</text>
+  <text x="600" y="104" fontSize="10" textAnchor="middle" className="mono">≈ 2,2 % / jour et plus</text>
+  <text x="600" y="120" fontSize="10" textAnchor="middle" className="mono">plus de 100 pts</text>
+  <text x="600" y="146" fontSize="9" textAnchor="middle" className="muted">liquidations, creux proches</text>
+  <text x="180" y="200" fontSize="11" fontWeight="600">Structure à terme</text>
+  <line x1="60" y1="270" x2="330" y2="270" className="line" strokeWidth="1" />
+  <polyline points="80,255 140,245 200,238 260,233 320,230" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="200" y="225" fontSize="9" textAnchor="middle" className="green">contango : normal</text>
+  <text x="80" y="284" fontSize="8" className="muted">spot</text><text x="320" y="284" fontSize="8" textAnchor="end" className="muted">3 mois</text>
+  <line x1="400" y1="270" x2="680" y2="270" className="line" strokeWidth="1" />
+  <polyline points="420,215 480,235 540,248 600,255 660,258" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="560" y="228" fontSize="9" textAnchor="middle" className="red">backwardation : stress</text>
+  <text x="420" y="284" fontSize="8" className="muted">spot</text><text x="660" y="284" fontSize="8" textAnchor="end" className="muted">3 mois</text>
+</svg>
+</Figure>
+
+## Définir un régime de marché : tendance, range, stress
+
+Un **régime** est un état persistant du marché qui change la probabilité de réussite des setups. Le niveau 2 en a donné les briques (structure : tendance ou range ; volatilité : régime calme ou agité) ; ce chapitre les assemble avec le contexte macro en trois grands régimes, chacun ayant des sous-cas.
+
+**Régime de tendance.** La structure de l'unité de contexte fait des HH / HL (ou LH / LL) nets, la volatilité est normale (VIX 15-20, ATR stable), le sentiment n'est pas extrême, les corrélations intermarket sont stables et cohérentes avec le sens (chapitre 3). Ce qui fonctionne : les trades de continuation (niveau 3 : retour sur FVG / OB après BOS, sweeps de HL / LH), le pyramidage (niveau 1), les cibles lointaines. Ce qui échoue : les trades de retournement précoces, les ventes de résistances dans une hausse.
+
+**Régime de range.** La structure ne construit pas de HH / LL durables (niveau 2), la volatilité est basse ou en contraction (VIX sous 15, ATR qui décroît), le profil de volume est en D avec des value areas qui se chevauchent (niveau 4), le sentiment est neutre ou complaisant. Ce qui fonctionne : les trades de rotation (VAL acheté, VAH vendu, retour au POC), les sweeps de bornes de range suivis de retour, les cibles courtes. Ce qui échoue : les cassures achetées (elles sont majoritairement fausses en range), les cibles lointaines, le pyramidage. Le danger propre : la contraction annonce l'expansion ; le range finit toujours, et le premier trade de cassure qui échoue n'est pas le dernier.
+
+**Régime de stress.** VIX au-dessus de 25 avec courbe inversée, ATR qui double ou triple, corrélations qui montent vers 1 (tout baisse ensemble, niveau 1 et chapitre 3), sentiment en panique, liquidations en cascade (niveau 4), spreads élargis, gaps. Ce qui fonctionne : très peu de choses pour un particulier ; les setups de continuation baissière avec des stops très larges et des tailles très réduites ; les rebonds violents après capitulation (climax de volume, OI qui s'effondre) pour les traders expérimentés. Ce qui échoue : tout ce qui suppose des stops normaux et une liquidité normale. La règle du cours : en régime de stress, la taille est divisée par deux au minimum, les stops multipliés d'autant, et l'abstention est une position.
+
+Deux sous-régimes fréquents et trompeurs : la **tendance en régime agité** (une hausse rapide avec VIX élevé, typique des rebonds post-panique : les setups de continuation fonctionnent mais avec des stops de régime de stress) et le **range en régime de stress** (une consolidation large et violente après un choc : ni les rotations ni les continuations ne tiennent, c'est le régime où l'on perd le plus en essayant).
+
+Comment on détecte le régime : pas avec un indicateur unique, mais avec un **faisceau** de trois ou quatre mesures qui doivent concorder : structure de contexte (niveau 2), volatilité implicite et réalisée (VIX, ATR), corrélations intermarket (chapitre 3), sentiment et positionnement (chapitre 5 et ce chapitre). Quand elles concordent, le régime est net ; quand elles divergent, on est en transition, et la prudence s'impose.
+
+## Une matrice de régimes opérationnelle
+
+Voici la matrice que le cours propose. Elle croise deux axes : la **structure** (tendance ou range, sur l'unité de contexte) et la **volatilité** (basse, normale, élevée avec stress), et donne pour chaque case le régime, les setups favorisés, les setups à éviter, et les réglages de risque.
+
+| | Volatilité basse (VIX sous 15, ATR bas) | Volatilité normale (VIX 15-22) | Volatilité élevée / stress (VIX au-delà de 25, courbe inversée) |
+| --- | --- | --- | --- |
+| **Structure en tendance** | **Tendance calme** : continuation sur retours profonds (OTE, FVG HTF), cibles lointaines, pyramidage ; éviter les retournements ; risque normal, stops serrés possibles | **Tendance normale** : continuation après BOS, sweeps de HL / LH, silver bullet ; éviter les ventes de résistance ; risque normal | **Tendance agitée** (rebonds post-choc, krachs) : continuation avec stops ×2 et taille ÷2, pas de pyramidage ; éviter tout contre-tendance ; budget quotidien réduit |
+| **Structure en range** | **Range calme** (contraction) : rotation VAL / VAH, sweeps de bornes ; éviter les cassures ; taille normale, cibles courtes ; **surveiller l'expansion** | **Range normal** : rotation et sweeps de bornes avec confirmation ; cassure jouée seulement sur retest avec volume ; risque normal | **Range de stress** (consolidation post-choc) : le régime le plus coûteux ; abstention ou taille ÷3, stops ×3, cibles très courtes ; attendre le retour à un régime lisible |
+
+Trois règles d'usage :
+
+1. **La matrice se remplit une fois par semaine** (le week-end, avec le tableau de bord intermarket et le COT) et se **vérifie chaque matin** en une minute (le VIX a-t-il changé de case ? la structure a-t-elle cassé ?). Un changement de case en cours de semaine est une information majeure.
+2. **La case dit quels chapitres du niveau 3 sortir** : en tendance, les chapitres 5 (BOS) et 6 (killzones, OTE) ; en range, les chapitres 2 (sweeps de bornes) et le niveau 4 (rotation VAL / VAH) ; en stress, presque aucun.
+3. **La case dit les réglages du niveau 1** : risque par trade, budget quotidien, taille des stops en ATR (niveau 2), pyramidage autorisé ou non. Le régime de stress divise la taille par deux ou trois ; ce n'est pas une option.
+
+<Figure caption="Figure 3 · La matrice de régimes : structure (tendance / range) croisée avec la volatilité (basse / normale / stress). Chaque case donne les setups à sortir, ceux à ranger, et les réglages de risque. Elle se remplit le week-end et se vérifie chaque matin.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Matrice de régimes structure contre volatilité" xmlns="http://www.w3.org/2000/svg">
+  <text x="240" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Vol. basse</text>
+  <text x="400" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Vol. normale</text>
+  <text x="580" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Stress</text>
+  <text x="90" y="110" fontSize="11" fontWeight="600" textAnchor="middle">Tendance</text>
+  <text x="90" y="250" fontSize="11" fontWeight="600" textAnchor="middle">Range</text>
+  <rect x="165" y="45" width="150" height="130" rx="6" className="green" opacity="0.15" />
+  <text x="240" y="68" fontSize="10" fontWeight="600" textAnchor="middle">Tendance calme</text>
+  <text x="240" y="90" fontSize="9" textAnchor="middle">continuation profonde</text>
+  <text x="240" y="104" fontSize="9" textAnchor="middle">OTE, FVG HTF, pyramide</text>
+  <text x="240" y="126" fontSize="9" textAnchor="middle" className="muted">risque normal</text>
+  <text x="240" y="150" fontSize="9" textAnchor="middle" className="red">éviter : retournements</text>
+  <rect x="325" y="45" width="150" height="130" rx="6" className="green" opacity="0.1" />
+  <text x="400" y="68" fontSize="10" fontWeight="600" textAnchor="middle">Tendance normale</text>
+  <text x="400" y="90" fontSize="9" textAnchor="middle">continuation après BOS</text>
+  <text x="400" y="104" fontSize="9" textAnchor="middle">sweeps de HL, silver bullet</text>
+  <text x="400" y="126" fontSize="9" textAnchor="middle" className="muted">risque normal</text>
+  <text x="400" y="150" fontSize="9" textAnchor="middle" className="red">éviter : ventes de résistance</text>
+  <rect x="485" y="45" width="190" height="130" rx="6" className="gold" opacity="0.15" />
+  <text x="580" y="68" fontSize="10" fontWeight="600" textAnchor="middle">Tendance agitée</text>
+  <text x="580" y="90" fontSize="9" textAnchor="middle">continuation seulement</text>
+  <text x="580" y="104" fontSize="9" textAnchor="middle">stops ×2, taille ÷2</text>
+  <text x="580" y="126" fontSize="9" textAnchor="middle" className="muted">pas de pyramide, budget réduit</text>
+  <text x="580" y="150" fontSize="9" textAnchor="middle" className="red">éviter : tout contre-tendance</text>
+  <rect x="165" y="185" width="150" height="130" rx="6" className="box" strokeWidth="1" />
+  <text x="240" y="208" fontSize="10" fontWeight="600" textAnchor="middle">Range calme</text>
+  <text x="240" y="230" fontSize="9" textAnchor="middle">rotation VAL / VAH</text>
+  <text x="240" y="244" fontSize="9" textAnchor="middle">sweeps de bornes</text>
+  <text x="240" y="266" fontSize="9" textAnchor="middle" className="muted">cibles courtes</text>
+  <text x="240" y="290" fontSize="9" textAnchor="middle" className="red">éviter : cassures · veiller l'expansion</text>
+  <rect x="325" y="185" width="150" height="130" rx="6" className="box" strokeWidth="1" />
+  <text x="400" y="208" fontSize="10" fontWeight="600" textAnchor="middle">Range normal</text>
+  <text x="400" y="230" fontSize="9" textAnchor="middle">rotation avec confirmation</text>
+  <text x="400" y="244" fontSize="9" textAnchor="middle">cassure : retest + volume</text>
+  <text x="400" y="266" fontSize="9" textAnchor="middle" className="muted">risque normal</text>
+  <text x="400" y="290" fontSize="9" textAnchor="middle" className="red">éviter : cassures au marché</text>
+  <rect x="485" y="185" width="190" height="130" rx="6" className="red" opacity="0.12" />
+  <text x="580" y="208" fontSize="10" fontWeight="600" textAnchor="middle">Range de stress</text>
+  <text x="580" y="230" fontSize="9" textAnchor="middle">le régime le plus coûteux</text>
+  <text x="580" y="244" fontSize="9" textAnchor="middle">abstention ou taille ÷3, stops ×3</text>
+  <text x="580" y="266" fontSize="9" textAnchor="middle" className="muted">cibles très courtes</text>
+  <text x="580" y="290" fontSize="9" textAnchor="middle" className="red">attendre un régime lisible</text>
+</svg>
+</Figure>
+
+## Adapter ses setups au régime en cours
+
+La matrice n'a de valeur que si elle change réellement ce que l'on fait. Trois adaptations concrètes.
+
+**Le choix des setups.** Un trader qui a trois setups dans son playbook (niveau 7 en construira ; niveau 9 les assemblera) note pour chacun le ou les régimes où il a une expectancy positive, mesurée sur son historique décomposé par régime (niveau 1, chapitre 3 : décomposer par contexte). En début de semaine, il sort du playbook les setups de la case courante et range les autres. Un setup de continuation en range calme, un setup de rotation en tendance normale, n'importe quel setup en range de stress : autant de trades qui n'auront pas lieu, et c'est le but.
+
+**Les réglages de risque.** La case donne le multiplicateur de stop (en ATR de l'unité d'exécution) et le diviseur de taille ; le niveau 1 fait le reste (le risque en euros reste à 1 % au plus, la taille s'adapte au stop élargi). Elle donne aussi le budget quotidien (réduit en stress), l'autorisation ou non de pyramider, et l'ambition des cibles (lointaines en tendance, courtes en range, très courtes en stress).
+
+**Le rythme.** En tendance normale, on trade au rythme habituel ; en range calme, on trade peu et on prépare l'expansion (le premier displacement hors du range, dans le sens de la structure supérieure, sera le trade de la semaine) ; en stress, on trade très peu ou pas, et l'on observe pour être prêt quand le régime redevient lisible (souvent une tendance agitée post-capitulation, la case la plus rémunératrice pour qui a gardé du capital).
+
+Une dernière règle, la plus importante : **le changement de régime coûte à ceux qui ne le voient pas.** La majorité des grosses pertes des traders discrétionnaires surviennent dans les jours qui suivent un changement de case (un range qui s'ouvre en tendance agitée, une tendance calme qui bascule en stress), parce qu'ils continuent d'appliquer les réglages de l'ancienne case. La vérification matinale de la matrice, une minute, est l'assurance contre ce risque-là.
+
+## Deux trades selon le régime
+
+Reconstitutions pédagogiques : le même setup, dans deux cases de la matrice.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Case « tendance normale » (VIX 17, structure D en HH / HL, corrélations stables, sentiment neutre) ; setup de continuation : sweep de HL H1, displacement, retour dans le FVG ; réglages normaux"
+  entree="5 286,00"
+  stop="5 279,00 (28 ticks, 1,2 ATR M15)"
+  objectif="5 314,00 (EQH et nPOC)"
+  r="+4R">
+
+Le week-end, la matrice disait « tendance normale » ; le setup de continuation était sorti du playbook avec ses réglages standard. Mardi, la séquence se présente ; entrée, stop de 1,2 ATR M15, cible lointaine autorisée par la case. Le trade prend deux heures. Rien de remarquable : c'est le trade que la case promet, exécuté dans la case.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Même setup de continuation, mêmes réglages, mais deux semaines plus tard, en case « range de stress » (VIX passé de 17 à 31 en trois jours, courbe VIX inversée, structure D en transition après un CHoCH, corrélations montées vers 1) ; la matrice n'a pas été revérifiée"
+  entree="5 214,00"
+  stop="5 207,00 (28 ticks), exécuté à 5 201,50 dans un trou de liquidité"
+  objectif="5 242,00"
+  r="−1,8R, puis −1R sur un second essai le lendemain">
+
+Même trader. La semaine suivante commence par un choc ; le VIX double, la structure quotidienne casse son HL, tout baisse ensemble. Il n'a pas revérifié la matrice le matin ; il voit un sweep et un FVG en H1, « son » setup, et l'exécute avec un stop de 28 ticks (0,4 ATR M15 désormais, l'ATR ayant triplé). Le stop est traversé dans un trou de liquidité avec 22 ticks de slippage. Le lendemain, il recommence : −1R. Le setup n'était pas faux ; il était dans la mauvaise case : en range de stress, la matrice disait « abstention ou taille ÷3, stops ×3, cibles très courtes ». Le changement de régime a coûté ce qu'il coûte à ceux qui ne le voient pas.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **sentiment** (enquêtes, put / call, flux, indices composites) se lit de façon **contrarienne aux extrêmes**, comme le COT ; entre les extrêmes il ne dit rien ; il suit le prix, la divergence compte.
+- Le **VIX** est un thermomètre de régime : niveau (calme, normal, stress, panique → mouvement quotidien attendu), direction (divergence avec le prix), **structure à terme** (contango normal, backwardation de stress), écart avec la volatilité réalisée.
+- Trois **régimes** : tendance, range, stress, définis par un faisceau (structure, volatilité, corrélations, sentiment) ; deux sous-régimes trompeurs : tendance agitée et range de stress.
+- La **matrice** structure × volatilité donne pour chaque case les setups à sortir, ceux à ranger, et les réglages de risque ; elle se remplit le week-end et se **vérifie chaque matin**.
+- **Adapter** : choix des setups par case (expectancy mesurée par régime), réglages de stop et de taille, rythme ; le changement de régime coûte à ceux qui ne le voient pas.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Nommer le régime">
+
+Lundi matin : structure D de l'ES en HH / HL depuis six semaines ; VIX à 13,5 en baisse, courbe VIX en contango marqué ; ATR quotidien au plus bas de l'année ; profils de session en D depuis huit jours avec value areas qui se chevauchent ; AAII à 52 % de haussiers ; corrélations intermarket stables ; COT des fonds sur l'ES à 78.
+
+1. Quelle case de la matrice ? Justifiez avec le faisceau.
+2. Quels setups sortez-vous, lesquels rangez-vous, quels réglages ?
+3. Quel est le risque propre à cette case et comment le surveillez-vous ?
+
+<Solution>
+
+1. Structure : **tendance** (HH / HL sur le D)… mais les huit derniers jours sont un range (profils en D, VA qui se chevauchent) à l'intérieur de la tendance ; volatilité : **basse** (VIX 13,5, ATR au plus bas, contango). Case : **tendance calme**, avec un range de court terme à l'intérieur (une contraction dans une tendance, niveau 2). Sentiment un peu élevé mais pas extrême ; COT élevé sans être extrême : pas de fragilité aiguë, mais un marché bien positionné.
+2. On sort : la continuation sur retours profonds (OTE, FVG H4 / D dans le sens de la tendance), le pyramidage autorisé, cibles lointaines ; et, tant que le range de court terme tient, la rotation VAL / VAH à taille réduite. On range : les retournements, les cassures achetées au marché. Réglages : risque normal, stops serrés possibles (ATR bas), budget normal.
+3. **L'expansion** : une contraction aussi marquée précède un mouvement ; le premier displacement hors du range, dans le sens de la tendance D, est le trade de la semaine ; contre la tendance, c'est un avertissement de changement de case. Surveillance : ATR qui remonte, VIX qui repasse 16, sortie de la value area avec acceptation (niveau 4).
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Changement de case">
+
+Jeudi 15 h : le VIX est passé de 14 à 27 depuis mardi ; la courbe VIX est inversée depuis ce matin ; l'ES a cassé son dernier HL quotidien en clôture hier (CHoCH) ; l'ATR M15 est passé de 5 à 16 points ; les obligations baissent avec les actions ; AUD/JPY perd 2 % ; le put / call est au plus haut de six mois.
+
+1. De quelle case venez-vous, dans laquelle êtes-vous ?
+2. Que devient un stop de 28 ticks (7 points) sur MES, en ATR, et que faut-il en faire ?
+3. Quelle conduite pour le reste de la semaine ?
+
+<Solution>
+
+1. De **tendance calme** (VIX 14, structure haussière) à **stress** : structure en transition (CHoCH quotidien) ou début de tendance baissière, volatilité élevée avec courbe inversée, corrélations vers 1 (obligations et actions baissent ensemble), risk-off (AUD/JPY), peur (put / call). Case : **range de stress** ou **tendance agitée baissière** selon que la structure confirme (un BOS baissier) ou non ; dans les deux cas, réglages de stress.
+2. 7 points sur un ATR M15 de 16 = **0,44 ATR** : un stop dans le bruit d'une seule bougie ; il sera traversé avec slippage. Il faut le multiplier par deux ou trois (15 à 20 points, soit environ 1 à 1,2 ATR) et diviser la taille d'autant pour garder le risque en euros (niveau 1 et 2).
+3. Taille ÷2 au minimum (÷3 si range de stress), stops ×2 à ×3, cibles courtes, budget quotidien réduit, pas de pyramidage, aucun contre-tendance ; setups limités à la continuation baissière après retour dans les zones laissées par les displacements ; ou abstention. Observer pour repérer la capitulation (climax de volume, OI en chute, VIX qui plafonne) qui ouvrira la case « tendance agitée » de rebond, la plus rémunératrice pour qui a gardé son capital.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Décomposer ses résultats par régime">
+
+Reprenez votre journal (ou un journal de simulation) et attribuez à chaque trade la case de la matrice au moment de l'entrée (structure de contexte, VIX ou ATR relatif). Calculez l'expectancy par case et par setup. Puis écrivez, pour chacun de vos setups, dans quelles cases il est autorisé et avec quels réglages.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend, et ce que la plupart des traders découvrent : un ou deux setups qui font tout le résultat dans une ou deux cases, et des pertes concentrées dans les cases de transition et de stress, souvent sur les mêmes setups appliqués hors de leur case. Le résultat de l'exercice est une ligne par setup dans le playbook (« autorisé en tendance calme et normale ; interdit en range et en stress ; stops ×2 en tendance agitée »), qui devient une règle de la vérification matinale. Le niveau 7 en fera une étude systématique ; le niveau 9 l'inscrira dans le playbook.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Les indicateurs de sentiment se lisent :",
+      options: [
+        "Dans le sens de la foule",
+        "De façon contrarienne aux extrêmes ; entre les extrêmes ils ne disent rien ; ils suivent le prix, la divergence compte",
+        "Comme des signaux d'entrée",
+        "Jamais",
+      ],
+      answer: 1,
+      explain: "Quand tout le monde est haussier, tout le monde a déjà acheté. Les extrêmes de panique coïncident souvent avec les creux ; l'euphorie peut durer.",
+    },
+    {
+      q: "Un VIX à 25 correspond à un mouvement quotidien attendu d'environ :",
+      options: [
+        "0,25 %",
+        "1,6 % (25 ÷ racine de 252), soit près de 85 points d'ES à 5 300",
+        "25 %",
+        "5 %",
+      ],
+      answer: 1,
+      explain: "Le VIX est une volatilité annualisée implicite à 30 jours ; on la ramène au jour en divisant par la racine du nombre de séances.",
+    },
+    {
+      q: "Une courbe VIX en backwardation signifie :",
+      options: [
+        "Un marché calme",
+        "Que la peur est maintenant : la volatilité implicite à court terme dépasse celle à long terme ; un marqueur net de régime de stress",
+        "Que le VIX va monter",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "En temps normal, la courbe est en contango (l'incertitude croît avec l'horizon). Le passage en backwardation change la case de la matrice.",
+    },
+    {
+      q: "Le régime se détecte :",
+      options: [
+        "Avec le VIX seul",
+        "Avec un faisceau concordant : structure de contexte, volatilité implicite et réalisée, corrélations intermarket, sentiment et positionnement",
+        "Avec la moyenne mobile 200",
+        "Avec le COT seul",
+      ],
+      answer: 1,
+      explain: "Quand les mesures concordent, le régime est net ; quand elles divergent, on est en transition, et la prudence s'impose.",
+    },
+    {
+      q: "En case « range de stress », la matrice recommande :",
+      options: [
+        "Le pyramidage",
+        "L'abstention, ou taille ÷3, stops ×3, cibles très courtes, en attendant un régime lisible",
+        "Les cassures au marché",
+        "Les cibles lointaines",
+      ],
+      answer: 1,
+      explain: "C'est le régime le plus coûteux : ni les rotations ni les continuations ne tiennent. Le changement de régime coûte à ceux qui ne le voient pas.",
+    },
+    {
+      q: "La matrice de régimes se remplit et se vérifie :",
+      options: [
+        "Une fois par an",
+        "Le week-end (avec le tableau de bord et le COT) et chaque matin en une minute ; un changement de case en cours de semaine est une information majeure",
+        "Jamais, elle est fixe",
+        "Uniquement en stress",
+      ],
+      answer: 1,
+      explain: "La majorité des grosses pertes discrétionnaires surviennent dans les jours qui suivent un changement de case, chez ceux qui appliquent encore les réglages de l'ancienne.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 5 est complet : cycle, banques centrales, intermarket, calendrier, COT, saisonnalité, sentiment et régimes. L'examen du niveau vérifie que ces couches de contexte s'articulent en une lecture hebdomadaire et en une matrice. Puis le niveau 6 descend dans chaque marché : futures ES et NQ, or et pétrole, sessions forex, options et grecques, spécificités de la crypto.
