@@ -1,0 +1,315 @@
+---
+title: "Analyse multi-timeframe"
+description: "La hiérarchie des unités de temps, la routine top-down du contexte à l'exécution, la gestion des signaux alignés et en conflit, le nombre d'unités à utiliser et lesquelles, et les erreurs multi-timeframe qui coûtent le plus cher."
+---
+
+# Analyse multi-timeframe
+
+Les deux chapitres précédents ont montré que la même bougie et la même structure changent de sens selon l'unité de temps. L'**analyse multi-timeframe** (MTF) est la méthode qui organise cette réalité au lieu de la subir : on lit plusieurs unités de temps dans un ordre fixe, chacune pour une question précise, et l'on n'exécute qu'une fois que les réponses sont cohérentes. Ce chapitre donne la hiérarchie, la routine, la règle de décision quand les unités se contredisent, et la liste des erreurs qui vident les comptes des traders qui « regardent tout ».
+
+## La hiérarchie des unités de temps
+
+Le principe fondamental : **les grandes unités de temps dominent les petites**. Un mouvement en quotidien contient des dizaines de mouvements en M15 dans les deux sens ; un mouvement en M15 ne renverse pas le quotidien. Quand une petite unité contredit une grande, c'est en général la petite qui finit par céder. Il y a des exceptions (tout retournement de la grande unité commence par une petite), mais parier sur l'exception est un mauvais métier.
+
+De ce principe découle une **répartition des rôles**. Chaque unité répond à une question, et une seule :
+
+| Rôle | Question | Unité type (intraday) | Unité type (swing) |
+| --- | --- | --- | --- |
+| **Contexte** (HTF, higher timeframe) | Dans quel sens penche le rapport de force ? Où sont les grands niveaux ? Quel régime (tendance, range) ? | Quotidien, H4 | Hebdomadaire, quotidien |
+| **Structure** (MTF, middle) | Où en est le mouvement en cours ? Repli, extension, transition ? Où est le dernier swing significatif ? | H1, M15 | H4, H1 |
+| **Exécution** (LTF, lower timeframe) | Où entrer précisément, où mettre le stop, y a-t-il un signal de réalignement ? | M5, M1 | M15, M5 |
+
+Le rapport entre unités successives est en général de 4 à 6 : quotidien → H4 → H1 → M15 → M5. Un rapport plus faible (H1 → M45) ne montre rien de neuf ; un rapport plus grand (quotidien → M5) laisse un trou dans lequel les repli passent inaperçus.
+
+<Figure caption="Figure 1 · La hiérarchie : le contexte fixe le sens, la structure situe le mouvement, l'exécution place l'entrée et le stop. L'information descend, jamais l'inverse.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Pyramide des rôles des unités de temps" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="30" width="600" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="56" fontSize="14" fontWeight="600" textAnchor="middle">Contexte · quotidien / H4</text>
+  <text x="360" y="80" fontSize="11" textAnchor="middle" className="muted">sens du rapport de force · grands niveaux · régime → « je cherche des achats » ou « des ventes » ou « rien »</text>
+  <polygon points="360,112 350,100 370,100" className="gold" />
+  <rect x="140" y="120" width="440" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="146" fontSize="14" fontWeight="600" textAnchor="middle">Structure · H1 / M15</text>
+  <text x="360" y="170" fontSize="11" textAnchor="middle" className="muted">repli, extension ou transition ? dernier swing significatif ? → « le repli arrive sur la zone »</text>
+  <polygon points="360,202 350,190 370,190" className="gold" />
+  <rect x="220" y="210" width="280" height="70" rx="8" className="gold" opacity="0.9" />
+  <text x="360" y="236" fontSize="14" fontWeight="700" textAnchor="middle" fill="#141414">Exécution · M5 / M1</text>
+  <text x="360" y="260" fontSize="11" textAnchor="middle" fill="#141414">réalignement, entrée, stop → l'ordre</text>
+</svg>
+</Figure>
+
+## Du contexte à l'exécution : la routine top-down
+
+**Top-down** signifie que l'on lit du haut vers le bas, toujours dans le même ordre, sans sauter d'étape. Voici la routine telle qu'un trader intraday la déroule avant la séance puis à chaque opportunité. Elle prend cinq à dix minutes le matin, moins d'une minute ensuite.
+
+**Étape 1 · Contexte (quotidien, puis H4).** Protocole de lecture du chapitre 1 : structure (HH/HL, LH/LL, range), position du prix par rapport aux extrêmes récents et aux niveaux majeurs (chapitre 4), dernière bougie close. Résultat écrit : « **Biais** haussier / baissier / neutre, niveaux clés X et Y ». Le biais est une préférence, pas une prédiction : « je chercherai des achats », pas « ça va monter ».
+
+**Étape 2 · Structure (H1, puis M15).** Où en est le mouvement dans le sens du biais ? Trois cas : en **extension** (le prix vient de faire un nouveau HH, il est loin du dernier HL) : trop tard pour entrer proprement, on attend ; en **repli** (structure interne contraire, le prix revient vers une zone d'intérêt) : c'est le moment de préparer ; en **transition** (le dernier HL est menacé, ou vient de céder) : le biais est en question, on ne fait rien avant clarification. Résultat écrit : « **Zone d'entrée** attendue entre A et B, **invalidation** sous C ».
+
+**Étape 3 · Exécution (M5, puis M1 si nécessaire).** Quand le prix est dans la zone, on cherche le signal de réalignement défini au chapitre précédent : la structure interne cesse de faire des LL, forme un creux, dépasse son dernier LH. Le stop va sous ce creux (ou sous l'invalidation structurelle si l'écart est faible). L'objectif est un niveau du contexte ou de la structure (le HH précédent, la résistance H4). Résultat : un ordre, avec un bracket.
+
+**Étape 4 · Gestion.** Une fois en position, on remonte d'une unité : la gestion se fait sur l'unité de structure, pas sur l'unité d'exécution. Le M5 a servi à entrer ; il ne sert pas à sortir à la première bougie rouge. On sort au stop, à l'objectif, ou sur un changement de structure en H1 ou M15.
+
+Un exemple condensé, tel qu'il s'écrit dans un plan de séance : « **D** : haussier, HH hier, HL à 5 210, résistance à 5 290. **H4** : repli en cours depuis 5 268. **H1** : LL en formation vers 5 235-5 240, zone du HL H1 précédent. **Plan** : si le prix atteint 5 235-5 240 et que le M5 se réaligne, achat, stop sous le creux M5 (au plus 5 226), objectif 5 268 puis 5 290. Sous 5 210 en clôture H1, biais annulé. »
+
+## Gérer les signaux alignés et les signaux en conflit
+
+L'analyse MTF produit trois situations, et une règle pour chacune.
+
+**Signaux alignés.** Le contexte est haussier, la structure montre un repli terminé, l'exécution donne un réalignement au bon endroit. C'est le trade complet, celui qui a le meilleur ratio et la meilleure expectancy dans la plupart des systèmes de tendance. Il ne se présente pas tous les jours : sur un marché donné, un trader intraday sélectif en voit deux ou trois par semaine. La patience de n'attendre que ceux-là est une part importante de l'avantage.
+
+**Conflit contexte-structure.** Le quotidien est haussier mais le H1 fait des LH et des LL sans fin, le dernier HL H4 est cassé : la structure contredit le contexte. C'est une **transition** ; le biais quotidien est en question. Règle : **on ne trade pas contre le contexte, et on ne trade pas non plus dans son sens tant que la structure ne s'est pas réalignée**. On attend. Souvent, cette attente dure des heures ou des jours ; c'est le prix de ne pas être du mauvais côté d'un retournement.
+
+**Conflit structure-exécution.** Le contexte et la structure sont haussiers, le prix est dans la zone d'entrée, mais le M5 continue de faire des LL sans réalignement. C'est le cas le plus fréquent et le moins grave : **on attend le signal**. Entrer « parce que le prix est dans la zone » sans réalignement, c'est attraper un couteau qui tombe : la zone est une zone, pas un prix ; le réalignement dit que le prix a fini d'y descendre.
+
+<Figure caption="Figure 2 · Matrice de décision. Seule la première ligne donne un trade ; les autres donnent une attente, dont la durée dépend de l'unité en conflit.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Matrice de décision selon l'alignement des unités de temps" xmlns="http://www.w3.org/2000/svg">
+  <text x="140" y="34" fontSize="12" fontWeight="600" textAnchor="middle">Contexte</text>
+  <text x="300" y="34" fontSize="12" fontWeight="600" textAnchor="middle">Structure</text>
+  <text x="460" y="34" fontSize="12" fontWeight="600" textAnchor="middle">Exécution</text>
+  <text x="620" y="34" fontSize="12" fontWeight="600" textAnchor="middle">Décision</text>
+
+  <rect x="60" y="48" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="140" y="73" fontSize="11" textAnchor="middle" fill="#ffffff">haussier</text>
+  <rect x="220" y="48" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="300" y="73" fontSize="11" textAnchor="middle" fill="#ffffff">repli terminé</text>
+  <rect x="380" y="48" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="460" y="73" fontSize="11" textAnchor="middle" fill="#ffffff">réalignement</text>
+  <rect x="540" y="48" width="160" height="40" rx="6" className="gold" opacity="0.9" /><text x="620" y="73" fontSize="11" fontWeight="700" textAnchor="middle" fill="#141414">TRADE</text>
+
+  <rect x="60" y="98" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="140" y="123" fontSize="11" textAnchor="middle" fill="#ffffff">haussier</text>
+  <rect x="220" y="98" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="300" y="123" fontSize="11" textAnchor="middle" fill="#ffffff">repli en zone</text>
+  <rect x="380" y="98" width="160" height="40" rx="6" className="red" opacity="0.6" /><text x="460" y="123" fontSize="11" textAnchor="middle" fill="#ffffff">encore des LL</text>
+  <rect x="540" y="98" width="160" height="40" rx="6" className="box" strokeWidth="1" /><text x="620" y="123" fontSize="11" textAnchor="middle">attendre le signal (minutes)</text>
+
+  <rect x="60" y="148" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="140" y="173" fontSize="11" textAnchor="middle" fill="#ffffff">haussier</text>
+  <rect x="220" y="148" width="160" height="40" rx="6" className="red" opacity="0.6" /><text x="300" y="173" fontSize="11" textAnchor="middle" fill="#ffffff">dernier HL cassé</text>
+  <rect x="380" y="148" width="160" height="40" rx="6" className="box" strokeWidth="1" /><text x="460" y="173" fontSize="11" textAnchor="middle" className="muted">peu importe</text>
+  <rect x="540" y="148" width="160" height="40" rx="6" className="box" strokeWidth="1" /><text x="620" y="173" fontSize="11" textAnchor="middle">attendre la clarification (heures, jours)</text>
+
+  <rect x="60" y="198" width="160" height="40" rx="6" className="green" opacity="0.7" /><text x="140" y="223" fontSize="11" textAnchor="middle" fill="#ffffff">haussier</text>
+  <rect x="220" y="198" width="160" height="40" rx="6" className="gold" opacity="0.5" /><text x="300" y="223" fontSize="11" textAnchor="middle">extension (loin du HL)</text>
+  <rect x="380" y="198" width="160" height="40" rx="6" className="box" strokeWidth="1" /><text x="460" y="223" fontSize="11" textAnchor="middle" className="muted">peu importe</text>
+  <rect x="540" y="198" width="160" height="40" rx="6" className="box" strokeWidth="1" /><text x="620" y="223" fontSize="11" textAnchor="middle">attendre le repli</text>
+</svg>
+</Figure>
+
+Une nuance pour les traders plus avancés : il existe des systèmes qui tradent **contre** le contexte, sur des retournements de la structure (le CHoCH du niveau 3, certains setups de range). Ils sont légitimes, avec des règles propres et un ratio gain/risque adapté. Mais ils se construisent après avoir maîtrisé le trade aligné, pas à la place. Pour ce niveau, la règle est simple : **le contexte a raison jusqu'à preuve structurelle du contraire**.
+
+## Combien d'unités de temps utiliser, et lesquelles
+
+Trois. Rarement quatre. Jamais six.
+
+Trois unités suffisent pour couvrir les trois rôles ; au-delà, chaque unité supplémentaire ajoute une occasion de trouver un signal contradictoire, donc une occasion d'hésiter ou de se justifier n'importe quoi. Le trader qui a huit graphiques ouverts trouve toujours une unité qui lui donne raison ; il ne trade plus une méthode, il cherche des confirmations à ses envies.
+
+Le choix concret dépend du profil du niveau 0 et du tableau du chapitre 1 :
+
+- **Intraday sur futures d'indices** : quotidien (contexte, lu une fois le matin), H1 ou M15 (structure), M5 (exécution). Le H4 est utile en complément du quotidien pour situer le mouvement de la semaine.
+- **Swing sur or, pétrole, forex** : hebdomadaire (contexte, lu le week-end), quotidien ou H4 (structure), H1 (exécution).
+- **Scalping** : M15 (contexte), M5 ou M1 (structure), tick ou secondes (exécution). Le quotidien reste à connaître (niveaux du jour) même si on ne l'analyse pas en séance.
+
+Deux principes de choix : garder un rapport de 4 à 6 entre unités successives, et **ne jamais descendre sous son unité d'exécution pour prendre une décision**. On peut regarder le M1 pour affiner un placement de stop de deux ticks ; on ne le regarde pas pour décider de sortir.
+
+Enfin, une pratique qui protège : le contexte se lit **avant** la séance et s'écrit ; il ne se relit pas en boucle pendant la séance. Un biais quotidien qui change trois fois dans la journée n'est pas un biais, c'est de l'agitation.
+
+## Les erreurs multi-timeframe les plus coûteuses
+
+Chacune de ces erreurs a un nom parce qu'elle est fréquente.
+
+**Le zoom-in émotionnel.** En position, le trader descend en M1 « pour surveiller ». Il voit des bougies rouges, une petite structure baissière, sort avec +0,3R. Le trade allait chercher +3R sur l'objectif de structure. Le M1 n'a rien montré que le H1 ne savait déjà : un repli. Remède : gérer sur l'unité de structure, écran M1 fermé.
+
+**Le zoom-out justificatif.** Le trader est en perte sur un trade M5. Il monte en H4, trouve que « ça reste haussier », déplace ou retire son stop. Il a changé d'unité de temps pour ne pas avoir tort. Le stop était défini par la structure M5 ou H1 au moment de l'entrée ; c'est cette structure qui juge le trade, pas une autre choisie après coup. Remède : l'invalidation est écrite avant l'entrée, avec son unité de temps.
+
+**Le contexte ignoré.** Trader le M5 comme s'il était seul au monde : vendre chaque LL, acheter chaque HH, sans savoir que le quotidien fait un repli vers un support majeur. Le M5 donne alors des signaux dans les deux sens toute la journée, et le trader en prend la moitié. Remède : la routine top-down, écrite, avant le premier trade.
+
+**Le biais fossilisé.** L'inverse : le trader a écrit « haussier » le matin et refuse de voir que la structure H1 a cassé son dernier HL à 11 h. Il achète les replis d'une tendance qui n'existe plus. Remède : la ligne d'invalidation du biais (« sous X en clôture H1, biais annulé »), écrite le matin, appliquée sans discussion.
+
+**La confusion des stops.** Un stop placé sur la structure H4 pour un trade entré sur M5 : le stop est à 60 points, la taille est minuscule ou le risque est énorme, et l'objectif M5 à 15 points donne un ratio de 1 pour 4. Ou l'inverse : un swing trade avec un stop M5 de 8 points, touché par le bruit avant midi. Remède : le stop est cohérent avec l'unité d'exécution et l'horizon du trade ; on ne mélange pas.
+
+**Le trop d'écrans.** Six unités de temps ouvertes, et le trader passe la journée à réconcilier des signaux contradictoires. Remède : trois unités, rôles fixés, le reste fermé.
+
+<Figure caption="Figure 3 · Le zoom-in émotionnel : le trade est décidé sur H1 avec un objectif à +3R ; le trader descend en M1, voit un repli ordinaire, sort à +0,3R. Le M1 n'a rien appris de neuf.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Illustration du zoom-in émotionnel" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">H1 : le trade tel qu'il est décidé</text>
+  <line x1="40" y1="250" x2="330" y2="250" className="line" strokeWidth="1" />
+  <polyline points="50,200 80,180 110,195 140,160 170,175 200,130 230,145 260,100 290,115 320,70" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="140" cy="160" r="5" className="gold" />
+  <text x="140" y="150" fontSize="10" textAnchor="middle">entrée</text>
+  <line x1="40" y1="190" x2="330" y2="190" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="300" y="203" fontSize="10" className="red">stop</text>
+  <line x1="40" y1="70" x2="330" y2="70" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="290" y="64" fontSize="10" className="green">objectif +3R</text>
+  <rect x="160" y="140" width="50" height="40" fill="none" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="3 3" />
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">M1 : ce que voit le trader</text>
+  <line x1="400" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <polyline points="410,150 425,140 440,148 455,135 470,142 485,128 500,138 515,132 530,145 545,140 560,158 575,150 590,168 605,160 620,178 635,170 650,150 665,120 680,90 695,60" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <circle cx="620" cy="178" r="5" className="red" />
+  <text x="620" y="198" fontSize="10" textAnchor="middle" className="red" fontWeight="600">sortie à +0,3R « ça se retourne »</text>
+  <text x="550" y="230" fontSize="10" textAnchor="middle" className="muted">trois LL en M1 = un repli ordinaire en H1</text>
+  <text x="680" y="52" fontSize="10" textAnchor="end" className="green">+3R sans lui</text>
+</svg>
+</Figure>
+
+## Deux trades sous l'angle MTF
+
+Reconstitutions pédagogiques : le même contexte, deux disciplines de lecture.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Top-down complet : D haussier, H4 en repli vers le HL H4, H1 en zone, M5 réaligné"
+  entree="5 238,50"
+  stop="5 229,50 (36 ticks, sous le creux M5, au-dessus du HL H4 à 5 226)"
+  objectif="5 265,00 (HH H4 précédent)"
+  r="+2,9R">
+
+Le matin, le plan écrit disait : « D haussier, HL H4 à 5 226, repli en cours, zone d'achat 5 232-5 240 si réalignement M5, invalidation du biais sous 5 226 en clôture H1. » À 16 h 20, le prix entre dans la zone. Le M5 fait encore deux LL ; le trader attend. À 16 h 45, creux à 5 232,25 puis dépassement du dernier LH M5 : réalignement. Entrée sur le retour à 5 238,50, stop à 5 229,50. Gestion sur H1 : aucune bougie M5 rouge n'a été regardée. Objectif touché à 18 h 10. Rien dans ce trade n'est brillant ; tout est dans l'ordre.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Short"
+  setup="Vente sur LL en M5 pendant le même repli, contexte D et H4 non consultés"
+  entree="5 236,00"
+  stop="5 243,00 (28 ticks)"
+  objectif="5 218,00"
+  r="−1R, puis −0,4R sur un second short « de confirmation »">
+
+Autre trader, même heure. Il ne regarde que le M5 : trois LL de suite, il vend à 5 236 avec un objectif à 5 218, c'est-à-dire **sous** le HL H4 à 5 226. Il parie donc sur une rupture de la structure quotidienne, sans le savoir. Le réalignement de 16 h 45 touche son stop. Agacé, il revend à 5 240 sur « le retest », stop à 5 245, et sort à −0,4R quand le prix accélère. Deux trades contre le contexte, −1,4R au total, sur un mouvement qu'un plan top-down avait identifié comme une zone d'**achat** trois heures plus tôt. Son analyse M5 était juste : le M5 baissait. Elle était simplement à la mauvaise échelle.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Les grandes unités dominent les petites.** Trois rôles : contexte (sens, niveaux, régime), structure (où en est le mouvement), exécution (entrée, stop, signal).
+- La routine **top-down** se lit dans le même ordre à chaque fois et s'écrit : biais, zone d'entrée, invalidation, puis ordre. La gestion se fait sur l'unité de structure.
+- **Alignés** : trade. **Conflit contexte-structure** : attendre la clarification. **Conflit structure-exécution** : attendre le signal. Le contexte a raison jusqu'à preuve structurelle du contraire.
+- **Trois unités**, rapport de 4 à 6 entre elles, jamais de décision sous l'unité d'exécution.
+- Erreurs à connaître par leur nom : zoom-in émotionnel, zoom-out justificatif, contexte ignoré, biais fossilisé, confusion des stops, trop d'écrans.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Attribuer les rôles">
+
+Un trader swing sur l'or garde ses positions 3 à 8 jours. Il hésite entre les unités M15, H1, H4, quotidien et hebdomadaire.
+
+1. Attribuez une unité à chaque rôle (contexte, structure, exécution) et justifiez le rapport entre elles.
+2. Il est en position depuis deux jours et regarde le M15 toutes les dix minutes. Quel est le problème, et quelle règle s'applique ?
+3. Le quotidien casse son dernier HL en clôture alors qu'il est long. Que doit-il faire selon la routine ?
+
+<Solution>
+
+1. **Contexte : hebdomadaire**, **structure : quotidien** (ou H4), **exécution : H1**. Rapports : W → D (×5), D → H4 (×6), H4 → H1 (×4). Le M15 est deux unités sous l'exécution : il ne sert à rien pour ce profil, sauf éventuellement pour affiner un stop de quelques dollars.
+2. C'est le **zoom-in émotionnel** : le M15 est loin sous son unité d'exécution ; il y verra des retournements toutes les heures et sortira d'un swing correct pour rien. Règle : gérer sur l'unité de structure (quotidien ou H4), le M15 fermé.
+3. Le **biais est invalidé** par la structure : la séquence HH/HL du quotidien est rompue. S'il avait écrit son invalidation de biais (« sous le HL D en clôture »), la réponse est dans le plan : sortir ou, au minimum, ne plus considérer le trade comme un swing haussier et le gérer comme une position à liquider. Ne pas monter en hebdomadaire pour trouver une raison de rester (zoom-out justificatif).
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Décider face au conflit">
+
+Pour chaque situation, indiquez la décision (trade, attendre le signal, attendre la clarification, attendre le repli) et l'unité de temps qui la motive.
+
+1. D haussier ; H1 vient de faire un HH et le prix est 40 points au-dessus du dernier HL H1 ; M5 haussier.
+2. D haussier ; H1 en repli, prix dans la zone du HL H1 ; M5 fait un LL de plus.
+3. D haussier ; H1 a cassé son dernier HL en clôture il y a une heure ; M5 se réaligne à la hausse.
+4. D haussier ; H1 en repli terminé (HH interne visible) au-dessus du HL ; M5 réaligné.
+
+<Solution>
+
+1. **Attendre le repli** (structure H1 en extension). Entrer ici, c'est acheter loin de l'invalidation avec un mauvais ratio.
+2. **Attendre le signal** (exécution M5 non réalignée). La zone est atteinte, pas le moment.
+3. **Attendre la clarification** (conflit contexte-structure : le H1 a rompu la séquence). Le réalignement M5 dans une structure H1 rompue est un signal de l'unité inférieure contre l'unité supérieure : on ne l'achète pas.
+4. **Trade** : les trois unités sont alignées.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire un plan top-down">
+
+Sur un marché de votre choix, avant une séance, rédigez en cinq lignes maximum le plan top-down : biais et niveaux (contexte), état du mouvement et zone attendue (structure), signal recherché et stop (exécution), invalidation du biais. Puis, en fin de séance, notez si le plan a été suivi et si les erreurs de la liste sont apparues.
+
+<Solution>
+
+Un plan acceptable a la forme : « D : haussier, HL à X, résistance à Y. H4/H1 : repli en cours vers la zone A-B (HL H1 précédent). Exécution : achat sur réalignement M5 dans A-B, stop sous le creux M5 (au plus C), objectif Y. Biais annulé sous X en clôture H1. » Le soir, la revue vérifie trois choses : le trade pris (s'il y en a eu un) était-il aligné sur les trois unités ; la gestion s'est-elle faite sur H1 et non sur M1 ; l'invalidation du biais a-t-elle été respectée si elle a été touchée. Deux semaines de ce rituel installent la routine.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Quel principe fonde l'analyse multi-timeframe ?",
+      options: [
+        "Les petites unités prédisent les grandes",
+        "Les grandes unités dominent les petites ; quand elles se contredisent, la petite cède en général",
+        "Toutes les unités ont le même poids",
+        "Il faut regarder le plus d'unités possible",
+      ],
+      answer: 1,
+      explain: "Un mouvement quotidien contient des dizaines de mouvements M15 dans les deux sens. Le contexte fixe le sens ; l'exécution place l'entrée.",
+    },
+    {
+      q: "Dans la routine top-down, l'unité d'exécution sert à :",
+      options: [
+        "Décider du biais",
+        "Trouver le signal de réalignement, placer l'entrée et le stop",
+        "Gérer la position bougie par bougie",
+        "Fixer l'objectif",
+      ],
+      answer: 1,
+      explain: "Le biais vient du contexte, l'objectif de la structure ou du contexte. L'exécution place l'entrée ; la gestion se fait ensuite sur l'unité de structure.",
+    },
+    {
+      q: "Contexte haussier, mais la structure H1 vient de casser son dernier HL. Vous :",
+      options: [
+        "Achetez, le contexte a raison",
+        "Vendez, la structure a raison",
+        "Attendez la clarification : ni achat sans réalignement, ni vente contre le contexte",
+        "Doublez la taille",
+      ],
+      answer: 2,
+      explain: "C'est une transition. Le biais est en question ; le trade contre le contexte demande une preuve structurelle complète, pas une seule rupture.",
+    },
+    {
+      q: "Combien d'unités de temps utiliser ?",
+      options: [
+        "Une seule",
+        "Trois, avec un rapport de 4 à 6 entre elles",
+        "Six ou plus pour être sûr",
+        "Autant que d'écrans",
+      ],
+      answer: 1,
+      explain: "Trois unités couvrent les trois rôles. Chaque unité supplémentaire est une occasion de trouver un signal contradictoire et de se justifier n'importe quoi.",
+    },
+    {
+      q: "En position sur un trade décidé en H1, vous descendez en M1 et voyez trois LL. Vous :",
+      options: [
+        "Sortez immédiatement",
+        "Ne changez rien : c'est du bruit sous l'unité d'exécution ; la gestion se fait sur H1",
+        "Doublez la position",
+        "Déplacez le stop",
+      ],
+      answer: 1,
+      explain: "C'est le zoom-in émotionnel. Trois LL en M1 sont un repli ordinaire en H1. Le trade se juge sur l'unité qui l'a décidé.",
+    },
+    {
+      q: "En perte sur un trade M5, vous montez en H4 pour constater que « ça reste haussier » et retirez votre stop. C'est :",
+      options: [
+        "Une bonne pratique multi-timeframe",
+        "Le zoom-out justificatif : changer d'unité après coup pour ne pas avoir tort",
+        "Obligatoire",
+        "Sans conséquence",
+      ],
+      answer: 1,
+      explain: "L'invalidation est définie à l'entrée, avec son unité de temps. Chercher une autre unité pour la contredire n'est pas de l'analyse, c'est du refus de la perte.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le contexte et la structure font référence, à chaque étape, à des « niveaux » : le HL H4, la résistance quotidienne, la zone d'entrée. Le chapitre suivant apprend à les identifier proprement : niveaux horizontaux majeurs, zones plutôt que lignes, changement de polarité, confluence, et l'art de nettoyer son graphique pour n'y garder que ce qui compte.
