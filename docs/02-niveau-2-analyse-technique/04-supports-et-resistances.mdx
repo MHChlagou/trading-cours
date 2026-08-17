@@ -1,0 +1,304 @@
+---
+title: "Supports et résistances"
+description: "Identifier les niveaux horizontaux majeurs, tracer des zones plutôt que des lignes, comprendre le changement de polarité support-résistance, chercher la confluence avec la structure et les niveaux ronds, et nettoyer son graphique pour ne garder que les niveaux qui comptent."
+---
+
+# Supports et résistances
+
+Les chapitres précédents ont parlé de « niveaux » sans les définir. Un **support** est une zone de prix où les acheteurs ont, par le passé, arrêté une baisse ; une **résistance**, une zone où les vendeurs ont arrêté une hausse. Ce sont les repères les plus anciens et les plus utilisés de l'analyse technique, et aussi les plus mal tracés : trop nombreux, trop fins, sans hiérarchie. Ce chapitre apprend à en repérer peu, à les tracer larges, à comprendre pourquoi ils changent de rôle, et à les combiner avec la structure pour en faire des zones d'entrée et de sortie.
+
+## Identifier les niveaux horizontaux majeurs
+
+Un niveau horizontal est un prix (ou une bande de prix) auquel le marché a réagi de façon visible. Ce qui rend un niveau **majeur** :
+
+1. **Le nombre de réactions.** Un prix touché deux, trois, quatre fois avec un rebond ou un rejet à chaque fois est un niveau que d'autres participants regardent aussi. Une seule réaction est un candidat, pas un niveau.
+2. **L'ampleur des réactions.** Un rejet de 40 points sur l'ES vaut plus qu'un rejet de 4 points. La réaction mesure la quantité d'ordres qui attendaient là.
+3. **L'unité de temps.** Un niveau visible en quotidien ou en H4 est majeur ; un niveau visible seulement en M5 est un niveau d'exécution, utile pour placer un stop, pas pour construire un biais.
+4. **La fraîcheur.** Un niveau touché la semaine dernière compte plus qu'un niveau touché il y a huit mois, sauf s'il s'agit d'un extrême historique (plus haut ou plus bas de l'année, par exemple).
+5. **La nature du niveau.** Certains prix ont un poids par construction : le plus haut et le plus bas de la veille, de la semaine passée, du mois ; l'ouverture de la séance ; les extrêmes de la session asiatique ou de Londres. Beaucoup de participants les regardent, donc beaucoup d'ordres s'y trouvent.
+
+La méthode de repérage, dans l'ordre : dézoomer sur l'unité de contexte ; marquer les extrêmes visibles (plus haut, plus bas de la période) ; marquer les swings significatifs du chapitre 2 qui ont été **retestés** au moins une fois ; ajouter les niveaux « par construction » du jour ; puis **retirer** tout ce qui fait doublon ou qui n'a qu'une réaction. Il doit rester trois à cinq niveaux, pas quinze.
+
+<Figure caption="Figure 1 · Repérage des niveaux majeurs sur un graphique H4. Trois zones retenues (réactions multiples, retests) ; les autres réactions isolées sont laissées de côté.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Graphique avec trois zones de support et résistance majeures" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <rect x="40" y="70" width="660" height="18" className="red" opacity="0.18" />
+  <text x="690" y="66" fontSize="10" textAnchor="end" className="red" fontWeight="600">résistance majeure · 4 rejets</text>
+  <rect x="40" y="160" width="660" height="18" className="gold" opacity="0.2" />
+  <text x="690" y="156" fontSize="10" textAnchor="end" className="gold" fontWeight="600">niveau intermédiaire · support devenu résistance</text>
+  <rect x="40" y="240" width="660" height="18" className="green" opacity="0.18" />
+  <text x="690" y="236" fontSize="10" textAnchor="end" className="green" fontWeight="600">support majeur · 3 rebonds</text>
+
+  <polyline points="50,250 80,200 100,170 130,120 160,80 180,110 200,90 220,75 250,120 280,175 300,240 330,210 350,180 370,168 400,200 430,250 460,220 490,170 520,140 550,85 580,110 610,78 640,130 670,175 690,165" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+
+  <circle cx="160" cy="80" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" /><circle cx="220" cy="75" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" /><circle cx="550" cy="85" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" /><circle cx="610" cy="78" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <circle cx="300" cy="240" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" /><circle cx="430" cy="250" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" /><circle cx="50" cy="250" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <circle cx="100" cy="170" r="4" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><circle cx="370" cy="168" r="4" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><circle cx="490" cy="170" r="4" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><circle cx="670" cy="175" r="4" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="200" y="100" fontSize="9" className="muted">réaction isolée : non retenue</text>
+  <line x1="200" y1="92" x2="200" y2="90" className="line" />
+</svg>
+</Figure>
+
+## Des zones plutôt que des lignes
+
+Le débutant trace une ligne au tick près sur un plus haut. Le marché ne s'arrête jamais au tick près : les ordres qui font le niveau sont répartis autour d'un prix, pas empilés sur un seul. Le prix teste, dépasse de quelques ticks, revient. Un niveau tracé comme une ligne produit deux erreurs symétriques : on croit qu'il est cassé quand il n'est que dépassé de trois ticks, ou on entre au tick alors que le prix va encore aller chercher les stops juste au-delà.
+
+D'où la règle : **on trace des zones**. Une zone a une épaisseur, qui dépend de l'unité de temps et de la volatilité de l'instrument (le chapitre suivant donnera l'ATR comme mesure). Ordres de grandeur pratiques : sur l'ES en H4, une zone fait 4 à 8 points ; en M15, 1 à 3 points. Sur l'or en H4, 3 à 6 dollars. Sur EUR/USD en H4, 10 à 20 pips.
+
+Comment délimiter la zone : elle englobe **les corps et une partie des mèches** des bougies qui ont réagi au niveau. En pratique, un bord sur le corps le plus extrême, l'autre bord sur la mèche la plus extrême, ou une bande centrée sur le prix moyen des réactions avec l'épaisseur adaptée à l'unité de temps. Le trader avancé garde parfois deux bords : le « corps » de la zone (là où le prix réagit le plus souvent) et sa « marge » (jusqu'où les mèches vont chercher).
+
+Conséquences pratiques : une entrée sur support se prend **dans** la zone (souvent sur un signal d'exécution, chapitre 3), pas au premier contact du bord haut ; un stop se place **au-delà** de la zone, pas dedans ; et une cassure ne se juge que sur une **clôture** au-delà de la zone dans l'unité de structure, pas sur une mèche.
+
+<Figure caption="Figure 2 · Ligne contre zone. La ligne au tick près est « cassée » deux fois par des mèches et « touchée » une fois avant le prix réel ; la zone lit correctement les trois réactions.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Comparaison d'un support tracé en ligne et en zone" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Ligne au tick près</text>
+  <line x1="40" y1="180" x2="330" y2="180" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <line x1="80" y1="120" x2="80" y2="192" className="line" strokeWidth="1.5" /><rect x="74" y="140" width="12" height="35" className="red" opacity="0.9" />
+  <line x1="120" y1="150" x2="120" y2="176" className="line" strokeWidth="1.5" /><rect x="114" y="152" width="12" height="20" className="green" opacity="0.9" />
+  <line x1="180" y1="130" x2="180" y2="196" className="line" strokeWidth="1.5" /><rect x="174" y="150" width="12" height="32" className="red" opacity="0.9" />
+  <line x1="220" y1="140" x2="220" y2="178" className="line" strokeWidth="1.5" /><rect x="214" y="145" width="12" height="28" className="green" opacity="0.9" />
+  <line x1="280" y1="110" x2="280" y2="188" className="line" strokeWidth="1.5" /><rect x="274" y="130" width="12" height="40" className="red" opacity="0.9" />
+  <text x="80" y="212" fontSize="9" textAnchor="middle" className="red">« cassé »</text>
+  <text x="180" y="212" fontSize="9" textAnchor="middle" className="red">« cassé »</text>
+  <text x="120" y="212" fontSize="9" textAnchor="middle" className="muted">pas touché</text>
+  <text x="180" y="250" fontSize="10" textAnchor="middle" className="muted">trois lectures fausses, un support pourtant tenu</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Zone (corps + marge de mèches)</text>
+  <rect x="400" y="168" width="290" height="30" className="green" opacity="0.18" />
+  <line x1="440" y1="120" x2="440" y2="192" className="line" strokeWidth="1.5" /><rect x="434" y="140" width="12" height="35" className="red" opacity="0.9" />
+  <line x1="480" y1="150" x2="480" y2="176" className="line" strokeWidth="1.5" /><rect x="474" y="152" width="12" height="20" className="green" opacity="0.9" />
+  <line x1="540" y1="130" x2="540" y2="196" className="line" strokeWidth="1.5" /><rect x="534" y="150" width="12" height="32" className="red" opacity="0.9" />
+  <line x1="580" y1="140" x2="580" y2="178" className="line" strokeWidth="1.5" /><rect x="574" y="145" width="12" height="28" className="green" opacity="0.9" />
+  <line x1="640" y1="110" x2="640" y2="188" className="line" strokeWidth="1.5" /><rect x="634" y="130" width="12" height="40" className="red" opacity="0.9" />
+  <text x="540" y="222" fontSize="10" textAnchor="middle" className="green" fontWeight="600">trois réactions dans la zone, aucune clôture en dessous</text>
+  <line x1="400" y1="205" x2="690" y2="205" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="690" y="240" fontSize="9" textAnchor="end" className="red">stop : sous la zone, pas dedans</text>
+</svg>
+</Figure>
+
+## Le changement de polarité support-résistance
+
+Un support cassé devient souvent une résistance, et inversement. C'est le **changement de polarité** (polarity flip, ou role reversal), et il a une explication concrète en termes de participants.
+
+Prenez un support à 5 200 sur l'ES, défendu trois fois. Des acheteurs y ont pris position ; d'autres, qui ont manqué le rebond, ont placé des ordres d'achat juste au-dessus pour la prochaine fois. Le prix casse 5 200 et clôture à 5 185. Maintenant :
+
+- les acheteurs de 5 200 sont **en perte** ; si le prix revient à 5 200, beaucoup vendront pour sortir à zéro (« je sors dès que je récupère mon prix ») ;
+- les vendeurs qui ont provoqué la cassure voient 5 200 comme le niveau où **rajouter** si le prix y revient ;
+- les acheteurs en attente au-dessus de 5 200 ont annulé leurs ordres ou les ont transformés en ventes.
+
+Résultat : au retour du prix sur 5 200, il y a désormais plus de vendeurs que d'acheteurs à cet endroit. L'ancien support résiste. Le mécanisme est symétrique pour une résistance cassée qui devient support.
+
+Le **retest** de l'ancien niveau après la cassure est l'un des setups les plus anciens et les plus robustes de l'analyse technique : cassure en clôture (dans l'unité de structure), retour sur la zone, signal d'exécution (réalignement, chapitre 3), entrée dans le sens de la cassure, stop de l'autre côté de la zone. Il ne fonctionne pas à chaque fois (rien ne fonctionne à chaque fois) ; il donne une invalidation nette et un ratio souvent favorable.
+
+Deux précautions : toutes les cassures ne tiennent pas (le niveau 3 est entièrement consacré aux fausses cassures, qui sont un setup en soi) ; et un retest qui **traverse** l'ancien niveau en clôture annule le changement de polarité et signale souvent une fausse cassure.
+
+## Confluence avec la structure et les niveaux ronds
+
+Un niveau horizontal seul est une information. Un niveau horizontal qui coïncide avec autre chose est une **confluence**, et la confluence est ce qui distingue une zone d'entrée sérieuse d'un simple trait.
+
+**Confluence avec la structure.** Le meilleur cas : le dernier HL de la structure H4 (chapitre 2) se trouve dans une zone de support majeure. La structure dit « c'est ici que la tendance se défend », le niveau dit « c'est ici que les acheteurs ont déjà agi ». Deux raisons indépendantes de s'attendre à une réaction, et une invalidation unique (sous la zone et sous le HL) qui protège les deux lectures.
+
+**Confluence avec les niveaux ronds.** Les prix ronds (5 200 sur l'ES, 2 400 sur l'or, 1,0800 sur EUR/USD, 60 000 sur BTC) attirent des ordres pour une raison simple : les humains les tapent. Ordres limites, stops, objectifs s'y regroupent. Un support technique qui tombe sur un chiffre rond est renforcé ; il attire aussi les chasseurs de stops (niveau 3), ce qui justifie une zone un peu plus large et un stop un peu plus loin.
+
+**Confluence multi-timeframe.** Un niveau visible en quotidien, retesté en H4, et sur lequel le M15 montre une réaction en cours, est vu par des participants de trois horizons différents. Plus la confluence traverse d'unités de temps, plus le niveau pèse.
+
+**Ce qui n'est pas de la confluence** : empiler des outils qui disent la même chose à partir des mêmes données (trois moyennes mobiles, deux retracements de Fibonacci et un pivot sur le même prix). Cela donne une illusion de solidité, pas une information supplémentaire. La confluence utile combine des **sources différentes** : structure, niveau horizontal, chiffre rond, volume (chapitre 6), volatilité (chapitre 5).
+
+<Figure caption="Figure 3 · Confluence : le dernier HL H4 (structure), un support majeur retesté (niveau) et un chiffre rond (5 200) se rejoignent. Une seule zone, une seule invalidation, trois raisons.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Zone de confluence entre structure, support et niveau rond" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <rect x="40" y="188" width="660" height="26" className="green" opacity="0.2" />
+  <text x="46" y="184" fontSize="10" className="green" fontWeight="600">zone de confluence 5 196 · 5 206</text>
+  <line x1="40" y1="200" x2="700" y2="200" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="6 4" />
+  <text x="690" y="196" fontSize="10" textAnchor="end" className="gold">5 200 · chiffre rond</text>
+
+  <polyline points="50,240 90,190 120,210 150,140 190,205 220,170 260,90 300,120 330,100 370,150 400,130 430,205 460,150 500,110 540,60 580,95 620,70 660,40 690,55" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="90" cy="190" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <circle cx="190" cy="205" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <circle cx="430" cy="205" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="430" y="228" fontSize="10" textAnchor="middle" className="green" fontWeight="600">HL H4 dans la zone</text>
+  <text x="140" y="228" fontSize="10" textAnchor="middle" className="muted">deux réactions antérieures</text>
+  <line x1="40" y1="222" x2="700" y2="222" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="690" y="236" fontSize="10" textAnchor="end" className="red">invalidation unique sous la zone</text>
+  <text x="600" y="130" fontSize="10" className="muted">structure H4 : HH / HL</text>
+</svg>
+</Figure>
+
+## Nettoyer son graphique : moins de niveaux, mieux choisis
+
+Un graphique couvert de vingt lignes horizontales n'est pas une analyse ; c'est une façon de ne jamais avoir tort (le prix réagira toujours près de l'une d'elles) et de ne jamais pouvoir agir (chaque niveau en contredit un autre). Le nettoyage est une compétence à part entière.
+
+Règles de nettoyage :
+
+1. **Un niveau, une unité de temps, une couleur ou une épaisseur.** Les niveaux du quotidien sont épais, ceux du H4 moyens, ceux du M15 fins ; on sait d'un coup d'œil lequel pèse.
+2. **Cinq niveaux au plus sur l'écran d'exécution.** En général : le plus haut et le plus bas de la veille, la zone majeure au-dessus, la zone majeure en dessous, et le niveau de la structure en cours (dernier HL ou LH). Le reste est sur un graphique de contexte, pas sur l'écran de travail.
+3. **Un niveau retiré dès qu'il a été traversé en clôture** dans l'unité qui l'a défini, sauf s'il devient candidat au changement de polarité (auquel cas il change de couleur, pas de statut).
+4. **Une revue hebdomadaire des niveaux de contexte** : ceux qui n'ont plus été approchés depuis un mois sortent, sauf extrêmes historiques.
+5. **Un niveau porte une note** : combien de réactions, dans quelle unité, dernière date. Un niveau sans note est un niveau qu'on ne sait plus justifier ; il part.
+
+Le test final : montrer son graphique à un autre trader et pouvoir justifier chaque trait en une phrase. Si la phrase est « je ne sais plus pourquoi il est là », il n'a rien à y faire.
+
+## Deux trades sur un niveau
+
+Reconstitutions pédagogiques : la même zone, deux exécutions.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Retest en support d'une ancienne résistance H4 cassée en clôture, confluence avec le HL H4 et le rond 2 400"
+  entree="2 402,5"
+  stop="2 395,5 (7 $, sous la zone 2 397-2 405 et sous le HL)"
+  objectif="2 423,5 (résistance H4 suivante)"
+  r="+3R">
+
+La zone 2 397-2 405 avait été résistance trois fois en H4. Cassure en clôture H4 à 2 409, extension à 2 418, puis retour. En H1, le prix entre dans la zone, forme un creux à 2 399,0, puis un HH interne : réalignement. Entrée à 2 402,5, stop 7 $ sous, au-delà de la zone. Trois raisons indépendantes de s'attendre à une réaction (changement de polarité, HL H4, chiffre rond), une seule invalidation. Objectif atteint le lendemain. Le trader n'a rien deviné : il a attendu que le prix vienne là où trois lectures se rejoignaient et qu'il montre une réaction.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Achat au premier contact d'une ligne au tick près, sans réaction, sans confluence"
+  entree="2 405,0 (bord haut de la zone, ligne tracée à 2 405,0)"
+  stop="2 402,0 (3 $, à l'intérieur de la zone)"
+  objectif="2 423,5"
+  r="−1R, puis le trade sans lui">
+
+Même journée, autre trader. Il avait tracé une ligne à 2 405,0 exactement, sur le plus haut du dernier rejet. Le prix touche 2 405,0 : il achète au contact, stop 3 $ plus bas « pour un bon ratio ». Le stop est à l'intérieur de ce qui était en réalité une zone de 8 $ ; le prix descend jusqu'à 2 399,0, touche le stop, puis se réaligne et monte 20 $. Le niveau était bon, la lecture était bonne, l'exécution était fausse trois fois : ligne au lieu de zone, entrée au contact au lieu d'attendre le signal, stop dans la zone au lieu d'au-delà. Il note dans son journal : « bonne zone, mauvais stop », ce qui est exact et ce qui coûte 1R à chaque fois.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Un niveau est **majeur** par le nombre et l'ampleur des réactions, l'unité de temps, la fraîcheur, et parfois par construction (extrêmes de la veille, de la semaine).
+- On trace des **zones**, avec une épaisseur adaptée à l'unité et à la volatilité ; on entre dans la zone sur signal, on met le stop **au-delà**, on ne juge une cassure que sur une **clôture**.
+- Le **changement de polarité** a une cause : les acheteurs piégés vendent au retour, les vendeurs rajoutent. Le retest après cassure est un setup robuste.
+- La **confluence** utile combine des sources différentes (structure, niveau, chiffre rond, volume), pas trois outils qui disent la même chose.
+- **Cinq niveaux au plus** sur l'écran de travail, chacun justifiable en une phrase ; le reste part.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Hiérarchiser des niveaux">
+
+Sur l'ES en H4, vous avez relevé : (a) un plus haut de la semaine dernière à 5 312 rejeté deux fois avec 30 points de repli ; (b) un creux isolé à 5 268 il y a trois semaines, jamais retesté ; (c) le plus bas de la veille à 5 281 ; (d) une zone 5 240-5 246 qui a servi de support quatre fois sur deux mois ; (e) un sommet à 5 300 en M5 ce matin ; (f) le plus haut historique à 5 340.
+
+1. Classez ces niveaux du plus au moins important pour un intraday, en justifiant.
+2. Lesquels gardez-vous sur l'écran d'exécution ?
+3. Le prix est à 5 290. Où sont les zones majeures au-dessus et en dessous ?
+
+<Solution>
+
+1. **(d)** zone de support majeure (quatre réactions, deux mois) ; **(a)** résistance récente à réactions amples ; **(f)** plus haut historique (par nature, même s'il est loin) ; **(c)** plus bas de la veille (niveau par construction, du jour) ; **(b)** creux isolé jamais retesté (candidat, pas niveau) ; **(e)** sommet M5 (niveau d'exécution, pas de contexte).
+2. Sur l'écran d'exécution : **(c)** 5 281, **(a)** 5 312 (zone au-dessus), **(d)** 5 240-5 246 (zone en dessous), et **(f)** 5 340 comme repère lointain si l'écran le permet. Le (b) part ; le (e) ne sert qu'à placer un stop intraday, il ne se trace pas comme un niveau.
+3. Au-dessus : **5 312** (puis 5 340). En dessous : **5 281** (proche, du jour) puis **5 240-5 246** (majeure).
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Tracer une zone et placer stop et entrée">
+
+Sur l'or en H4, trois bougies ont réagi à un support : mèches basses à 2 351,0, 2 349,5 et 2 352,0 ; corps les plus bas à 2 355,0, 2 354,0 et 2 356,0. Volatilité normale (zones H4 de 4 à 6 $).
+
+1. Délimitez la zone (bord haut, bord bas).
+2. Où placez-vous un stop pour un achat dans cette zone ? Où placez-vous l'entrée ?
+3. Le prix clôture une bougie H4 à 2 347,0. Que concluez-vous ?
+
+<Solution>
+
+1. Bord haut sur le corps le plus haut des réactions, environ **2 356,0** ; bord bas sur la mèche la plus basse, **2 349,5**. Zone de 6,5 $, un peu large mais cohérente avec trois réactions dispersées ; on peut aussi retenir un « corps » 2 354-2 356 et une « marge » jusqu'à 2 349,5.
+2. Stop **sous la zone**, avec une marge : vers 2 347,5-2 348,0. Entrée **dans la zone**, sur un signal d'exécution (réalignement H1 ou M15), typiquement entre 2 351 et 2 355, pas au premier contact de 2 356.
+3. Une clôture H4 à 2 347,0 est **sous la zone** : le support est cassé dans l'unité qui l'a défini. On ne l'achète plus ; on le surveille comme candidat au changement de polarité (retest en résistance vers 2 350-2 356), sous réserve que le retest ne le retraverse pas en clôture.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Nettoyer un graphique">
+
+Prenez votre graphique de travail actuel (ou un graphique quelconque sur lequel vous tracez quinze niveaux exprès). Pour chaque niveau, écrivez en une ligne : unité de temps, nombre de réactions, dernière réaction, statut (support, résistance, polarité changée). Retirez tout ce qui n'a pas de ligne convaincante. Comptez ce qui reste.
+
+<Solution>
+
+Résultat attendu : **trois à cinq niveaux** sur l'écran d'exécution, avec une hiérarchie visuelle (épaisseur ou couleur par unité de temps). Si vous en gardez plus de sept, l'un des critères est appliqué avec complaisance : en général « nombre de réactions » (une réaction n'est pas un niveau) ou « fraîcheur » (un niveau d'il y a six mois sans retest depuis n'a plus sa place, sauf extrême historique). Refaites l'exercice chaque semaine ; le nombre de niveaux qui survivent au nettoyage est un bon indicateur de la clarté de votre lecture.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Qu'est-ce qui rend un niveau horizontal « majeur » ?",
+      options: [
+        "Le fait qu'un indicateur le signale",
+        "Le nombre et l'ampleur des réactions, l'unité de temps, la fraîcheur, et parfois sa nature (extrême de la veille, de la semaine)",
+        "Sa couleur",
+        "Le fait qu'il soit exactement rond",
+      ],
+      answer: 1,
+      explain: "Un niveau touché plusieurs fois avec des réactions amples, visible en H4 ou quotidien, récent ou historique, est regardé par beaucoup de participants : c'est ce qui le fait tenir.",
+    },
+    {
+      q: "Pourquoi tracer des zones plutôt que des lignes ?",
+      options: [
+        "C'est plus joli",
+        "Les ordres qui font le niveau sont répartis autour d'un prix ; une ligne au tick près est « cassée » par les mèches et « manquée » par le prix",
+        "Les zones sont obligatoires sur les plateformes",
+        "Pour pouvoir placer le stop dedans",
+      ],
+      answer: 1,
+      explain: "Le marché ne s'arrête jamais au tick près. La zone englobe corps et mèches des réactions ; on entre dedans sur signal, on met le stop au-delà, on juge la cassure sur une clôture.",
+    },
+    {
+      q: "Un support cassé devient souvent résistance parce que :",
+      options: [
+        "C'est une loi de la géométrie",
+        "Les acheteurs piégés vendent au retour pour sortir à zéro, les vendeurs de la cassure rajoutent, les acheteurs en attente ont disparu",
+        "Le broker le décide",
+        "Le volume augmente",
+      ],
+      answer: 1,
+      explain: "Le changement de polarité a une cause en termes de participants. Le retest de l'ancien niveau après cassure en clôture est un setup ancien et robuste.",
+    },
+    {
+      q: "Quelle combinaison est une vraie confluence ?",
+      options: [
+        "Trois moyennes mobiles sur le même prix",
+        "Le dernier HL H4 dans une zone de support majeure sur un chiffre rond",
+        "Deux retracements de Fibonacci",
+        "Un niveau et sa copie en M1",
+      ],
+      answer: 1,
+      explain: "La confluence utile combine des sources différentes (structure, niveau horizontal, chiffre rond). Empiler des outils dérivés des mêmes données donne une illusion de solidité.",
+    },
+    {
+      q: "Le prix dépasse votre zone de support de 2 ticks en mèche puis clôture au-dessus. Le support est :",
+      options: [
+        "Cassé",
+        "Tenu : une cassure se juge sur une clôture au-delà de la zone dans l'unité de structure",
+        "Annulé",
+        "Devenu résistance",
+      ],
+      answer: 1,
+      explain: "Une mèche au-delà de la zone est un test, souvent une chasse aux stops. La cassure demande une clôture au-delà dans l'unité qui a défini le niveau.",
+    },
+    {
+      q: "Combien de niveaux garder sur l'écran d'exécution ?",
+      options: [
+        "Le plus possible pour ne rien rater",
+        "Trois à cinq, chacun justifiable en une phrase",
+        "Un seul",
+        "Une quinzaine",
+      ],
+      answer: 1,
+      explain: "Vingt lignes, c'est ne jamais avoir tort et ne jamais pouvoir agir. Cinq niveaux hiérarchisés, avec une note pour chacun, suffisent.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+L'épaisseur des zones, la marge des stops, la distance des objectifs : tout cela dépend de combien le marché bouge en ce moment. Le chapitre suivant mesure la volatilité, introduit l'ATR, et montre comment adapter stops, objectifs et taille de position aux régimes de volatilité, sur indices, or et forex.
