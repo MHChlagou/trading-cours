@@ -1,0 +1,368 @@
+---
+title: "Examen · Niveau 2 · Analyse technique"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider le niveau 2 : bougies et unités de temps, structure, analyse multi-timeframe, supports et résistances, volatilité et ATR, volume. Score de passage : 80 %."
+---
+
+# Examen · Niveau 2 · Analyse technique
+
+Cet examen valide les six chapitres du niveau 2. Il comporte **25 questions** en cinq blocs, puis **une étude de cas notée sur 20 points** qui demande de lire un graphique décrit en texte, du contexte à l'exécution, en chiffrant stop, taille et objectif avec les outils du niveau 1.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Le niveau 3 s'appuie directement sur la structure, les niveaux et le volume : ne passez pas sans les avoir.
+
+## Bloc 1 · Bougies et unités de temps
+
+<Quiz
+  title="Bloc 1 · Lire une bougie, choisir ses unités"
+  questions={[
+    {
+      q: "Une bougie H1 : ouverture 100, plus haut 103, plus bas 88, clôture 102. Elle raconte :",
+      options: [
+        "Une domination des vendeurs",
+        "Une poussée baissière entièrement ramenée : les acheteurs ont gagné l'heure, clôture dans le tiers supérieur",
+        "Une indécision totale",
+        "Rien sans indicateur",
+      ],
+      answer: 1,
+      explain: "Corps de 2 points, mèche basse de 12 : le prix a été poussé 12 points plus bas puis ramené. Qui a vendu à 88 est piégé. À lire en contexte : sur un support, c'est un signal ; au milieu d'un range, du bruit.",
+    },
+    {
+      q: "Un trader intraday décide sur M5. Pour le contexte, il regarde :",
+      options: [
+        "Le M1",
+        "Le H1 et le quotidien",
+        "Le tick",
+        "Uniquement le M5",
+      ],
+      answer: 1,
+      explain: "Le contexte se lit au-dessus de l'unité d'exécution, jamais en dessous. Descendre au M1 amplifie le bruit et fait sortir des bons trades.",
+    },
+    {
+      q: "Une figure de chandelier vue au milieu de sa bougie H1 :",
+      options: [
+        "Est exploitable immédiatement",
+        "Ne dit rien avant la clôture ; elle peut devenir son contraire",
+        "Est plus fiable qu'à la clôture",
+        "Doit être tradée en M1",
+      ],
+      answer: 1,
+      explain: "Un « avalement haussier » à 15 h 40 peut être un « pendu » à 15 h 59. On lit une bougie close, ou on descend d'unité pour trouver une clôture.",
+    },
+    {
+      q: "« Le marteau retourne le marché dans 70 % des cas. » Cette affirmation :",
+      options: [
+        "Est établie",
+        "Doit être considérée comme inexistante tant que la méthode n'est pas donnée ; isolées, la plupart des figures sont proches de 50 %",
+        "Vaut sur tous les marchés",
+        "Justifie d'acheter tous les marteaux",
+      ],
+      answer: 1,
+      explain: "Une statistique sans méthode, sans marché, sans unité de temps ni contexte n'est pas une statistique.",
+    },
+    {
+      q: "Le protocole de lecture d'un graphique vierge se termine par :",
+      options: [
+        "Un ordre",
+        "Un scénario écrit avec son invalidation, puis l'attente d'un setup défini",
+        "L'ajout d'indicateurs",
+        "Un zoom en M1",
+      ],
+      answer: 1,
+      explain: "La lecture produit un contexte conditionnel, pas un signal. Si vous ne pouvez pas écrire le scénario, vous n'avez pas lu le graphique.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Structure et multi-timeframe
+
+<Quiz
+  title="Bloc 2 · Swings, tendance, hiérarchie des unités"
+  questions={[
+    {
+      q: "Swings successifs : creux 50, sommet 62, creux 55, sommet 68, creux 60, sommet 66, creux 57. La structure au dernier swing est :",
+      options: [
+        "Haussière intacte",
+        "Rompue : 66 est un LH, 57 un LL sous le dernier HL (60)",
+        "En range",
+        "Indéterminable",
+      ],
+      answer: 1,
+      explain: "62 → 68 : HH ; 55 → 60 : HL ; 66 sous 68 : LH (premier échec) ; 57 sous 60 : LL, le dernier HL est cassé. La séquence haussière est rompue.",
+    },
+    {
+      q: "Structure H4 haussière, structure M15 baissière. La lecture correcte est :",
+      options: [
+        "Le marché est baissier",
+        "Repli dans une tendance haussière ; on attend le réalignement de l'interne pour acheter",
+        "Contradiction, on ne trade jamais",
+        "Le marché est haussier en M15",
+      ],
+      answer: 1,
+      explain: "Externe et interne sont emboîtées. Un repli est « externe haussier, interne baissier ». L'entrée se cherche au HH interne au-dessus du dernier HL externe.",
+    },
+    {
+      q: "Une bonne invalidation est :",
+      options: [
+        "Un montant fixe en euros",
+        "Objective (un swing visible), structurelle, avec une marge contre le bruit ; le montant se règle par la taille",
+        "La plus proche possible",
+        "Déplaçable si le prix approche",
+      ],
+      answer: 1,
+      explain: "Le stop va là où l'idée devient fausse. On ne le rapproche pas pour améliorer un ratio, on ne le déplace pas quand le prix approche.",
+    },
+    {
+      q: "Contexte haussier, structure H1 vient de casser son dernier HL, le M5 se réaligne à la hausse. Vous :",
+      options: [
+        "Achetez, le M5 est aligné",
+        "Attendez la clarification : conflit contexte-structure, le signal M5 est de l'unité inférieure",
+        "Vendez",
+        "Doublez",
+      ],
+      answer: 1,
+      explain: "La structure a rompu la séquence : transition. Un réalignement M5 dans une structure H1 rompue ne s'achète pas ; on attend que le H1 se réaligne ou confirme le retournement.",
+    },
+    {
+      q: "En position sur un trade décidé en H1, vous voyez trois LL en M1. Vous :",
+      options: [
+        "Sortez",
+        "Ne changez rien : c'est du bruit sous l'unité d'exécution ; la gestion se fait sur H1",
+        "Déplacez le stop",
+        "Ajoutez",
+      ],
+      answer: 1,
+      explain: "Le zoom-in émotionnel. Trois LL en M1 sont un repli ordinaire en H1. Le trade se juge sur l'unité qui l'a décidé.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Supports et résistances
+
+<Quiz
+  title="Bloc 3 · Niveaux, zones, polarité, confluence"
+  questions={[
+    {
+      q: "Ce qui rend un niveau horizontal majeur :",
+      options: [
+        "Sa couleur",
+        "Nombre et ampleur des réactions, unité de temps, fraîcheur, nature (extrême de la veille, de la semaine)",
+        "Le fait qu'un indicateur le montre",
+        "Le nombre de traders qui en parlent",
+      ],
+      answer: 1,
+      explain: "Un niveau touché plusieurs fois avec des réactions amples, visible en H4 ou quotidien, récent ou historique, est regardé par beaucoup de participants.",
+    },
+    {
+      q: "Le prix dépasse votre zone de support de 2 ticks en mèche puis clôture au-dessus. Le support est :",
+      options: [
+        "Cassé",
+        "Tenu : une cassure se juge sur une clôture au-delà de la zone dans l'unité de structure",
+        "Devenu résistance",
+        "Annulé",
+      ],
+      answer: 1,
+      explain: "Une mèche au-delà est un test, souvent une chasse aux stops. La cassure demande une clôture au-delà dans l'unité qui a défini le niveau.",
+    },
+    {
+      q: "Un support cassé devient résistance parce que :",
+      options: [
+        "C'est une loi géométrique",
+        "Les acheteurs piégés vendent au retour, les vendeurs rajoutent, les acheteurs en attente ont disparu",
+        "Le volume baisse",
+        "Le broker le décide",
+      ],
+      answer: 1,
+      explain: "Le changement de polarité a une cause en participants. Le retest après cassure en clôture est un setup ancien et robuste.",
+    },
+    {
+      q: "Quelle combinaison est une vraie confluence ?",
+      options: [
+        "Trois moyennes mobiles au même prix",
+        "Le dernier HL H4 dans une zone de support majeure sur un chiffre rond",
+        "Deux Fibonacci",
+        "Un niveau et sa copie en M1",
+      ],
+      answer: 1,
+      explain: "La confluence combine des sources différentes (structure, niveau, chiffre rond, volume). Empiler des outils dérivés du même prix donne une illusion.",
+    },
+    {
+      q: "Combien de niveaux garder sur l'écran d'exécution ?",
+      options: [
+        "Une quinzaine",
+        "Trois à cinq, chacun justifiable en une phrase",
+        "Un seul",
+        "Autant que possible",
+      ],
+      answer: 1,
+      explain: "Vingt lignes, c'est ne jamais avoir tort et ne jamais pouvoir agir.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Volatilité et ATR
+
+<Quiz
+  title="Bloc 4 · Régimes, ATR, taille"
+  questions={[
+    {
+      q: "La fourchette vraie d'une bougie qui ouvre 20 points au-dessus de la clôture précédente et ne bouge plus vaut :",
+      options: [
+        "0",
+        "20",
+        "10",
+        "Indéfinie",
+      ],
+      answer: 1,
+      explain: "Haut − bas = 0, mais |bas − clôture précédente| = 20. La fourchette vraie intègre les gaps.",
+    },
+    {
+      q: "Cinq fourchettes vraies : 18, 17, 18, 30, 19. ATR 5 ?",
+      options: [
+        "18",
+        "20,4",
+        "22",
+        "30",
+      ],
+      answer: 1,
+      explain: "(18 + 17 + 18 + 30 + 19) ÷ 5 = 102 ÷ 5 = 20,4.",
+    },
+    {
+      q: "La volatilité double, votre stop structurel + marge passe de 8 à 16 points. À budget constant, la taille :",
+      options: [
+        "Reste la même",
+        "Est divisée par deux",
+        "Double",
+        "Est nulle",
+      ],
+      answer: 1,
+      explain: "Taille = budget ÷ (distance × valeur du point). Garder la taille en régime agité, c'est doubler le R sans le savoir.",
+    },
+    {
+      q: "Une contraction prolongée de volatilité annonce :",
+      options: [
+        "Une hausse",
+        "Une baisse",
+        "Un mouvement d'ampleur, sans direction ; la direction vient de la structure",
+        "Rien",
+      ],
+      answer: 2,
+      explain: "Le cycle contraction / expansion est universel et ne dit pas le sens. On attend la sortie et le premier repli, on suit la structure.",
+    },
+    {
+      q: "Le stop se place :",
+      options: [
+        "À 1 ATR de l'entrée dans tous les cas",
+        "Sur la structure, avec une marge ATR contre le bruit, et vérifié pour n'être ni à 0,3 ni à 3 ATR",
+        "Au montant en euros souhaité",
+        "Où le ratio est bon",
+      ],
+      answer: 1,
+      explain: "La structure place le stop, l'ATR le vérifie et le complète, le position sizing en déduit la taille. Dans cet ordre.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Volume
+
+<Quiz
+  title="Bloc 5 · Ce que le volume dit et ne dit pas"
+  questions={[
+    {
+      q: "Le volume est exact et centralisé sur :",
+      options: [
+        "Le forex spot",
+        "Les futures",
+        "Les CFD",
+        "Toutes les cryptos",
+      ],
+      answer: 1,
+      explain: "Le volume des futures compte les contrats échangés sur une Bourse unique. Sur le forex spot, seul le tick volume existe.",
+    },
+    {
+      q: "Nouveau plus haut sur volume inférieur à l'impulsion précédente. C'est :",
+      options: [
+        "Une confirmation",
+        "Une divergence : la hausse perd des participants, à croiser avec structure et niveaux",
+        "Un signal de vente immédiat",
+        "Un climax d'achat",
+      ],
+      answer: 1,
+      explain: "La divergence est un affaiblissement, pas un signal en soi. Elle prend son sens sur une résistance ou avec un LH qui se prépare.",
+    },
+    {
+      q: "Une cassure de résistance à 3 h du matin sur volume relatif ×0,4 :",
+      options: [
+        "A plus de chances de tenir",
+        "Est probablement une fausse cassure : personne n'a validé le nouveau prix",
+        "Est une absorption",
+        "Est un climax",
+      ],
+      answer: 1,
+      explain: "Une cassure sans participants est souvent reprise à l'ouverture. Le volume distingue les cassures que le marché a décidées.",
+    },
+    {
+      q: "38 000 contrats à 15 h 35 (moyenne 45 000) et 9 000 à 4 h 10 (moyenne 1 500). L'anomalie est :",
+      options: [
+        "La bougie de 15 h 35",
+        "La bougie de 4 h 10 : volume relatif 6",
+        "Les deux",
+        "Aucune",
+      ],
+      answer: 1,
+      explain: "Le volume se lit par rapport à la même heure des jours précédents. 0,84 à 15 h 35 est ordinaire ; 6,0 à 4 h 10 est une anomalie à expliquer.",
+    },
+    {
+      q: "Sur le forex spot de détail, le volume affiché permet :",
+      options: [
+        "De lire l'absorption au tick près",
+        "De repérer les heures d'activité et les climax évidents, pas l'analyse fine ; le vrai volume est sur les futures de devises",
+        "Du volume profile précis",
+        "De l'order flow",
+      ],
+      answer: 1,
+      explain: "Le tick volume est un indicateur d'activité corrélé au vrai volume, propre au broker. Pour du volume réel sur l'euro, le 6E du CME.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Lire, décider, chiffrer">
+
+Vous tradez les micro-futures avec un compte de **9 000 $**, risque 1 % par trade. Instrument : MES (5 $ le point, tick 0,25). Voici la situation, décrite comme la lirait un trader qui applique le protocole du niveau 2.
+
+**Quotidien.** Depuis trois semaines : creux 5 180, sommet 5 260, creux 5 215, sommet 5 302, creux 5 248, sommet 5 330. Le prix replie depuis 5 330. Une zone 5 244-5 252 a servi de support deux fois et de résistance une fois auparavant. ATR 14 quotidien : 36 points.
+
+**H1.** Depuis 5 330, la structure H1 fait des LH et des LL ; le dernier LL est à 5 256, le dernier LH à 5 271. Le prix est à 5 262. ATR 14 H1 : 9 points.
+
+**M5, 16 h 30.** Le prix touche 5 250 (volume relatif M5 ×2,4, longue mèche basse, clôture 5 254), puis forme un creux à 5 251 et dépasse le dernier LH M5 à 5 258 sur la bougie de 16 h 45. Volume de la bougie de 16 h 45 : ×1,6.
+
+1. **(3 pts)** Étiquetez les swings quotidiens (HH/HL/LH/LL) et donnez la structure externe. Où est le dernier HL quotidien ?
+2. **(3 pts)** Décrivez la structure interne H1 et ce que le prix fait à 16 h 45 en M5. Comment nomme-t-on cette configuration au sens du chapitre 2 ?
+3. **(4 pts)** Justifiez la zone 5 244-5 252 par au moins trois arguments de confluence issus des chapitres 2, 4 et 6.
+4. **(4 pts)** Placez le stop : donnez le swing d'invalidation, la marge (0,5 ATR M5, avec ATR M5 ≈ 3 points), et vérifiez sa distance en ATR H1. Calculez la taille pour une entrée à 5 257,00 et le risque réel.
+5. **(3 pts)** Proposez un objectif structurel, calculez le ratio gain/risque, et vérifiez qu'il est réaliste dans la séance avec l'ATR quotidien.
+6. **(3 pts)** Trois variantes : (a) le prix avait cassé 5 244 en clôture H1 avant 16 h 30 ; (b) la mèche à 5 250 s'était formée sur volume ×0,5 ; (c) le trade est pris à 3 h du matin. Que change chacune ?
+
+<Solution>
+
+**1. Structure quotidienne (3 pts).** 5 260 : premier sommet ; 5 215 : HL (au-dessus de 5 180) ; 5 302 : **HH** ; 5 248 : **HL** ; 5 330 : **HH**. Structure externe **haussière** (HH/HL). Dernier HL quotidien : **5 248**.
+
+**2. Structure interne (3 pts).** H1 en LH/LL depuis 5 330 : structure interne **baissière**, donc **repli dans une tendance haussière**. À 16 h 45, le M5 dépasse son dernier LH (5 258) après un creux à 5 251 : **premier HH interne**, c'est le **réalignement** de la structure interne, au-dessus du dernier HL externe (5 248). Configuration : fin de repli, entrée dans le sens de la structure externe.
+
+**3. Confluence (4 pts).** (a) **Structure** : le dernier HL quotidien (5 248) est dans la zone. (b) **Niveau** : la zone a réagi trois fois (deux supports, une résistance) : niveau majeur avec changement de polarité déjà observé. (c) **Chiffre rond** : 5 250 est dans la zone. (d) **Volume** : la mèche à 5 250 sur volume relatif ×2,4 est un rejet fort (des acheteurs ont absorbé des ventes), et le réalignement se fait sur ×1,6, participation correcte. Trois arguments suffisent ; quatre sont donnés.
+
+**4. Stop et taille (4 pts).** Swing d'invalidation : le creux M5 à **5 251** (l'invalidation large serait sous la zone et sous le HL quotidien, vers 5 243). Marge : 0,5 × 3 = 1,5 point → stop à **5 249,50**. Distance depuis 5 257,00 : **7,5 points**, soit 30 ticks. En ATR H1 : 7,5 ÷ 9 ≈ **0,83 ATR H1**, cohérent (ni dans le bruit d'une bougie H1, ni excessif) et 2,5 ATR M5. Budget : 90 $. Risque par contrat : 7,5 × 5 = 37,50 $. 90 ÷ 37,50 = 2,4 → **2 MES**, risque réel **75 $** (0,83 %).
+
+**5. Objectif (3 pts).** Objectif structurel : le dernier LH H1 à 5 271 est trop proche (14 points, ratio 1,9) ; l'objectif cohérent avec le contexte est le **HH quotidien à 5 330** ou, plus prudent, la zone du HH précédent **5 302**. Avec 5 302 : gain 45 points, ratio 45 ÷ 7,5 = **6 pour 1**. Réalisme : 45 points font 1,25 ATR quotidien depuis un prix déjà à mi-fourchette de la journée : peu probable dans la séance, plausible en un à deux jours. Pour un intraday strict, un objectif intermédiaire à 5 271 (1,9R) puis 5 285 environ (3,7R, ≈ 0,8 ATR quotidien) est plus réaliste ; le plan doit le dire avant l'entrée. Toute réponse qui compare l'objectif à l'ATR et conclut de façon cohérente obtient les points.
+
+**6. Variantes (3 pts).** (a) Une clôture H1 sous 5 244 casse la zone **et** le dernier HL quotidien : la structure externe est rompue, le biais haussier est annulé, on n'achète pas ; on attend la clarification (chapitre 3). (b) Un rejet sur volume ×0,5 est un rejet faible : le niveau n'a pas été vraiment testé ; on peut attendre un second test ou réduire la taille, la confluence perd son argument volume. (c) À 3 h du matin, le carnet est mince, le volume relatif n'a pas de sens comparable, le slippage est élevé : le même setup se prend en taille réduite ou pas du tout selon le plan ; la plupart des plans intraday l'excluent.
+
+**Barème.** 1 point par élément juste (étiquette, argument, chiffre, justification). Passage : 16 sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Avec 20 bonnes réponses sur 25 et 16 points sur 20, le niveau 2 est validé. Vous savez lire un graphique du contexte à l'exécution et chiffrer ce que vous y voyez. Le niveau 3 explique le pourquoi : la liquidité, les stops que le marché va chercher, les déséquilibres qu'il revient combler, et la lecture Wyckoff des campagnes d'accumulation et de distribution.
