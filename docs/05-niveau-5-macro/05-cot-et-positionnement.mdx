@@ -1,0 +1,296 @@
+---
+title: "COT et positionnement"
+description: "Lire le rapport COT de la CFTC, distinguer commercials, large speculators et small traders, repérer les extrêmes de positionnement et les exploiter, construire un index COT, et connaître les limites de l'outil et son bon horizon."
+---
+
+# COT et positionnement
+
+Le niveau 4 a introduit l'open interest : combien de contrats sont ouverts. Le rapport **COT** (Commitments of Traders) de la CFTC va plus loin : il dit **qui** détient ces contrats, par grande catégorie de participants, chaque semaine. C'est la seule fenêtre publique et régulière sur le positionnement des acteurs qui comptent sur les futures : les industriels qui se couvrent, les fonds qui spéculent, les petits. Bien lu, il dit de quel côté le marché penche et à quel point c'est extrême. Mal lu, il produit des signaux de retournement qui arrivent des mois trop tôt. Ce chapitre apprend à le lire, à le résumer en un index, à l'utiliser à son horizon, et à connaître ses limites.
+
+## Lire le rapport COT de la CFTC
+
+La **CFTC** (Commodity Futures Trading Commission, le régulateur américain des futures, niveau 0) publie chaque **vendredi** à 15 h 30 heure de New York (21 h 30 à Paris en été) le rapport COT, qui donne les positions ouvertes au **mardi** précédent, par catégorie de participants, pour chaque contrat future coté aux États-Unis : indices (ES, NQ), obligations, devises (6E, 6J, 6B…), énergie (CL, NG), métaux (GC, SI, HG), grains, softs, et depuis 2018 le bitcoin.
+
+Deux versions coexistent :
+
+- **Le rapport « legacy »** (historique) : trois catégories, **commercials**, **non-commercials** (grands spéculateurs) et **non-reportables** (petits). C'est le plus utilisé pour les indices COT, parce que son historique remonte à des décennies.
+- **Le rapport « disaggregated »** (matières premières) et **TFF** (traders in financial futures, pour indices, devises, taux) : catégories plus fines (producteurs / négociants, swap dealers, managed money, autres ; ou dealers, asset managers, leveraged funds, autres). Plus précis pour savoir qui fait quoi ; historique plus court.
+
+Pour chaque catégorie, le rapport donne les positions **longues**, **courtes**, et l'on calcule la **position nette** (long moins short) et sa **variation** depuis la semaine précédente. C'est la position nette et son évolution que l'on suit.
+
+Trois précautions de lecture avant d'aller plus loin :
+
+- **Le décalage** : les données du mardi sont publiées le vendredi ; le positionnement a pu bouger depuis, surtout après une semaine volatile.
+- **Le COT est un stock, pas un flux** : il dit combien de contrats chaque catégorie détient, pas ce qu'elle a fait aujourd'hui.
+- **La somme des positions nettes est nulle** : ce que les commercials sont net short, les spéculateurs et les petits le sont net long, à contrat près. Les catégories sont les deux faces d'une même pièce ; on en lit une, on connaît l'autre.
+
+<Figure caption="Figure 1 · Le rapport COT legacy pour un contrat : trois catégories, positions longues et courtes, position nette. Les nets se compensent : les commercials sont en face des spéculateurs et des petits.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Structure du rapport COT avec trois catégories" xmlns="http://www.w3.org/2000/svg">
+  <text x="360" y="28" fontSize="12" fontWeight="600" textAnchor="middle">Or (GC), rapport legacy, positions au mardi (contrats)</text>
+  <text x="140" y="60" fontSize="11" fontWeight="600" textAnchor="middle">Catégorie</text>
+  <text x="300" y="60" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Long</text>
+  <text x="400" y="60" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Short</text>
+  <text x="510" y="60" fontSize="11" fontWeight="600" textAnchor="middle">Net</text>
+  <text x="630" y="60" fontSize="11" fontWeight="600" textAnchor="middle" className="muted">Δ semaine</text>
+  <line x1="40" y1="70" x2="700" y2="70" className="line" strokeWidth="1" />
+  <text x="140" y="96" fontSize="11" textAnchor="middle">Commercials</text><text x="300" y="96" fontSize="11" textAnchor="middle" className="mono">120 000</text><text x="400" y="96" fontSize="11" textAnchor="middle" className="mono">315 000</text><text x="510" y="96" fontSize="11" textAnchor="middle" className="mono red" fontWeight="700">−195 000</text><text x="630" y="96" fontSize="11" textAnchor="middle" className="mono muted">−12 000</text>
+  <text x="140" y="126" fontSize="11" textAnchor="middle">Non-commercials</text><text x="300" y="126" fontSize="11" textAnchor="middle" className="mono">280 000</text><text x="400" y="126" fontSize="11" textAnchor="middle" className="mono">105 000</text><text x="510" y="126" fontSize="11" textAnchor="middle" className="mono green" fontWeight="700">+175 000</text><text x="630" y="126" fontSize="11" textAnchor="middle" className="mono muted">+10 000</text>
+  <text x="140" y="156" fontSize="11" textAnchor="middle">Non-reportables</text><text x="300" y="156" fontSize="11" textAnchor="middle" className="mono">55 000</text><text x="400" y="156" fontSize="11" textAnchor="middle" className="mono">35 000</text><text x="510" y="156" fontSize="11" textAnchor="middle" className="mono green" fontWeight="700">+20 000</text><text x="630" y="156" fontSize="11" textAnchor="middle" className="mono muted">+2 000</text>
+  <line x1="40" y1="170" x2="700" y2="170" className="line" strokeWidth="1" />
+  <text x="510" y="194" fontSize="11" textAnchor="middle" className="mono">−195 000 + 175 000 + 20 000 = 0</text>
+  <text x="360" y="230" fontSize="10" textAnchor="middle" className="muted">les commercials (producteurs, raffineurs, banques de bullion) sont net short : ils couvrent leur production</text>
+  <text x="360" y="248" fontSize="10" textAnchor="middle" className="muted">les spéculateurs et les petits sont net long en face ; la variation hebdomadaire dit qui a bougé</text>
+</svg>
+</Figure>
+
+## Commercials, large speculators, small traders
+
+Chaque catégorie a un comportement typique, et c'est ce comportement qui donne du sens aux chiffres.
+
+**Les commercials** (ou « hedgers ») : les entreprises pour lesquelles le sous-jacent est un métier. Sur l'or : les mines, les raffineurs, les banques de bullion ; sur le pétrole : les producteurs, les raffineurs, les compagnies aériennes ; sur les grains : les agriculteurs, les négociants, les industriels ; sur les devises : les banques et les entreprises qui couvrent des flux commerciaux. Ils utilisent les futures pour **couvrir**, pas pour spéculer : le producteur vend à terme sa production future ; il est donc structurellement **net short** sur la plupart des matières premières. Leur comportement : ils vendent d'autant plus que le prix monte (ils fixent de bons prix de vente) et rachètent quand il baisse ; ils sont donc **contrariens** par nature, et ils ont raison **aux extrêmes**, parce qu'ils connaissent leur marché physique et qu'ils n'ont pas de stop.
+
+**Les non-commercials** (large speculators, « les fonds ») : les hedge funds, les CTA (fonds systématiques suiveurs de tendance), les gérants. Ils spéculent : ils sont **avec la tendance**, ils l'amplifient, et ils sont le plus long au sommet et le plus short au creux, parce que leurs modèles suivent le prix. Ils ont raison **au milieu** des tendances et tort aux retournements. Leur position nette est l'image miroir de celle des commercials.
+
+**Les non-reportables** (small traders) : les positions trop petites pour être déclarées individuellement, en majorité des particuliers. Souvent du même côté que les fonds, avec un décalage ; parfois lus comme un indicateur de sentiment « foule », avec la même logique contrarienne aux extrêmes, mais moins fiable parce que la catégorie est hétérogène.
+
+Ce qu'il faut retenir : **le COT ne dit pas qui a raison ; il dit qui est où.** Les commercials net short record ne signifient pas que le prix va baisser demain ; ils signifient que ceux qui connaissent le physique vendent massivement à ce prix, et que les fonds sont net long record en face : la tendance haussière est **chargée**. Le niveau 4 (chapitre 5) a décrit ce que cela veut dire : de la fragilité, pas une date.
+
+## Les extrêmes de positionnement et leur exploitation
+
+Un positionnement est **extrême** quand la position nette d'une catégorie atteint un niveau rarement vu sur l'historique récent : les commercials net short comme jamais depuis trois ans, les fonds net long record. Ce sont ces extrêmes, et pas les valeurs courantes, qui portent de l'information.
+
+Ce que les extrêmes signalent :
+
+- **Un marché chargé d'un côté** : les fonds sont pleins ; il ne reste plus beaucoup d'acheteurs marginaux à convaincre ; le carburant d'une continuation s'épuise et celui d'un retournement (le dénouement des positions des fonds) s'accumule.
+- **Une divergence entre l'expertise et le momentum** : les commercials, qui savent, vendent ; les fonds, qui suivent, achètent. Aux extrêmes, l'histoire donne plus souvent raison aux commercials, avec un délai.
+- **Une asymétrie de risque** : à positionnement extrême long, une mauvaise nouvelle déclenche une liquidation en cascade (le squeeze du niveau 4), une bonne nouvelle bouge peu (tout le monde est déjà là).
+
+Comment les exploiter, avec la prudence qu'exige l'horizon :
+
+1. **Comme filtre de biais de swing** : quand les commercials sont net long extrême sur l'or (rare : ils rachètent leurs couvertures parce que le prix est bas), on cherche des achats de swing sur la structure quotidienne / hebdomadaire et l'on évite les ventes de swing ; l'inverse aux extrêmes short. Le COT ne donne pas l'entrée ; il dit dans quel sens chercher pour les semaines à venir.
+2. **Comme avertissement de fragilité** : à extrême de fonds long, un long intraday reste possible (le niveau 4 le disait), mais avec un stop hors des zones de liquidation et une taille prudente ; et l'on surveille le premier CHoCH hebdomadaire.
+3. **Comme confirmation de retournement** : un extrême **suivi** d'un changement de structure (un CHoCH quotidien après un sweep, niveau 3) et d'un début de dénouement visible dans le COT suivant (les fonds réduisent, les commercials rachètent) est une configuration de retournement de plusieurs semaines. C'est l'usage le plus robuste : le COT donne le carburant, la structure donne l'allumage.
+4. **Combiné à la saisonnalité** (chapitre suivant) : un extrême de positionnement qui coïncide avec une fenêtre saisonnière favorable au retournement est une confluence de contexte.
+
+Ce qu'il ne faut pas faire : vendre parce que les fonds sont net long record. Ils peuvent le rester des mois, et l'être davantage. L'extrême est une condition ; le déclencheur vient d'ailleurs.
+
+<Figure caption="Figure 2 · Positions nettes des commercials et des fonds sur l'or, sur deux ans, avec le prix. Les extrêmes (bandes) coïncident avec les zones de retournement, avec des délais variables ; le retournement effectif attend un changement de structure.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Positions nettes COT et prix sur deux ans" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="150" x2="700" y2="150" className="line" strokeWidth="1" />
+  <text x="50" y="50" fontSize="10" textAnchor="end" className="muted">prix</text>
+  <polyline points="70,120 120,100 170,80 220,60 270,75 320,110 370,130 420,120 470,95 520,70 570,50 620,65 690,90" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="60" y1="300" x2="700" y2="300" className="line" strokeWidth="1" />
+  <line x1="60" y1="240" x2="700" y2="240" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="50" y="244" fontSize="10" textAnchor="end" className="mono muted">0</text>
+  <text x="50" y="180" fontSize="10" textAnchor="end" className="muted">net</text>
+  <polyline points="70,215 120,205 170,195 220,178 270,190 320,215 370,228 420,220 470,205 520,190 570,176 620,185 690,198" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="640" y="176" fontSize="9" className="green">fonds net long</text>
+  <polyline points="70,265 120,275 170,285 220,302 270,290 320,265 370,252 420,260 470,275 520,290 570,304 620,295 690,282" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="640" y="315" fontSize="9" className="red">commercials net short</text>
+  <rect x="200" y="170" width="45" height="140" className="red" opacity="0.1" /><text x="222" y="330" fontSize="9" textAnchor="middle" className="red">extrême</text>
+  <rect x="350" y="170" width="45" height="140" className="green" opacity="0.1" /><text x="372" y="330" fontSize="9" textAnchor="middle" className="green">extrême inverse</text>
+  <rect x="550" y="170" width="45" height="140" className="red" opacity="0.1" /><text x="572" y="330" fontSize="9" textAnchor="middle" className="red">extrême</text>
+  <text x="222" y="45" fontSize="9" textAnchor="middle" className="muted">sommet 3 semaines après</text>
+  <text x="372" y="145" fontSize="9" textAnchor="middle" className="muted">creux 2 semaines après</text>
+  <text x="600" y="35" fontSize="9" textAnchor="middle" className="muted">sommet 4 semaines après</text>
+</svg>
+</Figure>
+
+## Construire un index COT
+
+Les positions nettes en contrats sont difficiles à comparer d'un marché à l'autre et d'une époque à l'autre (l'open interest total change). L'**index COT** normalise : il situe la position nette actuelle d'une catégorie entre son minimum et son maximum sur une période de référence, sur une échelle de 0 à 100.
+
+```text
+Index COT = (Net actuel − Net minimum sur N semaines) ÷ (Net maximum − Net minimum) × 100
+```
+
+N est en général de 26 semaines (six mois) pour un usage de swing, ou 156 semaines (trois ans) pour un usage de position. Un index de 100 signifie que la catégorie est aussi longue qu'elle l'a été sur la période ; 0, aussi courte.
+
+Un calcul : positions nettes hebdomadaires des commercials sur l'or, 26 dernières semaines, allant d'un minimum de −110 000 à un maximum de −38 000 contrats ; la position actuelle est −77 000. Index = (−77 000 − (−110 000)) ÷ (−38 000 − (−110 000)) × 100 = 33 000 ÷ 72 000 × 100 = **46** : positionnement médian, aucune information. Si la position actuelle était −110 000 (le minimum), l'index serait **0** : les commercials aussi short qu'ils l'ont été en six mois, un extrême. Pour les fonds, l'image miroir donne un index proche de 100.
+
+Règles de lecture usuelles (conventions de praticiens, à calibrer sur chaque marché) : index des commercials au-dessus de **90** (ou des fonds sous 10) → configuration haussière de contexte ; commercials sous **10** (fonds au-dessus de 90) → configuration baissière de contexte. Entre, rien.
+
+Comment le construire soi-même : télécharger l'historique COT (la CFTC le fournit en fichiers publics), extraire la position nette de la catégorie voulue pour le contrat voulu, calculer le minimum et le maximum glissants sur N semaines, appliquer la formule. C'est un exercice de tableur, ou de quelques lignes de code au niveau 7. Plusieurs sites publient des index COT tout faits ; les construire soi-même permet de choisir N et de vérifier.
+
+Deux variantes utiles : l'**index de mouvement** (la variation de l'index sur trois ou quatre semaines : un index qui passe de 95 à 60 dit que les fonds dénouent, même sans extrême absolu) ; et l'index en **pourcentage de l'open interest** (la position nette divisée par l'OI total, qui corrige la croissance du marché).
+
+## Les limites du COT et son bon horizon
+
+Il faut être précis sur ce que le COT ne fait pas, parce que c'est l'outil le plus mal utilisé de ce niveau.
+
+**Il est lent.** Données du mardi publiées le vendredi, positions qui évoluent sur des semaines : le COT est un outil de **swing et de position**, à horizon de deux semaines à quelques mois. Il n'a aucun usage intraday, sinon comme contexte de fragilité.
+
+**Ses extrêmes ne datent rien.** Un index à 5 peut rester sous 10 pendant deux mois pendant que le prix continue de monter. Utilisé seul comme signal contrarien, il fait perdre exactement comme les divergences du niveau 4 utilisées seules : trop tôt, plusieurs fois.
+
+**Les catégories sont imparfaites.** Un swap dealer classé « commercial » peut couvrir des positions spéculatives de clients ; un fonds indiciel classé « non-commercial » n'a rien d'un spéculateur directionnel ; sur les indices actions, les « commercials » sont surtout des dealers qui couvrent des produits dérivés, ce qui rend la lecture contrarienne bien moins fiable que sur les matières premières.
+
+**Il ne couvre que les futures américains.** Le forex spot, les CFD, les marchés hors États-Unis n'y sont pas ; les futures de devises du CME sont un proxy raisonnable du positionnement spéculatif sur les paires majeures, mais partiel.
+
+**Il compte les contrats, pas les convictions.** Un fonds peut être net long record parce que son modèle suit la tendance et vendra dès que la structure casse ; c'est une position mécanique, non une opinion.
+
+Le bon horizon et le bon usage se résument ainsi : **le COT est un indicateur de contexte hebdomadaire**, à lire le week-end avec le tableau de bord intermarket, pour savoir sur quels marchés le positionnement est extrême et dans quel sens le carburant s'accumule ; il donne un biais de swing (chercher les achats ou les ventes), une alerte de fragilité pour les positions dans le sens de la foule, et une **confirmation** quand un extrême est suivi d'un changement de structure. Il ne donne jamais une entrée ni une date.
+
+## Deux trades sous l'angle du COT
+
+Reconstitutions pédagogiques : le même extrême de positionnement, deux usages.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or), swing"
+  direction="Short"
+  setup="Index COT des fonds à 96 (net long record sur 3 ans), commercials à 4 ; le rapport suivant montre les fonds qui commencent à réduire ; sweep des EQH hebdomadaires puis CHoCH quotidien ; entrée au retour dans le FVG D"
+  entree="2 448,0"
+  stop="2 476,0 (28 $, au-dessus du sweep hebdomadaire)"
+  objectif="2 364,0 (HVN composite et nPOC mensuel)"
+  r="+3R">
+
+Le trader lit chaque week-end : index des fonds à 96 depuis trois semaines, or en tendance haussière étirée. Il ne vend pas : l'extrême est une condition. Il note « fragilité haussière ; chercher un CHoCH quotidien après sweep ». Semaine 4 : sweep des EQH hebdomadaires à 2 470, displacement baissier qui casse le dernier HL quotidien (CHoCH), FVG D entre 2 440 et 2 456 ; le COT du vendredi montre les fonds en réduction de 15 000 contrats et les commercials qui rachètent : le dénouement commence. Entrée short au retour dans le FVG la semaine suivante, stop au-dessus du sweep, cible la zone de valeur composite. Le COT a donné le carburant et confirmé l'allumage ; la structure a donné le moment ; le trade a duré trois semaines.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or), swing"
+  direction="Short"
+  setup="Vente « parce que les fonds sont net long record » (index 96), sans changement de structure, sans sweep, en pleine tendance haussière hebdomadaire"
+  entree="2 402,0"
+  stop="2 424,0 (22 $)"
+  objectif="2 340,0"
+  r="−1R, puis −1R deux semaines plus tard sur le même raisonnement">
+
+Même période, cinq semaines plus tôt. Ce trader voit l'index à 96 et vend : « positionnement extrême, retournement imminent ». La structure hebdomadaire fait des HH et des HL ; aucun sweep, aucun CHoCH ; les commercials sont net short record mais ils le sont depuis un mois et l'or a monté de 80 $ pendant ce temps. Stop touché en cinq jours. Il revend deux semaines plus tard, index à 97 : stop touché. Le COT avait raison sur la fragilité et il finira par avoir raison sur le retournement, six semaines et 70 $ plus haut ; entre-temps, deux stops. L'extrême n'est pas une date.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **COT** (CFTC, vendredi, positions du mardi) donne les positions longues, courtes et nettes de trois catégories (**commercials, non-commercials, non-reportables**) par contrat future ; les nets se compensent ; c'est un stock, en retard de trois jours.
+- **Commercials** : hedgers, structurellement net short sur les matières premières, contrariens, raison aux extrêmes ; **fonds** : suiveurs de tendance, raison au milieu, tort aux retournements ; **petits** : foule, moins fiables.
+- Les **extrêmes** signalent un marché chargé, une divergence expertise / momentum, une asymétrie de risque : biais de swing, alerte de fragilité, confirmation quand ils sont suivis d'un changement de structure. Jamais une date.
+- L'**index COT** normalise de 0 à 100 sur N semaines : (net − min) ÷ (max − min) ; conventions au-delà de 90 et sous 10 ; à construire soi-même ; variantes en mouvement et en pourcentage de l'OI.
+- **Horizon** : swing et position, lecture hebdomadaire ; catégories imparfaites (surtout sur les indices), futures américains seulement, contrats et non convictions. Le COT donne le carburant ; la structure donne l'allumage.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Calculer un index COT">
+
+Positions nettes des fonds (non-commercials) sur le pétrole (CL), 26 dernières semaines : minimum +180 000, maximum +420 000 ; position actuelle +405 000 ; il y a quatre semaines : +395 000. Les commercials sont à −430 000 (minimum −450 000, maximum −200 000).
+
+1. Calculez l'index des fonds et l'index des commercials.
+2. Que dit l'index de mouvement sur quatre semaines ?
+3. Quelle configuration de contexte en tirez-vous, et que faut-il attendre avant d'agir ?
+
+<Solution>
+
+1. Fonds : (405 000 − 180 000) ÷ (420 000 − 180 000) × 100 = 225 000 ÷ 240 000 × 100 = **94**. Commercials : (−430 000 − (−450 000)) ÷ (−200 000 − (−450 000)) × 100 = 20 000 ÷ 250 000 × 100 = **8**. Les deux extrêmes se répondent, comme attendu.
+2. Il y a quatre semaines, l'index des fonds était (395 000 − 180 000) ÷ 240 000 × 100 ≈ **90** ; il est passé à 94 : les fonds ont encore **ajouté** ; pas de dénouement en cours.
+3. **Configuration baissière de contexte** sur le pétrole (fonds long extrême, commercials short extrême) : on ne cherche pas de ventes de swing tant que la structure hebdomadaire ne casse pas ; on évite d'ajouter des longs de swing ; on met les longs éventuels sous surveillance de fragilité. Le déclencheur attendu : un sweep des plus hauts hebdomadaires suivi d'un CHoCH quotidien, et un COT qui montre le début du dénouement (index des fonds qui recule nettement).
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire les catégories">
+
+Sur les futures d'euro (6E), rapport TFF : les leveraged funds sont net long record ; les asset managers net long modéré ; les dealers net short record. EUR/USD est en tendance haussière quotidienne depuis deux mois, mais la BCE vient de signaler une pause dans son resserrement pendant que la Fed reste ferme.
+
+1. Qui sont les leveraged funds et les dealers, et que dit leur positionnement respectif ?
+2. En quoi la nouvelle de banques centrales change-t-elle la lecture ?
+3. Que fait un trader de swing d'EUR/USD avec cette information ?
+
+<Solution>
+
+1. Les **leveraged funds** (hedge funds, CTA) sont l'équivalent des non-commercials : suiveurs de tendance, ici net long record sur l'euro : la hausse est chargée. Les **dealers** (banques) sont en face, net short record : ils couvrent les positions de leurs clients et fournissent la liquidité ; leur short record est le miroir du long des fonds, avec la même lecture de fragilité.
+2. Le différentiel de taux anticipé (chapitre 2 de ce niveau) se retourne contre l'euro : la BCE marque une pause, la Fed non. C'est un **catalyseur fondamental** dans le sens contraire au positionnement extrême : la combinaison la plus dangereuse pour les longs (asymétrie : la mauvaise nouvelle sur un marché chargé).
+3. Il ne vend pas encore sur le seul COT ; il **cesse de chercher des achats de swing**, met ses longs éventuels sous surveillance (stop hors des zones de liquidation, taille réduite), et attend un sweep des plus hauts quotidiens suivi d'un CHoCH pour chercher une vente de swing, avec le prochain COT pour confirmer le début du dénouement des fonds.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le COT sur son marché">
+
+Téléchargez l'historique COT (legacy ou TFF) de votre contrat principal sur trois ans, calculez la position nette hebdomadaire des fonds et des commercials, puis l'index sur 26 semaines pour chacun. Repérez les semaines où l'index des fonds a dépassé 90 ou est passé sous 10, et notez, pour chacune, ce que le prix a fait dans les 4, 8 et 12 semaines suivantes, et combien de semaines l'extrême a duré avant le retournement (s'il a eu lieu).
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend : une série d'index, une liste d'extrêmes datés, et un tableau des suites. Vous constaterez en général : que les extrêmes précèdent souvent des retournements de plusieurs semaines, mais avec des délais très variables (de 1 à 12 semaines et plus) ; que certains extrêmes n'ont pas été suivis de retournement (le marché est resté chargé et a continué) ; que la combinaison extrême + changement de structure quotidienne donne des résultats bien plus réguliers que l'extrême seul. C'est cette vérification personnelle qui fixe l'usage du COT sur votre marché ; le niveau 7 en fera une étude systématique.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le rapport COT est publié :",
+      options: [
+        "Chaque jour en temps réel",
+        "Chaque vendredi, avec les positions du mardi précédent, par catégorie de participants et par contrat future américain",
+        "Chaque mois",
+        "Uniquement pour l'or",
+      ],
+      answer: 1,
+      explain: "C'est un stock (combien chaque catégorie détient), en retard de trois jours ; les positions nettes des catégories se compensent.",
+    },
+    {
+      q: "Les commercials sur les matières premières sont :",
+      options: [
+        "Des spéculateurs suiveurs de tendance",
+        "Des hedgers (producteurs, raffineurs, banques de bullion), structurellement net short, contrariens, qui ont raison aux extrêmes",
+        "Des particuliers",
+        "Des banques centrales",
+      ],
+      answer: 1,
+      explain: "Ils vendent d'autant plus que le prix monte pour fixer leurs prix de vente ; ils connaissent le physique et n'ont pas de stop.",
+    },
+    {
+      q: "Les non-commercials (fonds) sont :",
+      options: [
+        "Contrariens",
+        "Avec la tendance : le plus long au sommet, le plus short au creux ; raison au milieu des tendances, tort aux retournements",
+        "Toujours perdants",
+        "Des hedgers",
+      ],
+      answer: 1,
+      explain: "Leur position nette est l'image miroir de celle des commercials. Un fonds net long record est souvent une position mécanique de suivi de tendance.",
+    },
+    {
+      q: "Index COT : net actuel −77 000, minimum −110 000, maximum −38 000 sur 26 semaines. L'index vaut :",
+      options: [
+        "0",
+        "46",
+        "100",
+        "77",
+      ],
+      answer: 1,
+      explain: "(−77 000 + 110 000) ÷ (−38 000 + 110 000) × 100 = 33 000 ÷ 72 000 × 100 ≈ 46 : positionnement médian, pas d'information.",
+    },
+    {
+      q: "Les fonds sont net long record (index 96). La conduite correcte est :",
+      options: [
+        "Vendre immédiatement",
+        "Noter la fragilité haussière, cesser de chercher des achats de swing, et attendre un sweep suivi d'un CHoCH quotidien et un début de dénouement dans le COT avant de vendre",
+        "Acheter davantage",
+        "Ignorer",
+      ],
+      answer: 1,
+      explain: "L'extrême est une condition, pas une date : il peut durer des mois. Le COT donne le carburant ; la structure donne l'allumage.",
+    },
+    {
+      q: "Le bon horizon du COT est :",
+      options: [
+        "L'intraday",
+        "Le swing et la position, en lecture hebdomadaire ; il ne donne ni entrée ni date",
+        "Le scalping",
+        "Le très long terme uniquement",
+      ],
+      answer: 1,
+      explain: "Il est lent, ses catégories sont imparfaites (surtout sur les indices), il ne couvre que les futures américains, et il compte des contrats, pas des convictions.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le COT dit qui est où ; le calendrier dit quand ça bouge ; il reste une dimension : à quelle période de l'année certains marchés ont-ils tendance à monter ou baisser ? Le chapitre suivant présente les saisonnalités robustes par classe d'actifs, la construction d'une carte saisonnière fiable, sa combinaison avec le positionnement COT, et les pièges statistiques qui font dire n'importe quoi aux moyennes.
