@@ -1,0 +1,333 @@
+---
+title: "Le volume"
+description: "Ce que le volume mesure réellement selon les marchés, les confirmations et divergences entre prix et volume, le comportement du volume aux niveaux clés, le volume relatif et ses anomalies, et les limites du volume en forex spot."
+---
+
+# Le volume
+
+Le prix dit où le marché est allé ; le **volume** dit combien de contrats ou de titres ont changé de mains pour l'y emmener. C'est la seule information du graphique qui ne dérive pas du prix. Bien lu, il distingue un mouvement porté par de nombreux participants d'un mouvement qui n'a convaincu personne, et il montre où les gros acteurs ont agi. Ce chapitre explique ce que le volume mesure vraiment (ce n'est pas la même chose partout), comment il confirme ou contredit le prix, comment il se comporte sur les niveaux, et pourquoi il faut s'en méfier sur le forex spot.
+
+## Ce que le volume mesure vraiment selon les marchés
+
+Le volume d'une bougie est le nombre d'unités échangées pendant sa période. Mais « unité » et « échangées » n'ont pas le même sens partout.
+
+**Futures (ES, NQ, GC, CL).** Le volume est le nombre de contrats échangés sur la Bourse, centralisé, exact, public, en temps réel. Chaque transaction a un acheteur et un vendeur ; le volume compte les contrats, pas les participants. C'est le volume le plus fiable qui existe pour un trader particulier, et la raison pour laquelle ce cours privilégie les futures pour l'analyse de volume et l'order flow (niveau 4).
+
+**Actions.** Le volume est le nombre de titres échangés, mais fragmenté entre plusieurs places (NYSE, Nasdaq, plateformes alternatives, dark pools). Le volume consolidé est en général disponible avec un léger retard ou en agrégé ; il reste très utilisable, surtout en quotidien.
+
+**Crypto.** Le volume est propre à chaque plateforme, et une part de celui affiché par certaines plateformes a longtemps été gonflée artificiellement. Sur les grandes plateformes régulées, il est exploitable ; il faut toujours savoir de quelle plateforme il vient.
+
+**Forex spot.** Il n'y a **pas de volume réel** : le marché est de gré à gré, aucune entité ne centralise les transactions. Ce que les plateformes affichent comme « volume » sur EUR/USD est le **tick volume** : le nombre de changements de prix pendant la bougie, tel que vu par le broker. C'est une approximation de l'activité, corrélée au vrai volume, mais ce n'est pas un volume. La dernière section y revient.
+
+**Options.** Volume et open interest (contrats ouverts) sont publics ; le niveau 6 les traite.
+
+La conséquence pratique : **avant d'interpréter un volume, sachez ce qu'il compte**. Une divergence prix-volume sur l'ES a une signification précise ; la même figure sur EUR/USD chez un broker de détail en a une beaucoup plus faible.
+
+## Confirmations et divergences prix-volume
+
+Le principe de lecture est simple : **un mouvement de prix soutenu par un volume croissant est un mouvement où de nombreux participants sont d'accord ; un mouvement de prix sur volume décroissant est un mouvement qui manque de participants**.
+
+**Confirmation.** En tendance haussière, les impulsions à la hausse se font sur volume élevé, les replis sur volume plus faible : les acheteurs poussent, peu de monde vend contre eux. Une cassure de résistance sur volume nettement supérieur à la normale a plus de chances de tenir qu'une cassure sur volume faible. C'est la lecture classique, et elle reste vraie en moyenne.
+
+**Divergence.** Le prix fait un nouveau plus haut, mais le volume de cette impulsion est inférieur à celui de l'impulsion précédente : de moins en moins de participants portent la hausse. Ce n'est pas un signal de vente en soi ; c'est un affaiblissement, à croiser avec la structure (un LH qui se prépare) et les niveaux (une résistance majeure). À l'inverse, un nouveau plus bas sur volume décroissant signale une baisse qui s'essouffle.
+
+**Le climax.** Une bougie de volume extrême (deux, trois fois la normale ou plus), avec une grande fourchette, au bout d'un mouvement prolongé, est un **climax** : tout le monde a agi en même temps, souvent les derniers à entrer et les premiers à capituler. Un climax d'achat au sommet d'une hausse ou un climax de vente au fond d'une baisse précède fréquemment un retournement ou au moins un range. Le niveau 3 (Wyckoff) en fait un élément central.
+
+**L'absence de volume sur un mouvement.** Un prix qui monte de 30 points sur un volume minuscule (par exemple la nuit sur l'ES) n'a pas la même valeur qu'un mouvement de 30 points en séance : peu de participants l'ont validé, il est souvent repris à l'ouverture. Le volume dit qui était là.
+
+<Figure caption="Figure 1 · Confirmation puis divergence. Les deux premières impulsions se font sur volume croissant ; la troisième fait un nouveau plus haut sur volume plus faible, puis un climax de vente clôt le mouvement.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Prix et volume montrant confirmation, divergence et climax" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="200" className="line" strokeWidth="1" />
+  <text x="50" y="40" fontSize="11" textAnchor="end" className="muted">prix</text>
+  <polyline points="70,170 110,120 140,140 180,90 210,110 250,70 290,95 320,60 350,80 380,55 410,140 440,120 470,150" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="380" cy="55" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="380" y="45" fontSize="10" textAnchor="middle" className="red" fontWeight="600">HH sur volume plus faible</text>
+  <text x="410" y="165" fontSize="10" textAnchor="middle" className="red" fontWeight="600">climax de vente</text>
+
+  <line x1="60" y1="320" x2="700" y2="320" className="line" strokeWidth="1" />
+  <line x1="60" y1="220" x2="60" y2="320" className="line" strokeWidth="1" />
+  <text x="50" y="230" fontSize="11" textAnchor="end" className="muted">volume</text>
+  <rect x="80" y="290" width="14" height="30" className="box" strokeWidth="1" /><rect x="100" y="270" width="14" height="50" className="green" opacity="0.7" /><rect x="120" y="295" width="14" height="25" className="box" strokeWidth="1" /><rect x="140" y="300" width="14" height="20" className="box" strokeWidth="1" />
+  <rect x="160" y="262" width="14" height="58" className="green" opacity="0.7" /><rect x="180" y="250" width="14" height="70" className="green" opacity="0.7" /><rect x="200" y="298" width="14" height="22" className="box" strokeWidth="1" />
+  <rect x="220" y="255" width="14" height="65" className="green" opacity="0.7" /><rect x="240" y="240" width="14" height="80" className="green" opacity="0.7" /><rect x="260" y="296" width="14" height="24" className="box" strokeWidth="1" /><rect x="280" y="300" width="14" height="20" className="box" strokeWidth="1" />
+  <rect x="300" y="268" width="14" height="52" className="green" opacity="0.7" /><rect x="320" y="278" width="14" height="42" className="green" opacity="0.7" /><rect x="340" y="298" width="14" height="22" className="box" strokeWidth="1" />
+  <rect x="360" y="285" width="14" height="35" className="green" opacity="0.5" /><rect x="380" y="290" width="14" height="30" className="green" opacity="0.5" />
+  <rect x="400" y="222" width="14" height="98" className="red" opacity="0.85" /><rect x="420" y="265" width="14" height="55" className="red" opacity="0.7" /><rect x="440" y="288" width="14" height="32" className="box" strokeWidth="1" /><rect x="460" y="282" width="14" height="38" className="red" opacity="0.6" />
+  <text x="180" y="245" fontSize="10" textAnchor="middle" className="green">impulsions : volume croissant</text>
+  <text x="330" y="262" fontSize="10" textAnchor="middle" className="red">divergence</text>
+  <text x="407" y="218" fontSize="10" textAnchor="middle" className="red" fontWeight="600">×3</text>
+  <line x1="60" y1="288" x2="700" y2="288" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="690" y="284" fontSize="9" textAnchor="end" className="muted">volume moyen</text>
+</svg>
+</Figure>
+
+Une précaution : le volume se lit **par rapport au volume habituel de la même heure**. Sur les futures, la première heure de New York a mécaniquement plus de volume que 3 h du matin ; comparer les deux n'a aucun sens. La section sur le volume relatif y revient.
+
+## Le volume aux niveaux clés
+
+Combiné aux niveaux du chapitre 4, le volume raconte ce qui se passe **au moment du contact**.
+
+**Rejet sur volume élevé.** Le prix arrive sur une résistance, une bougie à volume fort se forme avec une longue mèche haute et une clôture basse : beaucoup de contrats ont été échangés, et les vendeurs ont gagné. Des acheteurs ont été absorbés par des vendeurs plus gros. Le niveau est défendu ; la réaction est significative.
+
+**Rejet sur volume faible.** Même mèche, mais volume ordinaire : le prix a été repoussé sans grande bataille, peut-être simplement parce que personne n'achetait. Le niveau n'a pas été vraiment testé ; il le sera sans doute à nouveau.
+
+**Cassure sur volume élevé.** Le prix traverse le niveau et clôture au-delà, avec un volume nettement supérieur : de nombreux participants ont accepté le nouveau prix. La cassure a des chances de tenir, et le retest (changement de polarité, chapitre 4) est un setup de meilleure qualité.
+
+**Cassure sur volume faible.** Le prix traverse sans participation : c'est souvent une **fausse cassure**, notamment aux heures creuses. Le prix revient dans le range, et les acheteurs de la cassure sont piégés. Le niveau 3 est presque entièrement construit sur ce mécanisme.
+
+**Absorption.** Cas plus subtil : sur un support, le volume est très élevé mais le prix ne baisse plus. De gros vendeurs frappent, et pourtant le prix tient : quelqu'un absorbe toutes les ventes avec des ordres limites d'achat. C'est un signe fort de présence d'acheteurs importants ; le prix a tendance à repartir dans leur sens une fois les vendeurs épuisés. L'absorption se voit mieux avec les outils du niveau 4 (footprint, delta), mais un volume élevé sans progression du prix, sur un niveau, en est déjà l'indice.
+
+<Figure caption="Figure 2 · Quatre scénarios au contact d'une résistance : rejet fort, rejet faible, cassure valide, fausse cassure. Le prix seul ne les distingue pas ; le volume oui.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Quatre scénarios de volume au contact d'une résistance" xmlns="http://www.w3.org/2000/svg">
+  <line x1="30" y1="120" x2="690" y2="120" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="6 4" />
+  <text x="30" y="114" fontSize="10" className="red">résistance</text>
+
+  <text x="110" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Rejet fort</text>
+  <line x1="110" y1="95" x2="110" y2="185" className="line" strokeWidth="1.5" /><rect x="102" y="150" width="16" height="30" className="red" opacity="0.9" />
+  <rect x="98" y="220" width="24" height="60" className="red" opacity="0.8" />
+  <text x="110" y="295" fontSize="10" textAnchor="middle" className="muted">volume ×2,5</text>
+
+  <text x="270" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Rejet faible</text>
+  <line x1="270" y1="98" x2="270" y2="180" className="line" strokeWidth="1.5" /><rect x="262" y="148" width="16" height="28" className="red" opacity="0.9" />
+  <rect x="258" y="258" width="24" height="22" className="box" strokeWidth="1" />
+  <text x="270" y="295" fontSize="10" textAnchor="middle" className="muted">volume ×0,8</text>
+
+  <text x="430" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Cassure valide</text>
+  <line x1="430" y1="60" x2="430" y2="175" className="line" strokeWidth="1.5" /><rect x="422" y="70" width="16" height="95" className="green" opacity="0.9" />
+  <rect x="418" y="212" width="24" height="68" className="green" opacity="0.8" />
+  <text x="430" y="295" fontSize="10" textAnchor="middle" className="muted">volume ×3</text>
+
+  <text x="590" y="30" fontSize="11" fontWeight="600" textAnchor="middle">Fausse cassure</text>
+  <line x1="590" y1="88" x2="590" y2="178" className="line" strokeWidth="1.5" /><rect x="582" y="130" width="16" height="42" className="red" opacity="0.9" />
+  <rect x="578" y="262" width="24" height="18" className="box" strokeWidth="1" />
+  <text x="590" y="295" fontSize="10" textAnchor="middle" className="muted">volume ×0,6</text>
+  <text x="590" y="200" fontSize="9" textAnchor="middle" className="red">mèche au-dessus, clôture dessous</text>
+</svg>
+</Figure>
+
+## Volume relatif et anomalies
+
+Le volume brut d'une bougie ne dit rien seul : 40 000 contrats sur l'ES en M5, est-ce beaucoup ? Cela dépend de l'heure, du jour, du régime. D'où le **volume relatif** : le volume de la bougie divisé par le volume moyen des bougies comparables.
+
+Deux façons de le calculer :
+
+- **Par rapport aux N dernières bougies** (une moyenne mobile du volume, sur 20 périodes par exemple). Simple, disponible partout, mais biaisée par l'heure : la première bougie de New York semble toujours anormale par rapport aux bougies de fin de nuit.
+- **Par rapport à la même heure des N derniers jours** (volume « profil horaire »). Plus juste pour l'intraday : la bougie de 15 h 30 est comparée aux bougies de 15 h 30 des dix derniers jours. Certaines plateformes le proposent ; sinon, il se construit en tableur ou en script (niveau 7).
+
+Ce qui constitue une **anomalie** : un volume relatif de 2 ou plus (deux fois la normale), surtout s'il est isolé. Une anomalie a toujours une cause : une annonce, une grosse exécution institutionnelle, un climax, une expiration de contrats (le volume des futures explose autour des roulements trimestriels, ce n'est pas un signal), un rééquilibrage de fin de mois. Le travail du trader n'est pas de trader l'anomalie, mais de **savoir d'où elle vient** avant de l'interpréter.
+
+Deux anomalies utiles :
+
+- **Le volume anormal sur un niveau que vous suiviez** : quelqu'un d'important a agi là. La zone gagne en poids pour la suite.
+- **Le volume anormalement faible sur un mouvement qui paraît important** : méfiance, le mouvement n'a pas de participants et sera probablement repris.
+
+Et une anomalie qui n'en est pas : le volume élevé des premières et dernières minutes de la séance américaine, des annonces à heure fixe, et des jours d'expiration. Il est normal parce qu'il est prévisible.
+
+<Figure caption="Figure 3 · Volume relatif par heure sur l'ES : la même bougie de 40 000 contrats est ordinaire à 15 h 30 et énorme à 4 h. Le profil horaire sert de référence.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Profil horaire du volume moyen et volume relatif" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="210" x2="700" y2="210" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="210" className="line" strokeWidth="1" />
+  <text x="380" y="245" fontSize="12" textAnchor="middle" className="muted">heure de Paris</text>
+  <text x="90" y="228" fontSize="10" textAnchor="middle" className="mono muted">2h</text>
+  <text x="170" y="228" fontSize="10" textAnchor="middle" className="mono muted">6h</text>
+  <text x="250" y="228" fontSize="10" textAnchor="middle" className="mono muted">10h</text>
+  <text x="330" y="228" fontSize="10" textAnchor="middle" className="mono muted">14h</text>
+  <text x="410" y="228" fontSize="10" textAnchor="middle" className="mono muted">15h30</text>
+  <text x="490" y="228" fontSize="10" textAnchor="middle" className="mono muted">18h</text>
+  <text x="570" y="228" fontSize="10" textAnchor="middle" className="mono muted">21h</text>
+  <text x="650" y="228" fontSize="10" textAnchor="middle" className="mono muted">22h</text>
+
+  <rect x="80" y="196" width="20" height="14" className="gold" opacity="0.35" /><rect x="120" y="198" width="20" height="12" className="gold" opacity="0.35" /><rect x="160" y="192" width="20" height="18" className="gold" opacity="0.35" /><rect x="200" y="180" width="20" height="30" className="gold" opacity="0.35" /><rect x="240" y="170" width="20" height="40" className="gold" opacity="0.35" /><rect x="280" y="172" width="20" height="38" className="gold" opacity="0.35" /><rect x="320" y="150" width="20" height="60" className="gold" opacity="0.35" /><rect x="360" y="130" width="20" height="80" className="gold" opacity="0.35" /><rect x="400" y="50" width="20" height="160" className="gold" opacity="0.5" /><rect x="440" y="90" width="20" height="120" className="gold" opacity="0.35" /><rect x="480" y="120" width="20" height="90" className="gold" opacity="0.35" /><rect x="520" y="140" width="20" height="70" className="gold" opacity="0.35" /><rect x="560" y="120" width="20" height="90" className="gold" opacity="0.35" /><rect x="600" y="100" width="20" height="110" className="gold" opacity="0.35" /><rect x="640" y="60" width="20" height="150" className="gold" opacity="0.5" />
+
+  <line x1="60" y1="130" x2="700" y2="130" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="690" y="126" fontSize="10" textAnchor="end" className="red">40 000 contrats / 5 min</text>
+  <text x="90" y="120" fontSize="10" textAnchor="middle" className="red" fontWeight="600">×6 : anomalie</text>
+  <text x="410" y="42" fontSize="10" textAnchor="middle" className="muted">×0,5 : ordinaire</text>
+</svg>
+</Figure>
+
+## Les limites du volume en forex spot
+
+Le point mérite sa propre section parce que le forex est le marché où le plus de particuliers commencent, et où le « volume » affiché est le plus trompeur.
+
+Ce que montre l'histogramme de volume sur EUR/USD chez un broker de détail :
+
+- C'est un **tick volume** : le nombre de mises à jour de prix reçues par le broker pendant la bougie. Il mesure l'activité de cotation, pas la quantité échangée.
+- Il est **propre au broker** : deux brokers montrent des histogrammes différents pour la même bougie, parce que leurs fournisseurs de liquidité et leurs flux ne sont pas les mêmes.
+- Il est **corrélé** au vrai volume interbancaire (plus il y a d'échanges, plus les prix bougent), et des études l'ont montré ; mais la corrélation n'est pas l'égalité, et elle se dégrade aux heures creuses et pendant les annonces (les cotations s'accélèrent sans que les volumes suivent nécessairement).
+
+Ce que l'on peut en faire malgré tout : repérer les **heures d'activité** (le tick volume suit fidèlement les sessions), détecter un **climax** évident (une bougie à tick volume dix fois supérieur reste une bougie où il s'est passé quelque chose), et confirmer grossièrement une cassure. Ce que l'on ne peut pas en faire : de l'analyse fine (absorption, divergences subtiles, volume aux niveaux au tick près), du volume profile précis, de l'order flow.
+
+Les traders forex qui veulent du vrai volume ont deux options : les **futures de devises** du CME (6E pour l'euro, 6B pour la livre, 6J pour le yen), qui sont centralisés et dont le volume est réel, avec des prix quasi identiques au spot ; ou les données de volume publiées par certaines grandes plateformes interbancaires, agrégées et payantes. Pour ce cours, la règle est simple : **sur le forex, le volume est un indicateur d'activité, pas de conviction ; sur les futures, c'est de l'information.**
+
+## Deux trades lus avec le volume
+
+Reconstitutions pédagogiques : la même cassure de résistance, deux volumes.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Cassure d'une résistance H4 sur volume relatif ×2,8, retest en support sur volume faible, réalignement M5"
+  entree="5 306,50 (retest)"
+  stop="5 299,50 (28 ticks, sous la zone 5 300-5 304)"
+  objectif="5 328,00"
+  r="+3R">
+
+La zone 5 300-5 304 avait été rejetée trois fois en H4. À 16 h 05, une bougie M15 la traverse et clôture à 5 309 avec un volume près de trois fois supérieur à celui des bougies M15 de 16 h des dix derniers jours : de nombreux participants ont accepté le nouveau prix. Le trader ne rentre pas sur cette bougie (spread, slippage, stop indéfini). Il attend : le prix revient sur 5 305-5 307 sur un volume M5 faible (les vendeurs ne se battent pas), le M5 se réaligne. Entrée au retest, stop sous la zone. Le volume a validé la cassure ; le volume faible du retest a confirmé que la zone avait changé de polarité sans contestation. Objectif atteint.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Cassure de la même résistance à 3 h 40 du matin sur volume relatif ×0,4, entrée sur la cassure"
+  entree="5 305,00"
+  stop="5 298,00 (28 ticks)"
+  objectif="5 328,00"
+  r="−1R">
+
+Trois jours plus tôt, autre trader, même zone. À 3 h 40, une bougie M15 dépasse 5 304 et clôture à 5 306. Il achète la cassure. Le volume de cette bougie était moins de la moitié de celui d'une bougie de 3 h 40 ordinaire, elle-même vingt fois inférieure à une bougie de séance : personne n'était là. À l'ouverture européenne, le prix revient dans le range, touche le stop à 5 298, et la zone est rejetée une quatrième fois. Sur le graphique, la cassure de nuit et la cassure de séance se ressemblent ; l'histogramme de volume les distingue en un coup d'œil, et le trader qui n'a pas regardé a acheté une cassure que le marché n'avait pas encore décidée.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le volume est **exact et centralisé sur les futures**, fragmenté sur les actions, propre à chaque plateforme en crypto, et **inexistant sur le forex spot** (tick volume seulement).
+- **Confirmation** : impulsions sur volume croissant, replis sur volume faible. **Divergence** : nouveau plus haut sur volume plus faible. **Climax** : volume extrême en bout de mouvement.
+- Aux niveaux : rejet fort ou faible, cassure valide ou fausse, absorption. **Le prix seul ne les distingue pas ; le volume oui.**
+- Le volume se lit **en relatif**, par rapport à la même heure des jours précédents ; une anomalie a toujours une cause à identifier avant interprétation.
+- Sur le forex, le volume est un **indicateur d'activité, pas de conviction** ; les futures de devises donnent le vrai volume.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire une séquence prix-volume">
+
+Sur l'or en H1, cinq bougies successives (variation de prix · volume relatif) : +6 $ · 1,4 ; +5 $ · 1,7 ; −2 $ · 0,6 ; +7 $ · 1,1 ; +3 $ · 0,7, puis une sixième bougie : −9 $ · 3,2 avec une longue mèche haute.
+
+1. Les trois premières bougies confirment-elles la hausse ? Pourquoi ?
+2. Que remarquez-vous sur les bougies 4 et 5 ?
+3. Comment interprétez-vous la sixième, et que faites-vous si vous êtes long ?
+
+<Solution>
+
+1. **Oui** : les deux impulsions haussières se font sur volume croissant (1,4 puis 1,7), le repli sur volume faible (0,6). Configuration de confirmation classique.
+2. La bougie 4 fait un nouveau plus haut mais sur un volume relatif de 1,1, **inférieur** aux impulsions précédentes ; la 5 continue avec 0,7 : **divergence**, la hausse perd des participants. Ce n'est pas un signal de vente, c'est un affaiblissement à croiser avec la structure et les niveaux.
+3. La sixième est un **climax de vente** ou au minimum un rejet fort : volume ×3,2, longue mèche haute, clôture basse ; beaucoup de contrats échangés et les vendeurs ont gagné. Si long, on n'ajoute pas ; on sécurise selon le plan (stop remonté sous le dernier HL interne, ou sortie partielle si le plan le prévoit). On ne « devine » pas un retournement : on constate que la hausse a été contestée en volume et on protège.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Volume relatif et heure">
+
+Sur l'ES en M5, une bougie de 38 000 contrats à 15 h 35, une bougie de 9 000 contrats à 4 h 10. Volume moyen des dix derniers jours à 15 h 35 : 45 000 ; à 4 h 10 : 1 500.
+
+1. Calculez le volume relatif de chaque bougie par rapport à son profil horaire.
+2. Laquelle est une anomalie ? Que faut-il faire avant de l'interpréter ?
+3. Un trader compare les deux bougies avec une moyenne mobile du volume sur 20 périodes. Quelle erreur commet-il ?
+
+<Solution>
+
+1. 15 h 35 : 38 000 ÷ 45 000 ≈ **0,84** (ordinaire, même un peu faible). 4 h 10 : 9 000 ÷ 1 500 = **6,0** (anomalie franche).
+2. La bougie de 4 h 10. Avant de l'interpréter : chercher la cause (annonce asiatique ou européenne, événement géopolitique, grosse exécution, expiration). Si aucune cause n'est visible, noter le niveau où elle s'est produite : quelqu'un d'important a agi.
+3. La moyenne sur 20 périodes à 15 h 35 est tirée vers le bas par les bougies de fin de nuit et de pré-ouverture : la bougie de 38 000 paraît énorme alors qu'elle est ordinaire pour l'heure. Et inversement à 4 h 10 après une soirée active. Le profil horaire corrige ce biais.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Volume et véhicule">
+
+Un trader analyse EUR/USD chez un broker de détail et note : « divergence baissière prix-volume en M15, volume d'absorption sur le support 1,0850 ». Un ami trade le même mouvement sur le future 6E.
+
+1. Que vaut chacune de ces deux observations sur le spot de détail ?
+2. Que peut faire l'ami que le premier ne peut pas ?
+3. Le premier veut garder le spot pour l'exécution. Que lui conseillez-vous pour l'analyse de volume ?
+
+<Solution>
+
+1. La **divergence M15** sur tick volume est une observation faible : le tick volume est corrélé à l'activité, pas à la quantité ; une divergence de quelques pourcents ne veut rien dire. Le « **volume d'absorption** » sur le spot de détail n'existe pas : l'absorption suppose de voir des contrats réellement échangés sans progression du prix, ce que le tick volume ne montre pas.
+2. Sur le 6E, il voit le volume réel, centralisé, par bougie et par prix : il peut lire une absorption (volume élevé, prix qui tient), un climax, une divergence sérieuse, et utiliser les outils du niveau 4.
+3. Analyser le volume sur le **6E** (les prix sont quasi identiques au spot, les niveaux se transposent à quelques pips près) et exécuter sur le spot s'il le souhaite. Et, sur le spot, ne garder du tick volume que ce qu'il sait faire : repérer les heures d'activité et les climax évidents.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Sur quel marché le volume affiché est-il exact et centralisé ?",
+      options: [
+        "Le forex spot",
+        "Les futures (ES, NQ, GC, CL)",
+        "Les CFD",
+        "Toutes les cryptos",
+      ],
+      answer: 1,
+      explain: "Le volume des futures compte les contrats échangés sur une Bourse unique, en temps réel. C'est le volume le plus fiable pour un particulier.",
+    },
+    {
+      q: "Le « volume » d'EUR/USD chez un broker de détail est :",
+      options: [
+        "Le nombre de lots échangés dans le monde",
+        "Le tick volume : le nombre de changements de prix pendant la bougie, propre au broker",
+        "Le volume de la Bourse de New York",
+        "Un chiffre inventé",
+      ],
+      answer: 1,
+      explain: "Le forex spot n'a pas de volume centralisé. Le tick volume est corrélé à l'activité, mais ce n'est pas une quantité échangée ; il ne permet pas d'analyse fine.",
+    },
+    {
+      q: "Le prix fait un nouveau plus haut sur un volume inférieur à l'impulsion précédente. C'est :",
+      options: [
+        "Une confirmation de la hausse",
+        "Une divergence : la hausse perd des participants ; à croiser avec la structure et les niveaux",
+        "Un signal de vente immédiat",
+        "Sans signification",
+      ],
+      answer: 1,
+      explain: "La divergence est un affaiblissement, pas un signal en soi. Elle prend son sens sur une résistance majeure ou avec un LH qui se prépare.",
+    },
+    {
+      q: "Une cassure de résistance à 3 h du matin sur volume relatif ×0,4 :",
+      options: [
+        "A plus de chances de tenir",
+        "Est probablement une fausse cassure : personne n'a validé le nouveau prix",
+        "Est une absorption",
+        "Est un climax",
+      ],
+      answer: 1,
+      explain: "Une cassure sans participants est souvent reprise à l'ouverture. Le volume distingue les cassures que le marché a décidées de celles qu'il n'a pas encore vues.",
+    },
+    {
+      q: "Comment lire correctement le volume d'une bougie intraday ?",
+      options: [
+        "En valeur absolue",
+        "Par rapport à la même heure des jours précédents (profil horaire)",
+        "Par rapport à la bougie précédente uniquement",
+        "Par rapport au volume quotidien",
+      ],
+      answer: 1,
+      explain: "Le volume a une saisonnalité horaire forte. 40 000 contrats sont ordinaires à 15 h 30 et énormes à 4 h ; le profil horaire est la référence juste.",
+    },
+    {
+      q: "Sur un support, volume très élevé mais le prix ne baisse plus. C'est :",
+      options: [
+        "Une fausse cassure",
+        "Une absorption : de gros acheteurs absorbent les ventes avec des ordres limites",
+        "Un climax d'achat",
+        "Une divergence haussière classique",
+      ],
+      answer: 1,
+      explain: "Beaucoup de contrats échangés sans progression du prix, sur un niveau : quelqu'un absorbe. C'est un signe fort de présence d'acheteurs importants, précisé au niveau 4.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 2 est complet : bougies, structure, unités de temps, niveaux, volatilité, volume. L'examen du niveau vérifie que ces lectures s'articulent. Puis le niveau 3 change d'échelle : il explique **pourquoi** le prix va chercher certains niveaux, qui déclenche les stops, et comment lire les concepts de smart money, de liquidité, de FVG et d'order block, ainsi que la méthode Wyckoff.
