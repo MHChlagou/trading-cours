@@ -1,0 +1,361 @@
+---
+title: "Macroéconomie pour traders"
+description: "Le cycle économique et ses phases, les données d'inflation, d'emploi et de croissance qui comptent, comment lire un rapport macro en dix minutes, le chemin du chiffre au mouvement de prix, et comment construire sa veille macro hebdomadaire."
+---
+
+# Macroéconomie pour traders
+
+Les niveaux 2 à 4 ont lu le prix, la structure et le flux. Ils ne disent pas pourquoi l'or monte pendant six mois, pourquoi le Nasdaq et les obligations baissent ensemble une année et bougent en sens inverse la suivante, ni pourquoi un chiffre publié à 14 h 30 déplace l'ES de quarante points. La macroéconomie répond à ces questions, et le trader n'a pas besoin d'en être un spécialiste : il a besoin d'un modèle simple du cycle, de savoir quelles données comptent, de lire un rapport vite, de comprendre comment un chiffre devient un mouvement, et d'une veille organisée. C'est l'objet de ce chapitre, le premier d'un niveau qui donne au graphique son arrière-plan.
+
+## Le cycle économique et ses phases
+
+L'économie ne progresse pas en ligne droite : elle alterne des phases d'expansion et de ralentissement, avec une périodicité irrégulière (de quelques années à une décennie). Ce **cycle économique** se lit avec deux variables : la **croissance** (le rythme d'activité, mesuré par le PIB, l'emploi, la production, les ventes) et l'**inflation** (le rythme de hausse des prix). Leur combinaison définit quatre phases, et chaque phase a ses actifs favoris.
+
+| Phase | Croissance | Inflation | Ce que font les banques centrales | Actifs typiquement favorisés |
+| --- | --- | --- | --- | --- |
+| **Reprise** | Accélère depuis un point bas | Faible, parfois en baisse | Taux bas, soutien | Actions (surtout cycliques et petites capitalisations), crédit |
+| **Expansion** | Forte | Monte progressivement | Commencent à resserrer | Actions, matières premières, devises des pays exportateurs |
+| **Surchauffe / ralentissement** | Ralentit | Élevée | Resserrent fermement | Matières premières puis liquidités ; les actions et obligations souffrent |
+| **Récession** | Négative ou très faible | Baisse | Baissent les taux, soutiennent | Obligations d'État, or, devises refuges (USD, JPY, CHF) ; les actions touchent leur point bas avant la fin de la récession |
+
+Trois précisions pour ne pas prendre ce tableau pour une machine à prédire :
+
+- **Les marchés anticipent** : ils tournent en général avant l'économie. Les actions montent alors que la récession est encore dans les chiffres, parce que les participants voient la reprise venir. Le tableau décrit des tendances de fond, pas des signaux d'entrée.
+- **Les phases n'ont pas de durée fixe**, et le passage de l'une à l'autre se voit après coup ; le trader travaille avec une **hypothèse de phase**, qu'il révise avec les données.
+- **Les chocs** (pandémie, guerre, crise financière) brisent la séquence : une expansion peut plonger en récession en un trimestre.
+
+Ce que le trader en tire : un **biais de fond** sur les classes d'actifs (dans quelle phase sommes-nous, donc quels actifs ont le vent avec eux et lesquels contre), et une lecture des **réactions aux données** : le même chiffre d'inflation est une bonne ou une mauvaise nouvelle selon la phase (section « Du chiffre au mouvement »).
+
+<Figure caption="Figure 1 · Le cycle en deux variables : croissance et inflation. Chaque quadrant a ses actifs favoris ; les marchés basculent avant l'économie ; les chocs court-circuitent la séquence.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Quadrants du cycle économique croissance / inflation" xmlns="http://www.w3.org/2000/svg">
+  <line x1="360" y1="30" x2="360" y2="290" className="line" strokeWidth="1.5" />
+  <line x1="60" y1="160" x2="660" y2="160" className="line" strokeWidth="1.5" />
+  <text x="365" y="26" fontSize="10" className="muted">inflation ↑</text>
+  <text x="655" y="176" fontSize="10" textAnchor="end" className="muted">croissance ↑</text>
+  <text x="70" y="176" fontSize="10" className="muted">croissance ↓</text>
+
+  <rect x="365" y="35" width="290" height="120" rx="6" className="red" opacity="0.08" />
+  <text x="510" y="58" fontSize="12" fontWeight="600" textAnchor="middle">Surchauffe / ralentissement</text>
+  <text x="510" y="80" fontSize="10" textAnchor="middle" className="muted">croissance forte puis en baisse, inflation élevée</text>
+  <text x="510" y="98" fontSize="10" textAnchor="middle" className="muted">banques centrales qui resserrent</text>
+  <text x="510" y="122" fontSize="10" textAnchor="middle">matières premières, puis cash</text>
+  <text x="510" y="140" fontSize="10" textAnchor="middle" className="red">actions et obligations souffrent</text>
+
+  <rect x="365" y="165" width="290" height="120" rx="6" className="green" opacity="0.08" />
+  <text x="510" y="188" fontSize="12" fontWeight="600" textAnchor="middle">Expansion</text>
+  <text x="510" y="210" fontSize="10" textAnchor="middle" className="muted">croissance forte, inflation qui monte doucement</text>
+  <text x="510" y="228" fontSize="10" textAnchor="middle" className="muted">premiers resserrements</text>
+  <text x="510" y="252" fontSize="10" textAnchor="middle">actions, matières premières</text>
+  <text x="510" y="270" fontSize="10" textAnchor="middle" className="green">devises exportatrices</text>
+
+  <rect x="65" y="35" width="290" height="120" rx="6" className="gold" opacity="0.08" />
+  <text x="210" y="58" fontSize="12" fontWeight="600" textAnchor="middle">Récession</text>
+  <text x="210" y="80" fontSize="10" textAnchor="middle" className="muted">croissance négative, inflation qui baisse</text>
+  <text x="210" y="98" fontSize="10" textAnchor="middle" className="muted">baisses de taux, soutien</text>
+  <text x="210" y="122" fontSize="10" textAnchor="middle">obligations d'État, or, USD / JPY / CHF</text>
+  <text x="210" y="140" fontSize="10" textAnchor="middle" className="green">les actions touchent leur bas avant la fin</text>
+
+  <rect x="65" y="165" width="290" height="120" rx="6" className="green" opacity="0.05" />
+  <text x="210" y="188" fontSize="12" fontWeight="600" textAnchor="middle">Reprise</text>
+  <text x="210" y="210" fontSize="10" textAnchor="middle" className="muted">croissance qui accélère, inflation faible</text>
+  <text x="210" y="228" fontSize="10" textAnchor="middle" className="muted">taux bas maintenus</text>
+  <text x="210" y="252" fontSize="10" textAnchor="middle">actions cycliques, petites capitalisations</text>
+  <text x="210" y="270" fontSize="10" textAnchor="middle" className="green">crédit</text>
+  <path d="M 150 240 Q 100 120 210 70 Q 400 40 560 90 Q 640 180 500 260 Q 320 300 150 240" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" strokeDasharray="6 4" />
+  <text x="360" y="305" fontSize="10" textAnchor="middle" className="muted">le cycle tourne dans ce sens ; les marchés basculent avant l'économie</text>
+</svg>
+</Figure>
+
+## Inflation, emploi, croissance : les données qui comptent
+
+Des centaines de statistiques sont publiées chaque mois. Une dizaine déplacent réellement les marchés, parce qu'elles alimentent directement la décision des banques centrales (chapitre suivant) et les anticipations de croissance. Pour les États-Unis, qui donnent le ton à tous les marchés de ce cours :
+
+**Inflation.**
+- **CPI** (consumer price index, indice des prix à la consommation) : la mesure d'inflation la plus suivie par les marchés ; publié mensuellement vers le milieu du mois. On regarde le CPI global et le **core CPI** (hors énergie et alimentation, plus stable), en variation mensuelle et annuelle.
+- **PCE** (personal consumption expenditures) : la mesure préférée de la Fed, publiée fin de mois ; moins de surprise que le CPI (ses composantes sont largement connues d'avance) mais c'est celle qui compte pour la politique monétaire.
+- **PPI** (prix à la production) : en amont du CPI ; moins suivi, sauf quand il diverge nettement.
+
+**Emploi.**
+- **NFP** (non-farm payrolls, créations d'emplois hors agriculture), avec le **taux de chômage** et les **salaires horaires** : le premier vendredi du mois, 14 h 30 heure de Paris. L'annonce la plus volatile du mois pour les indices, le dollar et les taux.
+- **Inscriptions hebdomadaires au chômage** (jobless claims), chaque jeudi : un thermomètre à haute fréquence de la détérioration du marché du travail.
+- **JOLTS** (offres d'emploi) : suivi par la Fed pour mesurer la tension du marché du travail.
+
+**Croissance et activité.**
+- **PIB** trimestriel (trois estimations successives) : important mais rétrospectif ; les marchés le savent en grande partie avant.
+- **ISM manufacturier et services** (PMI) : enquêtes auprès des directeurs d'achats, publiées en début de mois ; au-dessus de 50, expansion ; en dessous, contraction. Très suivis parce que rapides et prospectifs.
+- **Ventes au détail**, **production industrielle**, **commandes de biens durables** : le détail de l'activité, à surveiller quand une inflexion se cherche.
+- **Confiance des consommateurs** (Conference Board, Université du Michigan, qui inclut des **anticipations d'inflation** regardées par la Fed).
+
+**Le lien avec la banque centrale.** Ce qui fait bouger les marchés n'est pas la donnée en soi mais **ce qu'elle change dans les anticipations de politique monétaire**. Une inflation plus forte que prévu fait anticiper des taux plus élevés plus longtemps : les taux courts montent, le dollar monte, les actions et l'or baissent en général. Un emploi plus faible que prévu fait anticiper des baisses de taux : l'inverse. Le chapitre suivant détaille ce mécanisme ; retenez ici que **la hiérarchie des données suit la hiérarchie des préoccupations de la banque centrale** : en période d'inflation élevée, le CPI domine tout ; en période de ralentissement, le NFP et les claims prennent le dessus.
+
+Pour la zone euro : l'inflation harmonisée (HICP) et le PIB, publiés par Eurostat, les PMI et l'IFO allemand ; pour le Japon et le Royaume-Uni, leurs équivalents. Le trader de forex suit les deux côtés de sa paire ; le trader d'indices américains, d'or et de pétrole, les données américaines d'abord.
+
+## Lire un rapport macro en dix minutes
+
+Un rapport macro (le communiqué du BLS sur l'emploi, celui du BEA sur le PCE) fait plusieurs dizaines de pages. Le marché réagit en secondes à trois ou quatre chiffres. La lecture utile est courte, structurée, et se prépare **avant** la publication.
+
+**Avant (la veille ou le matin) :**
+
+1. **Le consensus** : la prévision moyenne des économistes, publiée par les agences et les calendriers économiques. C'est la référence : le marché a déjà intégré le consensus ; seule la **surprise** (l'écart entre le chiffre et le consensus) fait bouger.
+2. **La fourchette et le « whisper number »** : les prévisions les plus hautes et les plus basses, et parfois un chiffre officieux attendu par les tables de marché, différent du consensus. Un chiffre dans la fourchette surprend peu.
+3. **La donnée précédente** et ses révisions possibles : le NFP du mois précédent est révisé chaque mois, parfois de dizaines de milliers ; la révision compte autant que le chiffre.
+4. **Ce que le marché veut** : dans quelle phase sommes-nous, que craint-on ? En période d'inflation élevée, un CPI fort est une mauvaise nouvelle pour les actions ; en période de peur de récession, un NFP faible aussi, mais un NFP trop fort peut l'être également (taux plus hauts). Écrire la grille de réaction attendue avant le chiffre.
+
+**Pendant (les trente premières secondes) :**
+
+5. **Le chiffre principal contre le consensus** : au-dessus, en dessous, de combien (en écarts-types de la fourchette si l'on veut être rigoureux, ou simplement « grosse surprise » / « conforme »).
+6. **Le second chiffre** qui compte : pour le NFP, le taux de chômage et les salaires horaires ; pour le CPI, le core ; pour le PIB, la consommation.
+7. **Les révisions** du mois précédent.
+
+**Après (cinq à dix minutes) :**
+
+8. **La composition** : d'où vient la surprise ? Un CPI fort tiré par l'énergie n'a pas le même sens qu'un CPI fort tiré par les services (les banques centrales regardent le second). Un NFP fort tiré par le secteur public n'a pas le même sens qu'un NFP fort dans le privé.
+9. **La réaction du marché** : les taux courts (les futures de Fed funds, chapitre suivant), le dollar, l'ES ; est-elle cohérente avec la surprise ? Une réaction contraire à la surprise (bon chiffre, marché qui baisse) dit que le positionnement ou le « whisper » étaient ailleurs, ou que le second chiffre a dominé.
+
+Le tout tient sur une demi-page de notes. Le trader qui a fait ce travail sait, à 14 h 31, si le chiffre est une surprise, dans quel sens, et si le marché la lit comme lui ; celui qui découvre le chiffre en direct sans consensus ni grille regarde le graphique bouger sans comprendre.
+
+<Figure caption="Figure 2 · La grille de lecture d'une publication : le consensus est déjà dans le prix ; seule la surprise bouge, et son sens dépend de la phase. La révision et le second chiffre comptent autant que le premier.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Grille de lecture d'une publication macro" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="200" height="240" rx="8" className="box" strokeWidth="1.5" />
+  <text x="120" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Avant</text>
+  <text x="30" y="80" fontSize="10">1 · consensus</text>
+  <text x="30" y="100" fontSize="10">2 · fourchette, whisper</text>
+  <text x="30" y="120" fontSize="10">3 · précédent, révisions</text>
+  <text x="30" y="140" fontSize="10">4 · phase → grille de réaction</text>
+  <rect x="30" y="160" width="180" height="96" rx="4" className="gold" opacity="0.12" />
+  <text x="120" y="180" fontSize="9" textAnchor="middle" className="muted">ex. CPI attendu +0,3 % m/m</text>
+  <text x="120" y="196" fontSize="9" textAnchor="middle" className="muted">fourchette 0,2-0,4 · précédent 0,4</text>
+  <text x="120" y="212" fontSize="9" textAnchor="middle" className="muted">phase : inflation élevée</text>
+  <text x="120" y="232" fontSize="9" textAnchor="middle">≥ 0,4 : taux ↑ USD ↑ ES ↓ or ↓</text>
+  <text x="120" y="248" fontSize="9" textAnchor="middle">≤ 0,2 : l'inverse</text>
+
+  <polygon points="235,150 225,142 225,158" className="gold" />
+  <rect x="240" y="30" width="200" height="240" rx="8" className="box" strokeWidth="1.5" />
+  <text x="340" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Pendant · 30 s</text>
+  <text x="250" y="80" fontSize="10">5 · chiffre vs consensus</text>
+  <text x="250" y="100" fontSize="10">6 · second chiffre (core)</text>
+  <text x="250" y="120" fontSize="10">7 · révisions</text>
+  <rect x="250" y="160" width="180" height="96" rx="4" className="gold" opacity="0.12" />
+  <text x="340" y="180" fontSize="9" textAnchor="middle" className="muted">publié : +0,5 % m/m</text>
+  <text x="340" y="196" fontSize="9" textAnchor="middle" className="muted">core +0,4 (att. 0,3)</text>
+  <text x="340" y="212" fontSize="9" textAnchor="middle" className="red" fontWeight="600">surprise haussière nette</text>
+  <text x="340" y="232" fontSize="9" textAnchor="middle">grille : taux ↑ USD ↑ ES ↓</text>
+
+  <polygon points="455,150 445,142 445,158" className="gold" />
+  <rect x="460" y="30" width="240" height="240" rx="8" className="box" strokeWidth="1.5" />
+  <text x="580" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Après · 5-10 min</text>
+  <text x="470" y="80" fontSize="10">8 · composition (services ? énergie ?)</text>
+  <text x="470" y="100" fontSize="10">9 · réaction cohérente ?</text>
+  <rect x="470" y="120" width="220" height="136" rx="4" className="gold" opacity="0.12" />
+  <text x="580" y="140" fontSize="9" textAnchor="middle" className="muted">services hors logement en hausse :</text>
+  <text x="580" y="156" fontSize="9" textAnchor="middle" className="muted">la Fed regarde ça → durable</text>
+  <text x="580" y="180" fontSize="9" textAnchor="middle" className="muted">Fed funds futures : +8 pb sur déc.</text>
+  <text x="580" y="196" fontSize="9" textAnchor="middle" className="muted">DXY +0,5 % · ES −1,1 % · or −1,4 %</text>
+  <text x="580" y="220" fontSize="9" textAnchor="middle" className="green" fontWeight="600">réaction cohérente avec la grille</text>
+  <text x="580" y="240" fontSize="9" textAnchor="middle" className="muted">→ le biais du jour est écrit</text>
+</svg>
+</Figure>
+
+## Du chiffre macro au mouvement de prix
+
+Le chemin entre un chiffre publié et un mouvement sur l'ES ou l'or n'est pas direct ; il passe par une chaîne d'anticipations, et c'est cette chaîne qui explique les réactions apparemment paradoxales.
+
+**Étape 1 : la surprise.** Le marché a intégré le consensus. Le chiffre est comparé au consensus (et au whisper). Pas de surprise, pas de mouvement durable (une secousse d'exécution, souvent reprise). Surprise, mouvement.
+
+**Étape 2 : la traduction en politique monétaire.** La surprise change ce que le marché attend de la banque centrale : plus ou moins de hausses ou de baisses de taux, plus tôt ou plus tard. Cela se lit immédiatement sur les **futures de taux** (chapitre suivant) : c'est le premier marché à bouger, et le plus fidèle.
+
+**Étape 3 : la propagation.** Les taux anticipés bougent le **dollar** (des taux plus hauts attirent les capitaux vers le dollar), les **obligations** (les rendements montent, les prix baissent), puis les **actions** (des taux plus hauts pèsent sur les valorisations, surtout des valeurs de croissance : le Nasdaq réagit plus que le S&P), l'**or** (qui ne verse pas d'intérêt, souffre des taux réels plus hauts et du dollar plus fort), et le **pétrole** (par la croissance anticipée et le dollar).
+
+**Étape 4 : le contexte qui inverse.** La même surprise n'a pas le même effet selon la phase. Un NFP très fort en pleine expansion avec inflation élevée = « la Fed va devoir resserrer plus » = actions en baisse (« good news is bad news »). Le même NFP très fort en début de reprise avec inflation faible = « la croissance est là, sans risque de resserrement » = actions en hausse. C'est pourquoi la grille de réaction s'écrit **avant**, à partir de la phase.
+
+**Étape 5 : le positionnement.** Un marché très positionné d'un côté (niveau 4, chapitre 5) réagit de façon asymétrique : une surprise dans le sens du positionnement bouge peu (tout le monde est déjà là), une surprise contraire déclenche un squeeze. C'est ce qui explique les réactions « excessives » et celles qui s'inversent en quelques minutes.
+
+Ce que cela donne au trader d'exécution : la surprise se lit en secondes, sa direction sur les taux et le dollar en une minute, et le mouvement de l'ES ou de l'or qui suit **est un displacement** au sens du niveau 3, avec la même mécanique (liquidité prise avant, FVG laissés, retour). Les meilleurs trades post-annonce ne sont pas pris à 14 h 30 (spread, slippage, niveau 0) mais dans les vingt à quarante minutes qui suivent, sur le retour dans les zones laissées, dans le sens de la lecture macro confirmée par les taux.
+
+## Construire sa veille macro hebdomadaire
+
+La macro ne se lit pas en direct toute la journée ; elle se prépare une fois par semaine et se met à jour en dix minutes par jour. Une routine :
+
+**Le dimanche ou le lundi matin (30 à 45 minutes) :**
+
+1. **Le calendrier de la semaine** : les publications à fort impact (chapitre 4 de ce niveau donne la hiérarchie), leur heure en heure locale, le consensus et le précédent pour chacune. Les noter sur l'écran de contexte (niveau 0).
+2. **La phase et le thème du moment** en deux lignes : « inflation en décrue lente, marché du travail qui se détend, la Fed hésite entre pause et baisse : les données d'emploi dominent cette semaine ». C'est le fil de lecture des cinq jours.
+3. **Les banques centrales** : y a-t-il une décision, un discours du président, des minutes cette semaine ? (chapitre suivant)
+4. **Le positionnement** : COT du vendredi (chapitre 5 de ce niveau), funding si crypto, OI si matières premières.
+5. **La grille de réaction** pour les deux ou trois publications majeures : « si CPI au-dessus de X : biais baissier ES / haussier USD pour la séance ; en dessous : l'inverse ; conforme : pas de biais macro, lecture technique seule ».
+
+**Chaque matin (10 minutes) :**
+
+6. Les publications du jour, l'heure, le consensus, la grille ; les niveaux techniques déjà en place ; ce que les futures de taux et le dollar ont fait pendant la nuit.
+7. Une phrase de biais macro pour la journée, distincte du biais technique, et la règle qui s'applique s'ils se contredisent (en général : pas de trade contre le technique sur la seule foi de la macro ; la macro filtre, la structure décide).
+
+**Chaque soir (5 minutes) :**
+
+8. Le chiffre publié, la surprise, la réaction, et si la grille était juste. Ce journal macro, tenu quelques mois, apprend plus vite que n'importe quel manuel comment un marché donné réagit à une donnée donnée dans une phase donnée.
+
+Le principe : **la macro filtre, elle ne déclenche pas.** Elle dit dans quel sens le vent souffle et quand il va tourner (les publications) ; la structure, les séquences et le flux disent où et quand entrer.
+
+## Deux trades sous l'angle macro
+
+Reconstitutions pédagogiques : le même chiffre, deux préparations.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Short"
+  setup="CPI plus fort que prévu (surprise nette, core aussi) en phase d'inflation élevée ; taux courts et dollar en hausse immédiate (réaction cohérente) ; entrée sur le retour dans le FVG M15 laissé par le displacement baissier, vingt-cinq minutes après"
+  entree="5 268,00 (retour dans le FVG M15 5 266-5 271)"
+  stop="5 276,00 (32 ticks, au-dessus du plus haut post-annonce)"
+  objectif="5 244,00 (PDL et HVN composite)"
+  r="+3R">
+
+Préparation de la veille : consensus CPI +0,3 % m/m, core +0,3 % ; phase : inflation élevée, Fed en resserrement ; grille : au-dessus de 0,4 sur le core, biais baissier ES pour la séance. À 14 h 30 : global +0,5, core +0,4, révision du mois précédent à la hausse. Les futures de Fed funds intègrent 8 points de base de plus sur la réunion suivante en une minute ; le DXY monte de 0,5 % ; l'ES perd 30 points en un displacement de trois bougies M5, laissant un FVG M15. Le trader n'a rien fait à 14 h 30 (spread, slippage). À 14 h 55, le prix revient dans le FVG ; le M5 se réaligne à la baisse ; entrée short. Le biais macro était écrit avant, la réaction des taux l'a confirmé, la séquence du niveau 3 a donné l'entrée. Cible : la liquidité en dessous, atteinte à 16 h 40.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat à 14 h 31 « parce que le chiffre est bon » (CPI en baisse), sans consensus ni grille ; le marché baisse : la surprise était sur le core et les révisions"
+  entree="5 296,00 (au marché, 14 h 31, servi à 5 297,50)"
+  stop="5 290,00 (24 ticks prévus, exécuté à 5 288,50)"
+  objectif="5 320,00"
+  r="−1,4R">
+
+Autre mois. Le trader voit passer « CPI 3,1 % contre 3,3 % le mois dernier », lit « l'inflation baisse, c'est bon pour les actions », achète au marché à 14 h 31, servi 1,5 point plus haut. Il n'a pas regardé le consensus (3,0 %), ni le core (+0,4 % contre 0,3 attendu), ni les révisions. Le marché lit une surprise **haussière** sur ce qui compte pour la Fed ; les taux montent, l'ES baisse de 25 points, son stop est exécuté avec slippage. La donnée était « bonne » par rapport au mois précédent et « mauvaise » par rapport à ce que le marché attendait : seule la seconde comparaison compte. Il a tradé un titre de presse ; le marché trade la surprise.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **cycle** se lit avec deux variables, **croissance et inflation** ; chaque phase a ses actifs favoris ; les marchés basculent avant l'économie et les chocs court-circuitent la séquence. Le trader travaille avec une hypothèse de phase.
+- Une dizaine de données comptent (**CPI, PCE, NFP, claims, ISM, PIB**…) parce qu'elles alimentent la décision de la banque centrale ; leur hiérarchie suit les préoccupations du moment.
+- Un rapport se lit en dix minutes : **consensus, fourchette, précédent, grille de réaction écrite avant** ; chiffre contre consensus, second chiffre, révisions ; composition et cohérence de la réaction.
+- **Seule la surprise bouge** ; elle se traduit d'abord en taux anticipés, puis en dollar, obligations, actions, or, pétrole ; le contexte de phase peut inverser le sens ; le positionnement amplifie ou étouffe.
+- La **veille hebdomadaire** (calendrier, phase, banques centrales, positionnement, grilles) et la mise à jour quotidienne font de la macro un **filtre** : elle dit le vent, la structure décide.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Situer la phase">
+
+Données récentes : PIB en hausse mais en ralentissement sur deux trimestres ; CPI à 4,2 % en glissement annuel, core à 3,9 %, en légère baisse ; NFP encore positifs mais en décélération, chômage qui remonte de 3,6 à 3,9 % ; ISM manufacturier à 47, services à 51 ; la banque centrale a relevé ses taux six fois et parle de « pause ».
+
+1. Dans quel quadrant du cycle situez-vous l'économie ? Justifiez avec deux variables.
+2. Quels actifs ont typiquement le vent avec eux dans cette phase, et lesquels contre ?
+3. Quelle donnée dominera probablement les réactions de marché dans les semaines à venir, et pourquoi ?
+
+<Solution>
+
+1. **Surchauffe / ralentissement**, en fin de phase : croissance encore positive mais qui ralentit (PIB, NFP en décélération, ISM manufacturier sous 50), inflation élevée mais en décrue ; la banque centrale a resserré et hésite. On se dirige vers le quadrant récession sans y être.
+2. Le vent avec : liquidités (taux élevés), obligations d'État si le ralentissement se confirme (les rendements commencent à baisser), or et devises refuges à mesure que la peur de récession monte. Contre : actions cycliques, matières premières industrielles, devises des exportateurs. Nuance : les marchés anticipent ; les actions peuvent commencer à monter avant que la récession n'apparaisse si le marché « voit » les baisses de taux.
+3. Les **données d'emploi** (NFP, claims, chômage) : la préoccupation bascule de l'inflation vers la croissance ; la Fed en pause regarde si le marché du travail craque. Le CPI reste important mais un NFP faible bougera plus les taux qu'un CPI conforme.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Écrire une grille de réaction">
+
+Demain, 14 h 30 : NFP. Consensus +180 000, fourchette 120 000-240 000, précédent +210 000 ; taux de chômage attendu 3,8 % ; salaires horaires attendus +0,3 % m/m. Phase : inflation encore élevée, Fed qui hésite entre une hausse de plus et une pause. Vous tradez MES et MGC.
+
+1. Écrivez la grille de réaction attendue (trois cas : nettement au-dessus, conforme, nettement en dessous) pour l'ES, le dollar et l'or.
+2. Quel « second chiffre » pourrait renverser la lecture du chiffre principal ?
+3. Que faites-vous à 14 h 30 précises, et à partir de quand cherchez-vous un trade ?
+
+<Solution>
+
+1. **Nettement au-dessus (≥ 240 000)** : marché du travail solide, la Fed peut resserrer encore → taux ↑, USD ↑, ES ↓ (« good news is bad news » dans cette phase), or ↓. **Conforme (150 000-210 000)** : peu de surprise, mouvement d'exécution puis retour ; pas de biais macro, lecture technique seule. **Nettement en dessous (≤ 120 000)** : détente du marché du travail, pause probable → taux ↓, USD ↓, ES ↑ (à nuancer si le chiffre est si faible qu'il fait peur pour la croissance), or ↑.
+2. Les **salaires horaires** : un NFP faible avec des salaires à +0,5 % reste inflationniste (la Fed regarde les salaires) et peut annuler la lecture « pause » ; inversement un NFP fort avec des salaires à +0,1 % est moins inquiétant. Les **révisions** du mois précédent peuvent aussi inverser la surprise apparente.
+3. À 14 h 30 : rien ; on lit le chiffre, le second chiffre, les révisions, la réaction des futures de taux et du dollar (cohérente ou non). On cherche un trade à partir de 14 h 50-15 h 10, sur le retour dans les zones laissées par le displacement (niveau 3), dans le sens du biais macro confirmé, avec la structure et le flux (niveaux 2 et 4).
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="La veille en pratique">
+
+Construisez, pour la semaine à venir sur votre marché, la fiche de veille macro : calendrier des publications à fort impact avec heure locale, consensus et précédent ; phase et thème en deux lignes ; événements de banques centrales ; positionnement (COT, funding, OI) ; grille de réaction pour les deux publications majeures. Puis, chaque soir de la semaine, notez la surprise, la réaction et la justesse de la grille.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend : une fiche d'une page, écrite avant le lundi ; des grilles conditionnelles (« si X alors biais Y ») et non des prédictions ; une distinction claire entre biais macro et biais technique, avec la règle de conflit (« pas de trade contre la structure sur la seule macro »). Après quatre semaines de ce journal, comparez : combien de fois la grille était juste, combien de fois la réaction a été contraire à la surprise (et pourquoi : positionnement, second chiffre, whisper). C'est cette comparaison qui construit une lecture macro personnelle, pas la lecture de commentaires.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le cycle économique se lit avec :",
+      options: [
+        "Le prix des actions seul",
+        "Deux variables, croissance et inflation, dont la combinaison définit quatre phases aux actifs favoris différents",
+        "Le taux de change",
+        "Le volume",
+      ],
+      answer: 1,
+      explain: "Reprise, expansion, surchauffe / ralentissement, récession. Les marchés basculent avant l'économie ; le trader travaille avec une hypothèse de phase.",
+    },
+    {
+      q: "Pourquoi une dizaine de données seulement déplacent-elles vraiment les marchés ?",
+      options: [
+        "Parce que les autres sont fausses",
+        "Parce qu'elles alimentent directement la décision de la banque centrale et les anticipations de croissance",
+        "Parce qu'elles sont publiées le vendredi",
+        "Par hasard",
+      ],
+      answer: 1,
+      explain: "CPI, PCE, NFP, claims, ISM, PIB : leur hiérarchie suit les préoccupations de la banque centrale du moment.",
+    },
+    {
+      q: "Ce qui fait bouger le marché à la publication est :",
+      options: [
+        "Le chiffre lui-même",
+        "La surprise : l'écart entre le chiffre (et le second chiffre, et les révisions) et le consensus, lue dans le contexte de la phase",
+        "La comparaison avec le mois précédent",
+        "Le titre de presse",
+      ],
+      answer: 1,
+      explain: "Le consensus est déjà dans le prix. Un CPI « en baisse » par rapport au mois dernier mais au-dessus du consensus est une surprise haussière.",
+    },
+    {
+      q: "Un NFP très fort en phase d'inflation élevée fait typiquement :",
+      options: [
+        "Monter les actions",
+        "Monter les taux anticipés et le dollar, baisser les actions et l'or : « good news is bad news »",
+        "Rien",
+        "Baisser le dollar",
+      ],
+      answer: 1,
+      explain: "La surprise se traduit d'abord en politique monétaire anticipée, puis se propage. Le contexte de phase peut inverser le sens de la même surprise.",
+    },
+    {
+      q: "Le meilleur moment pour trader une annonce majeure est :",
+      options: [
+        "À la seconde de la publication, au marché",
+        "Dans les vingt à quarante minutes qui suivent, sur le retour dans les zones laissées par le displacement, dans le sens de la lecture macro confirmée par les taux",
+        "Jamais",
+        "La veille",
+      ],
+      answer: 1,
+      explain: "À 14 h 30, spread et slippage sont maximaux (niveau 0). Le mouvement post-annonce est un displacement au sens du niveau 3, avec la même mécanique de retour.",
+    },
+    {
+      q: "Le rôle de la macro dans le trade est :",
+      options: [
+        "De déclencher les entrées",
+        "De filtrer : elle dit le sens du vent et quand il va tourner ; la structure, les séquences et le flux disent où et quand entrer",
+        "De remplacer le stop",
+        "De prédire le prix à un mois",
+      ],
+      answer: 1,
+      explain: "La règle de conflit : pas de trade contre la structure sur la seule foi de la macro. La macro filtre, la structure décide.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Toutes les données macro convergent vers un acteur : la banque centrale. Le chapitre suivant décrit la Fed, la BCE et la BoJ, leurs mandats et leurs outils (taux directeurs, QE, QT, forward guidance), la courbe des taux et ses messages, ce que les futures de taux disent des anticipations, et les réactions typiques des actifs aux décisions.
