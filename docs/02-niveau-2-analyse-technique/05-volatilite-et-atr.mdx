@@ -1,0 +1,320 @@
+---
+title: "Volatilité et ATR"
+description: "Mesurer la volatilité et reconnaître ses régimes, calculer et utiliser l'ATR pour dimensionner stops et objectifs, adapter la taille de position à la volatilité, lire l'expansion et la contraction, avec des cas pratiques sur indices, or et forex."
+---
+
+# Volatilité et ATR
+
+Toutes les distances utilisées jusqu'ici (épaisseur d'une zone, marge d'un stop, distance d'un objectif) ont un point commun : elles dépendent de combien le marché bouge. Un stop de 8 points sur l'ES est large un jour calme et ridicule un jour d'annonce. La **volatilité** est la mesure de ce « combien », et l'**ATR** est l'outil le plus simple pour la lire. Ce chapitre les met au service du position sizing du niveau 1 et de la structure du niveau 2 : c'est le lien entre l'analyse et le risque.
+
+## Mesurer la volatilité et ses régimes
+
+La volatilité est l'amplitude typique des variations de prix sur une période. Plusieurs mesures existent (écart-type des rendements, volatilité implicite des options que le niveau 6 abordera) ; pour un trader discrétionnaire, la plus directe est la **fourchette** : de combien le prix bouge, en moyenne, sur une bougie de l'unité de temps de travail.
+
+Ce que l'on observe sur tous les marchés :
+
+- La volatilité **n'est pas constante**. Elle se déplace par **régimes** : des semaines calmes où l'ES bouge de 30 points par jour, des semaines agitées où il en fait 100. Les régimes durent, puis basculent.
+- Elle est **regroupée** (clustering) : une grande journée est plus souvent suivie d'une grande journée que d'une petite. La volatilité d'hier est le meilleur prédicteur simple de la volatilité d'aujourd'hui.
+- Elle a une **saisonnalité intra-journalière** : sur les futures américains, elle est maximale à l'ouverture de New York et autour des annonces, minimale en fin de nuit ; sur le forex, maximale sur le chevauchement Londres-New York.
+- Elle **monte dans les baisses** sur les indices actions (la peur est plus brutale que la confiance), ce qui n'est pas vrai sur toutes les classes d'actifs (l'or ou le pétrole peuvent être volatils à la hausse).
+
+Reconnaître le régime en cours est la première utilité de la mesure : un plan calibré sur un régime calme échoue en régime agité, et inversement.
+
+<Figure caption="Figure 1 · Régimes de volatilité sur trois mois d'ES en quotidien : fourchette journalière (barres) et sa moyenne mobile (ATR 14). Deux régimes calmes, un régime agité entre les deux, avec un basculement rapide.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Fourchettes journalières et ATR sur trois mois" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <line x1="60" y1="30" x2="60" y2="250" className="line" strokeWidth="1" />
+  <text x="50" y="254" fontSize="11" textAnchor="end" className="mono muted">0</text>
+  <text x="50" y="154" fontSize="11" textAnchor="end" className="mono muted">50 pts</text>
+  <text x="50" y="54" fontSize="11" textAnchor="end" className="mono muted">100 pts</text>
+  <text x="380" y="280" fontSize="12" textAnchor="middle" className="muted">jours de bourse (≈ 60)</text>
+
+  <rect x="66" y="196" width="8" height="54" className="gold" opacity="0.35" /><rect x="76" y="186" width="8" height="64" className="gold" opacity="0.35" /><rect x="86" y="200" width="8" height="50" className="gold" opacity="0.35" /><rect x="96" y="190" width="8" height="60" className="gold" opacity="0.35" /><rect x="106" y="204" width="8" height="46" className="gold" opacity="0.35" /><rect x="116" y="182" width="8" height="68" className="gold" opacity="0.35" /><rect x="126" y="194" width="8" height="56" className="gold" opacity="0.35" /><rect x="136" y="198" width="8" height="52" className="gold" opacity="0.35" /><rect x="146" y="188" width="8" height="62" className="gold" opacity="0.35" /><rect x="156" y="202" width="8" height="48" className="gold" opacity="0.35" /><rect x="166" y="184" width="8" height="66" className="gold" opacity="0.35" /><rect x="176" y="196" width="8" height="54" className="gold" opacity="0.35" /><rect x="186" y="190" width="8" height="60" className="gold" opacity="0.35" /><rect x="196" y="200" width="8" height="50" className="gold" opacity="0.35" /><rect x="206" y="180" width="8" height="70" className="gold" opacity="0.35" /><rect x="216" y="192" width="8" height="58" className="gold" opacity="0.35" /><rect x="226" y="198" width="8" height="52" className="gold" opacity="0.35" /><rect x="236" y="186" width="8" height="64" className="gold" opacity="0.35" /><rect x="246" y="194" width="8" height="56" className="gold" opacity="0.35" /><rect x="256" y="176" width="8" height="74" className="gold" opacity="0.35" />
+  <rect x="266" y="130" width="8" height="120" className="red" opacity="0.5" /><rect x="276" y="90" width="8" height="160" className="red" opacity="0.5" /><rect x="286" y="110" width="8" height="140" className="red" opacity="0.5" /><rect x="296" y="60" width="8" height="190" className="red" opacity="0.5" /><rect x="306" y="100" width="8" height="150" className="red" opacity="0.5" /><rect x="316" y="80" width="8" height="170" className="red" opacity="0.5" /><rect x="326" y="120" width="8" height="130" className="red" opacity="0.5" /><rect x="336" y="70" width="8" height="180" className="red" opacity="0.5" /><rect x="346" y="105" width="8" height="145" className="red" opacity="0.5" /><rect x="356" y="95" width="8" height="155" className="red" opacity="0.5" /><rect x="366" y="130" width="8" height="120" className="red" opacity="0.5" /><rect x="376" y="115" width="8" height="135" className="red" opacity="0.5" /><rect x="386" y="140" width="8" height="110" className="red" opacity="0.5" /><rect x="396" y="125" width="8" height="125" className="red" opacity="0.5" /><rect x="406" y="150" width="8" height="100" className="red" opacity="0.5" /><rect x="416" y="135" width="8" height="115" className="red" opacity="0.5" /><rect x="426" y="160" width="8" height="90" className="red" opacity="0.5" /><rect x="436" y="145" width="8" height="105" className="red" opacity="0.5" /><rect x="446" y="170" width="8" height="80" className="red" opacity="0.5" /><rect x="456" y="158" width="8" height="92" className="red" opacity="0.5" />
+  <rect x="466" y="186" width="8" height="64" className="gold" opacity="0.35" /><rect x="476" y="196" width="8" height="54" className="gold" opacity="0.35" /><rect x="486" y="180" width="8" height="70" className="gold" opacity="0.35" /><rect x="496" y="200" width="8" height="50" className="gold" opacity="0.35" /><rect x="506" y="190" width="8" height="60" className="gold" opacity="0.35" /><rect x="516" y="204" width="8" height="46" className="gold" opacity="0.35" /><rect x="526" y="188" width="8" height="62" className="gold" opacity="0.35" /><rect x="536" y="198" width="8" height="52" className="gold" opacity="0.35" /><rect x="546" y="184" width="8" height="66" className="gold" opacity="0.35" /><rect x="556" y="196" width="8" height="54" className="gold" opacity="0.35" /><rect x="566" y="202" width="8" height="48" className="gold" opacity="0.35" /><rect x="576" y="190" width="8" height="60" className="gold" opacity="0.35" /><rect x="586" y="194" width="8" height="56" className="gold" opacity="0.35" /><rect x="596" y="186" width="8" height="64" className="gold" opacity="0.35" /><rect x="606" y="200" width="8" height="50" className="gold" opacity="0.35" /><rect x="616" y="192" width="8" height="58" className="gold" opacity="0.35" /><rect x="626" y="198" width="8" height="52" className="gold" opacity="0.35" /><rect x="636" y="188" width="8" height="62" className="gold" opacity="0.35" /><rect x="646" y="196" width="8" height="54" className="gold" opacity="0.35" /><rect x="656" y="190" width="8" height="60" className="gold" opacity="0.35" /><rect x="666" y="200" width="8" height="50" className="gold" opacity="0.35" /><rect x="676" y="194" width="8" height="56" className="gold" opacity="0.35" /><rect x="686" y="198" width="8" height="52" className="gold" opacity="0.35" />
+
+  <polyline points="70,194 130,194 190,193 250,190 270,175 300,140 330,115 360,105 390,110 420,125 450,140 480,160 510,180 540,188 570,192 600,193 630,194 690,194" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="150" y="176" fontSize="11" fontWeight="600" className="gold">ATR 14 ≈ 28 pts</text>
+  <text x="365" y="92" fontSize="11" fontWeight="600" className="red">régime agité · ATR ≈ 72 pts</text>
+  <text x="600" y="176" fontSize="11" fontWeight="600" className="gold">retour au calme</text>
+</svg>
+</Figure>
+
+## L'ATR pour dimensionner stops et objectifs
+
+L'**ATR** (Average True Range, fourchette vraie moyenne) est la moyenne, sur N périodes, de la **fourchette vraie** (true range) de chaque bougie. La fourchette vraie est le plus grand des trois écarts :
+
+- plus haut moins plus bas de la bougie ;
+- plus haut de la bougie moins clôture de la précédente (en valeur absolue) ;
+- plus bas de la bougie moins clôture de la précédente (en valeur absolue).
+
+Les deux derniers termes servent à compter les gaps : une bougie qui ouvre 20 points au-dessus de la clôture précédente et ne bouge plus a une fourchette de 0 mais une fourchette vraie de 20. N vaut 14 par défaut sur la plupart des plateformes ; 10 ou 20 changent peu. L'ATR s'exprime dans l'unité du prix (points, dollars, pips) et dépend de l'unité de temps : l'ATR quotidien de l'ES n'a rien à voir avec son ATR M5.
+
+Un calcul à la main pour comprendre, sur l'or en quotidien, cinq jours (plus haut · plus bas · clôture) après une clôture précédente à 2 366,0 :
+
+| Jour | Haut | Bas | Clôture | Haut − Bas | Haut − Clôt. préc. | Bas − Clôt. préc. | Fourchette vraie |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 2 380,0 | 2 362,0 | 2 377,5 | 18,0 | 14,0 | 4,0 | **18,0** |
+| 2 | 2 391,0 | 2 374,0 | 2 379,0 | 17,0 | 13,5 | 3,5 | **17,0** |
+| 3 | 2 384,0 | 2 366,0 | 2 370,0 | 18,0 | 5,0 | 13,0 | **18,0** |
+| 4 | 2 382,0 | 2 352,0 | 2 356,0 | 30,0 | 12,0 | 18,0 | **30,0** |
+| 5 | 2 368,0 | 2 349,0 | 2 361,0 | 19,0 | 12,0 | 7,0 | **19,0** |
+
+ATR sur 5 jours = (18 + 17 + 18 + 30 + 19) ÷ 5 = **20,4 $**. Lecture : sur cette période, l'or bouge en moyenne de 20 dollars par jour. Un stop de 5 $ en swing quotidien est dans le bruit ; un objectif de 60 $ demande trois journées moyennes dans le bon sens.
+
+**Utiliser l'ATR pour le stop.** Le stop reste défini par la structure (l'invalidation objective du chapitre 2). L'ATR sert à deux choses : donner la **marge contre le bruit** (par exemple 0,25 à 0,5 ATR de l'unité d'exécution au-delà du swing), et **vérifier** que le stop structurel n'est pas absurde par rapport à la volatilité (un stop à 0,3 ATR de l'unité de structure sera touché par le mouvement normal ; un stop à 3 ATR est probablement sur un mauvais swing). Certains traders utilisent directement un stop à 1,5 ou 2 ATR de l'entrée quand la structure ne donne pas de swing net ; c'est un choix de méthode acceptable, à condition d'être constant.
+
+**Utiliser l'ATR pour l'objectif.** L'ATR répond à la question « ce mouvement est-il réaliste dans le temps que je lui donne ? ». Un objectif intraday à 2,5 ATR quotidiens de l'entrée est très improbable dans la journée ; un objectif swing à 1 ATR quotidien peut être touché avant la fin de la séance. On confronte l'objectif structurel (niveau, HH précédent) à l'ATR pour savoir combien de temps le trade devrait durer et si le ratio gain/risque tient compte de la volatilité réelle.
+
+<Figure caption="Figure 2 · Le même stop de 8 points sur MES dans deux régimes : à ATR M15 de 4 points, il est à 2 ATR, raisonnable ; à ATR M15 de 12 points, il est à 0,67 ATR, dans le bruit d'une seule bougie.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Même stop dans deux régimes de volatilité" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Régime calme · ATR M15 = 4 pts</text>
+  <line x1="60" y1="60" x2="60" y2="240" className="line" strokeWidth="1" />
+  <line x1="80" y1="150" x2="80" y2="170" className="line" strokeWidth="1.5" /><rect x="76" y="154" width="8" height="12" className="green" opacity="0.9" />
+  <line x1="100" y1="146" x2="100" y2="164" className="line" strokeWidth="1.5" /><rect x="96" y="150" width="8" height="10" className="red" opacity="0.9" />
+  <line x1="120" y1="140" x2="120" y2="160" className="line" strokeWidth="1.5" /><rect x="116" y="143" width="8" height="12" className="green" opacity="0.9" />
+  <line x1="140" y1="136" x2="140" y2="156" className="line" strokeWidth="1.5" /><rect x="136" y="140" width="8" height="10" className="green" opacity="0.9" />
+  <line x1="160" y1="142" x2="160" y2="160" className="line" strokeWidth="1.5" /><rect x="156" y="146" width="8" height="10" className="red" opacity="0.9" />
+  <line x1="180" y1="132" x2="180" y2="152" className="line" strokeWidth="1.5" /><rect x="176" y="136" width="8" height="12" className="green" opacity="0.9" />
+  <line x1="200" y1="126" x2="200" y2="146" className="line" strokeWidth="1.5" /><rect x="196" y="130" width="8" height="10" className="green" opacity="0.9" />
+  <line x1="60" y1="150" x2="330" y2="150" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" /><text x="325" y="146" fontSize="10" textAnchor="end" className="gold">entrée</text>
+  <line x1="60" y1="190" x2="330" y2="190" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="6 4" /><text x="325" y="204" fontSize="10" textAnchor="end" className="red">stop −8 pts = 2 ATR</text>
+  <text x="180" y="240" fontSize="10" textAnchor="middle" className="green" fontWeight="600">hors du bruit ordinaire</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Régime agité · ATR M15 = 12 pts</text>
+  <line x1="420" y1="60" x2="420" y2="240" className="line" strokeWidth="1" />
+  <line x1="440" y1="120" x2="440" y2="185" className="line" strokeWidth="1.5" /><rect x="436" y="130" width="8" height="40" className="green" opacity="0.9" />
+  <line x1="460" y1="110" x2="460" y2="200" className="line" strokeWidth="1.5" /><rect x="456" y="140" width="8" height="45" className="red" opacity="0.9" />
+  <line x1="480" y1="95" x2="480" y2="165" className="line" strokeWidth="1.5" /><rect x="476" y="105" width="8" height="45" className="green" opacity="0.9" />
+  <line x1="500" y1="130" x2="500" y2="205" className="line" strokeWidth="1.5" /><rect x="496" y="140" width="8" height="50" className="red" opacity="0.9" />
+  <line x1="520" y1="100" x2="520" y2="170" className="line" strokeWidth="1.5" /><rect x="516" y="110" width="8" height="45" className="green" opacity="0.9" />
+  <line x1="540" y1="80" x2="540" y2="150" className="line" strokeWidth="1.5" /><rect x="536" y="90" width="8" height="40" className="green" opacity="0.9" />
+  <line x1="560" y1="90" x2="560" y2="160" className="line" strokeWidth="1.5" /><rect x="556" y="100" width="8" height="45" className="red" opacity="0.9" />
+  <line x1="420" y1="150" x2="690" y2="150" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" /><text x="685" y="146" fontSize="10" textAnchor="end" className="gold">entrée</text>
+  <line x1="420" y1="190" x2="690" y2="190" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="6 4" /><text x="685" y="204" fontSize="10" textAnchor="end" className="red">stop −8 pts = 0,67 ATR</text>
+  <text x="540" y="240" fontSize="10" textAnchor="middle" className="red" fontWeight="600">une seule mèche suffit</text>
+</svg>
+</Figure>
+
+## Adapter la taille de position à la volatilité
+
+C'est ici que le niveau 1 et le niveau 2 se rejoignent. La formule de position sizing dit : taille = budget ÷ (distance du stop × valeur du point). Si le stop est correctement placé (structure + marge ATR), sa distance **augmente** quand la volatilité augmente. Donc, à budget de risque constant, **la taille diminue automatiquement en régime agité** et augmente en régime calme. C'est le comportement voulu : le trader qui garde 2 MES en toutes circonstances prend en réalité trois fois plus de risque les jours agités.
+
+Un exemple sur MES, budget 50 $ :
+
+- Régime calme, ATR M15 = 4 points, stop structurel + marge = 8 points : 8 × 5 = 40 $ par contrat, **1 contrat** (le calcul donne 1,25).
+- Régime agité, ATR M15 = 12 points, stop structurel + marge = 20 points : 20 × 5 = 100 $ par contrat : **0 contrat**. Le trade ne se prend pas sur MES à ce budget ; il faudrait un budget de 100 $ ou un instrument à valeur de point plus faible.
+
+Ce résultat surprend le débutant : « le marché bouge enfin, et je dois trader plus petit ? ». Oui. Le marché qui bouge deux fois plus donne des trades dont le gain en points est deux fois plus grand pour une taille deux fois plus petite : le résultat en R est le même, et le risque est resté à 1 %. Le trader qui garde sa taille pleine en régime agité ne « profite pas plus de la volatilité » : il double son R sans le savoir, et le chapitre 4 du niveau 1 dit ce qui arrive ensuite.
+
+Une méthode plus systématique, utilisée par les traders qui tiennent plusieurs marchés : **normaliser le risque en ATR**. Toutes les positions sont dimensionnées pour qu'un mouvement de 1 ATR (de l'unité de structure) représente le même montant en euros. Un swing sur l'or, un swing sur EUR/USD et un swing sur MNQ ont alors le même « poids » réel, quelle que soit la valeur du point ou le prix nominal. C'est la version pratique du heat du niveau 1, chapitre 5.
+
+## Expansion et contraction : ce qu'elles annoncent
+
+La volatilité respire : après une **contraction** (bougies de plus en plus petites, ATR qui baisse, range étroit) vient en général une **expansion** (bougies larges, ATR qui remonte, mouvement directionnel). Et l'expansion s'épuise en contraction. Ce cycle est l'un des rares comportements de marché qui se retrouve sur tous les instruments et toutes les unités de temps.
+
+Ce que cela donne en pratique :
+
+- **Une contraction prolongée est une information de timing, pas de direction.** Elle dit qu'un mouvement se prépare ; elle ne dit pas dans quel sens. Le sens vient de la structure et du contexte (chapitres 2 et 3). Parier sur la direction de la sortie d'une contraction, c'est deviner ; attendre la sortie et suivre la structure, c'est trader.
+- **En contraction, les stops se resserrent et les objectifs s'éloignent en ATR** : les zones sont plus fines, le bruit est faible ; mais la sortie de la contraction produira des bougies bien plus larges que celles qui ont servi à calibrer le stop. D'où la marge : un stop calculé sur l'ATR d'une contraction est souvent trop serré pour la première bougie d'expansion.
+- **En expansion, la première bougie large n'est pas le moment d'entrer** au marché : c'est le moment où le spread s'écarte et où le slippage grimpe (niveau 0). L'entrée se cherche sur le premier repli après l'expansion, quand la structure interne se réaligne.
+- **La fin d'une expansion se lit à l'ATR qui plafonne** et aux bougies qui rétrécissent malgré le mouvement : les objectifs lointains deviennent improbables ; c'est le moment de sécuriser plutôt que d'ajouter.
+
+<Figure caption="Figure 3 · Cycle contraction / expansion sur un range qui se resserre puis casse. La contraction annonce le mouvement, pas sa direction ; la direction vient de la structure.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Contraction de volatilité suivie d'une expansion" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <line x1="60" y1="70" x2="420" y2="120" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="60" y1="210" x2="420" y2="160" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <polyline points="60,180 90,90 120,190 150,105 180,175 210,118 240,165 270,128 300,158 330,135 360,152 390,140 420,148 440,110 460,60 480,80 500,40 520,55 540,30" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="60" y="222" width="360" height="14" rx="3" className="gold" opacity="0.25" />
+  <text x="240" y="233" fontSize="10" textAnchor="middle" fontWeight="600">contraction : bougies et ATR décroissants</text>
+  <rect x="430" y="222" width="120" height="14" rx="3" className="green" opacity="0.5" />
+  <text x="490" y="233" fontSize="10" textAnchor="middle" fontWeight="600" fill="#ffffff">expansion</text>
+  <text x="600" y="120" fontSize="10" className="muted">direction : donnée par</text>
+  <text x="600" y="134" fontSize="10" className="muted">la structure H4 (haussière ici),</text>
+  <text x="600" y="148" fontSize="10" className="muted">pas par la contraction</text>
+  <circle cx="480" cy="80" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="480" y="100" fontSize="9" textAnchor="middle" className="green">entrée sur le 1er repli, pas sur la 1re bougie</text>
+</svg>
+</Figure>
+
+## Cas pratiques sur indices, or et forex
+
+**Indices (MES / MNQ, intraday).** ATR quotidien de l'ES : de 30 points en régime calme à 100 en régime agité ; ATR M15 en séance américaine : 3 à 12 points. Règles types d'un intraday : stop structurel M5 plus 0,25 à 0,5 ATR M15 de marge ; pas de trade si l'ATR M15 dépasse un seuil (par exemple 15 points) sans réduction de taille ; objectif intraday plafonné à environ 1 ATR quotidien depuis l'ouverture. Cas concret : ATR M15 à 6 points, creux M5 à 5 241,00, marge 2 points : stop à 5 239,00 pour une entrée à 5 246,00 (7 points, 35 $ par MES) ; budget 50 $ : 1 MES.
+
+**Or (MGC, swing).** ATR quotidien de l'or : de 15 $ en période calme à 40 $ ou plus en période agitée. Un swing de 3 à 8 jours vise typiquement 1,5 à 3 ATR quotidiens ; le stop est structurel H4 avec une marge de 0,3 à 0,5 ATR quotidien. Cas concret : ATR quotidien 20 $, HL H4 à 2 348,0, marge 7 $ : stop 2 341,0 pour une entrée à 2 356,0 (15 $, 150 $ par MGC) ; budget 100 $ : **0 contrat**. Le trade se prend avec un budget de 150 $ (compte de 15 000 $ à 1 %) ou attend une entrée plus proche du HL. C'est l'ATR qui a montré que le compte était trop petit pour ce swing.
+
+**Forex (EUR/USD, swing court).** ATR quotidien : de 40 pips en régime calme à 120 en régime agité. Le forex ayant des micro-lots, la taille s'ajuste finement. Cas concret : ATR quotidien 60 pips, stop structurel H4 de 45 pips plus 15 pips de marge (0,25 ATR) : 60 pips ; budget 60 $ : 60 ÷ (60 × 0,10) = 10 micro-lots. En régime agité (ATR 120 pips), le même stop structurel passe à 90 + 30 = 120 pips : 5 micro-lots. Même risque, taille divisée par deux, gain en pips potentiellement doublé : résultat en R inchangé.
+
+Le fil commun : **la structure place le stop, l'ATR le vérifie et le complète, le position sizing en déduit la taille**. Dans cet ordre, à chaque trade.
+
+## Deux trades sous l'angle de la volatilité
+
+Reconstitutions pédagogiques : le même setup, dans deux régimes.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Achat sur repli en tendance H1, régime agité (ATR M15 = 35 pts), taille réduite en conséquence"
+  entree="18 610,00"
+  stop="18 572,00 (38 pts : creux M5 à 18 584 + marge 12 pts ≈ 0,35 ATR M15)"
+  objectif="18 700,00 (HH H1, ≈ 0,4 ATR quotidien)"
+  r="+2,4R">
+
+Compte de 6 000 $, budget 60 $. Sur MNQ, 38 points × 2 $ = 76 $ par contrat : au-dessus du budget. Le trader passe sur son plan B écrit pour les régimes agités : budget porté à 1,25 % (75 $) une fois par jour au plus, ou pas de trade. 76 $ reste au-dessus de 75 $ : il ne prend pas le trade sur MNQ... et cherche le même setup sur MES, où le stop équivalent (creux M5 + marge) fait 11 points, soit 55 $ : 1 MES. Le trade atteint l'objectif équivalent : +2,4R. La volatilité n'a pas rendu le trade impossible ; elle a imposé de changer d'instrument pour garder le risque à sa place.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Même setup, même régime agité, mais stop calibré sur l'ATR de la veille (10 pts) et taille inchangée"
+  entree="18 610,00"
+  stop="18 598,00 (12 pts, comme d'habitude)"
+  objectif="18 700,00"
+  r="−1R, puis −1R, puis −1R">
+
+Autre trader, même compte, même moment. Il utilise « son » stop habituel de 12 points, calibré sur les semaines calmes (ATR M15 à 8), et ses 2 MNQ habituels (48 $ de risque). Dans un régime à 35 points d'ATR M15, un stop de 12 points fait 0,34 ATR : il est à l'intérieur d'une seule bougie. Le stop saute sur la mèche suivante, sans que la structure H1 ait bougé. Il rentre à nouveau (même stop) : même résultat. Une troisième fois : idem. Trois fois −1R sur un trade qui a fini par aller à l'objectif ; budget quotidien consommé avant midi. Son analyse était identique à celle du premier trader. Il n'a simplement pas regardé l'ATR.
+
+</TradeExample>
+
+:::tip À retenir
+
+- La volatilité se déplace par **régimes**, se regroupe dans le temps, suit l'heure de la journée. Reconnaître le régime en cours précède toute calibration.
+- L'**ATR** est la moyenne des fourchettes vraies sur N périodes ; il s'exprime en unités de prix et dépend de l'unité de temps.
+- Le **stop est structurel, l'ATR le vérifie** (ni à 0,3 ATR, ni à 3 ATR) et lui donne sa **marge contre le bruit** ; l'ATR dit aussi si un **objectif** est réaliste dans le temps imparti.
+- À budget de risque constant, **la taille baisse quand la volatilité monte** ; garder sa taille en régime agité, c'est doubler son R sans le savoir. La normalisation en ATR égalise le poids des positions sur plusieurs marchés.
+- **La contraction annonce un mouvement, pas sa direction** ; l'entrée se cherche sur le premier repli après l'expansion, pas sur la première bougie large.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Calculer un ATR à la main">
+
+EUR/USD en H4, clôture précédente à 1,0850. Cinq bougies (haut · bas · clôture, en pips au-dessus de 1,0800 pour simplifier) : (72 · 44 · 66), (80 · 58 · 62), (70 · 40 · 45), (55 · 30 · 52), (75 · 48 · 70).
+
+1. Calculez la fourchette vraie de chaque bougie (la clôture précédente de la première est 50).
+2. Calculez l'ATR sur 5 périodes.
+3. Un stop structurel est à 8 pips sous un creux. Avec une marge de 0,25 ATR, où va le stop, et est-il raisonnable par rapport à l'ATR ?
+
+<Solution>
+
+1. Bougie 1 : haut − bas 28, |haut − clôt. préc.| 22, |bas − clôt. préc.| 6 → **28**. Bougie 2 (clôt. préc. 66) : 22, 14, 8 → **22**. Bougie 3 (clôt. préc. 62) : 30, 8, 22 → **30**. Bougie 4 (clôt. préc. 45) : 25, 10, 15 → **25**. Bougie 5 (clôt. préc. 52) : 27, 23, 4 → **27**.
+2. ATR 5 = (28 + 22 + 30 + 25 + 27) ÷ 5 = 132 ÷ 5 = **26,4 pips**.
+3. Marge : 0,25 × 26,4 ≈ 6,6, arrondie à 7 pips. Stop à 8 + 7 = **15 pips** sous le creux, soit environ 0,57 ATR H4 sous le swing d'invalidation. C'est raisonnable pour un trade décidé sur H4 : au-delà du bruit d'une bougie ordinaire, sans être à trois bougies de distance.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Taille selon le régime">
+
+Budget de risque : 80 $. Setup identique sur MES dans trois régimes : stop structurel + marge de 6, 12 et 24 points.
+
+1. Calculez la taille dans chaque régime.
+2. Un mouvement de 1 ATR M15 dans le bon sens vaut respectivement 4, 8 et 16 points. Quel gain en dollars et en R représente-t-il dans chaque cas ?
+3. Que conclure sur « profiter de la volatilité » ?
+
+<Solution>
+
+1. 6 pts : 30 $ par contrat, 80 ÷ 30 = 2,67 → **2 MES** (risque 60 $). 12 pts : 60 $, 80 ÷ 60 = 1,33 → **1 MES** (60 $). 24 pts : 120 $ → **0 MES** : pas de trade sur MES à ce budget.
+2. Régime 1 : 4 × 5 × 2 = 40 $, soit 40 ÷ 60 = **0,67R**. Régime 2 : 8 × 5 × 1 = 40 $, **0,67R**. Régime 3 : trade non pris.
+3. Le gain en R d'un mouvement de 1 ATR est **identique** dans les deux régimes tradés : la volatilité plus forte est exactement compensée par la taille plus faible. On ne « profite » pas d'une volatilité plus élevée en R ; on en profite en euros seulement si l'on augmente le risque, ce qui est un autre choix, avec ses conséquences.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Contraction et plan">
+
+L'ES fait depuis quatre jours des bougies quotidiennes de plus en plus petites (fourchettes 45, 38, 30, 22 points, ATR 14 à 34), dans un range de 5 260 à 5 300. La structure H4 est haussière (HL à 5 255).
+
+1. Que dit la contraction, et que ne dit-elle pas ?
+2. Écrivez un plan en trois lignes pour la sortie de la contraction, sens compris.
+3. Le lendemain, une bougie de 70 points casse 5 300 à la hausse. Où cherchez-vous l'entrée, et pourquoi pas sur cette bougie ?
+
+<Solution>
+
+1. Elle dit qu'un mouvement d'ampleur supérieure aux dernières bougies est probable à court terme (le cycle contraction / expansion). Elle **ne dit pas** dans quel sens.
+2. « Structure H4 haussière, HL à 5 255 : biais haussier. Si cassure de 5 300 en clôture H1 puis repli vers 5 295-5 300 avec réalignement M5, achat, stop sous le creux M5 + 0,5 ATR M15, objectif 1 ATR quotidien au-dessus (≈ 5 335). Si cassure de 5 260 en clôture H4, biais annulé, pas de vente sans structure baissière H1 confirmée. »
+3. Sur le **premier repli** après l'expansion, quand la structure interne M5 se réaligne au-dessus de l'ancien plafond 5 300 (changement de polarité, chapitre 4). Pas sur la bougie de 70 points elle-même : le spread s'écarte, le slippage grimpe, et le stop calibré sur l'ATR de la contraction serait dérisoire face à une bougie de cette taille.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La fourchette vraie (true range) d'une bougie est :",
+      options: [
+        "Toujours le plus haut moins le plus bas",
+        "Le plus grand des trois : haut − bas, |haut − clôture précédente|, |bas − clôture précédente|",
+        "La taille du corps",
+        "La moyenne des mèches",
+      ],
+      answer: 1,
+      explain: "Les deux derniers termes intègrent les gaps : une bougie qui ouvre 20 points plus haut et ne bouge plus a une fourchette de 0 mais une fourchette vraie de 20.",
+    },
+    {
+      q: "L'ATR sert principalement à :",
+      options: [
+        "Prédire la direction",
+        "Donner la marge contre le bruit et vérifier que stop et objectif sont cohérents avec la volatilité",
+        "Remplacer la structure pour placer le stop",
+        "Mesurer le volume",
+      ],
+      answer: 1,
+      explain: "Le stop reste structurel ; l'ATR le complète (marge) et le contrôle (ni 0,3 ATR ni 3 ATR). Il dit aussi si un objectif est réaliste dans le temps donné.",
+    },
+    {
+      q: "La volatilité double, votre stop structurel + marge passe de 8 à 16 points. À budget constant, votre taille :",
+      options: [
+        "Reste la même",
+        "Est divisée par deux",
+        "Double",
+        "Est nulle",
+      ],
+      answer: 1,
+      explain: "Taille = budget ÷ (distance × valeur du point). Distance doublée, taille divisée par deux. Garder la taille, c'est doubler le R sans le savoir.",
+    },
+    {
+      q: "Une contraction de volatilité prolongée annonce :",
+      options: [
+        "Une hausse",
+        "Une baisse",
+        "Un mouvement d'ampleur, sans indication de direction ; la direction vient de la structure",
+        "Rien",
+      ],
+      answer: 2,
+      explain: "Le cycle contraction / expansion est universel. La contraction est une information de timing ; le sens se lit dans la structure et le contexte.",
+    },
+    {
+      q: "Une première bougie d'expansion de 70 points casse un range. Vous :",
+      options: [
+        "Entrez au marché immédiatement",
+        "Attendez le premier repli et le réalignement de la structure interne",
+        "Vendez à contre-sens",
+        "Doublez la taille",
+      ],
+      answer: 1,
+      explain: "Sur la première bougie large, le spread s'écarte, le slippage grimpe et le stop calibré sur la contraction est dérisoire. L'entrée se cherche sur le repli.",
+    },
+    {
+      q: "Or, ATR quotidien 20 $. Un swing avec 15 $ de stop, 150 $ par MGC, et un budget de 100 $. Vous :",
+      options: [
+        "Prenez 1 MGC quand même",
+        "Rapprochez le stop à 9 $",
+        "Ne prenez pas le trade sur ce compte, ou attendez une entrée plus proche de l'invalidation",
+        "Doublez le budget",
+      ],
+      answer: 2,
+      explain: "L'ATR a montré que le compte est trop petit pour ce swing à ce risque. Un stop rapproché serait dans le bruit d'une demi-journée. La réponse est la taille zéro ou une meilleure entrée.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Structure, niveaux, volatilité : il manque une dimension à la lecture, celle qui dit combien de participants ont réellement échangé à chaque prix. Le dernier chapitre du niveau est consacré au volume : ce qu'il mesure selon les marchés, ses confirmations et ses divergences avec le prix, son comportement aux niveaux clés, et ses limites sur le forex spot.
