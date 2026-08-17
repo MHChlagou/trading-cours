@@ -1,0 +1,340 @@
+---
+title: "Choisir son broker"
+description: "Régulation et protection des fonds (AMF, FCA, NFA, CFTC), structure de coûts réelle, qualité d'exécution, modèle du broker et différences entre futures, CFD et comptant, avec une grille d'évaluation imprimable."
+---
+
+# Choisir son broker
+
+Le broker est l'intermédiaire entre vos ordres et le marché. Il garde votre argent, route vos ordres, vous facture des frais et, dans certains modèles, se trouve en face de vos positions. Choisir un broker n'est pas une formalité administrative : c'est une décision qui pèse sur la sécurité de votre capital, sur vos coûts annuels et sur la qualité de chaque exécution. Ce chapitre donne les critères, dans l'ordre d'importance.
+
+## Régulation et sécurité des fonds
+
+Avant de comparer un seul spread, une question : **si le broker fait faillite demain, que devient mon argent ?** La réponse dépend de la juridiction, du régulateur et de la façon dont les fonds sont détenus.
+
+### Les principaux régulateurs
+
+- **AMF (Autorité des marchés financiers), France**, avec l'ACPR pour l'agrément bancaire. Un broker qui démarche des clients français doit être autorisé ou passeporté dans l'Union européenne. Le cadre européen (MiFID II, règles ESMA) impose des limites de levier pour les particuliers (30 pour 1 sur les paires forex majeures, 20 pour 1 sur les indices, 2 pour 1 sur les cryptos), la protection contre le solde négatif et la ségrégation des fonds clients.
+- **FCA (Financial Conduct Authority), Royaume-Uni**. Régulateur exigeant, règles proches du cadre européen depuis le Brexit, avec un fonds d'indemnisation (FSCS) qui couvre les clients jusqu'à un plafond en cas de défaillance du broker.
+- **NFA (National Futures Association) et CFTC (Commodity Futures Trading Commission), États-Unis**. La CFTC est l'agence fédérale qui régule les futures et les options sur futures ; la NFA est l'organisme d'autorégulation auquel les brokers de futures (FCM, futures commission merchants) et les introducing brokers doivent adhérer. Les fonds clients en futures sont ségrégués et les FCM sont soumis à des exigences de capital strictes.
+- **SEC et FINRA, États-Unis**, pour les actions et options sur actions, avec la protection SIPC en cas de faillite du courtier.
+
+Un broker enregistré dans une juridiction offshore, sans régulateur reconnu, peut proposer des leviers de 500 pour 1 et des bonus de dépôt. Il ne peut pas proposer de protection sérieuse. Le levier élevé est l'appât ; l'absence de recours est le prix.
+
+### Ce qu'il faut vérifier
+
+1. **Le numéro d'agrément** sur le site du régulateur lui-même, pas sur le site du broker. Les usurpations d'identité de brokers régulés sont fréquentes.
+2. **La ségrégation des fonds** : votre argent est-il sur un compte séparé de la trésorerie du broker, chez une banque tierce ?
+3. **Le fonds de garantie** applicable et son plafond.
+4. **La protection contre le solde négatif** : impossible de devoir de l'argent au broker après un gap violent. Obligatoire pour les particuliers en Europe, pas partout ailleurs.
+5. **L'entité juridique exacte** avec laquelle vous signez : beaucoup de groupes ont une entité européenne régulée et une entité offshore. Le formulaire d'ouverture de compte doit indiquer laquelle vous accueille.
+
+## La structure de coûts réelle
+
+Le débutant compare le spread affiché en page d'accueil. Le professionnel calcule le coût total d'un aller-retour dans ses conditions réelles.
+
+### Les postes de coût
+
+- **Commission** : montant fixe par ordre, par contrat ou par lot. Sur les futures : de l'ordre de 0,50 à 3 $ par contrat et par côté selon le broker et le contrat (micro moins cher). Sur le forex « ECN » : quelques dollars par lot standard aller-retour. Sur les actions : souvent zéro aux États-Unis, quelques euros en Europe.
+- **Spread** : le broker forex ou CFD se rémunère souvent en élargissant le spread reçu de ses fournisseurs. Un compte « sans commission » n'est pas gratuit : le coût est dans le spread. Comparez toujours à heure égale, sur le même instrument, en conditions réelles (compte réel ou démo alimentée par les prix réels, pas une démo « idéale »).
+- **Financement (swap, rollover)** : sur le forex et les CFD, une position gardée après l'heure de rollover (souvent 22 h ou 23 h Paris) paie ou reçoit un intérêt lié au différentiel de taux, augmenté d'une marge broker. Sur un swing trade de deux semaines, il peut dépasser le spread. Les futures n'ont pas de swap : le coût de portage est déjà dans le prix du contrat.
+- **Frais de données et de plateforme** : abonnements aux flux de cotations en temps réel (souvent 10 à 30 $ par mois par Bourse pour un particulier), licence de plateforme, frais d'inactivité, frais de retrait, frais de conversion de devise.
+- **Slippage moyen** : invisible sur les grilles tarifaires, mais mesurable en comparant, sur vos propres trades, le prix demandé et le prix obtenu.
+
+### La bonne façon de comparer
+
+Prenez votre profil réel : nombre de trades par mois, instrument, taille moyenne, durée moyenne. Calculez le coût annuel chez chaque candidat. Un exemple : 15 trades par semaine sur MES, 2 contrats en moyenne, aller-retour. Broker A : 0,85 $ par contrat et par côté plus 12 $ de données par mois. Broker B : 0,35 $ par contrat et par côté plus 30 $ de données et 20 $ de plateforme par mois. Sur l'année (48 semaines de trading), A coûte 15 × 2 × 2 × 0,85 × 48 = 2 448 $ de commissions plus 144 $ de données, soit 2 592 $. B coûte 15 × 2 × 2 × 0,35 × 48 = 1 008 $ plus 600 $ de frais fixes, soit 1 608 $. B est meilleur pour ce trader ; A serait meilleur pour quelqu'un qui fait trois trades par semaine.
+
+<Figure caption="Figure 1 · Le coût total annuel dépend de votre fréquence : le broker aux commissions basses et aux frais fixes élevés ne gagne qu'au-delà d'un certain volume.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Coût annuel en fonction du nombre de contrats tradés par an, pour deux brokers" xmlns="http://www.w3.org/2000/svg">
+  <line x1="80" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <line x1="80" y1="30" x2="80" y2="270" className="line" strokeWidth="1" />
+  <text x="390" y="300" fontSize="12" textAnchor="middle" className="muted">contrats aller-retour par an</text>
+  <text x="80" y="20" fontSize="12" className="muted">coût annuel ($)</text>
+
+  <text x="80" y="288" fontSize="11" textAnchor="middle" className="mono muted">0</text>
+  <text x="235" y="288" fontSize="11" textAnchor="middle" className="mono muted">1 000</text>
+  <text x="390" y="288" fontSize="11" textAnchor="middle" className="mono muted">2 000</text>
+  <text x="545" y="288" fontSize="11" textAnchor="middle" className="mono muted">3 000</text>
+  <text x="700" y="288" fontSize="11" textAnchor="middle" className="mono muted">4 000</text>
+
+  <text x="70" y="274" fontSize="11" textAnchor="end" className="mono muted">0</text>
+  <text x="70" y="194" fontSize="11" textAnchor="end" className="mono muted">2 000</text>
+  <text x="70" y="114" fontSize="11" textAnchor="end" className="mono muted">4 000</text>
+  <text x="70" y="34" fontSize="11" textAnchor="end" className="mono muted">6 000</text>
+
+  <line x1="80" y1="264" x2="614" y2="30" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="470" y="60" fontSize="12" fontWeight="600" className="gold">Broker A : 1,70 $ par AR + 144 $/an</text>
+
+  <line x1="80" y1="246" x2="700" y2="134" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="470" y="160" fontSize="12" fontWeight="600" className="red">Broker B : 0,70 $ par AR + 600 $/an</text>
+
+  <circle cx="151" cy="234" r="5" className="box" strokeWidth="2" />
+  <text x="160" y="228" fontSize="11" className="muted">≈ 456 contrats : point d'équilibre</text>
+</svg>
+</Figure>
+
+Le point d'équilibre se calcule : 144 + 1,70 × N = 600 + 0,70 × N, soit N = 456 contrats aller-retour par an. En dessous, A ; au-dessus, B.
+
+## Qualité d'exécution et modèle du broker
+
+Deux brokers affichant les mêmes tarifs peuvent vous coûter très différemment, selon la manière dont ils traitent vos ordres.
+
+### Les modèles
+
+- **DMA / STP / ECN (accès direct au marché)** : vos ordres sont transmis à la Bourse (futures, actions) ou à un réseau de fournisseurs de liquidité (forex). Le broker gagne sur la commission ; il n'a pas d'intérêt à ce que vous perdiez. C'est le modèle des brokers de futures : chaque ordre finit dans le carnet du CME.
+- **Market maker / dealing desk** : le broker prend l'autre côté de votre trade, au moins en partie, et gère son risque en couvrant globalement. Il gagne sur le spread et, si vous perdez, sur votre perte. Ce modèle n'est pas malhonnête en soi (les gros brokers CFD régulés le pratiquent), mais il crée un conflit d'intérêt structurel, et le spread s'élargit souvent au pire moment.
+- **Hybride** : les brokers de détail classent les clients ; les flux jugés « toxiques » (traders gagnants) sont couverts, les autres sont internalisés. Vous ne saurez pas dans quelle case vous êtes.
+
+### Mesurer l'exécution
+
+La qualité d'exécution se mesure sur des faits, pas sur des promesses.
+
+- **Le slippage moyen** sur vos ordres au marché et sur vos stops, en séance et hors séance. Tenez la statistique sur cinquante trades.
+- **Le taux de rejet ou de requote** : un broker qui refuse vos ordres quand le marché bouge vite vous fait perdre les meilleurs moments.
+- **La latence** : temps entre l'envoi et la confirmation. Quelques dizaines de millisecondes en séance sont normales ; des secondes ne le sont pas.
+- **La stabilité pendant les annonces** : plateforme qui gèle, spread qui passe de 1 à 15 pips, stops exécutés loin. Testez avec une position minuscule lors d'un chiffre de l'emploi.
+
+Un compte de démonstration ne mesure rien de tout cela : la démo exécute au prix affiché, sans file d'attente ni slippage. Testez en réel, en taille minimale, pendant un mois avant de déposer sérieusement.
+
+<Figure caption="Figure 2 · Deux modèles de broker. À accès direct, votre ordre finit dans le carnet du marché ; en dealing desk, il s'arrête au broker qui décide de le couvrir ou non.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Comparaison broker accès direct et broker market maker" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="28" fontSize="14" fontWeight="600">Accès direct (futures, actions, forex ECN)</text>
+  <rect x="20" y="42" width="140" height="50" rx="8" className="box" strokeWidth="1.5" />
+  <text x="90" y="72" fontSize="13" textAnchor="middle" fontWeight="600">Vous</text>
+  <line x1="160" y1="67" x2="230" y2="67" className="line" strokeWidth="2" />
+  <polygon points="230,67 218,61 218,73" className="gold" />
+  <rect x="235" y="42" width="160" height="50" rx="8" className="box" strokeWidth="1.5" />
+  <text x="315" y="64" fontSize="13" textAnchor="middle" fontWeight="600">Broker</text>
+  <text x="315" y="82" fontSize="11" textAnchor="middle" className="muted">commission, routage</text>
+  <line x1="395" y1="67" x2="465" y2="67" className="line" strokeWidth="2" />
+  <polygon points="465,67 453,61 453,73" className="gold" />
+  <rect x="470" y="42" width="230" height="50" rx="8" className="box" strokeWidth="1.5" />
+  <text x="585" y="64" fontSize="13" textAnchor="middle" fontWeight="600">Bourse / fournisseurs de liquidité</text>
+  <text x="585" y="82" fontSize="11" textAnchor="middle" className="muted">votre ordre est dans le carnet</text>
+
+  <text x="20" y="150" fontSize="14" fontWeight="600">Dealing desk (beaucoup de CFD et de forex de détail)</text>
+  <rect x="20" y="164" width="140" height="50" rx="8" className="box" strokeWidth="1.5" />
+  <text x="90" y="194" fontSize="13" textAnchor="middle" fontWeight="600">Vous</text>
+  <line x1="160" y1="189" x2="230" y2="189" className="line" strokeWidth="2" />
+  <polygon points="230,189 218,183 218,195" className="gold" />
+  <rect x="235" y="164" width="230" height="50" rx="8" className="box" strokeWidth="1.5" />
+  <text x="350" y="186" fontSize="13" textAnchor="middle" fontWeight="600">Broker = contrepartie</text>
+  <text x="350" y="204" fontSize="11" textAnchor="middle" className="muted">gagne le spread, et votre perte</text>
+  <line x1="465" y1="189" x2="535" y2="189" className="line" strokeWidth="2" strokeDasharray="5 4" />
+  <polygon points="535,189 523,183 523,195" className="gold" />
+  <rect x="540" y="164" width="160" height="50" rx="8" className="box" strokeWidth="1.5" />
+  <text x="620" y="186" fontSize="13" textAnchor="middle" fontWeight="600">Couverture</text>
+  <text x="620" y="204" fontSize="11" textAnchor="middle" className="muted">partielle, à sa discrétion</text>
+  <text x="20" y="246" fontSize="12" className="muted">Le trait pointillé signale que la couverture n'est ni systématique ni visible pour le client.</text>
+</svg>
+</Figure>
+
+## Futures, CFD, actions au comptant : ce que change le véhicule
+
+Le même graphique du S&P 500 peut se trader via un future ES, un CFD « US500 » ou un ETF au comptant. Le prix ressemble ; tout le reste diffère.
+
+| | Futures | CFD | Comptant (actions, ETF, crypto spot) |
+| --- | --- | --- | --- |
+| Lieu d'exécution | Bourse centralisée (CME) | Chez le broker (OTC) | Bourse ou plateforme |
+| Contrepartie | Chambre de compensation | Le broker | Autre participant via la Bourse |
+| Prix | Unique, public, avec volume réel | Construit par le broker sur le sous-jacent | Public |
+| Coût dominant | Commission fixe par contrat | Spread élargi + financement quotidien | Commission faible, pas de financement (hors marge) |
+| Position gardée la nuit | Pas de swap, marge de nuit plus élevée | Financement quotidien | Aucun coût si non financée |
+| Taille minimale | Un micro-contrat (MES = 5 $ le point) | Souvent très petite (0,1 lot) | Une action, une fraction en crypto |
+| Levier | Implicite via la marge | Fixé par le régulateur (UE : 20 pour 1 sur indices) | Faible ou nul |
+| Fiscalité, régulation | Cadre strict, régulateur de futures | Cadre MiFID pour les particuliers en UE | Cadre actions |
+| Adapté pour | Intraday et swing sérieux, lecture du volume | Petit compte, accès simple, swing court | Investissement, swing long |
+
+**Pourquoi ce cours privilégie les futures.** Prix unique et vérifiable, volume réel qui permet l'order flow (niveau 4), commissions transparentes, aucun conflit d'intérêt avec le broker, micro-contrats pour les petits comptes. Les CFD restent une porte d'entrée acceptable pour quelqu'un qui n'a pas encore accès à un broker de futures, à condition de choisir un broker régulé et de comprendre que le spread et le financement sont le vrai coût.
+
+## Grille d'évaluation pour comparer
+
+Imprimez cette grille et remplissez-la pour deux ou trois candidats. Un « non » à l'un des cinq premiers points élimine le broker, quel que soit le reste.
+
+<Checklist
+  title="Évaluer un broker en 15 points"
+  items={[
+    "Le numéro d'agrément est vérifié sur le site du régulateur (AMF/ESMA, FCA, NFA/CFTC, SEC/FINRA), pas seulement sur le site du broker.",
+    "L'entité juridique avec laquelle je signe est l'entité régulée, pas une filiale offshore.",
+    "Les fonds clients sont ségrégués sur des comptes séparés chez une banque tierce.",
+    "Un fonds de garantie ou une assurance couvre les clients en cas de faillite du broker (plafond noté).",
+    "La protection contre le solde négatif est garantie contractuellement.",
+    "Le modèle d'exécution est connu : accès direct (DMA/STP/ECN) ou dealing desk, et je l'accepte en connaissance de cause.",
+    "Le coût total annuel est calculé pour mon profil réel (fréquence, taille, durée), commissions + spread + financement + frais fixes.",
+    "Le spread a été observé en conditions réelles, aux heures où je trade, y compris pendant une annonce.",
+    "Les frais de données temps réel, de plateforme, d'inactivité, de retrait et de conversion sont connus.",
+    "Le slippage moyen sur ordres au marché et sur stops a été mesuré sur un compte réel en taille minimale.",
+    "La plateforme propose brackets, OCO, ordres GTC, et n'a pas gelé pendant le test en période de volatilité.",
+    "Les instruments dont j'ai besoin sont disponibles avec les micro-tailles adaptées à mon capital.",
+    "Le support répond en moins d'un jour ouvré, dans une langue que je maîtrise, à une question technique précise.",
+    "Les dépôts et retraits se font sans frais cachés, dans ma devise, en quelques jours au plus.",
+    "J'ai lu les conditions sur les gaps, les liquidations forcées et les marges de nuit, et je les accepte.",
+  ]}
+/>
+
+## Deux trades qui parlent du broker
+
+Reconstitutions pédagogiques centrées sur ce que le broker change au résultat.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MCL (pétrole WTI)"
+  direction="Long"
+  setup="Achat sur repli après le chiffre hebdomadaire des stocks, broker de futures à accès direct"
+  entree="78,42 (buy limit)"
+  stop="78,12 (0,30 $, soit 30 ticks)"
+  objectif="79,12"
+  r="+2,3R">
+
+Le trade dure quatre heures en séance américaine. Sur MCL, un tick de 0,01 $ vaut 1 $ : le stop représente 30 $ par contrat. Compte de 6 000 $, risque 1 % (60 $) : 2 contrats. Commission : 0,50 $ par contrat et par côté, soit 2 $ au total. Gain brut : 70 ticks × 1 $ × 2 = 140 $. Gain net : 138 $. L'entrée en limite a été servie au prix demandé, la sortie en limite aussi ; le broker s'est contenté de router. C'est exactement ce qu'on attend de lui : de la transparence et de l'absence de surprise.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="CFD sur or (XAU/USD), broker dealing desk non régulé, levier 200"
+  direction="Short"
+  setup="Vente sur résistance H4, position gardée trois nuits"
+  entree="2 348,5"
+  stop="2 356,5 (8 $)"
+  objectif="2 326,5"
+  r="−1,4R, puis retrait bloqué">
+
+Le trade lui-même n'est pas absurde. Ce qui l'est, c'est le cadre. Le spread annoncé de 0,20 $ passe à 0,90 $ le soir ; le financement de trois nuits sur 1 lot (100 onces) coûte environ 45 $. Le deuxième soir, un pic de volatilité de quelques secondes, visible uniquement sur les cotations du broker et pas sur les futures GC, touche le stop à 2 356,5 avec 3 $ de slippage : sortie à 2 359,5. Perte : 11 $ × 100 = 1 100 $ au lieu des 800 $ prévus, plus 45 $ de financement, soit environ 1,4R. Puis, au moment de retirer le solde restant, le broker exige des « documents complémentaires » pendant six semaines. Aucun régulateur à saisir. La perte de trading était acceptable ; le choix du broker ne l'était pas.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **La régulation d'abord** : agrément vérifié à la source, entité juridique exacte, fonds ségrégués, protection contre le solde négatif.
+- Le coût réel se calcule **pour votre profil** : commissions, spread, financement et frais fixes, sur un an, pas sur une page d'accueil.
+- **Le modèle du broker compte** : à accès direct, il route ; en dealing desk, il est votre contrepartie.
+- L'exécution se **mesure en réel** en taille minimale : slippage, requotes, stabilité pendant les annonces.
+- **Le véhicule change tout** : futures, CFD et comptant n'ont ni les mêmes coûts, ni la même transparence, ni la même contrepartie.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Coût annuel selon le broker">
+
+Vous tradez le forex : 40 allers-retours par mois, 0,5 lot standard en moyenne, dont un quart des positions gardées une nuit. Broker X : spread moyen 0,9 pip, aucune commission, swap moyen 6 $ par lot et par nuit. Broker Y : spread moyen 0,2 pip, commission 6 $ par lot aller-retour, swap moyen 5 $ par lot et par nuit. Sur EUR/USD, 1 pip vaut 10 $ par lot standard.
+
+1. Coût annuel du spread chez X et chez Y.
+2. Coût annuel des commissions chez Y.
+3. Coût annuel du swap chez chacun, puis coût total. Lequel est le moins cher ?
+
+<Solution>
+
+1. Volume annuel : 40 × 12 × 0,5 = 240 lots. Spread X : 0,9 pip × 10 $ × 240 = **2 160 $**. Spread Y : 0,2 × 10 × 240 = **480 $**.
+2. Commissions Y : 6 $ × 240 = **1 440 $**.
+3. Nuits : un quart de 480 trades = 120 trades de 0,5 lot = 60 lots-nuits. Swap X : 6 × 60 = 360 $ ; swap Y : 5 × 60 = 300 $. Total X : 2 160 + 0 + 360 = **2 520 $**. Total Y : 480 + 1 440 + 300 = **2 220 $**. Y est moins cher d'environ 300 $ par an, et l'écart grandirait avec le volume. Le compte « sans commission » n'était pas le moins cher.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Futures ou CFD pour un swing sur l'or">
+
+Vous voulez être long sur l'or pendant dix jours, exposition de 10 onces. Option A : 1 MGC, commission 0,60 $ par côté, spread 1 tick (1 $ sur le contrat), pas de financement. Option B : CFD 10 onces, spread 0,30 $ l'once, financement 0,45 $ par jour sur cette taille.
+
+1. Coût total en A et en B.
+2. À partir de combien de jours le CFD devient-il plus cher que le micro-future ?
+
+<Solution>
+
+1. A : 1,20 $ de commissions + 1 $ de spread = **2,20 $**. B : spread 0,30 × 10 = 3 $, financement 0,45 × 10 = 4,50 $, total **7,50 $**.
+2. Le CFD est déjà plus cher au jour 0 (3 $ contre 2,20 $). Le financement creuse ensuite l'écart de 0,45 $ par jour. Pour un swing de plusieurs jours sur l'or, le micro-future est structurellement moins coûteux, en plus d'offrir un prix unique et vérifiable.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Éliminer un broker">
+
+Un broker propose : levier 500 pour 1, bonus de 100 % sur le premier dépôt, spread « à partir de 0,0 pip », entité enregistrée dans une juridiction sans régulateur reconnu, retraits « sous 30 jours ouvrés après vérification ».
+
+1. Quels éléments sont des signaux d'alarme, et pourquoi ?
+2. Ce broker peut-il être acceptable pour un compte de test de 200 € ?
+
+<Solution>
+
+1. Le **levier de 500** est interdit aux particuliers en Europe et au Royaume-Uni : il signale une entité hors cadre. Le **bonus de dépôt** est lui aussi interdit dans ces cadres et sert à retenir les fonds (conditions de volume avant retrait). L'**absence de régulateur reconnu** supprime tout recours. Le **délai de retrait de 30 jours** est le symptôme le plus fréquent d'un broker en difficulté ou de mauvaise foi. Le spread « à partir de 0,0 » n'est qu'un argument marketing.
+2. Non. Même 200 € méritent un cadre régulé, et un test chez un mauvais broker n'apprend rien sur l'exécution que vous aurez ailleurs. Il existe des brokers régulés qui acceptent des dépôts de ce montant, sur micro-lots ou micro-futures.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Quelle est la première chose à vérifier chez un broker ?",
+      options: [
+        "Le spread affiché sur EUR/USD",
+        "Son agrément auprès d'un régulateur reconnu, vérifié sur le site du régulateur",
+        "Le montant du bonus de bienvenue",
+        "Le nombre d'instruments proposés",
+      ],
+      answer: 1,
+      explain: "La sécurité des fonds passe avant tout. Un broker sans agrément sérieux peut afficher les meilleurs spreads du monde, ils ne serviront à rien si les retraits sont bloqués.",
+    },
+    {
+      q: "Que signifie « ségrégation des fonds clients » ?",
+      options: [
+        "Le broker répartit vos fonds entre plusieurs devises",
+        "Vos fonds sont détenus sur des comptes séparés de la trésorerie du broker, chez une banque tierce",
+        "Vos fonds sont bloqués tant qu'une position est ouverte",
+        "Le broker vous interdit de retirer plus de la moitié du solde",
+      ],
+      answer: 1,
+      explain: "La ségrégation empêche le broker d'utiliser votre argent pour son fonctionnement et le protège en cas de faillite du broker.",
+    },
+    {
+      q: "Un broker « sans commission » sur le forex est-il gratuit ?",
+      options: [
+        "Oui",
+        "Non : il se rémunère par un spread plus large, et souvent par le swap",
+        "Oui, tant qu'on ne garde pas de position la nuit",
+        "Non, mais il est toujours moins cher qu'un broker à commission",
+      ],
+      answer: 1,
+      explain: "Le coût est déplacé dans le spread. Selon votre volume, un broker à commission avec spread serré peut être nettement moins cher.",
+    },
+    {
+      q: "Quel est le conflit d'intérêt d'un broker en dealing desk ?",
+      options: [
+        "Il gagne quand vous gagnez",
+        "Il est votre contrepartie : il gagne le spread et, s'il ne couvre pas, il gagne votre perte",
+        "Il facture des commissions plus élevées",
+        "Il n'y a pas de conflit d'intérêt",
+      ],
+      answer: 1,
+      explain: "En prenant l'autre côté de votre trade, le broker profite de vos pertes. Ce n'est pas nécessairement de la manipulation, mais la structure d'incitation est défavorable.",
+    },
+    {
+      q: "Pourquoi un compte de démonstration ne permet-il pas d'évaluer la qualité d'exécution ?",
+      options: [
+        "Parce que les prix de la démo sont faux",
+        "Parce que la démo exécute au prix affiché, sans file d'attente, sans slippage ni requote",
+        "Parce que la démo est plus lente",
+        "Parce que la démo n'a pas de spread",
+      ],
+      answer: 1,
+      explain: "L'exécution réelle dépend du carnet, de la file d'attente et de la latence. Seul un test en réel, en taille minimale, la mesure.",
+    },
+    {
+      q: "Pour un swing de dix jours sur l'or, pourquoi le micro-future est-il généralement moins coûteux que le CFD ?",
+      options: [
+        "Parce que le micro-future n'a pas de commission",
+        "Parce que le CFD paie un financement quotidien et un spread plus large, alors que le future n'a pas de swap",
+        "Parce que le CFD est interdit sur l'or",
+        "Parce que le micro-future n'a pas de spread",
+      ],
+      answer: 1,
+      explain: "Le coût de portage du future est déjà dans son prix. Le CFD ajoute un financement chaque nuit et un spread élargi ; sur plusieurs jours, l'écart se creuse.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le broker choisi, il reste à monter le poste de travail : matériel réellement utile, plateformes (TradingView, Sierra Chart, NinjaTrader, MT5), flux de données, organisation des écrans, et surtout le plan de secours quand tout tombe en panne avec une position ouverte.
