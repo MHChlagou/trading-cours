@@ -1,0 +1,366 @@
+---
+title: "Examen · Niveau 4 · Order flow et volume avancé"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider le niveau 4 : volume profile de base et avancé, footprint et delta, DOM et tape reading, open interest et funding. Score de passage : 80 %."
+---
+
+# Examen · Niveau 4 · Order flow et volume avancé
+
+Cet examen valide les cinq chapitres du niveau 4. Il comporte **25 questions** en cinq blocs, puis **une étude de cas notée sur 20 points** qui empile toutes les couches : contexte (profil composite), zone (séquence SMC et profil de session), moment (footprint), exécution (DOM), positionnement (OI et funding), avec des chiffres à calculer.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Le niveau 4 est le dernier niveau « micro » du cours ; les niveaux 5 et 6 changent d'échelle. Un bloc raté se relit maintenant.
+
+## Bloc 1 · Volume Profile de base
+
+<Quiz
+  title="Bloc 1 · Profil, POC, value area, formes"
+  questions={[
+    {
+      q: "Le volume profile projette :",
+      options: [
+        "Le volume dans le temps",
+        "Le volume échangé à chaque prix sur une période, à l'horizontale",
+        "Le delta",
+        "L'open interest",
+      ],
+      answer: 1,
+      explain: "Il distingue les prix où le marché a négocié (bosses) de ceux qu'il a traversés (queues).",
+    },
+    {
+      q: "Volumes par prix : 40, 90, 160, 260, 410, 520, 480, 350, 210, 120, 60, 30 (total 2 730). Le POC et une value area d'environ 70 % :",
+      options: [
+        "POC au niveau de 410 ; VA = les trois niveaux centraux",
+        "POC au niveau de 520 ; VA ≈ les cinq niveaux de 260 à 350 (2 020, soit 74 %)",
+        "POC au niveau de 480 ; VA = tout",
+        "POC au niveau de 40",
+      ],
+      answer: 1,
+      explain: "520 + 480 + 410 + 350 + 260 = 2 020, soit 74 % ; certaines conventions s'arrêtent à 1 760 (64,5 %). L'essentiel : le POC et une VA autour de lui.",
+    },
+    {
+      q: "Un profil en b signifie :",
+      options: [
+        "Une séance d'équilibre",
+        "Une baisse rapide (queue haute) puis une acceptation des prix bas (bosse en bas)",
+        "Une hausse",
+        "Une double distribution",
+      ],
+      answer: 1,
+      explain: "Le P est le miroir. Le VAH du b est la résistance de la nouvelle valeur.",
+    },
+    {
+      q: "Le marché ouvre au-dessus de la value area de la veille. La lecture correcte :",
+      options: [
+        "Vendre, ça revient toujours au POC",
+        "Deux scénarios (retour dans la VA sans acceptation, nouvelle valeur avec acceptation) ; le volume construit dans la première heure juge",
+        "Acheter",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Le profil est une carte et un contexte, pas un signal.",
+    },
+    {
+      q: "Un LVN est :",
+      options: [
+        "Un bon endroit pour un stop",
+        "Une zone traversée vite : bonne cible intermédiaire, mauvais stop ; les FVG y correspondent souvent",
+        "Le POC",
+        "Une zone d'entrée",
+      ],
+      answer: 1,
+      explain: "Le marché n'y a pas négocié ; il la franchit d'un coup dans les deux sens.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Volume Profile avancé
+
+<Quiz
+  title="Bloc 2 · Composite, nPOC, migration, intégration"
+  questions={[
+    {
+      q: "Un naked POC est :",
+      options: [
+        "Le POC du jour",
+        "Le POC d'une session passée jamais retesté ; cible et zone de réaction fréquentes",
+        "Le POC composite",
+        "Un HVN de session",
+      ],
+      answer: 1,
+      explain: "Les ordres construits autour d'un prix d'accord restent intacts tant qu'il n'est pas retesté.",
+    },
+    {
+      q: "Une value area qui se construit sous le POC de la veille après trois jours de VA montantes est :",
+      options: [
+        "Une confirmation de la hausse",
+        "Le premier signal d'inversion de la migration ; à confirmer par les VAL des jours précédents",
+        "Un LVN",
+        "Sans importance",
+      ],
+      answer: 1,
+      explain: "La migration de la valeur est une lecture de tendance par le volume.",
+    },
+    {
+      q: "Le LVN laissé par une annonce majeure :",
+      options: [
+        "Est un niveau d'acceptation solide",
+        "Est un vide durable, retraversé vite ; les stops placés dedans sont exécutés loin",
+        "Disparaît en une heure",
+        "Est le POC du jour",
+      ],
+      answer: 1,
+      explain: "Le HVN post-annonce, où le marché a digéré l'information, est au contraire un niveau solide.",
+    },
+    {
+      q: "Un order block H1 valide (niveau 3) situé dans un LVN composite est :",
+      options: [
+        "Très solide",
+        "Faible : personne n'y a construit de volume ; le profil l'écarte ou le déplace vers le HVN voisin",
+        "Un breaker",
+        "Un nPOC",
+      ],
+      answer: 1,
+      explain: "OB ↔ HVN, FVG ↔ LVN, sweep ↔ queue, cible ↔ nPOC : le profil dit si du volume s'est échangé dans la zone SMC.",
+    },
+    {
+      q: "Le POC d'un jour d'expiration trimestrielle :",
+      options: [
+        "Est le niveau le plus fiable du mois",
+        "Se lit avec réserve : volume mécanique (roulements, couvertures), pas une acceptation ordinaire",
+        "N'existe pas",
+        "Est toujours le plus bas",
+      ],
+      answer: 1,
+      explain: "Un profil d'événement se lit avec sa cause.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Footprint et delta
+
+<Quiz
+  title="Bloc 3 · Cellules, delta, absorption, divergences"
+  questions={[
+    {
+      q: "Dans une cellule « 140 × 12 », les 140 sont :",
+      options: [
+        "Des achats agressifs à l'ask",
+        "Des ventes agressives au bid ; les 12, des achats agressifs à l'ask",
+        "Le delta",
+        "Le volume total",
+      ],
+      answer: 1,
+      explain: "Le footprint distingue qui était pressé : bid = vendeur agressif, ask = acheteur agressif.",
+    },
+    {
+      q: "Bougie : bid 385, ask 418, clôture 3 points au-dessus de l'ouverture avec deux déséquilibres vendeurs empilés en bas. Delta et lecture :",
+      options: [
+        "−33, baisse",
+        "+33 ; les vendeurs ont frappé en bas sans faire baisser le prix (absorption), puis les acheteurs ont repris : bougie de retournement intrabar",
+        "+803, hausse",
+        "0",
+      ],
+      answer: 1,
+      explain: "418 − 385 = +33. Les déséquilibres vendeurs sans résultat sont de l'absorption ; la clôture haute confirme la reprise.",
+    },
+    {
+      q: "Un déséquilibre diagonal se calcule en comparant :",
+      options: [
+        "Bid et ask du même prix",
+        "L'ask d'un prix au bid du prix juste en dessous (ratio ≥ 3)",
+        "Deux bougies",
+        "Le volume de deux jours",
+      ],
+      answer: 1,
+      explain: "L'acheteur agressif à un prix et le vendeur agressif au prix inférieur se disputent le spread.",
+    },
+    {
+      q: "Une divergence de delta (prix HH, CVD LH) :",
+      options: [
+        "Est un signal de vente immédiat partout",
+        "Est un indice d'épuisement, valable aux extrêmes sur des niveaux qui comptent, qui demande une réaction du prix, et qui peut durer",
+        "N'existe pas",
+        "Vaut au milieu des ranges",
+      ],
+      answer: 1,
+      explain: "Vendre une divergence sans réaction, c'est vendre un marché qui monte.",
+    },
+    {
+      q: "Le footprint, isolé du contexte, de la structure et du profil :",
+      options: [
+        "Est un système complet",
+        "Produit des dizaines de faux signaux par jour ; il qualifie un setup existant et donne le moment et le stop",
+        "Remplace le stop",
+        "Est inutile",
+      ],
+      answer: 1,
+      explain: "La zone vient d'ailleurs ; le footprint dit qui a acheté et vendu dedans.",
+    },
+  ]}
+/>
+
+## Bloc 4 · DOM et tape
+
+<Quiz
+  title="Bloc 4 · Profondeur, icebergs, spoofing, exécution"
+  questions={[
+    {
+      q: "Le DOM montre :",
+      options: [
+        "Toutes les intentions",
+        "La liquidité passive affichée, sous-ensemble de la liquidité réelle ; c'est la dynamique qui informe, pas la photo",
+        "Le volume exécuté",
+        "L'OI",
+      ],
+      answer: 1,
+      explain: "Un mur non frappé n'est pas une information ; il le devient quand il absorbe ou quand il disparaît à l'approche.",
+    },
+    {
+      q: "Un iceberg se reconnaît à :",
+      options: [
+        "Une grosse taille affichée",
+        "Une petite taille qui se reconstitue sans cesse pendant que le tape montre un gros volume exécuté au même prix, sans que le prix cède",
+        "Un mur qui disparaît",
+        "Un delta positif",
+      ],
+      answer: 1,
+      explain: "L'absorption du footprint est très souvent un iceberg.",
+    },
+    {
+      q: "Le spoofing :",
+      options: [
+        "Est légal",
+        "Est l'affichage d'une taille qu'on retire à l'approche pour influencer ; illégal, présent sous des formes rapides ; d'où : un mur non frappé n'est pas fiable",
+        "Est une absorption",
+        "Est un type d'ordre",
+      ],
+      answer: 1,
+      explain: "La règle qui en découle : le DOM se lit par ce qui est exécuté et par ce qui reste.",
+    },
+    {
+      q: "L'usage le plus sûr du DOM pour un particulier :",
+      options: [
+        "Prédire la direction",
+        "Affiner l'exécution : prix du limite, limite ou marché, slippage attendu, objectifs avant les murs, stops derrière les niveaux épais",
+        "Scalper toute la journée",
+        "Détecter les institutions",
+      ],
+      answer: 1,
+      explain: "Le sens vient de la structure, la zone de la séquence et du profil, le moment du footprint ; le DOM affine les derniers ticks.",
+    },
+    {
+      q: "Le carnet se vide brutalement d'un côté à 14 h 29. Vous :",
+      options: [
+        "Entrez au marché",
+        "N'exécutez pas : retrait de liquidité avant annonce, le prix va bouger vite dans le vide ; on attend et on lit ensuite",
+        "Placez un stop serré",
+        "Doublez",
+      ],
+      answer: 1,
+      explain: "Le retrait de liquidité est une information sur la vitesse à venir, pas sur la direction.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Open interest et funding
+
+<Quiz
+  title="Bloc 5 · OI, grille prix / OI, funding, squeezes"
+  questions={[
+    {
+      q: "L'open interest est :",
+      options: [
+        "Le volume",
+        "Le nombre de contrats ouverts et non clôturés ; il monte quand des positions s'ouvrent des deux côtés, baisse quand elles se ferment",
+        "Le delta",
+        "Le nombre de traders",
+      ],
+      answer: 1,
+      explain: "Un transfert fait du volume sans changer l'OI. L'OI se lit en variation, hors roulements.",
+    },
+    {
+      q: "Le prix baisse sur volume très élevé et l'OI baisse de 8 % :",
+      options: [
+        "Nouveaux shorts, la baisse va continuer",
+        "Liquidation longue, capitulation probable : le marché s'est nettoyé, retournement possible à confirmer par la structure",
+        "Short covering",
+        "Sans lecture",
+      ],
+      answer: 1,
+      explain: "La même baisse avec OI en hausse serait portée par de nouveaux shorts et pourrait continuer.",
+    },
+    {
+      q: "Un funding positif de 0,10 % par 8 h depuis trois jours signifie :",
+      options: [
+        "Les shorts paient les longs",
+        "Les longs paient les shorts, cher : le côté long est chargé et à levier, donc vulnérable ; et c'est un coût significatif",
+        "Le prix va monter",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Le funding dit qui paie qui et à quel prix. Extrême et persistant, c'est un signal d'alerte de positionnement.",
+    },
+    {
+      q: "Un squeeze est :",
+      options: [
+        "Un retournement de tendance",
+        "La liquidation forcée en cascade d'un côté trop chargé : un sweep géant dont la suite dépend de la structure HTF",
+        "Une annonce",
+        "Un iceberg",
+      ],
+      answer: 1,
+      explain: "Ne pas être du côté chargé avec un stop dans la zone ; ne pas courir après ; chercher l'entrée après, dans le sens HTF.",
+    },
+    {
+      q: "Le positionnement (OI, funding, COT) :",
+      options: [
+        "Prédit le jour du retournement",
+        "Mesure la fragilité d'un côté sans donner le moment ; usage défensif d'abord, opportuniste ensuite",
+        "Remplace la structure",
+        "Donne la taille",
+      ],
+      answer: 1,
+      explain: "Un marché chargé peut le rester longtemps ; les squeezes arrivent souvent quand plus personne ne les attend.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Toutes les couches sur une matinée">
+
+Vous tradez les micro-futures avec un compte de **10 000 $**, risque 1 %. Instrument : MES (5 $ le point, tick 0,25 = 1,25 $). Le DOM et le footprint sont lus sur l'ES.
+
+**Contexte.** Composite de deux semaines : HVN 5 236-5 246, LVN 5 247-5 258, HVN 5 260-5 268, nPOC de jeudi dernier à 5 281 jamais retesté, POC composite 5 242. Structure H4 haussière (dernier HL à 5 232). Profil de la veille : POC 5 262, VAH 5 268, VAL 5 254. OI du contrat : en hausse de 3 % sur les deux dernières séances de hausse.
+
+**La séance.** Ouverture à 5 250, dans le LVN, sous la VA de la veille. Première demi-heure : le prix descend à 5 243, dans le HVN, et y reste. Footprint des trois bougies M5 sur 5 243,00-5 244,00 : bid 210 × ask 40 ; bid 260 × ask 55 ; bid 190 × ask 48 ; plus bas 5 243,00 tenu ; delta cumulé de la séance : −620. Au DOM de l'ES, 30 contrats affichés au bid à 5 243,00 qui se reconstituent ; le tape y montre 700 contrats exécutés en huit minutes. Quatrième bougie M5 : bid 60 × ask 230, clôture 5 246,25, déséquilibres acheteurs empilés sur 5 245,00-5 246,00 ; le M5 casse son dernier LH à 5 246,00.
+
+1. **(3 pts)** Situez l'ouverture par rapport au profil de la veille et au composite. Quels sont les deux scénarios de l'ouverture, et lequel le HVN 5 236-5 246 favorise-t-il ?
+2. **(4 pts)** Lisez les trois premières bougies M5 au footprint : delta de chacune, déséquilibres diagonaux (donnez au moins un ratio), et le nom du phénomène. Que dit le DOM et le tape en plus ?
+3. **(3 pts)** Que change la quatrième bougie ? Nommez ce qui s'est passé au footprint et dans la structure interne.
+4. **(4 pts)** Placez l'entrée (prix), le stop (sous le niveau absorbé + 2 ticks), calculez la taille et le risque réel. Où est-il logique de placer l'ordre limite selon le DOM, et pourquoi pas dans le LVN ?
+5. **(3 pts)** Proposez deux cibles successives issues du profil, calculez le ratio de chacune, et dites où placer l'objectif au tick près par rapport à un éventuel mur d'asks au bord du HVN supérieur.
+6. **(3 pts)** L'OI en hausse sur la hausse récente : que dit-il de la solidité du contexte ? Si le funding d'un perpétuel crypto corrélé était à +0,10 % depuis trois jours, en quoi la lecture du positionnement serait-elle différente et pourquoi cela ne s'applique-t-il pas tel quel à l'ES ?
+
+<Solution>
+
+**1. Ouverture (3 pts).** À 5 250, le prix ouvre **sous la VA de la veille** (VAL 5 254) et **dans le LVN composite** (5 247-5 258) : zone de traversée. Deux scénarios : (a) pas d'acceptation sous le VAL → retour dans la VA de la veille, vers le POC 5 262 ; (b) acceptation sous le VAL → nouvelle valeur plus basse. Le HVN 5 236-5 246 juste en dessous (avec le POC composite 5 242) est une zone où le prix devrait **ralentir et réagir** : il favorise le scénario (a) si le HVN absorbe, et le contexte H4 haussier (HL à 5 232 intact) va dans le même sens.
+
+**2. Footprint (4 pts).** Deltas : 40 − 210 = **−170** ; 55 − 260 = **−205** ; 48 − 190 = **−142**. Ventes agressives massives (660 contrats au bid sur trois bougies) et le plus bas tient à 5 243,00 : **absorption**. Déséquilibres vendeurs diagonaux : par exemple 260 au bid contre 55 à l'ask du niveau supérieur → ratio **4,7** ; 210 vs 40 → **5,25** : déséquilibres vendeurs empilés sans résultat. Le DOM confirme un **iceberg** : 30 affichés qui se reconstituent, 700 exécutés au même prix en huit minutes ; l'absorbeur est un acheteur passif de taille.
+
+**3. Quatrième bougie (3 pts).** Delta 230 − 60 = **+170** : retournement du delta ; déséquilibres **acheteurs** empilés sur 5 245-5 246 : les acheteurs passifs deviennent agressifs. Structure interne : le M5 casse son dernier LH à 5 246,00 en clôture (5 246,25) : **CHoCH interne** (réalignement M5 dans le sens H4). C'est le moment.
+
+**4. Entrée, stop, taille (4 pts).** Entrée sur la clôture de la quatrième bougie ou sur le premier retour : **5 246,00** environ (ordre limite un tick au-dessus de l'iceberg serait 5 243,25 pour un retour profond ; l'entrée réaliste après la bougie de retournement est vers 5 245,50-5 246,25). Stop : sous le niveau absorbé + 2 ticks : 5 243,00 − 0,50 = **5 242,50**. Distance depuis 5 246,00 : 3,5 points = 14 ticks = 17,50 $ par MES. Budget 100 $ : 100 ÷ 17,50 = 5,7 → **5 MES**, risque réel **87,50 $**. Selon le DOM, un ordre limite se place **au bord du HVN, au-dessus de l'iceberg** (5 243,25-5 244,00) si l'on veut une entrée profonde, ou sur le retest de 5 245-5 246 après le CHoCH ; **pas dans le LVN** (au-dessus de 5 247), où le prix traverse sans réagir et où l'ordre serait servi au pire moment.
+
+**5. Cibles (3 pts).** Cible 1 : **POC de la veille 5 262** (retour dans la VA), gain 16 points, ratio 16 ÷ 3,5 ≈ **4,6**. Cible 2 : **nPOC 5 281**, gain 35 points, ratio **10**. Si un mur d'asks persistant apparaît au bord du HVN supérieur (par exemple 5 268,50), l'objectif intermédiaire se place **un tick en dessous** (5 268,25) : le prix ralentit au contact et n'atteint pas toujours le tick suivant.
+
+**6. Positionnement (3 pts).** OI en hausse sur la hausse : **nouveaux longs**, hausse portée par de l'argent nouveau, contexte haussier sain (cohérent avec la structure H4). Sur un perpétuel crypto à +0,10 % de funding depuis trois jours, la lecture serait inverse : le côté long serait **chargé et à levier**, vulnérable à un squeeze ; on éviterait un long avec stop dans la zone de liquidation. Cela ne s'applique pas tel quel à l'ES parce que les futures CME n'ont pas de funding (le coût de portage est dans le prix, échéance fixe) et que l'OI des indices est dominé par des couvertures institutionnelles ; la mesure de fragilité équivalente sur l'ES passe par le COT (niveau 5) et les extrêmes d'OI, avec plus de bruit.
+
+**Barème.** 1 point par élément juste (calcul, nom du phénomène, placement justifié). Passage : 16 sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Avec 20 bonnes réponses sur 25 et 16 points sur 20, le niveau 4 est validé. Vous savez empiler profil, footprint, DOM et positionnement sur une structure et une séquence. Le niveau 5 sort du graphique : la macroéconomie utile au trader, les banques centrales et les taux, l'analyse intermarket, le calendrier économique, le rapport COT, la saisonnalité, le sentiment et les régimes de marché.
