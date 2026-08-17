@@ -1,0 +1,332 @@
+---
+title: "Lire un graphique : bougies et unités de temps"
+description: "L'anatomie d'une bougie et ce qu'elle raconte du rapport de force, le choix des unités de temps selon son horizon, pourquoi une bougie ne se lit qu'en contexte, les pièges des patterns appris par cœur, et un protocole de lecture d'un graphique vierge."
+---
+
+# Lire un graphique : bougies et unités de temps
+
+Les niveaux 0 et 1 ont posé le cadre : les marchés, les ordres, le risque. Il est temps d'ouvrir un graphique. Ce chapitre apprend à le lire comme un enregistrement du rapport de force entre acheteurs et vendeurs, pas comme une collection de figures à reconnaître. Il commence par la bougie, l'unité de base ; il continue par les unités de temps, qui décident de ce que l'on voit ; il se termine par un protocole de lecture, à appliquer à chaque graphique vierge.
+
+## Anatomie d'une bougie et ce qu'elle raconte
+
+Une **bougie** (candlestick) résume l'activité d'une période (une minute, cinq minutes, une heure, un jour) en quatre prix : l'ouverture (open), le plus haut (high), le plus bas (low) et la clôture (close). On les note souvent OHLC.
+
+- Le **corps** (body) est le rectangle entre l'ouverture et la clôture. S'il clôture au-dessus de l'ouverture, la bougie est **haussière** ; en dessous, **baissière**. Sur ce site, comme sur la plupart des plateformes, vert pour la hausse et rouge pour la baisse.
+- Les **mèches** (wicks, ou ombres) sont les traits fins au-dessus et en dessous du corps : elles vont jusqu'au plus haut et au plus bas de la période. Elles montrent où le prix est allé **sans y rester**.
+
+<Figure caption="Figure 1 · Anatomie de deux bougies. Le corps est ce que la période a acquis ; les mèches sont ce qu'elle a testé puis rejeté.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Anatomie d'une bougie haussière et d'une bougie baissière" xmlns="http://www.w3.org/2000/svg">
+  <line x1="180" y1="40" x2="180" y2="260" className="line" strokeWidth="2" />
+  <rect x="160" y="100" width="40" height="120" className="green" opacity="0.9" />
+  <text x="180" y="30" fontSize="12" textAnchor="middle" fontWeight="600">Bougie haussière</text>
+  <line x1="200" y1="40" x2="260" y2="40" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="265" y="44" fontSize="11">plus haut (high)</text>
+  <line x1="200" y1="100" x2="260" y2="100" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="265" y="104" fontSize="11">clôture (close)</text>
+  <line x1="200" y1="220" x2="260" y2="220" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="265" y="224" fontSize="11">ouverture (open)</text>
+  <line x1="200" y1="260" x2="260" y2="260" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="265" y="264" fontSize="11">plus bas (low)</text>
+  <text x="140" y="70" fontSize="10" textAnchor="end" className="muted">mèche haute</text>
+  <text x="140" y="165" fontSize="10" textAnchor="end" className="muted">corps</text>
+  <text x="140" y="245" fontSize="10" textAnchor="end" className="muted">mèche basse</text>
+
+  <line x1="540" y1="50" x2="540" y2="250" className="line" strokeWidth="2" />
+  <rect x="520" y="90" width="40" height="110" className="red" opacity="0.9" />
+  <text x="540" y="30" fontSize="12" textAnchor="middle" fontWeight="600">Bougie baissière</text>
+  <line x1="560" y1="90" x2="600" y2="90" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="605" y="94" fontSize="11">ouverture</text>
+  <line x1="560" y1="200" x2="600" y2="200" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="605" y="204" fontSize="11">clôture</text>
+  <text x="500" y="70" fontSize="10" textAnchor="end" className="muted">testé, rejeté</text>
+  <text x="500" y="235" fontSize="10" textAnchor="end" className="muted">testé, rejeté</text>
+</svg>
+</Figure>
+
+Ce que la bougie raconte se lit dans trois rapports :
+
+1. **La taille du corps par rapport à la mèche.** Un grand corps sans mèche : un camp a dominé du début à la fin, sans contestation. Un petit corps avec de longues mèches des deux côtés : les deux camps se sont battus, personne n'a gagné, le prix a fini près de là où il avait commencé (c'est le **doji** et ses variantes). Une longue mèche d'un seul côté avec un petit corps à l'opposé : le prix a été poussé loin puis violemment ramené ; le camp qui a ramené a gagné la période (c'est le **marteau** ou l'**étoile filante** des manuels, mais retenez le mécanisme plus que le nom).
+2. **La clôture par rapport à la fourchette.** Une clôture dans le tiers supérieur de la fourchette haut-bas est forte pour les acheteurs, quelle que soit la couleur ; une clôture dans le tiers inférieur est forte pour les vendeurs. Où le prix **finit** compte plus que la couleur.
+3. **La taille de la bougie par rapport aux précédentes.** Une bougie deux ou trois fois plus grande que la moyenne récente est un événement : un flux inhabituel est entré. Une bougie minuscule après une série de grandes est un ralentissement.
+
+Une bougie ne dit rien de plus que cela : **où le prix a été poussé, où il a été rejeté, où il a fini**. C'est déjà beaucoup, à condition de ne pas lui faire dire ce qui vient après.
+
+## Choisir ses unités de temps selon son horizon
+
+L'**unité de temps** (timeframe) est la durée que chaque bougie résume. La même journée sur l'ES est une bougie en quotidien (D), 24 bougies en H1, 288 bougies en M5. Rien dans le marché ne change ; ce qui change, c'est ce que vous voyez et ce que vous ne voyez plus.
+
+- Les **grandes unités** (hebdomadaire, quotidien, H4) montrent la direction de fond, les grands niveaux, les régimes. Elles cachent le détail intraday.
+- Les **petites unités** (M15, M5, M1) montrent l'exécution : où entrer, où mettre le stop, comment le prix réagit à un niveau. Elles cachent le contexte et amplifient le bruit.
+
+Le choix découle de l'horizon de tenue des trades, lui-même choisi au niveau 0 selon le capital, l'emploi du temps et le tempérament :
+
+| Profil | Durée d'un trade | Contexte | Structure | Exécution |
+| --- | --- | --- | --- | --- |
+| Scalping | Secondes à minutes | M15 / M5 | M1 | Tick, secondes, DOM |
+| Intraday | Minutes à heures | D / H4 | H1 / M15 | M5 / M1 |
+| Swing | Jours à semaines | W / D | H4 | H1 / M15 |
+| Position | Semaines à mois | M / W | D | H4 |
+
+Une règle simple qui évitera beaucoup de confusion : **on choisit d'abord son unité d'exécution, puis on regarde une ou deux unités au-dessus pour le contexte, jamais en dessous**. Le trader intraday qui décide sur M5 mais se laisse effrayer par une bougie rouge en M1 fait l'erreur la plus courante du débutant : il lit du bruit comme du signal. Le chapitre 3 de ce niveau organise cette hiérarchie en routine.
+
+<Figure caption="Figure 2 · La même séance sur trois unités de temps. En H1, une hausse propre en quatre bougies ; en M15, un repli visible ; en M5, une chute apparente qui n'était qu'un repli dans la hausse.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Même séance vue en H1, M15 et M5" xmlns="http://www.w3.org/2000/svg">
+  <text x="120" y="24" fontSize="12" fontWeight="600" textAnchor="middle">H1 · 4 bougies</text>
+  <line x1="60" y1="60" x2="60" y2="260" className="line" strokeWidth="1" />
+  <line x1="90" y1="230" x2="90" y2="150" className="line" strokeWidth="1.5" /><rect x="82" y="165" width="16" height="55" className="green" opacity="0.9" />
+  <line x1="120" y1="200" x2="120" y2="120" className="line" strokeWidth="1.5" /><rect x="112" y="128" width="16" height="45" className="green" opacity="0.9" />
+  <line x1="150" y1="175" x2="150" y2="105" className="line" strokeWidth="1.5" /><rect x="142" y="112" width="16" height="50" className="green" opacity="0.9" />
+  <line x1="180" y1="140" x2="180" y2="70" className="line" strokeWidth="1.5" /><rect x="172" y="78" width="16" height="45" className="green" opacity="0.9" />
+
+  <text x="360" y="24" fontSize="12" fontWeight="600" textAnchor="middle">M15 · 16 bougies</text>
+  <line x1="260" y1="60" x2="260" y2="260" className="line" strokeWidth="1" />
+  <rect x="270" y="205" width="8" height="18" className="green" opacity="0.9" /><rect x="282" y="190" width="8" height="16" className="green" opacity="0.9" /><rect x="294" y="185" width="8" height="10" className="red" opacity="0.9" /><rect x="306" y="170" width="8" height="18" className="green" opacity="0.9" />
+  <rect x="318" y="150" width="8" height="20" className="green" opacity="0.9" /><rect x="330" y="145" width="8" height="12" className="red" opacity="0.9" /><rect x="342" y="140" width="8" height="8" className="green" opacity="0.9" /><rect x="354" y="128" width="8" height="14" className="green" opacity="0.9" />
+  <rect x="366" y="130" width="8" height="18" className="red" opacity="0.9" /><rect x="378" y="140" width="8" height="16" className="red" opacity="0.9" /><rect x="390" y="150" width="8" height="8" className="red" opacity="0.9" /><rect x="402" y="130" width="8" height="24" className="green" opacity="0.9" />
+  <rect x="414" y="110" width="8" height="22" className="green" opacity="0.9" /><rect x="426" y="100" width="8" height="12" className="green" opacity="0.9" /><rect x="438" y="88" width="8" height="14" className="green" opacity="0.9" /><rect x="450" y="78" width="8" height="12" className="green" opacity="0.9" />
+  <rect x="362" y="126" width="52" height="34" fill="none" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="388" y="176" fontSize="9" textAnchor="middle" className="gold">repli</text>
+
+  <text x="600" y="24" fontSize="12" fontWeight="600" textAnchor="middle">M5 · zoom sur le repli</text>
+  <line x1="500" y1="60" x2="500" y2="260" className="line" strokeWidth="1" />
+  <rect x="510" y="120" width="8" height="10" className="green" opacity="0.9" /><rect x="522" y="118" width="8" height="14" className="red" opacity="0.9" /><rect x="534" y="130" width="8" height="18" className="red" opacity="0.9" /><rect x="546" y="146" width="8" height="10" className="red" opacity="0.9" /><rect x="558" y="150" width="8" height="20" className="red" opacity="0.9" /><rect x="570" y="166" width="8" height="8" className="green" opacity="0.9" /><rect x="582" y="160" width="8" height="24" className="red" opacity="0.9" /><rect x="594" y="180" width="8" height="14" className="red" opacity="0.9" /><rect x="606" y="186" width="8" height="10" className="green" opacity="0.9" /><rect x="618" y="176" width="8" height="12" className="green" opacity="0.9" /><rect x="630" y="160" width="8" height="18" className="green" opacity="0.9" /><rect x="642" y="140" width="8" height="22" className="green" opacity="0.9" /><rect x="654" y="120" width="8" height="22" className="green" opacity="0.9" /><rect x="666" y="100" width="8" height="22" className="green" opacity="0.9" />
+  <text x="600" y="230" fontSize="10" textAnchor="middle" className="muted">en M5, « ça chute » ; en H1, ça montait</text>
+</svg>
+</Figure>
+
+## Bougies en contexte plutôt que figures isolées
+
+Les manuels de chandeliers japonais cataloguent des dizaines de figures : marteau, pendu, étoile du matin, avalement, harami, trois soldats blancs. Elles ne sont pas fausses. Elles sont **incomplètes** : la même bougie a un sens différent selon **où** elle apparaît et **après quoi**.
+
+Une longue mèche basse (le « marteau ») signifie que des acheteurs ont repoussé une tentative de baisse. Si elle apparaît :
+
+- **sur un support majeur, après une baisse prolongée, en unité de temps de contexte** : c'est une information sérieuse, des acheteurs défendent un niveau ;
+- **au milieu de nulle part, dans un range, en M1** : c'est du bruit, il y en a trente par heure ;
+- **sous une résistance, en pleine tendance baissière** : c'est probablement un rebond technique avant reprise de la baisse, pas un retournement.
+
+Le contexte se lit dans cet ordre : la **tendance de l'unité supérieure**, la **position par rapport aux niveaux clés** (chapitre 4), la **structure récente** (chapitre 2), le **volume** si disponible (chapitre 6), et enfin la bougie. La bougie est le dernier maillon, celui qui déclenche l'exécution quand tout le reste est en place. Elle ne remplace jamais le reste.
+
+Une manière utile de lire une bougie en contexte : se demander **qui est piégé**. Une grande bougie haussière qui casse un plus haut puis clôture en dessous a piégé les acheteurs de cassure ; ils sont maintenant en perte et devront vendre. Une longue mèche sous un plus bas évident a piégé les vendeurs de cassure et déclenché les stops des acheteurs, puis le prix est revenu : les vendeurs sont coincés. Le niveau 3 fera de cette lecture un système complet ; retenez ici que la bougie parle de participants, pas de géométrie.
+
+## Les pièges des patterns appris par cœur
+
+Trois pièges reviennent chez presque tous les débutants qui ont appris les figures avant le contexte.
+
+**Le piège de la mémoire visuelle.** Après avoir mémorisé vingt figures, on les voit partout : le cerveau complète, isole la bougie qui « ressemble » et oublie les cinquante autres. Résultat : des entrées sur des signaux qui n'existent que parce qu'on les cherche, sans contexte, avec une expectancy nulle. Le remède est de partir du contexte et de descendre vers la bougie, jamais l'inverse.
+
+**Le piège de la statistique inventée.** « Le marteau retourne le marché dans 70 % des cas. » Aucune étude sérieuse ne donne un tel chiffre indépendamment du contexte, du marché et de l'unité de temps ; et les études qui existent montrent des taux proches de 50 % pour la plupart des figures prises isolément. Si un chiffre vous est donné sans la méthode qui l'a produit, considérez-le comme inexistant. Le niveau 7 vous apprendra à produire les vôtres.
+
+**Le piège de la bougie non close.** Une bougie ne dit rien avant sa clôture. Un « avalement haussier » qui se forme en H1 à 15 h 40 peut être un « pendu » à 15 h 59. Beaucoup d'entrées ratées viennent d'une figure lue au milieu de sa bougie. Règle : on lit une bougie quand elle est close, ou on descend d'unité de temps pour trouver une clôture qui confirme.
+
+Une remarque plus générale : les figures de chandeliers ne sont pas la cause du mouvement qui suit. Elles sont **la trace visible d'un flux d'ordres** (des acheteurs qui absorbent, des stops déclenchés, un vendeur pressé). Comprendre le flux rend la figure lisible ; mémoriser la figure sans le flux la rend trompeuse.
+
+## Protocole de lecture d'un graphique vierge
+
+Devant un graphique inconnu, sans indicateur, voici l'ordre de lecture à appliquer à chaque fois, jusqu'à ce qu'il devienne un réflexe. Il prend cinq minutes ; il évite les vingt erreurs suivantes.
+
+1. **Identifier l'instrument, l'unité de temps et la période affichée.** Cela paraît trivial ; c'est la première source d'erreur (un graphique en M1 lu comme un H1, une session de nuit lue comme une séance).
+2. **Dézoomer** de deux ou trois unités de temps au-dessus de celle d'exécution : où est le prix par rapport à l'ensemble de la période visible ? Plutôt haut, plutôt bas, au milieu ? Monte-t-il, baisse-t-il, ou stagne-t-il, sur cette grande unité ?
+3. **Repérer les extrêmes** : le plus haut et le plus bas de la période visible, et les deux ou trois niveaux où le prix s'est arrêté ou retourné plusieurs fois (le chapitre 4 formalise ce repérage). Les tracer, pas plus de cinq.
+4. **Décrire la structure récente** en une phrase : « plus hauts et plus bas montants depuis trois jours », « range entre X et Y depuis ce matin », « cassure du plus bas de la semaine hier, retour dessous aujourd'hui » (chapitre 2).
+5. **Regarder les dernières bougies de l'unité d'exécution** en contexte : grandes ou petites, mèches, clôtures dans quel tiers, où par rapport aux niveaux tracés ? Qui semble en contrôle, qui semble piégé ?
+6. **Écrire le scénario en deux lignes**, avec son invalidation : « tant que le prix tient au-dessus de X, je cherche des achats sur repli ; sous X, l'idée est fausse. » Si vous ne pouvez pas l'écrire, vous n'avez pas lu le graphique.
+7. **Ne rien faire tant qu'un setup défini** (niveaux suivants) n'apparaît pas. La lecture n'est pas un signal d'entrée ; c'est le contexte dans lequel un signal sera valide ou non.
+
+<Figure caption="Figure 3 · Le protocole de lecture, du plus large au plus fin. On ne descend à la bougie qu'en dernier ; on ne cherche un signal qu'après avoir écrit le scénario.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Étapes du protocole de lecture d'un graphique" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="130" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="85" y="55" fontSize="12" fontWeight="600" textAnchor="middle">1 · Cadre</text>
+  <text x="85" y="74" fontSize="10" textAnchor="middle" className="muted">instrument, UT, période</text>
+  <polygon points="160,60 150,54 150,66" className="gold" />
+  <rect x="165" y="30" width="130" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="230" y="55" fontSize="12" fontWeight="600" textAnchor="middle">2 · Dézoom</text>
+  <text x="230" y="74" fontSize="10" textAnchor="middle" className="muted">où est le prix, direction</text>
+  <polygon points="305,60 295,54 295,66" className="gold" />
+  <rect x="310" y="30" width="130" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="375" y="55" fontSize="12" fontWeight="600" textAnchor="middle">3 · Niveaux</text>
+  <text x="375" y="74" fontSize="10" textAnchor="middle" className="muted">extrêmes, 5 lignes max</text>
+  <polygon points="450,60 440,54 440,66" className="gold" />
+  <rect x="455" y="30" width="130" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="520" y="55" fontSize="12" fontWeight="600" textAnchor="middle">4 · Structure</text>
+  <text x="520" y="74" fontSize="10" textAnchor="middle" className="muted">une phrase</text>
+  <polygon points="595,60 585,54 585,66" className="gold" />
+  <rect x="600" y="30" width="100" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="650" y="55" fontSize="12" fontWeight="600" textAnchor="middle">5 · Bougies</text>
+  <text x="650" y="74" fontSize="10" textAnchor="middle" className="muted">en contexte</text>
+
+  <line x1="650" y1="90" x2="650" y2="130" className="line" strokeWidth="1.5" />
+  <line x1="650" y1="130" x2="360" y2="130" className="line" strokeWidth="1.5" />
+  <polygon points="360,140 354,128 366,128" className="gold" />
+  <rect x="200" y="145" width="320" height="50" rx="8" className="gold" opacity="0.9" />
+  <text x="360" y="167" fontSize="12" fontWeight="700" textAnchor="middle" fill="#141414">6 · Scénario écrit + invalidation</text>
+  <text x="360" y="185" fontSize="10" textAnchor="middle" fill="#141414">« tant que X tient, je cherche… ; sous X, faux »</text>
+  <text x="360" y="230" fontSize="11" textAnchor="middle" className="muted">7 · Attendre un setup défini. La lecture est un contexte, pas un signal.</text>
+</svg>
+</Figure>
+
+## Deux trades lus sur le graphique
+
+Reconstitutions pédagogiques : la même bougie, deux contextes.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Longue mèche basse en M15 sur le plus bas de la veille, tendance D haussière, protocole appliqué"
+  entree="5 244,50"
+  stop="5 238,50 (24 ticks, sous la mèche)"
+  objectif="5 259,50"
+  r="+2,5R">
+
+Le protocole d'abord : D en tendance haussière (plus hauts et plus bas montants depuis deux semaines), le prix revient sur le plus bas de la veille en début de séance américaine, niveau tracé la veille au soir. En M15, une bougie plonge 5 points sous ce plus bas puis clôture dans son tiers supérieur : les vendeurs de cassure sont piégés, les acheteurs ont repris la période. Scénario écrit avant l'entrée : « tant que 5 238 tient, achats ; sous 5 238, faux ». Entrée sur la bougie M15 suivante, stop sous la mèche, objectif sur le plus haut de la session. La bougie n'était que le dernier maillon ; le trade a été décidé par le contexte.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Même figure de mèche basse, mais en M1, au milieu d'un range, contre la tendance H1"
+  entree="5 251,00"
+  stop="5 249,00 (8 ticks)"
+  objectif="5 257,00"
+  r="−1R">
+
+Deux heures plus tard, le trader voit en M1 une bougie identique : longue mèche basse, clôture haute. Il achète, « parce que c'est un marteau ». Il n'a pas dézoomé : en H1, le prix vient de rejeter la résistance de la session et fait des plus hauts descendants ; en M15, il est au milieu d'un range de 10 points où ce genre de mèche apparaît toutes les cinq minutes. Le stop de 8 ticks est touché dans les trois minutes par le bruit normal du range. Perte de 1R, ordinaire ; mais surtout, ce trade n'aurait jamais dû exister : il n'avait ni contexte, ni niveau, ni scénario écrit. La figure était la même ; le graphique ne l'était pas.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Une bougie dit **où le prix a été poussé, où il a été rejeté, où il a fini** : taille du corps contre mèches, clôture dans quel tiers, taille relative aux précédentes.
+- L'**unité de temps** décide de ce que l'on voit ; on choisit d'abord l'unité d'exécution, puis on regarde **au-dessus** pour le contexte, jamais en dessous.
+- Une figure ne se lit qu'**en contexte** : tendance supérieure, niveaux, structure, puis bougie. La même mèche est un signal sur un support et du bruit dans un range.
+- Trois pièges : voir des figures partout, croire des statistiques sans méthode, lire une bougie **avant sa clôture**.
+- Le **protocole de lecture** en sept étapes se termine par un scénario écrit avec son invalidation ; la lecture est un contexte, pas un signal.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire quatre bougies">
+
+Pour chaque bougie H1 décrite (open · high · low · close), dites si elle est haussière ou baissière, dans quel tiers de sa fourchette elle clôture, et ce qu'elle raconte du rapport de force. Prix sur l'ES.
+
+1. 5 300 · 5 318 · 5 298 · 5 316
+2. 5 316 · 5 322 · 5 296 · 5 300
+3. 5 300 · 5 304 · 5 284 · 5 302
+4. 5 302 · 5 306 · 5 298 · 5 303
+
+<Solution>
+
+1. **Haussière**, fourchette 20 points, clôture à 18 points du bas : **tiers supérieur**. Grand corps (16 points), petites mèches : les acheteurs ont contrôlé toute l'heure.
+2. **Baissière**, fourchette 26 points, clôture à 4 points du bas : **tiers inférieur**. Corps de 16 points, mèche basse de 4 : les vendeurs ont pris le contrôle et gardé l'essentiel du terrain. Après la bougie 1, c'est un renversement du rapport de force sur l'heure.
+3. **Haussière** de 2 points seulement, mais fourchette de 20 points avec une mèche basse de 16 : le prix a été poussé 16 points plus bas puis entièrement ramené, clôture dans le **tiers supérieur**. Des acheteurs ont absorbé la baisse ; qui a vendu à 5 284 est piégé. C'est la bougie la plus intéressante des quatre, à condition de savoir où elle se situe (support ? milieu de range ?).
+4. **Haussière**, fourchette 8 points, corps 1 point, clôture au milieu : bougie d'indécision, petite par rapport aux précédentes. Ralentissement après la bataille de la bougie 3 ; en soi, elle ne dit rien.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Choisir ses unités de temps">
+
+Trois traders : Amel fait du swing sur l'or, trades de 3 à 10 jours ; Bruno fait de l'intraday sur MNQ, trades de 20 minutes à 3 heures ; Chloé scalpe l'ES, trades de 30 secondes à 3 minutes.
+
+1. Proposez pour chacun une unité de contexte, une de structure et une d'exécution.
+2. Quelle est l'erreur commune si Bruno regarde le M1 pendant qu'il est en position ?
+3. Amel voit un « avalement baissier » en H1 sur l'or alors qu'elle est longue depuis quatre jours. Que doit-elle vérifier avant de réagir ?
+
+<Solution>
+
+1. Amel : contexte **hebdomadaire ou quotidien**, structure **H4**, exécution **H1**. Bruno : contexte **quotidien ou H4**, structure **H1 ou M15**, exécution **M5**. Chloé : contexte **M15**, structure **M5 ou M1**, exécution **secondes, ticks, DOM**.
+2. Il lit du bruit comme du signal : le M1 est deux à trois unités sous son unité d'exécution. Une bougie rouge en M1 dans un trade décidé sur M5 avec un contexte H1 n'a aucune valeur d'information ; elle a une grande valeur d'inquiétude, et c'est ainsi que les bons trades sont coupés trop tôt.
+3. Le H1 est son unité d'exécution, pas son unité de décision. Elle doit vérifier le **quotidien et le H4** : la tendance tient-elle, le prix est-il sur un niveau clé, la structure H4 est-elle cassée ? Si tout tient, l'avalement H1 est un repli dans un swing haussier, pas une raison de sortir ; sa sortie est son stop ou son objectif, définis à l'entrée.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Appliquer le protocole">
+
+Choisissez un graphique réel que vous n'avez jamais étudié (un instrument que vous ne suivez pas, une période passée), sans indicateur. Appliquez les sept étapes par écrit, en cinq minutes maximum, et produisez le scénario en deux lignes avec son invalidation. Puis comparez votre texte à la grille de correction.
+
+<Solution>
+
+Grille : votre texte doit contenir (1) l'instrument, l'unité de temps et la période ; (2) une phrase sur la position du prix dans l'ensemble visible et sa direction en unité supérieure ; (3) au plus cinq niveaux, dont les extrêmes ; (4) une phrase de structure (« plus hauts montants… », « range entre… ») ; (5) une lecture des dernières bougies en contexte, avec « qui contrôle » ou « qui est piégé » ; (6) un scénario conditionnel avec un niveau d'invalidation chiffré ; (7) aucun ordre, aucun signal d'entrée. Si l'un des sept manque, recommencez sur un autre graphique. L'exercice se refait chaque jour pendant deux semaines : c'est ainsi que le protocole devient automatique.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Une bougie H1 ouvre à 100, monte à 112, descend à 98, clôture à 110. Elle est :",
+      options: [
+        "Baissière, clôture dans le tiers inférieur",
+        "Haussière, clôture dans le tiers supérieur, corps dominant : les acheteurs ont contrôlé l'heure",
+        "Un doji",
+        "Illisible sans indicateur",
+      ],
+      answer: 1,
+      explain: "Corps de 10 points sur une fourchette de 14, clôture à 12 points du bas. Grand corps, petites mèches : domination des acheteurs sans contestation.",
+    },
+    {
+      q: "Que montrent les mèches d'une bougie ?",
+      options: [
+        "Le volume échangé",
+        "Où le prix est allé sans y rester : testé puis rejeté",
+        "L'ouverture et la clôture",
+        "La tendance de fond",
+      ],
+      answer: 1,
+      explain: "Le corps est ce que la période a acquis ; les mèches sont ce qu'elle a exploré puis abandonné. Une longue mèche signale un rejet.",
+    },
+    {
+      q: "Un trader intraday décide sur M5. Pour le contexte, il regarde :",
+      options: [
+        "Le M1",
+        "Le H1 et le quotidien",
+        "Le tick",
+        "Rien d'autre",
+      ],
+      answer: 1,
+      explain: "Le contexte se lit au-dessus de l'unité d'exécution, jamais en dessous. Descendre au M1 amplifie le bruit et fait sortir des bons trades trop tôt.",
+    },
+    {
+      q: "La même longue mèche basse apparaît sur un support majeur en tendance haussière D, et au milieu d'un range en M1. Elle :",
+      options: [
+        "A la même valeur dans les deux cas",
+        "Est un signal sérieux dans le premier cas et du bruit dans le second",
+        "Est du bruit dans les deux cas",
+        "Est un signal dans le second cas seulement",
+      ],
+      answer: 1,
+      explain: "La bougie ne se lit qu'en contexte : tendance supérieure, niveau, structure. La figure est identique ; l'information ne l'est pas.",
+    },
+    {
+      q: "« Le marteau retourne le marché dans 70 % des cas. » Cette affirmation :",
+      options: [
+        "Est une statistique établie",
+        "Est à considérer comme inexistante tant que la méthode qui l'a produite n'est pas donnée",
+        "Vaut pour tous les marchés",
+        "Justifie d'acheter tous les marteaux",
+      ],
+      answer: 1,
+      explain: "Aucune étude sérieuse ne donne un tel chiffre hors contexte, marché et unité de temps ; isolées, la plupart des figures sont proches de 50 %.",
+    },
+    {
+      q: "Quelle est la dernière étape du protocole de lecture ?",
+      options: [
+        "Placer un ordre",
+        "Écrire un scénario avec son invalidation, puis attendre un setup défini",
+        "Ajouter des indicateurs",
+        "Descendre en M1",
+      ],
+      answer: 1,
+      explain: "La lecture produit un contexte conditionnel (« tant que X tient… »), pas un signal. L'entrée vient d'un setup défini dans les niveaux suivants.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Vous savez lire une bougie et choisir vos unités de temps. Le chapitre suivant apprend à lire la structure : les swings significatifs, la tendance et le range, la structure interne et externe, et surtout comment définir une invalidation objective, celle qui décide où va le stop.
