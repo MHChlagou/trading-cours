@@ -1,0 +1,309 @@
+---
+title: "DOM et tape reading"
+description: "La profondeur de marché en temps réel, les icebergs, le spoofing et les fausses tailles, la lecture du tape sur les moments clés, l'usage du DOM pour affiner l'exécution, et ce que le particulier peut et ne peut pas en tirer."
+---
+
+# DOM et tape reading
+
+Le footprint montre ce qui a été exécuté. Le **DOM** (depth of market, la profondeur de marché) montre ce qui **attend** : les ordres limites empilés à chaque prix, de part et d'autre du spread. Le **tape** (time and sales) montre chaque transaction au moment où elle a lieu, une par une. Ce sont les deux outils les plus proches du carnet du niveau 0, et les plus séduisants : on croit voir les intentions. Ce chapitre apprend à les lire, montre pourquoi une bonne partie de ce qu'ils affichent est trompeuse, et délimite honnêtement ce qu'un particulier peut en tirer : beaucoup pour l'exécution, peu pour la direction.
+
+## La profondeur de marché en temps réel
+
+Le DOM est le carnet d'ordres du niveau 0, affiché en colonne et mis à jour en continu : au centre, l'échelle des prix ; à gauche, les quantités en attente à l'achat (bids) sous le prix courant ; à droite, les quantités en attente à la vente (asks) au-dessus ; entre les deux, le spread. Sur l'ES en séance, on voit typiquement dix niveaux de chaque côté avec des dizaines à des centaines de contrats à chacun.
+
+Ce que le DOM montre réellement :
+
+- **La liquidité passive visible** : les ordres limites que les participants ont choisi d'afficher. C'est un sous-ensemble de la liquidité totale (les icebergs, les stops et les ordres non encore envoyés n'y sont pas).
+- **Sa forme** : symétrique (équilibre), déséquilibrée (plus de contrats d'un côté), avec des niveaux épais (des « murs ») ou fins.
+- **Sa dynamique** : les tailles qui apparaissent, grossissent, se retirent, sont consommées. C'est la dynamique qui informe, plus que la photo.
+
+Ce qu'il ne montre pas : les intentions réelles (un ordre affiché peut être annulé en une milliseconde), les ordres cachés, les ordres au marché à venir, et l'essentiel du flux institutionnel qui passe par des algorithmes fractionnant en petites tailles.
+
+Une lecture de base, à titre d'orientation : un mur d'asks (une taille très supérieure aux niveaux voisins) juste au-dessus du prix **peut** signifier qu'un vendeur passif défend ce niveau, et le prix ralentit souvent à son approche ; mais il peut aussi être retiré à l'approche du prix (section suivante), et le prix le traverser d'un coup. Le mur qui **absorbe** (il est frappé, se reconstitue, le prix ne passe pas) est une information ; le mur qui **disparaît** en est une autre. La photo ne le dit pas ; le film oui.
+
+<Figure caption="Figure 1 · Un DOM sur l'ES en séance : bids à gauche, asks à droite, spread d'un tick, un mur d'asks à 5 291,00. La colonne centrale des dernières transactions (tape) défile. La lecture utile est dynamique : que fait le mur quand le prix s'en approche ?">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Représentation d'un DOM avec bids, asks et tape" xmlns="http://www.w3.org/2000/svg">
+  <text x="130" y="30" fontSize="11" fontWeight="600" textAnchor="middle" className="green">bids (achats en attente)</text>
+  <text x="330" y="30" fontSize="11" fontWeight="600" textAnchor="middle">prix</text>
+  <text x="530" y="30" fontSize="11" fontWeight="600" textAnchor="middle" className="red">asks (ventes en attente)</text>
+  <text x="330" y="60" fontSize="12" textAnchor="middle" className="mono">5 291,50</text><rect x="400" y="48" width="90" height="16" className="red" opacity="0.4" /><text x="580" y="60" fontSize="11" className="mono">180</text>
+  <text x="330" y="84" fontSize="12" textAnchor="middle" className="mono">5 291,25</text><rect x="400" y="72" width="70" height="16" className="red" opacity="0.4" /><text x="580" y="84" fontSize="11" className="mono">140</text>
+  <text x="330" y="108" fontSize="12" textAnchor="middle" className="mono" fontWeight="700">5 291,00</text><rect x="400" y="96" width="260" height="16" className="red" opacity="0.8" /><text x="580" y="108" fontSize="11" className="mono" fontWeight="700" fill="#ffffff">920 · mur</text>
+  <text x="330" y="132" fontSize="12" textAnchor="middle" className="mono">5 290,75</text><rect x="400" y="120" width="60" height="16" className="red" opacity="0.4" /><text x="580" y="132" fontSize="11" className="mono">115</text>
+  <text x="330" y="156" fontSize="12" textAnchor="middle" className="mono" fontWeight="700">5 290,50</text><rect x="400" y="144" width="45" height="16" className="red" opacity="0.7" /><text x="580" y="156" fontSize="11" className="mono" fontWeight="700">88 · ask</text>
+  <line x1="60" y1="168" x2="660" y2="168" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="330" y="186" fontSize="12" textAnchor="middle" className="mono" fontWeight="700">5 290,25</text><rect x="210" y="174" width="50" height="16" className="green" opacity="0.7" /><text x="80" y="186" fontSize="11" className="mono" fontWeight="700">bid · 96</text>
+  <text x="330" y="210" fontSize="12" textAnchor="middle" className="mono">5 290,00</text><rect x="180" y="198" width="80" height="16" className="green" opacity="0.4" /><text x="80" y="210" fontSize="11" className="mono">150</text>
+  <text x="330" y="234" fontSize="12" textAnchor="middle" className="mono">5 289,75</text><rect x="195" y="222" width="65" height="16" className="green" opacity="0.4" /><text x="80" y="234" fontSize="11" className="mono">122</text>
+  <text x="330" y="258" fontSize="12" textAnchor="middle" className="mono">5 289,50</text><rect x="170" y="246" width="90" height="16" className="green" opacity="0.4" /><text x="80" y="258" fontSize="11" className="mono">175</text>
+  <text x="330" y="282" fontSize="12" textAnchor="middle" className="mono">5 289,25</text><rect x="200" y="270" width="60" height="16" className="green" opacity="0.4" /><text x="80" y="282" fontSize="11" className="mono">108</text>
+  <text x="360" y="315" fontSize="10" textAnchor="middle" className="muted">le mur de 920 à 5 291,00 : défense réelle ou taille qui disparaîtra à l'approche ? seul le film le dit</text>
+</svg>
+</Figure>
+
+## Icebergs, spoofing et fausses tailles
+
+Trois phénomènes rendent la lecture naïve du DOM dangereuse.
+
+**Les icebergs.** Un ordre iceberg n'affiche qu'une petite partie de sa taille réelle ; chaque fois que la partie visible est exécutée, une nouvelle tranche apparaît au même prix. Sur le DOM, on voit un petit chiffre (20 contrats) qui se **reconstitue** sans cesse ; sur le tape, on voit des dizaines de transactions au même prix sans que la quantité affichée ne baisse. C'est l'outil standard des institutions pour absorber sans montrer leur main : l'absorption du chapitre précédent est très souvent un iceberg. Le signe : le prix bute sur un niveau où le DOM n'affichait rien de spécial, le tape s'y emballe, et le niveau tient. Certaines plateformes tentent de détecter les icebergs en comparant volume exécuté et taille affichée ; c'est utile, imparfait.
+
+**Le spoofing.** Afficher une grosse taille (un mur) qu'on n'a pas l'intention de laisser exécuter, pour influencer les autres participants (les faire vendre en montrant un mur d'asks, par exemple), puis la retirer avant qu'elle soit atteinte. C'est **illégal** sur les marchés régulés (des poursuites et des condamnations existent) et néanmoins présent sous des formes plus subtiles et plus rapides que ce qu'un œil humain distingue. Conséquence pratique : **un mur qui n'a pas encore été frappé n'est pas une information fiable**. Il le devient quand il est frappé et tient (absorption) ou quand il disparaît à l'approche du prix (le mur était creux, le prix accélère souvent dans le vide laissé).
+
+**Les fausses tailles et le bruit algorithmique.** Une grande partie de la profondeur affichée est posée et retirée par des algorithmes de market making en quelques millisecondes ; les tailles clignotent, se déplacent avec le prix, se retirent avant les annonces. Ce bruit rend la « photo » du DOM presque illisible pour un humain sur les marchés très rapides. Ce qui reste lisible : les niveaux qui **persistent** et qui **absorbent**, les **retraits** brutaux de liquidité (le carnet qui se vide d'un côté avant un mouvement), et le **déséquilibre durable** de la profondeur sur plusieurs secondes.
+
+La règle qui découle des trois : **le DOM se lit par ce qui est exécuté et par ce qui reste, jamais par ce qui est seulement affiché**.
+
+<Figure caption="Figure 2 · Trois comportements d'un mur à l'approche du prix : il absorbe (frappé, reconstitué, le prix ne passe pas : information), il disparaît (spoofing ou retrait, le prix accélère dans le vide), il est un iceberg (petite taille affichée qui se reconstitue sans fin, le tape s'emballe).">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Trois comportements d'un mur dans le DOM" xmlns="http://www.w3.org/2000/svg">
+  <text x="120" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Le mur absorbe</text>
+  <rect x="40" y="60" width="160" height="14" className="red" opacity="0.8" /><text x="120" y="71" fontSize="10" textAnchor="middle" fill="#ffffff">920</text>
+  <polyline points="50,180 80,150 110,110 130,80 145,76 160,82 175,77 190,90 200,120" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="120" y="210" fontSize="10" textAnchor="middle" className="muted">frappé, se reconstitue,</text>
+  <text x="120" y="224" fontSize="10" textAnchor="middle" className="green" fontWeight="600">le prix ne passe pas : information</text>
+
+  <text x="360" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Le mur disparaît</text>
+  <rect x="280" y="60" width="160" height="14" className="red" opacity="0.8" /><text x="360" y="71" fontSize="10" textAnchor="middle" fill="#ffffff">920 → 0</text>
+  <line x1="280" y1="60" x2="440" y2="74" stroke="var(--tm-red)" strokeWidth="1.5" /><line x1="280" y1="74" x2="440" y2="60" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <polyline points="290,180 320,150 350,110 370,85 385,66 400,45 420,30 440,20" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="360" y="210" fontSize="10" textAnchor="middle" className="muted">retiré à l'approche (spoofing ou retrait),</text>
+  <text x="360" y="224" fontSize="10" textAnchor="middle" className="red" fontWeight="600">le prix accélère dans le vide</text>
+
+  <text x="600" y="24" fontSize="12" fontWeight="600" textAnchor="middle">L'iceberg</text>
+  <rect x="560" y="60" width="30" height="14" className="red" opacity="0.8" /><text x="575" y="71" fontSize="10" textAnchor="middle" fill="#ffffff">20</text>
+  <text x="600" y="72" fontSize="9" className="muted">↻ ×40</text>
+  <polyline points="530,180 560,150 590,110 610,80 625,74 640,80 655,76 670,84 690,78" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="600" y="210" fontSize="10" textAnchor="middle" className="muted">petite taille qui se reconstitue,</text>
+  <text x="600" y="224" fontSize="10" textAnchor="middle" className="green" fontWeight="600">tape emballé, le niveau tient : absorption</text>
+</svg>
+</Figure>
+
+## Lire le tape sur les moments clés
+
+Le tape est la liste des transactions : heure, prix, quantité, côté (au bid ou à l'ask). En séance sur l'ES, il défile trop vite pour être lu en continu ; l'usage utile est de le regarder **aux moments clés**, quelques secondes à quelques minutes, pour répondre à une question précise.
+
+**Au contact d'un niveau (VAL, HVN, zone SMC, mur).** Que fait le tape ? Des ventes agressives en rafale au bid qui n'obtiennent pas de baisse (le prix reste sur le niveau, la quantité affichée se reconstitue) : absorption, iceberg probable ; l'entrée long se prépare. Des ventes agressives qui obtiennent de la baisse tick après tick : le niveau cède ; on n'achète pas.
+
+**Sur une cassure.** Le tape s'accélère-t-il **dans le sens** de la cassure (rafale d'achats à l'ask sur une cassure haussière, grosses tailles, spread qui tient) ou reste-t-il clairsemé (quelques petites transactions, puis retour) ? Le premier cas est une cassure participée ; le second, une cassure sans personne, souvent reprise (niveau 2, volume aux niveaux ; niveau 3, sweep contre cassure). Le tape le dit dans les secondes qui suivent, avant la clôture de la bougie.
+
+**Sur un sweep.** Le tape d'un sweep montre typiquement une rafale d'exécutions au marché **au-delà** du niveau (les stops déclenchés), suivie très vite d'exécutions agressives dans l'autre sens et d'un retour du prix. Le footprint le montre après coup (delta contraire sur la bougie) ; le tape le montre pendant.
+
+**Sur une absorption prolongée.** Compter, ou laisser la plateforme compter, le volume exécuté à un prix qui ne bouge pas : 300, 500, 800 contrats au même bid sans que le prix descende. C'est l'iceberg qui travaille ; l'information est dans le nombre et dans la durée.
+
+**Autour des annonces.** Le tape se vide dans les secondes qui précèdent (les tailles se retirent) et explose après ; la lecture est impossible en temps réel, et c'est justement pourquoi on n'exécute pas là (niveau 0).
+
+Le point commun : le tape se lit **avec une question, à un endroit, pendant un temps court**. Le regarder toute la journée hypnotise et ne renseigne sur rien.
+
+## Utiliser le DOM pour affiner l'exécution
+
+C'est l'usage le plus sûr du DOM pour un particulier : non pas décider du sens, mais **exécuter mieux** un trade décidé ailleurs (niveaux 2 et 3, profil, footprint).
+
+**Placer un ordre limite au bon prix.** Le DOM montre où la liquidité passive est fine et où elle est épaisse. Un ordre limite d'achat placé juste au-dessus d'un niveau épais (un mur de bids qui absorbe, un HVN) a plus de chances d'être servi puis défendu ; placé au milieu d'un vide, il sera traversé. Le DOM affine le prix de l'ordre de quelques ticks dans la zone décidée par le setup.
+
+**Choisir entre limite et marché.** Si le DOM montre un carnet profond des deux côtés et un tape calme, un ordre au marché coûte le spread et rien de plus ; si le carnet est mince (heures creuses, avant annonce), l'ordre au marché glissera de plusieurs ticks : on place un limite ou on s'abstient. Le DOM est le meilleur indicateur en temps réel du slippage à attendre.
+
+**Sortir mieux.** Un objectif placé juste **avant** un mur d'asks visible ou un HVN a plus de chances d'être servi que juste après ; le prix ralentit souvent au contact et n'atteint pas toujours le tick suivant. Le même raisonnement pour un stop : un stop placé juste derrière un niveau fin sera traversé avec slippage ; derrière un niveau épais qui absorbe, il a une chance d'être protégé (mais il ne faut pas compter dessus).
+
+**Ne pas entrer sur un carnet qui se vide.** Quand la profondeur disparaît d'un côté en quelques secondes (les tailles se retirent avant un mouvement ou une annonce), le prix va bouger vite dans le vide : ce n'est pas le moment d'entrer au marché, c'est le moment d'attendre que le mouvement se fasse et de lire ensuite.
+
+**Le DOM sur les micro-contrats.** Le carnet du MES est distinct de celui de l'ES, moins profond ; le prix suit celui de l'ES au tick près (arbitrage). Pour lire la liquidité, on regarde le DOM de l'ES ; pour exécuter, on passe l'ordre sur le MES. Le slippage sur MES est en général faible en séance, parce que les market makers alignent les deux carnets.
+
+## Ce que le retail peut et ne peut pas en tirer
+
+Il faut être direct, parce que le DOM et le tape sont vendus comme des outils de « lecture des institutions » et que la réalité est plus modeste.
+
+**Ce qu'un particulier peut en tirer :**
+
+- Une **meilleure exécution** : prix des limites, choix limite / marché, estimation du slippage, placement des objectifs et des stops par rapport à la liquidité visible.
+- La **qualification en temps réel** d'un niveau que le setup a déjà désigné : absorption ou cession, cassure participée ou vide, sweep en train de se faire.
+- Le repérage des **retraits de liquidité** avant les mouvements et les annonces.
+- Une **intuition** de la vitesse et de la participation, qui affine la lecture du footprint et du profil.
+
+**Ce qu'il ne peut pas en tirer :**
+
+- La **direction** : le DOM ne prédit pas ; les tailles affichées sont manipulables et bruitées, et le flux institutionnel réel est en grande partie invisible (icebergs, algorithmes fractionnés, dark pools sur actions).
+- La **vitesse** : les acteurs qui exploitent réellement la microstructure du carnet le font en microsecondes, avec une co-location et une infrastructure hors de portée. Un humain qui « lit le tape » sur l'ES en 2020-2030 lit un résumé très partiel d'un flux qu'il ne peut pas suivre.
+- Un **système** : le scalping pur au DOM, tel qu'il se pratiquait sur les futures il y a vingt ans, est devenu très difficile pour un particulier ; les coûts (niveau 0) et la concurrence algorithmique ont mangé l'avantage. Les traders qui vivent du DOM aujourd'hui sont rares, très spécialisés, et l'utilisent sur des marchés moins rapides.
+
+La position du cours : **le DOM et le tape sont des outils d'exécution et de qualification, pas de décision**. Le sens vient de la structure, la zone de la séquence SMC et du profil, le moment du footprint ; le DOM affine les derniers ticks et évite les erreurs d'exécution du niveau 0. Un trader qui maîtrise cela a tiré du DOM tout ce qu'il a à donner ; celui qui y cherche des secrets y perd du temps et de l'argent.
+
+<Figure caption="Figure 3 · La place du DOM et du tape dans la lecture : la dernière couche, celle de l'exécution. Le sens vient d'en haut ; le DOM affine les derniers ticks et qualifie le niveau en temps réel.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Hiérarchie des couches de lecture jusqu'au DOM" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="20" width="600" height="38" rx="6" className="box" strokeWidth="1.5" /><text x="360" y="44" fontSize="12" fontWeight="600" textAnchor="middle">Structure et contexte (niveau 2) → le sens</text>
+  <polygon points="360,68 352,58 368,58" className="gold" />
+  <rect x="100" y="76" width="520" height="38" rx="6" className="box" strokeWidth="1.5" /><text x="360" y="100" fontSize="12" fontWeight="600" textAnchor="middle">Séquence SMC et profil (niveaux 3 et 4) → la zone</text>
+  <polygon points="360,124 352,114 368,114" className="gold" />
+  <rect x="140" y="132" width="440" height="38" rx="6" className="box" strokeWidth="1.5" /><text x="360" y="156" fontSize="12" fontWeight="600" textAnchor="middle">Footprint → le moment et le stop</text>
+  <polygon points="360,180 352,170 368,170" className="gold" />
+  <rect x="180" y="188" width="360" height="38" rx="6" className="gold" opacity="0.9" /><text x="360" y="212" fontSize="12" fontWeight="700" textAnchor="middle" fill="#141414">DOM et tape → les derniers ticks, la qualification</text>
+  <text x="360" y="248" fontSize="10" textAnchor="middle" className="muted">jamais la direction ; toujours l'exécution</text>
+</svg>
+</Figure>
+
+## Deux trades sous l'angle de l'exécution
+
+Reconstitutions pédagogiques : le même setup, deux exécutions.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500), DOM de l'ES en référence"
+  direction="Long"
+  setup="Retour dans un FVG H1 sur un HVN ; au DOM de l'ES, iceberg au bid sur 5 264,00 (20 affichés, plus de 600 exécutés sans que le prix cède) ; ordre limite placé un tick au-dessus"
+  entree="5 264,25 (limite, servi)"
+  stop="5 262,00 (9 ticks, sous l'iceberg)"
+  objectif="5 276,50 (bord du HVN supérieur, avant un mur d'asks à 5 277)"
+  r="+5,4R">
+
+Le setup vient des niveaux 2 et 3 et du profil : FVG H1 dans un HVN, structure haussière. Au moment du retour, le DOM de l'ES montre 20 contrats affichés à 5 264,00 qui se reconstituent sans cesse pendant que le tape égrène des ventes au bid : 600 contrats absorbés en trois minutes, prix collé. Le trader place un limite à 5 264,25 (un tick au-dessus de l'iceberg, pour être servi sur le prochain test) : servi. Stop sous l'iceberg : si le niveau cède, l'absorbeur a perdu. Objectif un tick sous un mur d'asks persistant à 5 277 (il ne cherche pas le dernier tick). Le DOM n'a pas décidé du trade ; il a fait passer le stop de 16 ticks (sous le FVG) à 9, et il a placé l'objectif là où il serait servi.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Short"
+  setup="Vente « parce qu'il y a un mur d'asks de 1 200 contrats à 5 271 », sans setup ; le mur est retiré à l'approche"
+  entree="5 270,25 (au marché)"
+  stop="5 272,50 (9 ticks)"
+  objectif="5 264,00"
+  r="−1R avec 2 ticks de slippage, soit −1,2R">
+
+Autre trader, même matinée. Il voit apparaître 1 200 contrats à l'ask sur 5 271,00, quatre fois les niveaux voisins, et vend en dessous : « un mur pareil, ça ne passe pas ». Le prix monte vers 5 271, le mur se réduit à 300, puis 80, puis disparaît ; le prix traverse dans le vide laissé et touche son stop avec deux ticks de slippage (le carnet s'était vidé). Le mur était peut-être un spoof, peut-être un ordre réel retiré ; peu importe : **un mur non frappé n'est pas une information**. Il a vendu une photo. Le premier trader a acheté un film.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le **DOM** montre la liquidité passive **affichée** ; le **tape**, les transactions exécutées. Ce qui informe est la **dynamique** : ce qui est frappé et tient, ce qui se retire, ce qui se reconstitue.
+- **Icebergs** (petite taille qui se reconstitue : absorption), **spoofing** (mur retiré à l'approche : illégal, présent, indétectable à l'œil), **bruit algorithmique** : un mur non frappé n'est pas une information.
+- Le **tape se lit aux moments clés**, avec une question précise : contact d'un niveau, cassure, sweep, absorption ; jamais en continu.
+- Usage sûr : **affiner l'exécution** (prix du limite, limite ou marché, slippage attendu, objectifs avant les murs, stops derrière les niveaux épais, ne pas entrer sur un carnet qui se vide).
+- Le particulier en tire de l'**exécution et de la qualification**, pas de la **direction** ni un système : le sens vient de la structure, la zone de la séquence et du profil, le moment du footprint.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Photo ou film ?">
+
+Cinq observations au DOM de l'ES. Pour chacune, dites si c'est une information exploitable et laquelle, ou seulement une photo :
+
+- (a) 1 500 contrats affichés à l'ask 3 ticks au-dessus du prix, apparus il y a deux secondes.
+- (b) 25 contrats affichés au bid sur un HVN ; le tape montre 480 contrats exécutés au bid à ce prix en quatre minutes ; le prix n'a pas baissé.
+- (c) Les cinq premiers niveaux d'asks passent de 600 contrats cumulés à 90 en trois secondes, à 14 h 29.
+- (d) Un mur de 800 asks est frappé par des rafales d'achats ; il descend à 400, remonte à 750, redescend ; le prix reste collé dessous depuis deux minutes.
+- (e) La profondeur est symétrique, 100 à 150 contrats par niveau des deux côtés, tape régulier.
+
+<Solution>
+
+- **(a) Photo.** Un mur non frappé, très récent : spoof possible, retrait possible. Aucune décision dessus ; on regarde ce qu'il fait quand le prix approche.
+- **(b) Information : iceberg / absorption.** Petite taille affichée, gros volume exécuté, prix qui tient, sur un niveau qui compte. Un long se prépare, stop sous le niveau.
+- **(c) Information : retrait de liquidité** avant une annonce (14 h 30). Le prix va bouger vite dans le vide ; on n'exécute pas, on attend.
+- **(d) Information : mur qui absorbe.** Frappé, reconstitué, le prix ne passe pas : un vendeur passif défend. Pas d'achat de la cassure ; un short sur rejet du niveau devient envisageable si le setup existe.
+- **(e) Photo neutre.** Carnet équilibré, pas d'information directionnelle ; bonne condition d'exécution (slippage faible) si un setup existe par ailleurs.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Affiner une exécution">
+
+Vous avez décidé (niveaux 2, 3, profil) d'acheter dans une zone 5 248-5 252 sur MES avec un stop sous 5 246 et un objectif vers 5 262. Le DOM de l'ES montre : bids épais et reconstitués à 5 249,00 (iceberg probable), profondeur fine entre 5 250 et 5 252, mur d'asks persistant à 5 262,50, carnet symétrique ailleurs, tape calme.
+
+1. Où placez-vous votre ordre limite d'achat, et pourquoi pas ailleurs dans la zone ?
+2. Où placez-vous l'objectif, au tick près, et pourquoi ?
+3. Le stop : sous 5 246 comme prévu, ou pouvez-vous le rapprocher ? Argumentez.
+
+<Solution>
+
+1. **À 5 249,25**, un tick au-dessus de l'iceberg : c'est là que la liquidité passive absorbe et que le prix a le plus de chances de tenir puis de repartir ; un limite entre 5 250 et 5 252 (profondeur fine) serait traversé jusqu'à l'iceberg de toute façon, servi plus haut pour rien.
+2. **À 5 262,25**, un tick **sous** le mur d'asks à 5 262,50 : le prix ralentit souvent au contact d'un mur persistant et n'atteint pas toujours le tick suivant ; viser 5 262,50 ou au-delà, c'est risquer de ne pas être servi.
+3. Le stop peut se rapprocher **sous l'iceberg**, vers 5 248,25-5 248,50, à condition de considérer que si l'iceberg cède, l'idée est fausse (c'est cohérent : l'absorbeur a perdu). Le stop sous 5 246 reste le stop structurel ; les deux sont défendables, la version rapprochée donne un meilleur ratio et un taux de stop un peu plus élevé. On choisit avant, on note au journal, on ne déplace pas ensuite.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Ce que le DOM ne fait pas">
+
+Un trader vous dit : « Je vais apprendre à lire le tape pour anticiper les mouvements des institutions et scalper l'ES au DOM. » Rédigez en cinq lignes une réponse honnête, avec ce que le DOM lui apportera réellement et ce qu'il ne lui apportera pas.
+
+<Solution>
+
+Une réponse acceptable : « Le DOM et le tape t'apporteront une bien meilleure exécution (prix des limites, choix limite / marché, slippage, objectifs et stops par rapport à la liquidité) et une qualification en temps réel des niveaux que ton setup désigne (absorption, cession, cassure participée ou vide). Ils ne t'apporteront pas la direction : les tailles affichées sont manipulables et bruitées, le flux institutionnel réel est en grande partie invisible, et les acteurs qui exploitent la microstructure le font en microsecondes avec une infrastructure que tu n'auras pas. Le scalping pur au DOM sur l'ES est devenu très difficile pour un particulier à cause des coûts et de la concurrence algorithmique. Construis d'abord ton sens (structure), ta zone (séquence, profil), ton moment (footprint) ; utilise le DOM pour les derniers ticks. Là, il vaut de l'or. »
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le DOM montre :",
+      options: [
+        "Toutes les intentions des participants",
+        "La liquidité passive affichée à chaque prix ; un sous-ensemble de la liquidité réelle, sans les icebergs, les stops ni les ordres à venir",
+        "Le volume exécuté",
+        "Le delta",
+      ],
+      answer: 1,
+      explain: "Ce qui informe est la dynamique (frappé, retiré, reconstitué), pas la photo. Un mur non frappé n'est pas une information.",
+    },
+    {
+      q: "Un iceberg se reconnaît à :",
+      options: [
+        "Une grosse taille affichée",
+        "Une petite taille affichée qui se reconstitue sans cesse pendant que le tape montre un gros volume exécuté au même prix, sans que le prix cède",
+        "Un mur qui disparaît",
+        "Un delta positif",
+      ],
+      answer: 1,
+      explain: "C'est l'outil standard des institutions pour absorber sans montrer leur main. L'absorption du footprint est très souvent un iceberg.",
+    },
+    {
+      q: "Le spoofing est :",
+      options: [
+        "Légal et courant",
+        "L'affichage d'une taille qu'on n'a pas l'intention de laisser exécuter, retirée à l'approche ; illégal sur les marchés régulés, néanmoins présent sous des formes rapides",
+        "Un type d'ordre",
+        "Une absorption",
+      ],
+      answer: 1,
+      explain: "Conséquence pratique : un mur qui n'a pas été frappé n'est pas fiable. Il devient une information quand il absorbe ou quand il disparaît à l'approche.",
+    },
+    {
+      q: "Le tape se lit :",
+      options: [
+        "En continu toute la journée",
+        "Aux moments clés, avec une question précise (contact d'un niveau, cassure, sweep, absorption), pendant un temps court",
+        "Uniquement pendant les annonces",
+        "Jamais",
+      ],
+      answer: 1,
+      explain: "En séance sur l'ES, il défile trop vite pour être lu en continu ; le regarder toute la journée hypnotise et ne renseigne sur rien.",
+    },
+    {
+      q: "L'usage le plus sûr du DOM pour un particulier est :",
+      options: [
+        "Prédire la direction",
+        "Affiner l'exécution : prix du limite, limite ou marché, slippage attendu, objectifs avant les murs, stops derrière les niveaux épais",
+        "Détecter les institutions",
+        "Scalper toute la journée",
+      ],
+      answer: 1,
+      explain: "Le sens vient de la structure, la zone de la séquence et du profil, le moment du footprint. Le DOM affine les derniers ticks et qualifie le niveau.",
+    },
+    {
+      q: "Le carnet se vide brutalement d'un côté à 14 h 29. Vous :",
+      options: [
+        "Entrez au marché dans le sens du vide",
+        "N'exécutez pas : la liquidité se retire avant une annonce, le prix va bouger vite dans le vide ; on attend et on lit ensuite",
+        "Placez un stop serré",
+        "Doublez la taille",
+      ],
+      answer: 1,
+      explain: "Le retrait de liquidité est une information sur la vitesse à venir, pas sur la direction. Le niveau 0 le disait déjà : pas d'ordre au marché autour des annonces.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le dernier chapitre du niveau change d'échelle et de marché : l'open interest des futures et sa lecture combinée avec le prix et le volume, le funding des perpétuels crypto, le positionnement extrême et les squeezes, et les signaux d'alerte tirés de cas historiques.
