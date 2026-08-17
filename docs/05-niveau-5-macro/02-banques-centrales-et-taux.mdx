@@ -1,0 +1,320 @@
+---
+title: "Banques centrales et taux"
+description: "Fed, BCE, BoJ : mandats et fonctionnement, les outils (taux directeurs, QE, QT, forward guidance), la courbe des taux et ses messages, ce que les futures de taux disent des anticipations du marché, et les réactions typiques des actifs aux décisions."
+---
+
+# Banques centrales et taux
+
+Le chapitre précédent a montré que les données macro comptent parce qu'elles changent ce que le marché attend des banques centrales. Ce chapitre décrit ces institutions : ce qu'elles cherchent, comment elles décident, avec quels outils, et comment le marché lit leurs intentions avant même qu'elles ne les annoncent. Le trader n'a pas besoin de connaître la théorie monétaire ; il a besoin de savoir lire un communiqué, une courbe des taux et un contrat de futures de taux, et de connaître les réactions typiques de l'ES, du dollar, de l'or et du pétrole à une décision. C'est ce que ce chapitre donne.
+
+## Fed, BCE, BoJ : mandats et fonctionnement
+
+Une banque centrale fixe le prix de l'argent à court terme et, par là, influence toute la chaîne des taux, le crédit, les changes et les prix d'actifs. Trois institutions comptent pour les marchés de ce cours.
+
+**La Réserve fédérale (Fed), États-Unis.** Mandat double : **stabilité des prix** (un objectif d'inflation de 2 % sur le PCE) et **plein emploi**. Les décisions sont prises par le **FOMC** (Federal Open Market Committee), qui se réunit huit fois par an selon un calendrier public ; chaque réunion se termine par un communiqué (le mercredi, 20 h heure de Paris) suivi d'une conférence de presse du président ; une réunion sur deux publie aussi les **projections** des membres (croissance, inflation, chômage, et le fameux **dot plot** : la trajectoire de taux que chaque membre juge appropriée). Les **minutes** de la réunion sont publiées trois semaines plus tard. Entre les réunions, les gouverneurs et présidents de Fed régionales s'expriment ; leurs discours sont suivis parce qu'ils préparent le terrain.
+
+**La Banque centrale européenne (BCE), zone euro.** Mandat principal : **la stabilité des prix** (inflation à 2 % à moyen terme) ; le soutien à l'économie vient en second. Le Conseil des gouverneurs décide toutes les six semaines ; communiqué le jeudi à 14 h 15, conférence de presse à 14 h 45. La BCE gère une zone de vingt économies aux situations différentes, ce qui pèse sur ses décisions (les écarts de taux entre pays, les « spreads », sont une préoccupation propre).
+
+**La Banque du Japon (BoJ).** Mandat de stabilité des prix ; pendant des décennies, le problème a été l'inflation trop faible, d'où des taux nuls ou négatifs et des achats d'actifs massifs, puis un contrôle direct de la courbe des taux. La BoJ compte pour le yen (une devise de financement mondiale : quand elle resserre, les positions financées en yen se dénouent et cela se ressent partout) et pour les marchés obligataires mondiaux.
+
+À côté : la Banque d'Angleterre (BoE, pour la livre), la Banque nationale suisse (le franc), la Banque du Canada, la Reserve Bank d'Australie ; et la Banque populaire de Chine, dont les décisions pèsent sur les matières premières.
+
+Ce qui est commun : une banque centrale **réagit aux données** (elle a une fonction de réaction, plus ou moins explicite : si l'inflation dépasse la cible et que l'emploi est solide, elle resserre ; si l'inflation est sous la cible et que l'emploi se dégrade, elle assouplit), elle **communique** pour ne pas surprendre les marchés, et elle **arrive en retard** par construction (elle attend que les données confirment). Le trader qui connaît la fonction de réaction du moment sait comment le marché lira le prochain chiffre.
+
+<Figure caption="Figure 1 · La chaîne : les données macro entrent dans la fonction de réaction de la banque centrale ; les marchés anticipent la décision avant qu'elle tombe (futures de taux) ; la décision et la communication ajustent ; les actifs réagissent à l'écart entre l'anticipé et l'annoncé.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Chaîne des données à la réaction des actifs via la banque centrale" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="80" width="140" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="90" y="106" fontSize="12" fontWeight="600" textAnchor="middle">Données</text>
+  <text x="90" y="126" fontSize="10" textAnchor="middle" className="muted">CPI, PCE, NFP, PIB…</text>
+  <polygon points="175,115 165,108 165,122" className="gold" />
+  <rect x="180" y="80" width="170" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="265" y="100" fontSize="12" fontWeight="600" textAnchor="middle">Fonction de réaction</text>
+  <text x="265" y="118" fontSize="10" textAnchor="middle" className="muted">inflation vs cible, emploi</text>
+  <text x="265" y="136" fontSize="10" textAnchor="middle" className="muted">→ resserrer / attendre / assouplir</text>
+  <polygon points="365,115 355,108 355,122" className="gold" />
+  <rect x="370" y="80" width="150" height="70" rx="8" className="gold" opacity="0.9" />
+  <text x="445" y="100" fontSize="12" fontWeight="700" textAnchor="middle" fill="#141414">Anticipations</text>
+  <text x="445" y="118" fontSize="10" textAnchor="middle" fill="#141414">futures de taux, courbe</text>
+  <text x="445" y="136" fontSize="10" textAnchor="middle" fill="#141414">« ce qui est dans le prix »</text>
+  <polygon points="535,115 525,108 525,122" className="gold" />
+  <rect x="540" y="80" width="160" height="70" rx="8" className="box" strokeWidth="1.5" />
+  <text x="620" y="100" fontSize="12" fontWeight="600" textAnchor="middle">Décision + communication</text>
+  <text x="620" y="118" fontSize="10" textAnchor="middle" className="muted">taux, guidance, dot plot</text>
+  <text x="620" y="136" fontSize="10" textAnchor="middle" className="muted">conférence de presse</text>
+  <path d="M 620 150 Q 620 210 445 210 Q 300 210 265 160" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="5 3" />
+  <text x="445" y="232" fontSize="11" textAnchor="middle" className="red" fontWeight="600">les actifs réagissent à l'écart : annoncé − anticipé</text>
+</svg>
+</Figure>
+
+## Les outils : taux directeurs, QE, QT, forward guidance
+
+**Les taux directeurs.** L'outil principal : le taux auquel les banques se prêtent au jour le jour (les Fed funds aux États-Unis, le taux de dépôt à la BCE). Il ancre les taux courts de toute l'économie ; les taux longs en dépendent en partie (via les anticipations de taux courts futurs) et en partie d'autres facteurs (croissance et inflation à long terme, prime de terme, offre d'obligations). Une hausse de 25 points de base (0,25 %) est le pas standard ; 50 est un pas fort ; 75 est exceptionnel.
+
+**Le QE (quantitative easing).** Quand les taux sont déjà à zéro, la banque centrale achète des obligations d'État (et parfois d'autres actifs) pour faire baisser les taux longs et injecter des liquidités. Effet sur les marchés : soutien aux actifs risqués (les liquidités cherchent du rendement), pression baissière sur la devise, taux longs contenus. Le QE a dominé la décennie 2010 et la période 2020-2021.
+
+**Le QT (quantitative tightening).** L'inverse : la banque centrale laisse son portefeuille d'obligations diminuer (elle ne réinvestit pas les remboursements) ou vend. Effet : retrait de liquidités, pression haussière sur les taux longs, vent contraire modéré pour les actifs risqués. Le QT est plus lent et plus discret que le QE ; il agit en toile de fond.
+
+**La forward guidance.** La communication sur la trajectoire future des taux : « nous anticipons que les taux resteront à ce niveau pendant une période prolongée », « des hausses supplémentaires pourraient être appropriées ». C'est un outil à part entière : en guidant les anticipations, la banque centrale déplace les taux de marché avant d'avoir bougé son taux directeur. Le dot plot de la Fed en est la forme la plus explicite. Le marché lit chaque changement de mot du communiqué (« pourrait » devenu « devrait ») comme un signal.
+
+**Les autres outils** : les facilités de prêt d'urgence (en crise), le contrôle de la courbe (BoJ), les interventions de change (BoJ, BNS), les exigences de réserves. Ils comptent ponctuellement.
+
+Ce que le trader retient : **la décision de taux est rarement une surprise** (elle est presque toujours dans le prix, section sur les futures) ; **ce qui surprend, c'est la guidance** : le ton du communiqué, la conférence de presse, le dot plot. Une Fed qui monte de 25 comme prévu mais signale la fin du cycle fait baisser le dollar ; une Fed qui monte de 25 comme prévu et signale « plus haut, plus longtemps » le fait monter. La lecture se fait sur l'écart entre le communiqué et l'attente, pas sur le chiffre.
+
+## La courbe des taux et ses messages
+
+La **courbe des taux** relie les rendements des obligations d'État selon leur échéance : 3 mois, 2 ans, 5 ans, 10 ans, 30 ans. Sa forme est un résumé de ce que le marché pense de la croissance, de l'inflation et de la politique monétaire à venir.
+
+- **Courbe normale (pentue)** : les taux longs sont au-dessus des taux courts. Le marché attend de la croissance et une inflation normale ; il exige une prime pour prêter longtemps. Phase de reprise ou d'expansion.
+- **Courbe plate** : taux courts proches des taux longs. La banque centrale a resserré (les taux courts sont montés) et le marché ne voit pas beaucoup de croissance devant (les taux longs ne suivent pas). Fin de cycle.
+- **Courbe inversée** : les taux courts au-dessus des taux longs (le 2 ans au-dessus du 10 ans est la mesure la plus suivie). Le marché anticipe des baisses de taux futures, donc un ralentissement ou une récession. Historiquement, une inversion a précédé la plupart des récessions américaines, avec un délai de plusieurs mois à deux ans, et sans donner la date.
+- **La repentification** (la courbe redevient pentue après inversion) : deux cas. La **bull steepening** (les taux courts baissent vite parce que la banque centrale assouplit face à la récession) est souvent le moment où le ralentissement se matérialise ; la **bear steepening** (les taux longs montent plus vite que les courts) signale un retour des craintes d'inflation ou d'offre d'obligations.
+
+Le **spread 2 ans - 10 ans** est le chiffre à suivre. Sa valeur et son sens de variation situent la phase du cycle du chapitre précédent, avec l'avantage d'être une mesure de marché, mise à jour en continu.
+
+Deux précisions : la courbe reflète aussi la **prime de terme** (ce que les investisseurs exigent pour l'incertitude à long terme, influencée par le QE / QT et par l'offre de dette), qui brouille parfois le message ; et l'inversion **ne se trade pas** directement pour un particulier (c'est un signal de contexte, pas de timing) ; elle dit dans quel régime on est, ce que le chapitre 7 de ce niveau formalise.
+
+<Figure caption="Figure 2 · Trois formes de courbe : normale (reprise, expansion), plate (fin de cycle), inversée (ralentissement anticipé). Le spread 2 ans - 10 ans résume la forme ; sa repentification distingue bull et bear steepening.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Formes de la courbe des taux" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="250" className="line" strokeWidth="1" />
+  <text x="50" y="245" fontSize="10" textAnchor="end" className="mono muted">3 %</text>
+  <text x="50" y="145" fontSize="10" textAnchor="end" className="mono muted">4 %</text>
+  <text x="50" y="50" fontSize="10" textAnchor="end" className="mono muted">5 %</text>
+  <text x="80" y="268" fontSize="10" textAnchor="middle" className="muted">3 mois</text>
+  <text x="200" y="268" fontSize="10" textAnchor="middle" className="muted">2 ans</text>
+  <text x="340" y="268" fontSize="10" textAnchor="middle" className="muted">5 ans</text>
+  <text x="500" y="268" fontSize="10" textAnchor="middle" className="muted">10 ans</text>
+  <text x="680" y="268" fontSize="10" textAnchor="middle" className="muted">30 ans</text>
+  <polyline points="80,225 200,190 340,160 500,130 680,110" fill="none" stroke="var(--tm-green)" strokeWidth="2.5" />
+  <text x="600" y="100" fontSize="11" fontWeight="600" className="green">normale : reprise, expansion</text>
+  <polyline points="80,120 200,118 340,120 500,122 680,120" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="600" y="140" fontSize="11" fontWeight="600" className="gold">plate : fin de cycle</text>
+  <polyline points="80,60 200,75 340,105 500,125 680,130" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="230" y="60" fontSize="11" fontWeight="600" className="red">inversée : ralentissement anticipé</text>
+  <text x="380" y="292" fontSize="10" textAnchor="middle" className="muted">à suivre : le spread 2 ans - 10 ans, sa valeur et son sens de variation</text>
+</svg>
+</Figure>
+
+## Ce que le marché anticipe déjà : futures de taux
+
+Le marché ne devine pas la décision de la banque centrale : il la **cote**. Les **futures de Fed funds** (CME) et, en Europe, les futures sur l'€STR ou les swaps de taux, donnent à chaque instant le taux directeur moyen que le marché attend pour chaque mois à venir. Le prix d'un future de Fed funds est 100 moins le taux attendu : un contrat à 94,85 pour le mois d'une réunion signifie un taux moyen attendu de 5,15 %.
+
+De là, on déduit une **probabilité implicite** de mouvement à la prochaine réunion. Si le taux effectif actuel est 5,33 % et que le contrat du mois de la réunion cote 94,85 (taux implicite 5,15 %), le marché intègre une baisse de 18 points de base en moyenne, soit une probabilité d'environ **72 %** d'une baisse de 25 points de base (18 ÷ 25 = 0,72). Le même contrat à 94,72 (taux implicite 5,28 %) donnerait 5 points de base intégrés, soit **20 %** de probabilité de baisse. Le CME publie ces probabilités sous une forme lisible (l'outil FedWatch), mises à jour en continu.
+
+Pourquoi c'est l'information la plus importante du chapitre :
+
+- **La décision elle-même est presque toujours dans le prix.** Une banque centrale qui livre exactement ce que les futures cotaient (une baisse de 25 attendue à 95 %) ne fait rien bouger par sa décision ; ce qui bouge, c'est la guidance.
+- **Les futures de taux sont le premier marché à réagir aux données.** À 14 h 30, la surprise du CPI se lit d'abord dans le repricing des Fed funds (« le marché intègre désormais 8 points de base de plus pour décembre ») ; le dollar et l'ES suivent. Regarder les futures de taux, c'est lire la traduction officielle de la surprise.
+- **L'écart entre les futures et le dot plot** (ce que la Fed dit vouloir faire contre ce que le marché croit qu'elle fera) est une source de volatilité : quand ils divergent, l'un des deux devra bouger.
+
+Le trader qui ne trade pas les taux n'a pas besoin de ces contrats ; il a besoin de **regarder ce qu'ils disent** : la probabilité de la prochaine réunion et la trajectoire à un an, avant chaque décision et après chaque chiffre.
+
+## Réactions typiques des actifs aux décisions
+
+Le jour d'une décision (FOMC en particulier), et plus généralement quand les anticipations de taux bougent, les actifs réagissent selon des schémas répétés. « Typique » ne veut pas dire « toujours » : le contexte de phase et le positionnement modulent (chapitre précédent).
+
+| | Resserrement plus fort qu'attendu (« hawkish ») | Assouplissement plus fort qu'attendu (« dovish ») |
+| --- | --- | --- |
+| **Taux courts (2 ans)** | Montent | Baissent |
+| **Dollar (DXY)** | Monte : les capitaux vont vers le rendement | Baisse |
+| **Actions (ES, NQ)** | Baissent, le NQ plus que l'ES (valeurs de croissance plus sensibles aux taux) | Montent, NQ en tête |
+| **Obligations** | Prix en baisse, rendements en hausse | Prix en hausse |
+| **Or** | Baisse (taux réels plus hauts, dollar plus fort) | Monte |
+| **Pétrole** | Baisse modérée (dollar, croissance anticipée) | Monte modérément |
+| **Crypto** | Baisse, comme un actif de croissance à levier | Monte |
+| **EUR/USD** | Baisse (Fed hawkish) ; monte si c'est la BCE qui est hawkish | L'inverse |
+
+Trois schémas de séance FOMC à connaître :
+
+**Le communiqué puis la conférence.** À 20 h (Paris), le communiqué et la décision : première réaction, souvent violente et souvent **inversée** dans la demi-heure suivante par la conférence de presse (20 h 30), où le président nuance ou durcit. Beaucoup de traders ne prennent aucune position avant 21 h 15 ; les mouvements de 20 h à 21 h sont des sweeps de liquidité dans les deux sens (niveau 3), sur un carnet mince (niveau 0).
+
+**« Buy the rumor, sell the fact ».** Un assouplissement largement anticipé et livré peut faire baisser les actifs risqués si la guidance déçoit ou si le positionnement était déjà très long ; le marché a acheté l'anticipation, il vend la réalisation.
+
+**Le lendemain.** La tendance de la séance suivante est souvent plus fiable que celle du soir de la décision : le marché a digéré, le positionnement s'est ajusté, la liquidité est revenue. Un trader qui veut « trader la Fed » regarde le lendemain plus que le soir.
+
+Enfin, une règle transverse : quand la Fed et une autre banque centrale divergent (l'une resserre, l'autre assouplit), la paire de devises correspondante prend une tendance durable dans le sens du différentiel de taux. C'est le moteur le plus puissant du forex sur plusieurs mois (chapitre suivant, intermarket, et niveau 6, sessions forex).
+
+<Figure caption="Figure 3 · Une soirée de FOMC : communiqué à 20 h (réaction 1), conférence de presse à 20 h 30 (réaction 2, souvent inverse), digestion. Le mouvement fiable est souvent celui du lendemain ; le soir, ce sont des sweeps sur carnet mince.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Déroulé type d'une soirée de décision de la Fed" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="220" x2="700" y2="220" className="line" strokeWidth="1" />
+  <text x="120" y="238" fontSize="10" textAnchor="middle" className="muted">19 h 30</text>
+  <text x="240" y="238" fontSize="10" textAnchor="middle" className="muted">20 h</text>
+  <text x="360" y="238" fontSize="10" textAnchor="middle" className="muted">20 h 30</text>
+  <text x="480" y="238" fontSize="10" textAnchor="middle" className="muted">21 h 15</text>
+  <text x="640" y="238" fontSize="10" textAnchor="middle" className="muted">lendemain</text>
+  <polyline points="70,130 120,128 200,132 240,130 250,80 262,100 275,70 300,90 340,85 360,88 372,140 385,120 400,160 430,150 470,145 500,140 560,120 620,90 690,70" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="240" y1="40" x2="240" y2="220" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="240" y="34" fontSize="10" textAnchor="middle" fontWeight="600">communiqué</text>
+  <line x1="360" y1="40" x2="360" y2="220" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="360" y="34" fontSize="10" textAnchor="middle" fontWeight="600">conférence</text>
+  <rect x="240" y="60" width="240" height="120" className="red" opacity="0.06" />
+  <text x="360" y="200" fontSize="10" textAnchor="middle" className="red">sweeps dans les deux sens, carnet mince : pas de trade</text>
+  <line x1="480" y1="40" x2="480" y2="220" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="600" y="60" fontSize="10" textAnchor="middle" className="green" fontWeight="600">tendance digérée : le mouvement fiable</text>
+</svg>
+</Figure>
+
+## Deux trades autour d'une décision
+
+Reconstitutions pédagogiques : la même soirée de FOMC, deux approches.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Fed livre la baisse de 25 attendue (probabilité 90 % aux futures) mais le dot plot montre plus de baisses que le marché n'en cotait : guidance dovish ; le lendemain, retour de l'or dans le FVG H1 laissé par le displacement du soir, structure D haussière"
+  entree="2 412,0"
+  stop="2 402,0 (10 $, sous le sweep du soir)"
+  objectif="2 442,0 (nPOC et EQH)"
+  r="+3R">
+
+Le trader n'a rien fait à 20 h ni à 20 h 30. Il a lu : décision conforme aux futures (rien de neuf), dot plot avec deux baisses de plus que le marché n'en intégrait, conférence qui confirme. Traduction : taux anticipés en baisse, dollar en baisse, or en hausse : cohérent avec la structure quotidienne haussière de l'or. Le soir, un sweep sous le plus bas de la journée à 2 404 puis un displacement à 2 428 avec FVG H1 entre 2 408 et 2 416. Le lendemain matin, retour dans le FVG à 2 412 : entrée, stop sous le sweep. La macro a fourni le sens (dovish surprise sur la guidance, confirmée par les futures de taux le soir même) ; la séquence a fourni l'entrée ; le lendemain a fourni la liquidité.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat au marché à 20 h 01 « parce que la Fed baisse les taux »"
+  entree="5 312,00 (au marché, servi à 5 314,50)"
+  stop="5 304,00 (32 ticks prévus, exécuté à 5 302,25)"
+  objectif="5 340,00"
+  r="−1,5R">
+
+Même soirée. Le trader voit « la Fed baisse de 25 » et achète l'ES au marché à 20 h 01. La baisse était cotée à 90 % : elle n'apportait rien. Le communiqué contient une phrase prudente sur l'inflation ; première réaction : les taux montent, l'ES perd 20 points en trois minutes sur un carnet mince ; son stop est exécuté 1,75 point plus bas que prévu. À 20 h 45, la conférence rend le message dovish et l'ES repart à la hausse jusqu'à 5 345 dans la nuit. Il avait raison sur le sens final et il a perdu 1,5R : il a acheté une décision déjà dans le prix, au pire moment de liquidité de la journée, sans lire la guidance. Le titre était juste ; le trade était faux.
+
+</TradeExample>
+
+:::tip À retenir
+
+- La **Fed** (mandat double, FOMC huit fois par an, dot plot, minutes), la **BCE** (stabilité des prix, six semaines) et la **BoJ** (yen, courbe) **réagissent aux données** selon une fonction de réaction et communiquent pour ne pas surprendre.
+- Outils : **taux directeurs** (le pas de 25 pb), **QE / QT** (liquidités, taux longs), **forward guidance** (la trajectoire annoncée). La décision surprend rarement ; **la guidance, si**.
+- La **courbe des taux** résume les anticipations : normale, plate, inversée ; le **spread 2-10 ans** situe le cycle ; l'inversion précède les récessions sans dater ; bull et bear steepening ne disent pas la même chose.
+- Les **futures de taux** cotent la décision à venir (100 − prix = taux attendu ; probabilité implicite de 25 pb) ; ils sont le premier marché à réagir aux données et la référence de « ce qui est dans le prix ».
+- Réactions typiques : hawkish → taux courts et dollar ↑, actions (NQ surtout), or, obligations, crypto ↓ ; dovish → l'inverse ; le soir de FOMC est fait de sweeps, **le lendemain est plus fiable** ; la divergence entre banques centrales fait les tendances du forex.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire les futures de taux">
+
+Taux effectif des Fed funds : 5,33 %. Le future du mois de la prochaine réunion cote 94,91 ; celui du mois de la réunion suivante cote 95,10.
+
+1. Quel taux moyen le marché attend-il pour chacun des deux mois ?
+2. Quelle probabilité implicite d'une baisse de 25 pb à la prochaine réunion ? Et combien de baisses de 25 pb sont intégrées d'ici la seconde réunion (en supposant qu'aucune n'a lieu avant la première) ?
+3. La Fed baisse de 25 pb à la première réunion et indique qu'elle « procédera avec prudence ». Le marché avait coté 90 % de baisse et deux baisses d'ici la seconde réunion. Quelle réaction attendez-vous du dollar et pourquoi ?
+
+<Solution>
+
+1. Premier mois : 100 − 94,91 = **5,09 %**. Second : 100 − 95,10 = **4,90 %**.
+2. Première réunion : 5,33 − 5,09 = 24 pb intégrés → probabilité d'une baisse de 25 pb ≈ 24 ÷ 25 = **96 %**. Seconde réunion : 5,33 − 4,90 = 43 pb intégrés → environ **1,7 baisse** de 25 pb d'ici là (une quasi certaine à la première, et environ 70 % de probabilité d'une seconde).
+3. La baisse elle-même est **dans le prix** (96 % puis 90 % selon le moment) : elle ne bouge rien. La guidance « avec prudence » est **moins dovish** que ce que le marché cotait (près de deux baisses) : le marché doit retirer une partie de la seconde baisse → taux anticipés ↑ par rapport à l'attente → **dollar en hausse** (et actions / or plutôt en baisse), malgré la baisse de taux. C'est l'écart annoncé − anticipé qui compte.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire la courbe">
+
+Rendements américains : 3 mois 5,40 % ; 2 ans 4,95 % ; 10 ans 4,20 % ; 30 ans 4,35 %. Trois mois plus tard : 3 mois 5,05 % ; 2 ans 4,30 % ; 10 ans 4,15 % ; 30 ans 4,40 %.
+
+1. Décrivez la forme de la courbe au départ et calculez le spread 2-10.
+2. Que s'est-il passé en trois mois ? Nommez le mouvement.
+3. Quelle phase du cycle cela suggère-t-il, et quels actifs le tableau du chapitre 1 associe-t-il à cette phase ?
+
+<Solution>
+
+1. **Inversée** : le 3 mois et le 2 ans sont au-dessus du 10 ans. Spread 2-10 : 4,20 − 4,95 = **−0,75 %** (−75 pb).
+2. Le 2 ans a baissé de 65 pb, le 10 ans de 5 pb seulement : le spread 2-10 passe à 4,15 − 4,30 = **−0,15 %**. La courbe se **repentifie par les taux courts** : c'est un **bull steepening**, le marché intègre des baisses de taux rapprochées, typiquement parce que la banque centrale commence à assouplir face au ralentissement.
+3. Passage de la fin de cycle (surchauffe / ralentissement) vers la **récession** ou son anticipation. Actifs associés : obligations d'État (dont les prix montent avec la baisse des taux), or, devises refuges ; les actions peuvent d'abord souffrir puis toucher leur bas avant la fin de la récession. Le trader tient cette lecture comme une hypothèse de contexte, pas comme un signal.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Grille de FOMC">
+
+Avant la prochaine réunion de la Fed, rédigez la grille : ce que les futures cotent (probabilités), ce que le dot plot précédent disait, l'écart éventuel entre les deux ; puis trois scénarios (plus hawkish, conforme, plus dovish que l'attente) avec la réaction attendue de l'ES, du DXY, de l'or ; enfin votre règle de conduite pour 20 h, 20 h 30 et le lendemain.
+
+<Solution>
+
+Une grille acceptable contient : les probabilités FedWatch (par exemple « 25 pb de baisse coté à 88 %, 2,3 baisses d'ici décembre »), l'écart avec le dot plot (« la Fed disait 2 baisses en juin ; le marché en cote plus »), et les trois scénarios formulés en écart à l'attente (« si le dot plot montre moins de baisses que le marché : hawkish surprise → DXY ↑, ES ↓, or ↓ »). Règle de conduite : aucune position nouvelle de 19 h 45 à 21 h 15 ; lecture du communiqué puis de la conférence ; note du biais macro ; recherche d'un trade le lendemain sur les zones laissées, dans le sens du biais confirmé par les futures de taux, avec la structure. Si l'écart est nul (décision et guidance conformes), pas de biais macro : lecture technique seule.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le mandat de la Fed est :",
+      options: [
+        "La stabilité des prix uniquement",
+        "Double : stabilité des prix (2 % sur le PCE) et plein emploi",
+        "Le niveau des actions",
+        "Le taux de change",
+      ],
+      answer: 1,
+      explain: "La BCE a un mandat principal de stabilité des prix. Toutes réagissent aux données selon une fonction de réaction et communiquent pour ne pas surprendre.",
+    },
+    {
+      q: "Ce qui surprend le plus souvent lors d'une décision de banque centrale est :",
+      options: [
+        "Le chiffre du taux",
+        "La guidance : le ton du communiqué, la conférence, le dot plot, par rapport à ce que le marché cotait",
+        "L'heure de publication",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "La décision est presque toujours dans le prix (futures de taux). Les actifs réagissent à l'écart entre l'annoncé et l'anticipé.",
+    },
+    {
+      q: "Une courbe des taux inversée (2 ans au-dessus du 10 ans) signale :",
+      options: [
+        "Une expansion forte",
+        "Que le marché anticipe des baisses de taux futures, donc un ralentissement ; elle a précédé la plupart des récessions sans en donner la date",
+        "Une hausse imminente des actions",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "C'est un signal de contexte, pas de timing. La repentification par les taux courts (bull steepening) est souvent le moment où le ralentissement se matérialise.",
+    },
+    {
+      q: "Un future de Fed funds cote 94,85 alors que le taux effectif est 5,33 %. Le marché intègre :",
+      options: [
+        "Une hausse de 25 pb",
+        "Un taux attendu de 5,15 %, soit 18 pb de baisse, environ 72 % de probabilité d'une baisse de 25 pb",
+        "Rien",
+        "Une baisse de 50 pb certaine",
+      ],
+      answer: 1,
+      explain: "100 − prix = taux attendu ; l'écart avec le taux actuel divisé par 25 pb donne la probabilité implicite. Les futures de taux sont le premier marché à réagir aux données.",
+    },
+    {
+      q: "Une surprise hawkish de la Fed fait typiquement :",
+      options: [
+        "Baisser le dollar et monter l'or",
+        "Monter les taux courts et le dollar, baisser les actions (NQ surtout), l'or, les obligations et la crypto",
+        "Monter tout",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Le contexte de phase et le positionnement modulent, mais c'est le schéma de base. La divergence entre banques centrales fait les tendances du forex.",
+    },
+    {
+      q: "Le soir d'un FOMC, la conduite recommandée est :",
+      options: [
+        "Acheter au marché dès le communiqué",
+        "Ne pas prendre de position entre le communiqué et la fin de la conférence ; lire la guidance et les futures de taux ; chercher un trade le lendemain sur les zones laissées",
+        "Vendre au marché dès le communiqué",
+        "Doubler la taille",
+      ],
+      answer: 1,
+      explain: "Le soir, ce sont des sweeps dans les deux sens sur carnet mince ; la première réaction est souvent inversée par la conférence. Le lendemain est plus fiable.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Les taux et le dollar bougent, et tout le reste bouge avec eux, mais pas toujours dans le même sens. Le chapitre suivant lit les marchés les uns par rapport aux autres : obligations, dollar, actions et matières premières, les corrélations structurelles et leurs ruptures, risk-on et risk-off en pratique, le DXY comme boussole, et un tableau de bord intermarket.
