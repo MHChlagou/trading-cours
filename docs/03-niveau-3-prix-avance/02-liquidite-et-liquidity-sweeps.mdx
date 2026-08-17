@@ -1,0 +1,326 @@
+---
+title: "Liquidité et liquidity sweeps"
+description: "Où dort la liquidité (stops, plus hauts et plus bas égaux, extrêmes de session), les critères qui distinguent un sweep d'une cassure, la réaction post-sweep et ce qu'elle valide, les sweeps de session et de niveaux hebdomadaires, avec des exemples annotés sur NQ et EUR/USD."
+---
+
+# Liquidité et liquidity sweeps
+
+Le chapitre précédent a posé le principe : le prix va vers la liquidité. Ce chapitre le rend opérationnel. Il apprend à localiser les réservoirs de liquidité sur un graphique, à reconnaître le moment où le prix les vide (le **sweep**), à distinguer ce sweep d'une vraie cassure avec des critères vérifiables, à lire la réaction qui suit, et à hiérarchiser les sweeps selon leur échelle. C'est la brique de départ de presque tous les setups du niveau 7.
+
+## Où dort la liquidité : stops, equal highs, equal lows
+
+La liquidité qui intéresse le trader SMC est celle des **stops** : des ordres au marché en attente de déclenchement, regroupés là où les participants les placent par habitude. Trois familles de réservoirs, par ordre d'importance pratique.
+
+**Les plus hauts et plus bas égaux (equal highs, equal lows).** Deux ou trois sommets au même niveau à quelques ticks près (EQH), ou deux ou trois creux (EQL). Ce sont les réservoirs les plus fiables, parce que tout le monde les voit et que la « double » ou « triple » réaction convainc les particuliers que le niveau est solide : les vendeurs placent leurs stops juste au-dessus des EQH, les acheteurs juste sous les EQL. Plus les touches sont nombreuses et propres, plus le réservoir est gros. Le paradoxe SMC : un niveau qui paraît très solide est surtout un niveau où beaucoup de stops attendent.
+
+**Les swings évidents.** Un plus haut ou un plus bas de swing significatif (chapitre 2 du niveau 2), surtout s'il est net, isolé et récent : les stops des positions ouvertes depuis s'y trouvent. Un swing peu visible ou ancien concentre moins de liquidité.
+
+**Les extrêmes de référence.** Le plus haut et le plus bas de la veille (PDH, PDL), de la semaine précédente (PWH, PWL), de la session asiatique, de la session de Londres, de l'ouverture de New York. Beaucoup de systèmes utilisent ces prix comme stops ou comme objectifs ; ils sont des réservoirs par construction, indépendamment de la structure.
+
+À ces réservoirs de stops s'ajoutent des ordres limites (les acheteurs en attente sous un support, les vendeurs au-dessus d'une résistance) et des ordres de cassure (les traders qui achètent au-dessus d'un plus haut). Ils ne sont pas visibles sur le graphique, mais ils s'accumulent aux mêmes endroits.
+
+Un principe pour classer : **la liquidité est proportionnelle à l'évidence du niveau**. Ce que tout le monde voit, tout le monde le trade de la même façon, et le prix ira le tester.
+
+<Figure caption="Figure 1 · Carte de la liquidité sur une séance NQ en M15 : plus hauts égaux (stops de vendeurs au-dessus), plus bas égaux (stops d'acheteurs en dessous), extrêmes de la session asiatique et plus bas de la veille.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Réservoirs de liquidité repérés sur un graphique" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="310" x2="700" y2="310" className="line" strokeWidth="1" />
+  <polyline points="50,180 80,150 110,170 140,120 170,140 200,118 230,150 260,122 290,160 320,200 350,240 380,215 410,242 440,220 470,244 500,210 530,170 560,190 590,130 620,150 650,100 690,120" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+
+  <line x1="130" y1="116" x2="290" y2="116" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" />
+  <rect x="130" y="100" width="160" height="16" className="red" opacity="0.15" />
+  <text x="210" y="96" fontSize="10" textAnchor="middle" className="red" fontWeight="600">EQH : stops des vendeurs (achats en attente)</text>
+  <circle cx="140" cy="120" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" /><circle cx="200" cy="118" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" /><circle cx="260" cy="122" r="4" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+
+  <line x1="340" y1="246" x2="490" y2="246" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="5 3" />
+  <rect x="340" y="246" width="150" height="16" className="green" opacity="0.15" />
+  <text x="415" y="276" fontSize="10" textAnchor="middle" className="green" fontWeight="600">EQL : stops des acheteurs (ventes en attente)</text>
+  <circle cx="350" cy="240" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" /><circle cx="410" cy="242" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" /><circle cx="470" cy="244" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="690" y="304" fontSize="9" textAnchor="end" className="muted">plus bas de la veille (PDL) : réservoir par construction</text>
+  <line x1="40" y1="60" x2="700" y2="60" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="690" y="56" fontSize="9" textAnchor="end" className="muted">plus haut de la veille (PDH)</text>
+  <rect x="50" y="130" width="60" height="60" fill="none" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="80" y="206" fontSize="9" textAnchor="middle" className="gold">range asiatique</text>
+</svg>
+</Figure>
+
+## Sweep contre cassure : les critères de distinction
+
+Un **liquidity sweep** (ou stop hunt, ou raid) est une incursion du prix au-delà d'un réservoir de liquidité, suivie d'un **retour rapide** de l'autre côté : les stops ont été pris, le gros participant s'est servi, le prix n'a plus de raison de rester. Une **cassure** (breakout) est un dépassement du même niveau **suivi d'une acceptation** : le prix reste au-delà, construit dessus, continue.
+
+Sur le moment, les deux commencent pareil. Les distinguer demande des critères, et ces critères sont les mêmes qu'au niveau 2, précisés :
+
+| Critère | Sweep | Cassure |
+| --- | --- | --- |
+| **Clôture** de la bougie de dépassement (unité de structure) | Revient **du bon côté** du niveau : mèche au-delà, corps en deçà | Reste **au-delà** du niveau, corps compris |
+| **Vitesse du retour** | Immédiat ou en une à trois bougies | Pas de retour, ou retour lent après acceptation |
+| **Amplitude du dépassement** | Faible : quelques ticks à une fraction d'ATR | Nette : le prix s'installe au-delà |
+| **Volume** (futures) | Pic sur la mèche, puis le prix repart : les stops ont été absorbés | Volume élevé **et** le prix continue |
+| **Structure** | Le swing suivant se forme du côté initial : le niveau tient | Le niveau devient support ou résistance de l'autre côté (retest) |
+| **Ce qui suit** | Displacement dans le sens **opposé** au dépassement | Continuation dans le sens du dépassement |
+
+Le critère décisif est la **clôture** : sur l'unité de temps qui a défini le niveau, une bougie qui a dépassé les EQL puis clôturé au-dessus est un sweep ; une bougie qui clôture en dessous est une cassure candidate, à confirmer par le retest. Tout le reste est indice ; la clôture est le juge.
+
+Deux pièges. Premier piège : juger sur une unité de temps trop petite. Une bougie M1 qui clôture sous les EQL n'a aucune valeur si les EQL sont un niveau H1 ; on attend la clôture H1, ou au minimum une clôture M15 nette. Second piège : appeler « sweep » tout dépassement suivi d'un retour, même après trois heures. Un sweep est **rapide** ; un retour tardif après acceptation est un retournement, avec une autre logique.
+
+<Figure caption="Figure 2 · Sweep contre cassure sur les mêmes plus bas égaux, en H1. À gauche, la mèche traverse et le corps clôture au-dessus : sweep. À droite, le corps clôture en dessous puis le niveau est retesté par-dessous : cassure.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Sweep et cassure comparés sur des plus bas égaux" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Sweep</text>
+  <line x1="40" y1="180" x2="330" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="46" y="176" fontSize="9" className="green">EQL</text>
+  <line x1="80" y1="130" x2="80" y2="182" className="line" strokeWidth="1.5" /><rect x="74" y="140" width="12" height="36" className="red" opacity="0.9" />
+  <line x1="110" y1="140" x2="110" y2="180" className="line" strokeWidth="1.5" /><rect x="104" y="150" width="12" height="26" className="green" opacity="0.9" />
+  <line x1="140" y1="150" x2="140" y2="181" className="line" strokeWidth="1.5" /><rect x="134" y="155" width="12" height="22" className="red" opacity="0.9" />
+  <line x1="170" y1="120" x2="170" y2="215" className="line" strokeWidth="1.5" /><rect x="164" y="128" width="12" height="40" className="green" opacity="0.9" />
+  <line x1="200" y1="90" x2="200" y2="140" className="line" strokeWidth="1.5" /><rect x="194" y="95" width="12" height="38" className="green" opacity="0.9" />
+  <line x1="230" y1="70" x2="230" y2="105" className="line" strokeWidth="1.5" /><rect x="224" y="74" width="12" height="26" className="green" opacity="0.9" />
+  <circle cx="170" cy="215" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="170" y="240" fontSize="9" textAnchor="middle" className="green" fontWeight="600">mèche sous EQL, clôture au-dessus</text>
+  <text x="215" y="60" fontSize="9" textAnchor="middle" className="muted">displacement opposé</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Cassure</text>
+  <line x1="400" y1="180" x2="690" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="406" y="176" fontSize="9" className="green">EQL</text>
+  <line x1="440" y1="130" x2="440" y2="182" className="line" strokeWidth="1.5" /><rect x="434" y="140" width="12" height="36" className="red" opacity="0.9" />
+  <line x1="470" y1="140" x2="470" y2="180" className="line" strokeWidth="1.5" /><rect x="464" y="150" width="12" height="26" className="green" opacity="0.9" />
+  <line x1="500" y1="150" x2="500" y2="181" className="line" strokeWidth="1.5" /><rect x="494" y="155" width="12" height="22" className="red" opacity="0.9" />
+  <line x1="530" y1="160" x2="530" y2="230" className="line" strokeWidth="1.5" /><rect x="524" y="165" width="12" height="55" className="red" opacity="0.9" />
+  <line x1="560" y1="175" x2="560" y2="215" className="line" strokeWidth="1.5" /><rect x="554" y="185" width="12" height="20" className="green" opacity="0.9" />
+  <line x1="590" y1="200" x2="590" y2="255" className="line" strokeWidth="1.5" /><rect x="584" y="205" width="12" height="42" className="red" opacity="0.9" />
+  <line x1="620" y1="235" x2="620" y2="280" className="line" strokeWidth="1.5" /><rect x="614" y="240" width="12" height="32" className="red" opacity="0.9" />
+  <text x="530" y="248" fontSize="9" textAnchor="middle" className="red" fontWeight="600">clôture sous EQL</text>
+  <text x="560" y="168" fontSize="9" textAnchor="middle" className="muted">retest par-dessous</text>
+</svg>
+</Figure>
+
+## La réaction post-sweep et ce qu'elle valide
+
+Le sweep seul ne dit rien : le prix a pris des stops, et alors ? Ce qui compte est **ce qu'il fait ensuite**. La réaction post-sweep valide ou non l'hypothèse « un gros participant s'est servi ».
+
+**La réaction qui valide.** Après le sweep, un **displacement** dans le sens opposé : une ou plusieurs bougies larges, rapides, qui laissent souvent un déséquilibre (FVG, chapitre suivant) et cassent un swing interne récent (un CHoCH en petite unité, chapitre 5). Le message : la liquidité a été prise **et** quelqu'un a utilisé cette liquidité pour construire une position et pousser le prix. C'est le sweep « avec confirmation », celui sur lequel se construisent les entrées.
+
+**La réaction qui ne valide pas.** Après le sweep, le prix reste collé au niveau, hésite, forme des petites bougies : les stops ont été pris, mais personne ne pousse. Deux issues : le prix finit par casser (le sweep était le premier temps d'une vraie cassure), ou il repart mollement. Dans les deux cas, pas de setup : le sweep sans displacement est une information, pas une entrée.
+
+**Ce que valide un sweep confirmé**, en termes de lecture : que le niveau était bien un réservoir (les stops étaient là), qu'un participant important a agi (le displacement), et que la direction probable à court terme est celle du displacement, vers la liquidité opposée. En termes d'exécution, il donne : une **invalidation nette** (sous la mèche du sweep, avec une marge : si le prix repasse sous le plus bas du sweep, l'hypothèse « le gros acheteur est servi » est fausse) ; une **zone d'entrée** (le retour dans le FVG ou l'order block du displacement) ; une **cible** (le réservoir opposé).
+
+Une règle pratique qui évite bien des pertes : **on n'entre jamais sur le sweep lui-même**. On ne sait pas encore, au moment de la mèche, si c'est un sweep ou le début d'une cassure. On entre sur le retour après le displacement, quand la clôture a tranché et que la structure interne a montré la réaction. Le prix « manqué » entre la mèche et l'entrée est le prix de la confirmation ; il est largement compensé par le taux de faux signaux évités.
+
+<Figure caption="Figure 3 · Réaction post-sweep. En haut, sweep confirmé : displacement, CHoCH interne, FVG, retour, entrée. En bas, sweep non confirmé : le prix stagne au niveau, pas de setup, puis vraie cassure.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Sweep confirmé et sweep non confirmé" xmlns="http://www.w3.org/2000/svg">
+  <text x="60" y="24" fontSize="12" fontWeight="600">Sweep confirmé</text>
+  <line x1="60" y1="120" x2="700" y2="120" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="66" y="116" fontSize="9" className="green">EQL</text>
+  <polyline points="70,80 110,110 150,95 190,118 230,138 250,125 270,70 300,85 330,60 360,80 390,95 420,75 470,40 520,55 580,20" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="230" cy="138" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="230" y="158" fontSize="9" textAnchor="middle" className="green">sweep</text>
+  <text x="270" y="60" fontSize="9" textAnchor="middle" className="muted">displacement</text>
+  <line x1="150" y1="95" x2="300" y2="95" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="305" y="99" fontSize="9" className="muted">CHoCH interne</text>
+  <rect x="270" y="80" width="40" height="18" className="gold" opacity="0.3" />
+  <circle cx="390" cy="95" r="5" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="390" y="112" fontSize="9" textAnchor="middle" className="gold" fontWeight="600">entrée au retour</text>
+  <line x1="60" y1="150" x2="700" y2="150" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="690" y="164" fontSize="9" textAnchor="end" className="red">invalidation : sous la mèche + marge</text>
+
+  <text x="60" y="200" fontSize="12" fontWeight="600">Sweep non confirmé</text>
+  <line x1="60" y1="290" x2="700" y2="290" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="5 3" />
+  <text x="66" y="286" fontSize="9" className="green">EQL</text>
+  <polyline points="70,240 110,270 150,255 190,288 230,305 250,292 270,286 300,295 330,288 360,296 390,290 420,300 450,294 480,310 520,325 560,318 600,335" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="230" cy="305" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="230" y="325" fontSize="9" textAnchor="middle" className="red">sweep ?</text>
+  <text x="360" y="276" fontSize="9" textAnchor="middle" className="muted">pas de displacement : stagnation, pas de setup</text>
+  <text x="560" y="310" fontSize="9" textAnchor="middle" className="red">cassure réelle</text>
+</svg>
+</Figure>
+
+## Sweeps de session et sweeps de niveaux hebdomadaires
+
+Les sweeps existent à toutes les échelles, et leur portée est proportionnelle à l'échelle du réservoir.
+
+**Sweeps de session (intraday).** Les plus fréquents. Le plus haut ou le plus bas de la session asiatique est pris à l'ouverture de Londres ; le plus haut ou le plus bas de Londres est pris à l'ouverture de New York ; les EQH/EQL formés dans la matinée sont pris dans l'après-midi. Ces sweeps se produisent en général dans les **killzones** (chapitre 6), moments où le volume permet à un gros participant d'exécuter. Ils donnent des mouvements de quelques dizaines de points sur NQ, de 20 à 60 pips sur EUR/USD, exploitables en M5 / M15 avec un contexte H1.
+
+**Sweeps du plus haut ou plus bas de la veille (PDH / PDL).** Un cran au-dessus. Prendre le PDL puis repartir à la hausse est un schéma de journée entier : la première partie de la séance sert à aller chercher la liquidité de la veille, la seconde à se déplacer vers l'autre côté. Ces sweeps se lisent en H1 avec un contexte quotidien.
+
+**Sweeps de niveaux hebdomadaires ou mensuels (PWH / PWL, plus haut / plus bas du mois).** Rares, puissants. Le prix va prendre les stops accumulés sur une semaine ou un mois, puis retourne. Ils s'inscrivent dans une structure quotidienne ou H4, produisent des mouvements de plusieurs jours, et servent de cadre aux swings. Le trader intraday doit au minimum les connaître : un sweep du PWL le lundi matin change le biais de la semaine.
+
+**Sweeps de swings majeurs (plus haut / plus bas de plusieurs mois).** C'est le domaine de Wyckoff (chapitres 7 et 8) : le spring et l'upthrust sont des sweeps de la liquidité accumulée sous un range de plusieurs semaines. Même mécanique, autre échelle.
+
+La règle d'emboîtement : **un sweep de petite échelle se trade dans le sens de la structure de grande échelle**. Un sweep du plus bas asiatique suivi d'un displacement haussier est un excellent achat si le quotidien est haussier ; c'est un achat contre-tendance, à plus faible probabilité, si le quotidien vient de casser un HL. Le niveau 2 (multi-timeframe) reste la grille.
+
+## Exemples annotés sur NQ et EUR/USD
+
+**Exemple NQ, sweep de session.** Mardi, session asiatique : range 18 340-18 372, avec deux plus bas à 18 341 et 18 340 (EQL). Contexte quotidien haussier, HL quotidien à 18 290. 9 h 05 (ouverture Londres) : bougie M15 qui descend à 18 331, clôture à 18 352 (mèche sous les EQL, corps au-dessus : sweep). Bougie suivante : +38 points, de 18 352 à 18 390, laissant un déséquilibre entre 18 360 et 18 372, et cassant le dernier LH interne M5 à 18 366 (CHoCH interne). 9 h 40 : le prix revient à 18 368, dans le déséquilibre. Entrée là, stop à 18 326 (sous la mèche, marge 5 points), cible : le plus haut de la veille à 18 456. Ratio : 88 ÷ 42 ≈ 2,1. Annotations sur le graphique : EQL, mèche du sweep, bougie de displacement, zone de retour, CHoCH interne, PDH comme cible.
+
+**Exemple EUR/USD, sweep du plus haut de la veille.** Contexte quotidien baissier (LH/LL), dernier LH quotidien à 1,0895. Plus haut de la veille : 1,0872, avec des EQH à 1,0870-1,0872 formés en fin de journée. Mercredi 14 h 30 (chiffre américain) : mèche H1 à 1,0881, clôture à 1,0858 : sweep du PDH et des EQH. Bougie H1 suivante : −45 pips, de 1,0858 à 1,0813, déséquilibre entre 1,0835 et 1,0850, cassure du dernier HL interne M15 à 1,0842 (CHoCH interne). 16 h : retour à 1,0840. Entrée short, stop à 1,0886 (au-dessus de la mèche, marge 5 pips), cible : le plus bas de la veille à 1,0790. Ratio : 50 ÷ 46 ≈ 1,1, insuffisant selon les règles de la plupart des plans (minimum 2). **Le trade ne se prend pas** tel quel, ou se prend avec une cible plus lointaine (le PWL à 1,0755, ratio 1,85, encore juste) ou une entrée plus proche du sweep. L'annotation est correcte ; l'exécution dit non. C'est aussi cela, un exemple annoté.
+
+Ces deux exemples montrent la même séquence et deux verdicts différents. Le sweep n'est jamais un signal ; c'est le premier élément d'une lecture qui doit passer par la structure, la zone de retour et le ratio.
+
+## Deux trades sur un sweep
+
+Reconstitutions pédagogiques : le même sweep, deux exécutions.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Sweep des EQL de la session asiatique à l'ouverture de Londres, displacement, CHoCH interne, entrée au retour dans le déséquilibre, contexte D haussier"
+  entree="18 368,00"
+  stop="18 326,00 (42 pts, sous la mèche du sweep + 5 pts)"
+  objectif="18 456,00 (PDH)"
+  r="+2,1R">
+
+L'exemple NQ ci-dessus, exécuté. Compte de 8 000 $, budget 80 $ : 42 × 2 = 84 $ par contrat, au-dessus du budget de 4 $ ; le trader applique sa règle (arrondi vers le bas : 0 contrat sur MNQ) et cherche l'équivalent sur MES, où le stop équivalent fait 9 points (45 $) : 1 MES. Le trade atteint le PDH équivalent en début d'après-midi. Ce qui a fait le trade : la clôture M15 au-dessus des EQL (le sweep est validé), le displacement immédiat (quelqu'un a poussé), l'attente du retour (pas d'entrée sur la mèche), et un stop hors du réservoir. Ce qui aurait pu le faire perdre : rien d'identifiable a priori ; il aurait pu perdre en étant correct.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Long"
+  setup="Achat sur la mèche du sweep, avant la clôture, sans displacement"
+  entree="18 334,00 (au marché, dans la mèche)"
+  stop="18 324,00 (10 pts)"
+  objectif="18 456,00"
+  r="−1R">
+
+Autre trader, même mèche, une autre fois : sur cette séance-là, la bougie M15 qui descend à 18 331 ne clôture pas au-dessus des EQL ; elle clôture à 18 338, deux points sous, et la suivante continue à 18 310. Ce n'était pas un sweep, c'était le début d'une cassure ; on ne pouvait pas le savoir sur la mèche, on pouvait le savoir à la clôture. Le trader qui a acheté dans la mèche « parce que c'est un sweep » a parié sur une clôture qui n'est pas venue. Perte de 1R sur un stop serré placé, en plus, dans le réservoir résiduel. La leçon : le sweep n'existe qu'à la clôture ; avant, c'est un dépassement.
+
+</TradeExample>
+
+:::tip À retenir
+
+- La liquidité des stops dort aux endroits **évidents** : plus hauts et plus bas égaux, swings nets, extrêmes de la veille, de la semaine, des sessions. Plus le niveau paraît solide, plus il concentre de stops.
+- **Sweep contre cassure** : le juge est la **clôture** sur l'unité de temps du niveau (mèche au-delà, corps en deçà = sweep) ; vitesse du retour, amplitude, volume et structure sont des indices.
+- Un sweep ne vaut que par sa **réaction** : displacement opposé, CHoCH interne, déséquilibre laissé. Sans réaction, information ; pas d'entrée.
+- **On n'entre jamais sur la mèche** : on entre au retour, après la clôture, avec le stop hors du réservoir (sous la mèche + marge).
+- Les sweeps existent à toutes les échelles (session, veille, semaine, mois) ; les petits se tradent dans le sens de la structure des grands.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Localiser la liquidité">
+
+Sur l'ES en H1, vous relevez : plus haut de la veille 5 318 ; plus bas de la veille 5 276 ; deux sommets à 5 305 et 5 306 ce matin ; un creux isolé à 5 289 ; range asiatique 5 292-5 301 ; le prix est à 5 298 à 14 h.
+
+1. Listez les réservoirs de liquidité au-dessus et en dessous du prix, du plus proche au plus lointain, avec le type de stops concernés.
+2. Le contexte quotidien est haussier. Quel réservoir un gros acheteur a-t-il intérêt à voir pris en premier, et pourquoi ?
+3. Écrivez le scénario « sweep puis retour » qui en découle, avec la condition de validation.
+
+<Solution>
+
+1. **Au-dessus** : plus haut asiatique 5 301 (stops de vendeurs de nuit, petit) ; EQH 5 305-5 306 (stops de vendeurs, réservoir majeur) ; PDH 5 318 (réservoir par construction). **En dessous** : plus bas asiatique 5 292 (stops d'acheteurs de nuit) ; creux isolé 5 289 (petit réservoir) ; PDL 5 276 (réservoir majeur).
+2. Un gros acheteur cherche des **vendeurs** : la liquidité en ordres de vente est **sous** le prix, dans les stops des acheteurs. Il a intérêt à ce que le prix descende d'abord : plus bas asiatique 5 292, éventuellement 5 289, voire le PDL 5 276 pour un réservoir plus gros.
+3. « Si le prix descend sous 5 292 (ou 5 289) et que la bougie H1 clôture au-dessus, avec un displacement haussier et un CHoCH interne M5, je cherche un achat au retour dans le déséquilibre, stop sous la mèche + marge, cible EQH 5 305-5 306 puis PDH 5 318. Si la bougie H1 clôture sous 5 292, c'est une cassure candidate : pas d'achat, on attend. »
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Sweep ou cassure ?">
+
+Trois situations sur EUR/USD, EQL à 1,0820 définis en H1 :
+
+- (a) Bougie H1 : bas 1,0812, clôture 1,0826 ; bougie suivante : +30 pips.
+- (b) Bougie H1 : bas 1,0808, clôture 1,0811 ; bougie suivante : retour à 1,0819 puis clôture à 1,0805.
+- (c) Bougie M5 : bas 1,0815, clôture 1,0823 ; la bougie H1 en cours n'est pas close.
+
+1. Qualifiez chaque situation (sweep, cassure, indéterminé) avec le critère utilisé.
+2. Dans le cas (a), où va l'invalidation d'un achat ?
+3. Dans le cas (c), que faut-il faire ?
+
+<Solution>
+
+1. **(a) Sweep** : mèche sous 1,0820, clôture H1 au-dessus, displacement haussier immédiat. **(b) Cassure** : clôture H1 sous les EQL, retest par-dessous (1,0819) sans reprise, nouvelle clôture plus bas. **(c) Indéterminé** : le M5 n'est pas l'unité qui définit le niveau ; il faut la clôture H1 (ou au minimum une clôture M15 nette avec displacement).
+2. Sous la mèche du sweep avec une marge : 1,0812 moins 4 à 5 pips, soit **1,0807-1,0808**. Si le prix repasse là, l'hypothèse « le gros acheteur est servi » est fausse.
+3. **Attendre.** Ne pas acheter sur la mèche M5. Si la bougie H1 clôture au-dessus de 1,0820 avec displacement, on passe au scénario (a) ; si elle clôture en dessous, au scénario (b).
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Annoter un sweep complet">
+
+Reprenez l'exemple EUR/USD du chapitre (sweep du PDH à 14 h 30). Refaites l'annotation en cinq éléments (réservoir, mèche, displacement, CHoCH interne, zone de retour) et recalculez le ratio avec trois cibles : PDL 1,0790, PWL 1,0755, et un objectif à 1 ATR quotidien (ATR = 65 pips) sous l'entrée. Concluez sur la prise ou non du trade selon une règle de ratio minimal de 2.
+
+<Solution>
+
+Annotation : réservoir = PDH 1,0872 et EQH 1,0870-1,0872 ; mèche à 1,0881 avec clôture H1 à 1,0858 (sweep) ; displacement de 45 pips jusqu'à 1,0813 ; CHoCH interne M15 par cassure du HL à 1,0842 ; zone de retour 1,0835-1,0850, entrée à 1,0840 ; invalidation 1,0886. Risque : 46 pips. Cibles : PDL 1,0790 → 50 pips, ratio **1,1** ; PWL 1,0755 → 85 pips, ratio **1,85** ; 1 ATR sous l'entrée → 1,0775, 65 pips, ratio **1,4**. Aucune cible ne donne 2 : **le trade ne se prend pas** avec cette entrée. Il se prendrait avec une entrée plus haute dans la zone (1,0848 : risque 38 pips, PWL à 93 pips, ratio 2,45), à condition que le prix y revienne, ou pas du tout. C'est la réponse attendue : une lecture juste et un refus d'exécuter.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Où la liquidité des stops se concentre-t-elle le plus ?",
+      options: [
+        "Au milieu des ranges",
+        "Aux endroits évidents : plus hauts et plus bas égaux, swings nets, extrêmes de la veille, de la semaine, des sessions",
+        "Sur les moyennes mobiles",
+        "Nulle part de prévisible",
+      ],
+      answer: 1,
+      explain: "Ce que tout le monde voit, tout le monde le trade de la même façon. Plus un niveau paraît solide, plus il concentre de stops.",
+    },
+    {
+      q: "Le critère décisif pour distinguer un sweep d'une cassure est :",
+      options: [
+        "La couleur de la bougie",
+        "La clôture sur l'unité de temps qui a défini le niveau : mèche au-delà et corps en deçà pour un sweep",
+        "Le volume seul",
+        "L'heure",
+      ],
+      answer: 1,
+      explain: "Vitesse du retour, amplitude, volume et structure sont des indices ; la clôture est le juge.",
+    },
+    {
+      q: "Un sweep sans displacement ensuite :",
+      options: [
+        "Est un signal d'achat",
+        "Est une information, pas une entrée : personne n'a poussé, le niveau peut encore casser",
+        "Doit être vendu",
+        "N'existe pas",
+      ],
+      answer: 1,
+      explain: "La réaction valide l'hypothèse « un gros participant s'est servi ». Sans réaction, pas de setup.",
+    },
+    {
+      q: "Quand entre-t-on sur un sweep ?",
+      options: [
+        "Sur la mèche, le plus tôt possible",
+        "Au retour dans la zone laissée par le displacement, après la clôture, stop sous la mèche + marge",
+        "Jamais",
+        "À la clôture de la journée",
+      ],
+      answer: 1,
+      explain: "Sur la mèche, on ne sait pas encore si c'est un sweep ou une cassure. Le prix manqué est le prix de la confirmation.",
+    },
+    {
+      q: "Un sweep du plus bas asiatique avec displacement haussier, alors que le quotidien vient de casser un HL. C'est :",
+      options: [
+        "Un achat de qualité maximale",
+        "Un achat contre la structure de grande échelle, à plus faible probabilité ; les petits sweeps se tradent dans le sens des grands",
+        "Une vente",
+        "Sans importance",
+      ],
+      answer: 1,
+      explain: "L'emboîtement multi-timeframe reste la grille : un sweep de session dans le sens du quotidien vaut mieux qu'un sweep contre lui.",
+    },
+    {
+      q: "Une lecture de sweep correcte donne un ratio gain/risque de 1,1 sur la seule cible logique. Vous :",
+      options: [
+        "Prenez le trade, la lecture est bonne",
+        "Ne prenez pas le trade, ou attendez une entrée plus favorable dans la zone",
+        "Rapprochez le stop dans la mèche",
+        "Doublez la taille",
+      ],
+      answer: 1,
+      explain: "Le sweep n'est jamais un signal ; c'est le premier élément d'une lecture qui doit passer par la structure, la zone et le ratio. Une lecture juste peut conclure à ne pas trader.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le sweep est validé par le mouvement qui le suit. Le chapitre suivant définit précisément ce mouvement, le displacement, et le déséquilibre qu'il laisse, le fair value gap : définition stricte sur trois bougies, conditions de validité, usage comme zone d'intérêt et non comme signal, mitigation, inversion, invalidation, et confluence multi-timeframe.
