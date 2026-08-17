@@ -1,0 +1,372 @@
+---
+title: "Infrastructure de trading"
+description: "Le matériel réellement utile, les plateformes (TradingView, Sierra Chart, NinjaTrader, MT5), les flux de données à payer, l'organisation du poste et le plan de secours à appliquer quand tout tombe en panne avec une position ouverte."
+---
+
+# Infrastructure de trading
+
+Le poste de trading n'a pas besoin de ressembler à une salle de marché. Il a besoin d'être fiable, lisible et de survivre à une panne. Ce chapitre sépare ce qui est utile de ce qui est du décor, décrit les grandes plateformes et les données qu'il faut payer, propose une organisation d'écran, et se termine par le sujet que tout le monde néglige jusqu'au jour où il coûte cher : que faire quand la connexion tombe avec une position ouverte.
+
+## Matériel : ce qui est utile, ce qui est du gadget
+
+### Ce qui compte vraiment
+
+- **Un ordinateur stable.** Un portable ou une tour récente, avec 16 Go de mémoire, un SSD et un processeur correct suffit largement pour un trader discrétionnaire. Ce qui compte : qu'il ne plante pas, qu'il ne se mette pas à jour tout seul à 15 h 29, et qu'il tourne sans ventilateur hurlant pendant huit heures.
+- **Une connexion Internet fiable, et une seconde connexion.** La fibre ou un câble stable en premier ; un partage de connexion mobile prêt à être activé en second. La redondance de la connexion est le seul achat qui protège directement votre capital.
+- **Un onduleur (UPS).** Un boîtier à quelques dizaines d'euros qui alimente l'ordinateur et la box pendant dix à vingt minutes en cas de coupure de courant : le temps de fermer ou de protéger une position.
+- **Deux écrans.** Un pour l'exécution (graphique de travail et ticket d'ordre), un pour le contexte (unité de temps supérieure, carnet, calendrier). Au-delà de deux, le gain marginal est faible pour un débutant ; le coût en attention est réel.
+- **Une souris précise et un clavier confortable.** Vous cliquerez des ordres ; un clic manqué sur un DOM se paie en ticks.
+
+### Ce qui relève du gadget
+
+Six écrans en arc de cercle, un fauteuil de gamer, une machine à 4 000 € avec carte graphique de calcul intensif, une lampe RGB : rien de tout cela n'améliore une seule exécution. Le trader discrétionnaire ne calcule pas de modèles lourds ; il regarde des graphiques et clique. Ce qui manque le plus souvent aux débutants, ce n'est pas la puissance, c'est la fiabilité et la sobriété.
+
+Une exception : le trader qui fait du backtesting quantitatif (niveau 7) ou qui enregistre le tick par tick d'un carnet a besoin de plus de mémoire et de disque. Cela vient plus tard.
+
+<Figure caption="Figure 1 · Le poste minimal fiable : deux écrans, un onduleur, deux connexions. Tout le reste est optionnel.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Schéma d'un poste de trading minimal avec redondance" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="40" width="240" height="140" rx="6" className="box" strokeWidth="1.5" />
+  <text x="180" y="66" fontSize="13" fontWeight="600" textAnchor="middle">Écran 1 · Exécution</text>
+  <text x="180" y="90" fontSize="11" textAnchor="middle" className="muted">graphique de travail (M5 / M15)</text>
+  <text x="180" y="108" fontSize="11" textAnchor="middle" className="muted">ticket d'ordre, DOM</text>
+  <text x="180" y="126" fontSize="11" textAnchor="middle" className="muted">positions et ordres actifs</text>
+  <text x="180" y="160" fontSize="11" textAnchor="middle" className="gold" fontWeight="600">seul écran obligatoire</text>
+
+  <rect x="320" y="40" width="240" height="140" rx="6" className="box" strokeWidth="1.5" />
+  <text x="440" y="66" fontSize="13" fontWeight="600" textAnchor="middle">Écran 2 · Contexte</text>
+  <text x="440" y="90" fontSize="11" textAnchor="middle" className="muted">unités de temps supérieures (H1 / H4 / D)</text>
+  <text x="440" y="108" fontSize="11" textAnchor="middle" className="muted">calendrier économique</text>
+  <text x="440" y="126" fontSize="11" textAnchor="middle" className="muted">journal, checklist du jour</text>
+
+  <rect x="590" y="40" width="110" height="60" rx="6" className="box" strokeWidth="1.5" />
+  <text x="645" y="64" fontSize="12" fontWeight="600" textAnchor="middle">Onduleur</text>
+  <text x="645" y="82" fontSize="11" textAnchor="middle" className="muted">10 à 20 min</text>
+
+  <rect x="590" y="120" width="110" height="60" rx="6" className="box" strokeWidth="1.5" />
+  <text x="645" y="144" fontSize="12" fontWeight="600" textAnchor="middle">Connexion 2</text>
+  <text x="645" y="162" fontSize="11" textAnchor="middle" className="muted">partage mobile</text>
+
+  <line x1="180" y1="180" x2="180" y2="220" className="line" strokeWidth="1.5" />
+  <line x1="440" y1="180" x2="440" y2="220" className="line" strokeWidth="1.5" />
+  <line x1="180" y1="220" x2="440" y2="220" className="line" strokeWidth="1.5" />
+  <rect x="230" y="220" width="160" height="50" rx="6" className="box" strokeWidth="1.5" />
+  <text x="310" y="242" fontSize="12" fontWeight="600" textAnchor="middle">Ordinateur</text>
+  <text x="310" y="260" fontSize="11" textAnchor="middle" className="muted">stable, mises à jour maîtrisées</text>
+
+  <line x1="390" y1="245" x2="500" y2="245" className="line" strokeWidth="1.5" />
+  <rect x="500" y="225" width="80" height="40" rx="6" className="box" strokeWidth="1.5" />
+  <text x="540" y="249" fontSize="11" fontWeight="600" textAnchor="middle">Box fibre</text>
+  <line x1="580" y1="245" x2="700" y2="245" className="line" strokeWidth="1.5" strokeDasharray="5 3" />
+  <text x="640" y="238" fontSize="10" textAnchor="middle" className="muted">bascule si panne</text>
+</svg>
+</Figure>
+
+## Plateformes : TradingView, Sierra Chart, NinjaTrader, MT5
+
+Une plateforme fait deux choses : afficher les données (graphiques, carnet, indicateurs) et envoyer les ordres. Certaines font très bien la première, d'autres la seconde, quelques-unes les deux. Voici les quatre que vous croiserez le plus, avec ce qu'elles font bien et moins bien.
+
+**TradingView.** Application web et bureau, la référence pour l'analyse graphique : ergonomie excellente, tous les marchés sur un même écran, alertes, réplication multi-appareils, langage Pine Script pour créer des indicateurs et des stratégies simples. L'exécution est possible avec un nombre croissant de brokers connectés, mais l'outil n'est pas conçu pour l'order flow fin (footprint, DOM avancé). Formule gratuite limitée ; les formules payantes débloquent plus de graphiques et d'indicateurs par écran, et les données futures en temps réel sont facturées à part.
+
+**Sierra Chart.** Logiciel Windows, très rapide, très complet pour les futures : DOM, footprint, volume profile, réplay, backtesting, connexion directe à de nombreux brokers de futures et à ses propres flux de données. Interface austère et courbe d'apprentissage réelle. C'est l'outil des traders d'order flow (niveau 4). Prix : abonnement mensuel modéré, données en supplément.
+
+**NinjaTrader.** Logiciel Windows, très répandu pour les futures aux États-Unis. Bon DOM, brackets et gestion des ordres avancée, réplay de marché, écosystème d'indicateurs et de stratégies en C#. La plateforme est liée à un broker du même nom mais accepte d'autres connexions. Formule gratuite pour les graphiques et la simulation ; frais de licence ou commissions plus élevées pour l'exécution en réel selon la formule.
+
+**MetaTrader 5 (MT5).** Standard historique du forex et des CFD de détail, fourni gratuitement par les brokers. Exécution simple, langage MQL5 pour l'automatisation, énorme communauté. Adapté au forex, moins aux futures ; l'order flow y est limité, et la qualité des données dépend entièrement du broker qui l'alimente. Son prédécesseur MT4 est encore très utilisé.
+
+| | TradingView | Sierra Chart | NinjaTrader | MT5 |
+| --- | --- | --- | --- | --- |
+| Point fort | Analyse graphique, ergonomie | Order flow, vitesse, futures | DOM, brackets, réplay | Forex, gratuité, automatisation |
+| Point faible | Order flow limité | Interface austère | Windows uniquement, formules complexes | Données dépendantes du broker |
+| Marchés | Tous en affichage | Futures surtout | Futures surtout | Forex, CFD |
+| Système | Web, bureau, mobile | Windows | Windows | Windows, mobile |
+| Programmation | Pine Script | ACSIL (C++), Spreadsheets | C# | MQL5 |
+| Coût | Gratuit à payant | Abonnement | Gratuit à licence | Gratuit via broker |
+
+Beaucoup de traders combinent : TradingView pour l'analyse et le suivi multi-marchés, Sierra Chart ou NinjaTrader pour l'exécution sur futures. Ce cours utilise cette combinaison dans ses exemples. Peu importe la plateforme au début : ce qui compte, c'est de savoir placer un bracket les yeux fermés sur celle que vous avez choisie.
+
+## Flux de données et abonnements nécessaires
+
+Les graphiques ne sont pas gratuits ; les Bourses vendent leurs données. Comprendre ce que l'on paie évite deux erreurs : payer trop, ou trader sur des données retardées sans le savoir.
+
+- **Données de Bourse (futures, actions).** Le CME facture l'accès en temps réel à ses données, par groupe de marchés (indices, énergie, métaux). Pour un particulier (« non-professionnel »), l'abonnement se compte en dizaines de dollars par mois. Sans abonnement, TradingView ou votre broker affiche des données retardées de 10 à 15 minutes, inutilisables pour trader.
+- **Niveaux de données.** Le **niveau 1** (top of book) donne le meilleur bid, le meilleur ask et les dernières transactions : suffisant pour un trader graphique. Le **niveau 2** (profondeur, ou DOM) montre plusieurs niveaux du carnet : nécessaire pour l'order flow, plus cher.
+- **Forex et CFD.** Les prix viennent du broker et sont inclus. Ils sont donc gratuits, mais propres à ce broker : deux plateformes montreront des mèches différentes sur la même minute.
+- **Crypto.** Données gratuites par plateforme, mais fragmentées : le prix du BTC sur une plateforme n'est pas celui d'une autre.
+- **Historique.** Pour le backtesting, il faut de la profondeur historique propre. Certains fournisseurs vendent des historiques tick par tick ; TradingView fournit un historique en barres selon la formule.
+
+Un budget réaliste pour un débutant sur futures : plateforme et données de 30 à 80 $ par mois selon les choix. C'est un coût fixe qu'il faut mettre dans le calcul de rentabilité du chapitre précédent, et une raison de plus de ne pas multiplier les abonnements avant d'être rentable.
+
+## Organisation du poste et des espaces de travail
+
+Un écran bien organisé réduit les erreurs d'exécution et la fatigue. Quelques principes.
+
+1. **Un espace de travail par marché ou par routine.** Sur TradingView ou Sierra, enregistrez une disposition « ES intraday », une « or swing », une « préparation du matin ». Le passage de l'une à l'autre est un clic, pas quinze minutes de réglages.
+2. **Le graphique d'exécution au centre, sans indicateur inutile.** Prix, volume, deux ou trois niveaux tracés. Le contexte est sur l'autre écran, pas superposé au graphique de travail.
+3. **Le ticket d'ordre toujours au même endroit**, avec la quantité par défaut réglée sur la plus petite taille. Vos yeux et votre main doivent le trouver sans chercher.
+4. **La liste des positions et ordres actifs visible en permanence.** L'ordre orphelin du chapitre précédent se repère ici.
+5. **Le calendrier économique de la journée** sur l'écran de contexte, avec l'heure des annonces majeures surlignée.
+6. **Une horloge dans le fuseau du marché** (New York pour les futures US), en plus de l'heure locale.
+7. **Rien d'autre.** Pas de réseaux sociaux, pas de messagerie, pas de vidéo, pendant les heures d'exécution. L'attention est la ressource rare.
+
+<Figure caption="Figure 2 · Une disposition d'écran de travail pour un intraday sur futures : sobre, avec les ordres actifs et l'heure des annonces toujours visibles.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Disposition d'un écran d'exécution" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="680" height="300" rx="6" className="box" strokeWidth="1.5" />
+
+  <rect x="30" y="30" width="470" height="200" rx="4" className="box" strokeWidth="1" />
+  <text x="40" y="50" fontSize="12" fontWeight="600">MES · M5 · graphique d'exécution</text>
+  <polyline points="50,180 90,170 130,176 170,150 210,158 250,132 290,140 330,118 370,124 410,104 450,110 490,96" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="50" y1="150" x2="490" y2="150" className="line" strokeWidth="1" strokeDasharray="6 4" />
+  <text x="440" y="146" fontSize="10" className="muted">niveau clé tracé</text>
+  <rect x="50" y="200" width="440" height="20" rx="2" className="box" strokeWidth="1" />
+  <text x="55" y="214" fontSize="10" className="muted">volume</text>
+
+  <rect x="510" y="30" width="180" height="120" rx="4" className="box" strokeWidth="1" />
+  <text x="520" y="50" fontSize="12" fontWeight="600">DOM / ticket</text>
+  <text x="520" y="72" fontSize="11" className="mono">qté par défaut : 1</text>
+  <text x="520" y="90" fontSize="11" className="mono">bracket : 16t / 32t</text>
+  <text x="520" y="108" fontSize="11" className="mono">buy limit · sell limit</text>
+  <text x="520" y="126" fontSize="11" className="mono">buy stop · sell stop</text>
+
+  <rect x="510" y="160" width="180" height="70" rx="4" className="box" strokeWidth="1" />
+  <text x="520" y="180" fontSize="12" fontWeight="600">Positions et ordres actifs</text>
+  <text x="520" y="200" fontSize="11" className="mono">MES : 0 · ordres : 0</text>
+  <text x="520" y="218" fontSize="11" className="muted">vérifié après chaque sortie</text>
+
+  <rect x="30" y="240" width="330" height="70" rx="4" className="box" strokeWidth="1" />
+  <text x="40" y="260" fontSize="12" fontWeight="600">Annonces du jour (heure de Paris)</text>
+  <text x="40" y="280" fontSize="11" className="mono">14 h 30 · Emploi US</text>
+  <text x="40" y="298" fontSize="11" className="mono">16 h 00 · ISM services</text>
+  <rect x="200" y="269" width="150" height="14" rx="2" className="gold" opacity="0.35" />
+  <text x="205" y="280" fontSize="10" fontWeight="600">pas de trade 14 h 28 à 14 h 33</text>
+
+  <rect x="370" y="240" width="320" height="70" rx="4" className="box" strokeWidth="1" />
+  <text x="380" y="260" fontSize="12" fontWeight="600">Horloges et état</text>
+  <text x="380" y="280" fontSize="11" className="mono">Paris 15 h 42 · New York 09 h 42</text>
+  <text x="380" y="298" fontSize="11" className="mono">connexion : OK · perte du jour : 0 R / 2 R</text>
+</svg>
+</Figure>
+
+## Plan de secours en cas de panne pendant une position
+
+C'est la partie de ce chapitre qui vaut le plus cher. Une position ouverte sans accès au marché est un risque non borné : le stop est censé être dans le carnet, mais s'il ne l'est pas, ou si le marché saute, vous devez pouvoir agir.
+
+### Le principe qui règle 90 % des cas
+
+**Le stop est toujours placé sur le serveur, jamais dans la plateforme locale.** Un ordre stop envoyé à la Bourse (futures) ou au serveur du broker (forex, CFD) reste actif si votre ordinateur s'éteint. Un stop « côté client », géré par une plateforme qui doit être allumée pour l'envoyer (certains ordres simulés, certaines fonctions de trailing local), disparaît avec la panne. Vérifiez sur votre plateforme où vivent vos ordres : la plupart signalent les ordres « simulés » ou « locaux » par une couleur ou une mention.
+
+Avec un bracket dont le stop est sur le serveur, une panne d'ordinateur ne change rien au pire cas : le stop sera exécuté par la Bourse.
+
+### Les couches du plan
+
+1. **Connexion de secours.** Partage de connexion depuis le téléphone, configuré et testé avant, pas pendant la panne. Le portable bascule dessus en trente secondes.
+2. **Application mobile du broker.** Installée, connectée, avec l'authentification à jour. Elle permet de voir la position et de la fermer au marché. Testez-la à froid : ouvrir et fermer un micro-contrat depuis le téléphone une fois par mois.
+3. **Numéro de téléphone du desk d'exécution du broker**, écrit sur un papier collé sous l'écran, pas dans un fichier sur l'ordinateur qui vient de tomber en panne. Les brokers de futures et la plupart des brokers de forex acceptent de fermer une position par téléphone après vérification d'identité.
+4. **Onduleur** pour la coupure de courant : dix minutes suffisent pour fermer proprement.
+5. **Règle de conduite écrite** : « Si je perds l'accès et que je ne peux pas vérifier que mon stop est sur le serveur dans les deux minutes, je ferme la position par le premier moyen disponible. » Fermer une position gagnante par précaution coûte un peu. Rester exposé sans savoir peut coûter le compte.
+
+### Les cas particuliers
+
+- **Plateforme figée mais connexion active** : ouvrez la plateforme web ou mobile du broker, ne redémarrez pas la première avant d'avoir vérifié la position ailleurs.
+- **Le broker lui-même en panne** (cela arrive lors des grandes annonces) : c'est le cas où le téléphone du desk et la taille modeste de vos positions sont vos seules protections. C'est aussi une raison d'éviter de tenir des positions à travers les annonces majeures avec un broker qui a déjà montré des faiblesses.
+- **Le marché fermé** (pause quotidienne des futures, week-end) : votre stop GTC est dans le carnet mais ne peut pas s'exécuter tant que le marché est fermé ; à la réouverture, un gap peut le déclencher loin. La seule protection est la taille de la position.
+
+<Figure caption="Figure 3 · Arbre de décision en cas de panne avec une position ouverte. La question centrale : le stop est-il sur le serveur ?">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Arbre de décision en cas de panne pendant une position" xmlns="http://www.w3.org/2000/svg">
+  <rect x="235" y="20" width="250" height="44" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="47" fontSize="13" fontWeight="600" textAnchor="middle">Panne avec position ouverte</text>
+
+  <line x1="360" y1="64" x2="360" y2="90" className="line" strokeWidth="1.5" />
+  <rect x="200" y="90" width="320" height="44" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="117" fontSize="13" fontWeight="600" textAnchor="middle">Le stop est-il sur le serveur (bracket) ?</text>
+
+  <line x1="280" y1="134" x2="180" y2="170" className="line" strokeWidth="1.5" />
+  <text x="215" y="150" fontSize="12" fontWeight="600" className="gold">oui</text>
+  <line x1="440" y1="134" x2="540" y2="170" className="line" strokeWidth="1.5" />
+  <text x="495" y="150" fontSize="12" fontWeight="600" className="red">non / je ne sais pas</text>
+
+  <rect x="40" y="170" width="280" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="180" y="192" fontSize="12" fontWeight="600" textAnchor="middle">Le pire cas est borné.</text>
+  <text x="180" y="212" fontSize="11" textAnchor="middle" className="muted">Rétablir l'accès (connexion 2, mobile) sans précipitation.</text>
+
+  <rect x="400" y="170" width="280" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="540" y="192" fontSize="12" fontWeight="600" textAnchor="middle">Fermer la position, tout de suite.</text>
+  <text x="540" y="212" fontSize="11" textAnchor="middle" className="muted">1. mobile · 2. connexion 2 · 3. téléphone du desk</text>
+
+  <line x1="540" y1="230" x2="540" y2="262" className="line" strokeWidth="1.5" />
+  <rect x="400" y="262" width="280" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="540" y="284" fontSize="12" fontWeight="600" textAnchor="middle">Ensuite seulement : diagnostiquer.</text>
+  <text x="540" y="304" fontSize="11" textAnchor="middle" className="muted">Puis noter l'incident au journal et corriger le plan.</text>
+
+  <line x1="180" y1="230" x2="180" y2="262" className="line" strokeWidth="1.5" />
+  <rect x="40" y="262" width="280" height="60" rx="8" className="box" strokeWidth="1.5" />
+  <text x="180" y="284" fontSize="12" fontWeight="600" textAnchor="middle">Accès non rétabli en 2 minutes ?</text>
+  <text x="180" y="304" fontSize="11" textAnchor="middle" className="muted">Fermer quand même par le premier moyen disponible.</text>
+</svg>
+</Figure>
+
+## Deux trades sous l'angle de l'infrastructure
+
+Reconstitutions pédagogiques : la même panne, deux préparations différentes.
+
+<TradeExample
+  resultat="gain"
+  instrument="Futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat sur repli en tendance, bracket avec stop sur le serveur"
+  entree="5 232,50"
+  stop="5 227,50 (20 ticks)"
+  objectif="5 245,00"
+  r="+2,5R">
+
+Dix minutes après l'entrée, la box fibre redémarre toute seule. La plateforme perd le flux. Le trader ne panique pas : son bracket a été accepté par le CME, le stop et l'objectif sont dans le carnet. Il active le partage de connexion du téléphone, la plateforme se reconnecte en quarante secondes, la position est intacte. Le prix atteint 5 245,00 vingt minutes plus tard, l'objectif est servi. Sur 3 contrats, gain de 50 ticks × 1,25 $ × 3 = 187,50 $ pour un risque de 75 $. L'incident a été noté au journal : « panne box, bascule en 40 s, aucun impact ». Le plan de secours n'a pas rapporté un dollar ; il a évité de fermer un bon trade dans la panique.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="EUR/USD (CFD)"
+  direction="Short"
+  setup="Vente sur rejet d'un niveau H1, stop géré en trailing local par la plateforme"
+  entree="1,0874"
+  stop="1,0889 (15 pips) prévu, mais trailing stop côté client"
+  objectif="1,0844"
+  r="−2,7R">
+
+Le trader avait activé un trailing stop « intelligent » d'un module de la plateforme, qui déplace le stop localement et n'envoie l'ordre au broker qu'au moment du déclenchement. L'ordinateur applique une mise à jour et redémarre à 14 h 25. À 14 h 30, un chiffre d'inflation fait bondir l'euro de 40 pips. Aucun stop n'est sur le serveur. Le trader s'en rend compte à 14 h 41 sur son téléphone, dont l'application demande une réauthentification qu'il n'avait jamais faite. Il ferme au marché à 1,0915 : perte de 41 pips au lieu de 15, soit 2,7R, sur 1 lot : 410 $ au lieu de 150 $. Trois fautes d'infrastructure : stop local, mises à jour non maîtrisées, application mobile jamais testée. Aucune n'a de rapport avec la lecture du marché.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le matériel utile tient en cinq points : **machine stable, deux connexions, onduleur, deux écrans, périphériques fiables**. Le reste est du décor.
+- **Une plateforme pour analyser, une pour exécuter** est une combinaison courante ; l'important est de maîtriser le placement des ordres sur celle que vous utilisez.
+- Les **données de Bourse se paient** ; sans abonnement, vous regardez le passé. Comptez ce coût fixe dans votre rentabilité.
+- **Le stop vit sur le serveur, jamais dans la plateforme locale.** C'est la règle qui rend une panne supportable.
+- Le plan de secours se **teste à froid** : bascule de connexion, application mobile, numéro du desk sous l'écran.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Budget d'infrastructure">
+
+Un débutant sur micro-futures prévoit : abonnement plateforme d'exécution 36 $ par mois, données CME temps réel niveau 1 pour les indices 12 $ par mois, TradingView formule payante 15 $ par mois, second forfait mobile pour la connexion de secours 10 € par mois, onduleur 90 € une fois. Compte de départ : 4 000 €. On prendra 1 $ ≈ 1 €.
+
+1. Quel est le coût fixe annuel d'infrastructure ?
+2. Quel pourcentage du compte cela représente-t-il ?
+3. Si le trader vise une performance nette de 20 % la première année, quelle performance brute avant infrastructure (mais après commissions) doit-il réaliser ?
+
+<Solution>
+
+1. Mensuel : 36 + 12 + 15 + 10 = 73 par mois, soit 876 par an, plus 90 d'onduleur : **966 € la première année** (876 € les suivantes).
+2. 966 ÷ 4 000 = **24 % du compte**.
+3. Il faut gagner 20 % + 24 % = **44 % brut**, hors commissions, la première année. C'est la réalité d'un petit compte : les frais fixes pèsent lourd, ce qui plaide pour un abonnement minimal au départ (une seule plateforme payante, données strictement nécessaires) et contre le cumul d'outils.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Le stop est-il sur le serveur ?">
+
+Pour chaque situation, dites si le stop protège la position en cas de coupure de l'ordinateur, et pourquoi.
+
+1. Bracket accepté par le broker de futures, stop visible dans la liste des ordres actifs sur le site web du broker.
+2. Trailing stop géré par un module de la plateforme, qui indique « ordre simulé, sera soumis au déclenchement ».
+3. Stop mental : « je sortirai si ça passe 18 250 ».
+4. Stop DAY sur une position gardée après la clôture de la séance.
+
+<Solution>
+
+1. **Oui.** L'ordre est chez le broker et transmis à la Bourse ; il survit à la panne locale.
+2. **Non.** L'ordre n'existe que dans la plateforme locale tant qu'il n'est pas déclenché ; ordinateur éteint, il n'est jamais envoyé.
+3. **Non**, et ce n'est pas un stop : c'est une intention. Une panne, une distraction ou une hésitation suffisent à la faire disparaître.
+4. **Non après la clôture** : l'ordre a expiré ; la position court sans protection jusqu'à ce que vous en replaciez un. Un stop de protection se met en GTC.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire son plan de secours">
+
+Rédigez, en cinq lignes maximum, le plan de secours que vous appliqueriez si votre écran s'éteignait avec 2 MNQ longs et un bracket en place. Puis comparez avec la solution.
+
+<Solution>
+
+Un plan acceptable : « 1. Vérifier sur le téléphone (application broker) que la position et le stop sont bien actifs. 2. Si oui, basculer le portable sur le partage de connexion et rétablir la plateforme sans précipitation. 3. Si je ne peux pas vérifier en deux minutes, fermer la position au marché depuis le téléphone. 4. Si le téléphone échoue, appeler le desk au numéro sous l'écran et demander la clôture. 5. Après coup, noter l'incident au journal et corriger la cause. » L'essentiel : la vérification passe avant la réparation, et l'incapacité à vérifier vaut ordre de fermer.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Quel achat protège le plus directement votre capital en cas d'incident technique ?",
+      options: [
+        "Un troisième écran",
+        "Une seconde connexion Internet testée et un onduleur",
+        "Un processeur plus rapide",
+        "Un fauteuil ergonomique",
+      ],
+      answer: 1,
+      explain: "La redondance de connexion et l'alimentation de secours vous laissent le temps d'agir sur une position ouverte. Le reste améliore le confort, pas la sécurité.",
+    },
+    {
+      q: "Pourquoi les données futures en temps réel sont-elles payantes ?",
+      options: [
+        "Parce que le broker veut gagner plus",
+        "Parce que les Bourses (comme le CME) vendent l'accès à leurs données ; sans abonnement, elles sont retardées",
+        "Parce qu'elles sont réservées aux professionnels",
+        "Elles ne le sont pas, c'est une arnaque",
+      ],
+      answer: 1,
+      explain: "Les Bourses facturent leurs données par groupe de marchés. Le flux gratuit est retardé de plusieurs minutes, ce qui le rend inutilisable pour exécuter.",
+    },
+    {
+      q: "Quelle est la différence entre un stop « sur le serveur » et un stop « côté client » ?",
+      options: [
+        "Le premier coûte une commission, le second non",
+        "Le premier reste actif si votre ordinateur s'éteint, le second disparaît avec la panne",
+        "Le premier est réservé aux futures",
+        "Il n'y a pas de différence",
+      ],
+      answer: 1,
+      explain: "Un stop transmis au broker ou à la Bourse vit indépendamment de votre machine. Un stop géré localement par la plateforme n'est envoyé qu'au déclenchement : si la plateforme est éteinte, il n'est jamais envoyé.",
+    },
+    {
+      q: "Votre écran s'éteint avec une position ouverte et vous ne parvenez pas à vérifier votre stop en deux minutes. Que faites-vous ?",
+      options: [
+        "J'attends que ça revienne, le marché est calme",
+        "Je ferme la position par le premier moyen disponible (mobile, connexion de secours, téléphone du desk)",
+        "Je redémarre l'ordinateur et je réfléchis après",
+        "Je double la position pour compenser",
+      ],
+      answer: 1,
+      explain: "L'incapacité à vérifier vaut ordre de fermer. Le coût de fermer un bon trade est faible ; le coût de rester exposé sans savoir peut être le compte.",
+    },
+    {
+      q: "Quel outil combine le plus souvent un trader de futures pour analyser d'un côté et exécuter de l'autre ?",
+      options: [
+        "MT5 pour tout",
+        "TradingView pour l'analyse, Sierra Chart ou NinjaTrader pour l'exécution",
+        "Excel pour l'analyse, le téléphone pour l'exécution",
+        "Deux comptes TradingView",
+      ],
+      answer: 1,
+      explain: "TradingView excelle en graphique multi-marchés ; Sierra Chart et NinjaTrader excellent en DOM, brackets et order flow sur futures. La combinaison est courante.",
+    },
+    {
+      q: "Quel élément n'a pas sa place sur l'écran d'exécution pendant les heures de trading ?",
+      options: [
+        "La liste des ordres actifs",
+        "L'heure des annonces du jour",
+        "Une messagerie ou un réseau social",
+        "L'horloge de New York",
+      ],
+      answer: 2,
+      explain: "L'attention est la ressource rare. Tout ce qui n'aide pas à exécuter ou à protéger la position est une source d'erreur.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 0 est terminé : vous savez ce qu'est le trading, sur quels marchés il se pratique, comment le prix se forme, quels ordres envoyer, chez qui, et sur quel poste. L'examen du niveau valide ces fondations. Puis vient le niveau 1, celui qui décide de tout : le risque.
