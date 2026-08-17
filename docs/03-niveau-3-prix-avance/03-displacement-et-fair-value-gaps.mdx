@@ -1,0 +1,336 @@
+---
+title: "Displacement et Fair Value Gaps"
+description: "Reconnaître un displacement significatif, la définition stricte d'un fair value gap sur trois bougies et ses conditions de validité, le FVG comme zone d'intérêt et non comme signal, sa mitigation, son inversion et son invalidation, et la confluence multi-timeframe."
+---
+
+# Displacement et Fair Value Gaps
+
+Le sweep du chapitre précédent ne vaut que par la réaction qui le suit. Cette réaction a un nom, le **displacement**, et elle laisse une trace mesurable, le **fair value gap** (FVG). Ce chapitre définit les deux avec précision, parce que ce sont les concepts SMC les plus déformés : on voit des FVG partout, on les achète comme des signaux, on s'étonne qu'ils ne « fonctionnent » pas. Correctement définis et correctement placés dans la séquence, ils donnent au contraire les zones d'entrée les plus nettes du niveau.
+
+## Reconnaître un displacement significatif
+
+Un **displacement** est un mouvement de prix **rapide, directionnel et disproportionné** par rapport aux bougies qui le précèdent : une ou quelques bougies de grande taille, dans le même sens, avec peu ou pas de mèches contraires, qui traversent des niveaux sans s'y arrêter. Le mot dit l'idée : le prix est **déplacé**, pas négocié. C'est la trace visible d'un participant qui exécute en taille et en urgence, ou de stops qui se déclenchent en cascade.
+
+Ce qui rend un displacement **significatif** (et non une simple bougie un peu plus grande) :
+
+1. **La taille relative.** La ou les bougies du displacement font au moins deux à trois fois la taille moyenne des bougies récentes (l'ATR de l'unité de temps, niveau 2). Une bougie de 1,2 ATR n'est pas un displacement.
+2. **La proportion corps / mèches.** Le corps domine largement : le prix a avancé et est resté avancé. Une grande bougie avec une longue mèche de retour n'est pas un displacement, c'est une bataille.
+3. **La cassure d'une structure.** Le displacement traverse un swing interne récent (le dernier LH pour un displacement haussier après un sweep de plus bas), c'est-à-dire qu'il produit un CHoCH ou un BOS de l'unité d'exécution (chapitre 5). Un mouvement large qui reste à l'intérieur de la structure ne déplace rien.
+4. **Le contexte de départ.** Le displacement significatif part d'un endroit logique : après un sweep de liquidité, depuis un order block ou un FVG d'unité supérieure, à une heure où le volume le permet (chapitre 6). Un displacement qui part de nulle part, au milieu d'un range, en pleine nuit, mérite de la méfiance.
+5. **Le volume** (futures) : élevé sur les bougies du displacement ; c'est de la participation, pas un trou de liquidité.
+
+Le displacement est la **preuve** que le sweep a été utilisé : quelqu'un a pris la liquidité et a poussé. Sans displacement, le sweep n'est qu'un dépassement. Avec, la séquence est enclenchée, et l'on peut chercher où le prix reviendra.
+
+<Figure caption="Figure 1 · Displacement significatif après un sweep : trois bougies de deux à trois ATR, corps dominants, cassure du dernier LH interne, volume élevé. À droite, un mouvement large mais avec mèche de retour et sans cassure de structure : pas un displacement.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Displacement significatif comparé à un mouvement large ordinaire" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Displacement significatif</text>
+  <line x1="60" y1="270" x2="330" y2="270" className="line" strokeWidth="1" />
+  <line x1="80" y1="150" x2="80" y2="180" className="line" strokeWidth="1.5" /><rect x="74" y="155" width="12" height="20" className="red" opacity="0.9" />
+  <line x1="105" y1="160" x2="105" y2="190" className="line" strokeWidth="1.5" /><rect x="99" y="165" width="12" height="18" className="green" opacity="0.9" />
+  <line x1="130" y1="165" x2="130" y2="230" className="line" strokeWidth="1.5" /><rect x="124" y="170" width="12" height="20" className="green" opacity="0.9" />
+  <line x1="155" y1="115" x2="155" y2="175" className="line" strokeWidth="1.5" /><rect x="149" y="118" width="12" height="55" className="green" opacity="0.9" />
+  <line x1="180" y1="60" x2="180" y2="122" className="line" strokeWidth="1.5" /><rect x="174" y="62" width="12" height="58" className="green" opacity="0.9" />
+  <line x1="205" y1="30" x2="205" y2="70" className="line" strokeWidth="1.5" /><rect x="199" y="32" width="12" height="36" className="green" opacity="0.9" />
+  <line x1="60" y1="150" x2="230" y2="150" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="235" y="154" fontSize="9" className="muted">dernier LH cassé</text>
+  <circle cx="130" cy="230" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="130" y="250" fontSize="9" textAnchor="middle" className="green">sweep</text>
+  <text x="180" y="290" fontSize="10" textAnchor="middle" className="green" fontWeight="600">bougies 2 à 3 ATR, corps dominants, structure cassée</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Mouvement large, pas un displacement</text>
+  <line x1="420" y1="270" x2="690" y2="270" className="line" strokeWidth="1" />
+  <line x1="440" y1="150" x2="440" y2="180" className="line" strokeWidth="1.5" /><rect x="434" y="155" width="12" height="20" className="red" opacity="0.9" />
+  <line x1="465" y1="160" x2="465" y2="190" className="line" strokeWidth="1.5" /><rect x="459" y="165" width="12" height="18" className="green" opacity="0.9" />
+  <line x1="490" y1="90" x2="490" y2="200" className="line" strokeWidth="1.5" /><rect x="484" y="150" width="12" height="40" className="green" opacity="0.9" />
+  <line x1="515" y1="140" x2="515" y2="175" className="line" strokeWidth="1.5" /><rect x="509" y="145" width="12" height="25" className="red" opacity="0.9" />
+  <line x1="540" y1="150" x2="540" y2="185" className="line" strokeWidth="1.5" /><rect x="534" y="155" width="12" height="22" className="green" opacity="0.9" />
+  <line x1="420" y1="130" x2="600" y2="130" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="605" y="134" fontSize="9" className="muted">LH intact</text>
+  <text x="540" y="290" fontSize="10" textAnchor="middle" className="red" fontWeight="600">longue mèche de retour, structure intacte</text>
+</svg>
+</Figure>
+
+## Définition stricte d'un FVG et conditions de validité
+
+Un **fair value gap** est un déséquilibre laissé par un displacement : une zone de prix traversée si vite qu'elle n'a été échangée que d'un côté. La définition stricte tient sur **trois bougies consécutives** :
+
+- **FVG haussier** : il existe un espace entre le **plus haut de la première bougie** et le **plus bas de la troisième bougie**. La bougie du milieu (la deuxième) est la bougie de displacement qui a créé le trou. Le FVG est le rectangle entre high(1) et low(3).
+- **FVG baissier** : espace entre le **plus bas de la première bougie** et le **plus haut de la troisième**. Rectangle entre low(1) et high(3).
+
+Autrement dit : les mèches de la bougie 1 et de la bougie 3 **ne se chevauchent pas**. C'est vérifiable au tick près, et c'est ce qui rend le concept utilisable.
+
+Pourquoi ce trou compte : dans la zone du FVG, il n'y a eu que des acheteurs agressifs (pour un FVG haussier), pas d'échange équilibré ; les ordres limites qui auraient dû s'y trouver n'ont pas été servis ; le marché a tendance à **revenir** dans cette zone pour y « rééquilibrer » (fournir aux acheteurs en attente l'occasion d'entrer, servir les vendeurs restés en attente), avant de repartir dans le sens du displacement. Ce retour n'est pas garanti ; il est fréquent, surtout quand le FVG a été créé par un displacement significatif.
+
+**Conditions de validité**, celles qui distinguent un FVG utile d'un trou quelconque (il y en a des dizaines par jour en M1) :
+
+1. **Créé par un displacement significatif** au sens de la section précédente. Un FVG créé par une bougie de 1,3 ATR sans cassure de structure est un déséquilibre mineur.
+2. **Dans la séquence** : après un sweep de liquidité, ou depuis une zone d'intérêt d'unité supérieure. Un FVG orphelin, au milieu de rien, a peu de valeur.
+3. **Sur l'unité de temps de structure ou d'exécution**, cohérente avec le trade envisagé. Un FVG M1 pour un trade décidé en H1 n'est pas une zone d'entrée ; c'est du bruit.
+4. **Non encore comblé** (ou partiellement) : un FVG entièrement retraversé a en général été utilisé.
+5. **Aligné avec la structure** : un FVG haussier a de la valeur dans une structure haussière (après un CHoCH ou dans une suite de BOS haussiers), beaucoup moins à contre-structure.
+
+<Figure caption="Figure 2 · Définition stricte du FVG haussier : la mèche haute de la bougie 1 et la mèche basse de la bougie 3 ne se chevauchent pas. Le rectangle entre les deux est le FVG ; la bougie 2 est le displacement.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Définition du fair value gap sur trois bougies" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="270" x2="400" y2="270" className="line" strokeWidth="1" />
+  <line x1="120" y1="150" x2="120" y2="240" className="line" strokeWidth="2" /><rect x="105" y="170" width="30" height="55" className="red" opacity="0.9" />
+  <text x="120" y="258" fontSize="11" textAnchor="middle" fontWeight="600">1</text>
+  <line x1="200" y1="40" x2="200" y2="200" className="line" strokeWidth="2" /><rect x="185" y="48" width="30" height="145" className="green" opacity="0.9" />
+  <text x="200" y="258" fontSize="11" textAnchor="middle" fontWeight="600">2</text>
+  <line x1="280" y1="35" x2="280" y2="110" className="line" strokeWidth="2" /><rect x="265" y="45" width="30" height="55" className="green" opacity="0.9" />
+  <text x="280" y="258" fontSize="11" textAnchor="middle" fontWeight="600">3</text>
+  <line x1="120" y1="150" x2="380" y2="150" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="384" y="154" fontSize="10" className="gold">high(1)</text>
+  <line x1="280" y1="110" x2="380" y2="110" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="384" y="114" fontSize="10" className="gold">low(3)</text>
+  <rect x="100" y="110" width="280" height="40" className="gold" opacity="0.25" />
+  <text x="240" y="134" fontSize="12" textAnchor="middle" fontWeight="700">FVG haussier</text>
+  <text x="240" y="285" fontSize="10" textAnchor="middle" className="muted">les mèches de 1 et 3 ne se chevauchent pas : le prix n'a été échangé que d'un côté</text>
+
+  <rect x="440" y="40" width="260" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="570" y="64" fontSize="12" fontWeight="600" textAnchor="middle">Validité d'un FVG</text>
+  <text x="452" y="90" fontSize="11">1 · créé par un displacement significatif</text>
+  <text x="452" y="112" fontSize="11">2 · dans la séquence (après sweep, depuis zone HTF)</text>
+  <text x="452" y="134" fontSize="11">3 · sur l'unité de temps du trade</text>
+  <text x="452" y="156" fontSize="11">4 · non entièrement comblé</text>
+  <text x="452" y="178" fontSize="11">5 · aligné avec la structure</text>
+  <text x="570" y="215" fontSize="10" textAnchor="middle" className="muted">un FVG qui coche moins de 4 cases est du bruit</text>
+</svg>
+</Figure>
+
+Une remarque de vocabulaire : le même objet porte d'autres noms selon les auteurs (imbalance, inefficiency, gap de trois bougies). Le cours dit FVG et s'en tient à la définition sur trois bougies. Les variantes (gaps d'ouverture, « volume imbalance » entre corps de bougies) existent ; elles n'ajoutent rien d'essentiel à ce niveau.
+
+## Le FVG comme zone d'intérêt, pas comme signal
+
+C'est le point qui sépare l'usage utile de l'usage ruineux. Un FVG est une **zone où le prix a de bonnes chances de revenir et de réagir**. Ce n'est pas un ordre d'achat.
+
+Ce que « zone d'intérêt » veut dire concrètement :
+
+- On **attend** que le prix revienne dans le FVG. On ne court pas après le displacement.
+- Dans le FVG, on cherche un **signal d'exécution** sur l'unité inférieure : le réalignement de la structure interne (niveau 2), c'est-à-dire un creux dans ou près du FVG suivi d'une cassure du dernier LH de l'unité d'exécution. Ou, pour les traders plus agressifs, un ordre limite dans le FVG, à un niveau précis (souvent le milieu, dit « consequent encroachment », ou le bord le plus profond), avec un stop au-delà de la zone : plus de trades pris, plus de faux signaux, ratio meilleur ; c'est un choix de méthode à tester au niveau 7.
+- L'**invalidation** est claire : sous le bas du FVG haussier avec une marge, ou, plus prudent, sous le point bas du displacement (la mèche du sweep). Si le prix traverse tout le FVG en clôture, le déséquilibre a été comblé sans réaction : l'hypothèse est fausse.
+- La **cible** vient de la liquidité (chapitre 2) : le réservoir opposé, le plus haut de la veille, les EQH.
+
+Ce que « pas un signal » veut dire : le prix peut revenir dans le FVG et le traverser (le FVG est alors comblé, mitigé sans réaction, ou inversé, voir ci-dessous). Un FVG dans un mauvais contexte, contre la structure, sans sweep préalable, sera comblé plus souvent qu'il ne réagira. Le taux de réaction d'un FVG dépend entièrement de ce qui l'entoure. Le trader qui achète tous les FVG haussiers qu'il voit achète surtout des trous.
+
+## Mitigation, inversion et invalidation d'un FVG
+
+Trois vocables décrivent ce qui arrive à un FVG une fois le prix revenu.
+
+**Mitigation.** Le prix revient dans le FVG, y réagit et repart dans le sens du displacement. Le FVG a joué son rôle ; on dit qu'il est mitigé (ou « respecté », ou « utilisé »). Une mitigation partielle (le prix touche le premier tiers du FVG et repart) est fréquente sur les FVG les plus forts : le déséquilibre était tel que les acheteurs en attente ont saisi la première occasion. Une mitigation complète (le prix va jusqu'au bord opposé du FVG puis repart) est aussi valable. Un FVG mitigé peut servir une seconde fois, mais avec une probabilité moindre : le premier retour a consommé une partie des ordres.
+
+**Inversion.** Le prix traverse entièrement le FVG en clôture, puis revient le tester **de l'autre côté** : l'ancien FVG haussier agit désormais comme résistance. C'est le changement de polarité (niveau 2) appliqué au FVG ; on parle d'**inversion FVG** ou d'IFVG. La logique : les acheteurs qui attendaient dans le FVG ont été servis puis piégés ; au retour, ils sortent, et les vendeurs qui ont traversé rajoutent. Un FVG inversé devient une zone d'entrée dans le sens opposé, à condition que la structure ait elle aussi changé (un CHoCH accompagne en général l'inversion).
+
+**Invalidation.** Le prix traverse le FVG en clôture, et il n'y a ni réaction ni retest : le FVG a été comblé, il est mort. On l'efface du graphique. Le seuil de l'invalidation est une question de méthode : clôture au-delà du FVG sur l'unité qui l'a créé est le critère le plus courant ; certains attendent une clôture au-delà de l'extrême du displacement.
+
+Le point pratique : ces trois issues sont **observables**, avec des critères de clôture, et elles décident de ce qu'on fait ensuite. Un FVG n'est jamais « en attente indéfinie » : il est mitigé, inversé ou invalidé, et le graphique se nettoie en conséquence.
+
+<Figure caption="Figure 3 · Les trois destins d'un FVG haussier : mitigation (réaction et reprise), inversion (traversée en clôture puis retest par-dessous comme résistance), invalidation (traversée sans réaction ni retest).">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Mitigation, inversion et invalidation d'un FVG" xmlns="http://www.w3.org/2000/svg">
+  <text x="120" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Mitigation</text>
+  <rect x="40" y="130" width="170" height="30" className="gold" opacity="0.3" />
+  <polyline points="50,200 80,120 100,90 120,110 140,150 160,140 190,80 210,60" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="140" cy="150" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="120" y="230" fontSize="10" textAnchor="middle" className="green">réaction dans la zone, reprise</text>
+
+  <text x="360" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Inversion</text>
+  <rect x="280" y="130" width="170" height="30" className="gold" opacity="0.3" />
+  <polyline points="290,200 320,120 340,90 360,110 380,175 400,190 420,150 440,165 460,210" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="420" cy="150" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="360" y="230" fontSize="10" textAnchor="middle" className="red">traversée en clôture, retest par-dessous</text>
+
+  <text x="600" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Invalidation</text>
+  <rect x="520" y="130" width="170" height="30" className="gold" opacity="0.3" />
+  <polyline points="530,200 560,120 580,90 600,110 620,180 640,215 660,235 690,240" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="520" y1="130" x2="690" y2="160" stroke="var(--tm-red)" strokeWidth="1" /><line x1="520" y1="160" x2="690" y2="130" stroke="var(--tm-red)" strokeWidth="1" />
+  <text x="600" y="230" fontSize="10" textAnchor="middle" className="muted">traversée sans réaction : effacé</text>
+</svg>
+</Figure>
+
+## FVG multi-timeframe et confluence
+
+Un FVG existe sur chaque unité de temps, et les FVG s'emboîtent comme les structures du niveau 2. Un displacement H1 crée un FVG H1 ; à l'intérieur de la bougie H1 de displacement, il y a des FVG M5. Un displacement quotidien crée un FVG D qui contient des FVG H1.
+
+Trois usages de cet emboîtement :
+
+**Le FVG d'unité supérieure comme zone d'intérêt, le FVG d'unité inférieure comme entrée.** Le prix revient dans un FVG H4 (la zone) ; dans cette zone, on attend un sweep mineur, un displacement M5 et un FVG M5 (l'entrée). Le stop va sous le FVG M5 ou sous le sweep mineur : bien plus court que sous le FVG H4, pour la même cible. C'est le raffinement standard, et la principale source de bons ratios en SMC.
+
+**La confluence de FVG.** Un FVG M15 situé à l'intérieur d'un FVG H1, lui-même dans la moitié basse d'un range quotidien (le discount, chapitre 6), sur un chiffre rond, après un sweep du PDL : chaque élément est indépendant et tous pointent le même endroit. C'est le type de zone que le trader SMC prépare le matin et attend.
+
+**La hiérarchie en cas de conflit.** Un FVG H4 haussier non mitigé au-dessus du prix et un FVG M15 baissier juste au-dessus du prix : le M15 est un obstacle mineur sur le chemin vers le H4, pas une raison de vendre. Les grandes unités dominent (niveau 2, chapitre 3). Inversement, un FVG M5 haussier dans une zone où le H4 vient de créer un FVG baissier par displacement est un achat contre le courant.
+
+Le nombre : comme pour les niveaux, **peu de FVG tracés, bien choisis**. Les FVG d'unité supérieure non mitigés (H4, D) au-dessus et en dessous du prix ; les FVG de l'unité de structure dans la séquence en cours ; les FVG d'exécution uniquement au moment d'entrer, puis effacés.
+
+## Deux trades sur un FVG
+
+Reconstitutions pédagogiques : le même FVG, deux façons de l'utiliser.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Sweep du PDL, displacement H1 avec FVG H1, retour dans le FVG, sweep mineur M5 et FVG M5 dans la zone, entrée au retour du FVG M5"
+  entree="5 262,25"
+  stop="5 255,75 (26 ticks, sous le sweep mineur M5)"
+  objectif="5 288,00 (EQH, liquidité au-dessus)"
+  r="+3,9R">
+
+Contexte D haussier. 15 h 45 : sweep du PDL à 5 249, bougie H1 qui clôture à 5 258 puis displacement à 5 281, laissant un FVG H1 entre 5 259 et 5 267. 16 h 40 : le prix revient dans le FVG H1 ; dans la zone, une mèche M5 à 5 258,50 (sweep mineur), puis une bougie M5 de 6 points qui laisse un FVG M5 entre 5 261 et 5 263. Entrée au retour dans le FVG M5, stop 2 points sous le sweep mineur : 6,5 points, au lieu des 14 points qu'aurait coûté un stop sous le FVG H1. Cible : les EQH à 5 288. Le raffinement multi-timeframe a doublé le ratio sans changer la cible.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Achat d'un FVG M5 haussier orphelin, en plein range, contre un FVG H1 baissier au-dessus"
+  entree="5 274,00"
+  stop="5 270,00 (16 ticks, sous le FVG M5)"
+  objectif="5 288,00"
+  r="−1R">
+
+Deux heures plus tard, même trader ou un autre. Une bougie M5 de 1,4 ATR crée un petit trou entre 5 273 et 5 275, sans sweep préalable, au milieu d'un range de 12 points, alors qu'un FVG H1 baissier non mitigé traîne à 5 279-5 284 juste au-dessus. Il achète le retour « parce que c'est un FVG ». Le prix monte de 3 points, entre dans le FVG H1 baissier, y réagit, et redescend traverser le FVG M5 en clôture : invalidé, stop touché. Le FVG était réel au sens de la définition sur trois bougies ; il ne cochait qu'une case de validité sur cinq. La définition dit ce qu'est un FVG ; les conditions de validité disent s'il faut s'en occuper.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Un **displacement significatif** : bougies de 2 à 3 ATR, corps dominants, cassure d'une structure interne, départ logique (après sweep, depuis une zone HTF), volume. C'est la preuve que le sweep a été utilisé.
+- **FVG** : sur trois bougies, les mèches de la 1 et de la 3 ne se chevauchent pas ; le rectangle entre high(1) et low(3) est le FVG haussier. Vérifiable au tick près.
+- Un FVG est **une zone d'intérêt, pas un signal** : on attend le retour, on cherche un signal d'exécution ou on place un limite avec stop au-delà ; la validité dépend du displacement, de la séquence, de l'unité de temps, du comblement et de la structure.
+- Trois destins observables : **mitigation** (réaction), **inversion** (traversée puis retest de l'autre côté, changement de polarité), **invalidation** (traversée sans réaction, effacé).
+- **Multi-timeframe** : le FVG HTF est la zone, le FVG LTF l'entrée ; les grandes unités dominent ; peu de FVG tracés, bien choisis.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Vérifier un FVG au tick près">
+
+Trois bougies M15 consécutives sur MNQ (haut · bas) : bougie 1 : 18 412 · 18 396 ; bougie 2 : 18 448 · 18 405 ; bougie 3 : 18 456 · 18 421.
+
+1. Y a-t-il un FVG ? De quel type ? Donnez ses bornes.
+2. Quelle est la taille de la bougie 2 ? Avec un ATR M15 de 14 points, est-ce un displacement significatif au sens de la taille ?
+3. Le prix revient à 18 419 puis repart à la hausse. Le FVG est-il mitigé, et de quelle façon ?
+
+<Solution>
+
+1. **Oui**, un FVG **haussier** : high(1) = 18 412, low(3) = 18 421, et 18 421 est supérieur à 18 412 : les mèches ne se chevauchent pas. Bornes : **18 412 à 18 421** (9 points).
+2. Bougie 2 : 18 448 − 18 405 = **43 points**, soit environ **3,1 ATR** : oui, significatif par la taille (les autres critères, structure et séquence, seraient à vérifier).
+3. Le prix est entré à 18 419, soit 2 points dans le FVG (bord haut à 18 421) : **mitigation partielle**, réaction sur le premier quart. Signe d'un déséquilibre fort ; le FVG reste en grande partie « frais » pour un éventuel second test, avec une probabilité moindre.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Valider ou écarter">
+
+Cinq FVG repérés dans la journée sur l'ES. Pour chacun, dites s'il est une zone d'intérêt valable et pourquoi (critères de validité) :
+
+- (a) FVG H1 haussier créé par un displacement de 2,8 ATR après un sweep du PDL, structure D haussière, non comblé.
+- (b) FVG M1 haussier de 1,5 point à 4 h du matin, sans sweep, structure H1 baissière.
+- (c) FVG M15 baissier créé par un displacement de 2,5 ATR après un sweep des EQH, entièrement retraversé en clôture M15 une heure plus tard, sans retest.
+- (d) FVG H4 baissier non comblé au-dessus du prix, alors que le quotidien est haussier et que le prix vient de faire un BOS haussier en H1.
+- (e) FVG M5 haussier créé après un sweep mineur, à l'intérieur d'un FVG H1 haussier non mitigé, structure alignée.
+
+<Solution>
+
+- **(a) Valable** : coche les cinq critères. Zone d'intérêt principale de la journée.
+- **(b) Écarté** : unité de temps sans rapport avec un trade sérieux, pas de displacement significatif, hors séquence, contre la structure. Bruit.
+- **(c) Invalidé** : traversé en clôture sans réaction ni retest ; à effacer. S'il y avait eu un retest par-dessus avec réaction, il aurait été **inversé** (zone d'achat).
+- **(d) Valable mais secondaire** : c'est une zone de résistance HTF non mitigée, à surveiller comme obstacle et cible partielle pour les longs ; ce n'est pas une zone de vente tant que le quotidien et le H1 sont haussiers. Les grandes unités dominent, mais un FVG H4 non mitigé reste un endroit où le prix réagit souvent.
+- **(e) Valable et raffiné** : le cas idéal du multi-timeframe, FVG LTF dans un FVG HTF, séquence et structure alignées. Stop sous le sweep mineur.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le stop et le raffinement">
+
+Zone : FVG H1 haussier entre 2 356,0 et 2 364,0 sur l'or (MGC), après un sweep du PDL à 2 351,5. Cible : EQH à 2 392,0. Budget de risque : 60 $. Deux entrées possibles : (A) ordre limite au milieu du FVG H1, 2 360,0, stop sous le sweep à 2 350,0 ; (B) attente d'un sweep mineur et d'un FVG M5 dans la zone, entrée à 2 359,0, stop à 2 355,0.
+
+1. Calculez le risque en dollars par contrat, la taille et le ratio pour A et pour B.
+2. Quel est l'avantage de A ? Quel est le prix à payer ?
+3. Que dit le niveau 7 sur le choix entre les deux ?
+
+<Solution>
+
+1. **A** : 10 $ de stop × 10 $ = 100 $ par contrat, supérieur au budget de 60 $ : **0 contrat** à ce budget ; ratio (2 392 − 2 360) ÷ 10 = **3,2**. **B** : 4 $ × 10 $ = 40 $ par contrat, **1 contrat** ; ratio (2 392 − 2 359) ÷ 4 = **8,25**.
+2. A prend le trade **à coup sûr si le prix touche le milieu du FVG**, sans attendre un signal ; B peut manquer le trade si le prix réagit sur le bord du FVG sans former de sweep mineur ni de FVG M5. En échange, B a un stop deux fois et demie plus court, donc un ratio bien meilleur, et ici c'est le seul des deux qui rentre dans le budget.
+3. Que les deux sont des **méthodes légitimes** dont il faut mesurer l'expectancy sur son propre historique : A a un taux d'exécution plus élevé et un taux de réussite plus faible ; B l'inverse. Le choix est une décision de système, pas de goût, et il se prend sur des chiffres.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Un displacement significatif se reconnaît à :",
+      options: [
+        "Une bougie verte",
+        "Des bougies de 2 à 3 ATR, corps dominants, cassure d'une structure interne, départ logique, volume",
+        "Un volume faible",
+        "Une longue mèche de retour",
+      ],
+      answer: 1,
+      explain: "Le displacement est la preuve qu'un participant a poussé en taille. Une bougie de 1,3 ATR sans cassure de structure n'en est pas un.",
+    },
+    {
+      q: "La définition stricte d'un FVG haussier est :",
+      options: [
+        "Toute zone traversée rapidement",
+        "Sur trois bougies, un espace entre le plus haut de la première et le plus bas de la troisième",
+        "Un gap d'ouverture",
+        "Une bougie sans mèche",
+      ],
+      answer: 1,
+      explain: "Les mèches de la bougie 1 et de la bougie 3 ne se chevauchent pas ; le rectangle entre high(1) et low(3) est le FVG. Vérifiable au tick près.",
+    },
+    {
+      q: "Un FVG est :",
+      options: [
+        "Un signal d'achat",
+        "Une zone d'intérêt où l'on attend le retour et un signal d'exécution, avec une invalidation claire",
+        "Un objectif",
+        "Un indicateur",
+      ],
+      answer: 1,
+      explain: "Le taux de réaction d'un FVG dépend entièrement de ce qui l'entoure : displacement, séquence, unité de temps, structure. Acheter tous les FVG, c'est acheter des trous.",
+    },
+    {
+      q: "Le prix traverse un FVG haussier en clôture, puis revient le tester par-dessous et rebaisse. Le FVG est :",
+      options: [
+        "Mitigé",
+        "Inversé : il agit désormais comme résistance (changement de polarité)",
+        "Invalidé sans suite",
+        "Toujours haussier",
+      ],
+      answer: 1,
+      explain: "L'inversion est le changement de polarité appliqué au FVG : les acheteurs piégés sortent au retour, les vendeurs rajoutent. Elle accompagne en général un CHoCH.",
+    },
+    {
+      q: "Le prix revient dans un FVG H4 haussier. La meilleure entrée est :",
+      options: [
+        "Au marché dès le premier contact",
+        "Sur un sweep mineur et un FVG M5 formés dans la zone, stop sous le sweep mineur",
+        "Au bord opposé du FVG H4",
+        "Sur un FVG M5 baissier",
+      ],
+      answer: 1,
+      explain: "Le FVG HTF est la zone, le FVG LTF l'entrée : le stop est bien plus court pour la même cible. C'est la principale source de bons ratios en SMC.",
+    },
+    {
+      q: "Un FVG M5 haussier orphelin, en plein range, sous un FVG H1 baissier non mitigé :",
+      options: [
+        "Est un excellent achat",
+        "Ne coche presque aucune condition de validité ; c'est du bruit, et l'obstacle HTF est juste au-dessus",
+        "Doit être vendu",
+        "Est un signal fort",
+      ],
+      answer: 1,
+      explain: "La définition dit ce qu'est un FVG ; les conditions de validité disent s'il faut s'en occuper. Les grandes unités dominent.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le displacement laisse un FVG ; il part aussi de quelque part. La dernière bougie contraire avant le displacement, là où le gros participant a probablement construit sa position, est l'order block. Le chapitre suivant en donne la définition, les critères de sélection, le raffinement sur unité inférieure, sa version inversée (le breaker), et la hiérarchie pratique entre order block, FVG et sweep.
