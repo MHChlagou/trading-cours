@@ -1,0 +1,324 @@
+---
+title: "Wyckoff avancé"
+description: "Schématiques détaillées et variantes réelles des accumulations et distributions, le composite man comme grille de lecture, réaccumulation et redistribution en cours de tendance, projections d'objectifs par la loi de cause à effet, et le dialogue entre Wyckoff et les SMC modernes."
+---
+
+# Wyckoff avancé
+
+Le chapitre précédent a donné le schéma propre. Les marchés ne le sont jamais. Ce chapitre montre les variantes que l'on rencontre réellement, propose le composite man comme méthode de lecture (et non comme mythe), traite les ranges qui apparaissent au milieu des tendances, explique comment Wyckoff projetait des objectifs, et termine par ce que le niveau entier a préparé : le dialogue entre Wyckoff et les Smart Money Concepts, qui sont, pour l'essentiel, la même lecture à deux échelles et à un siècle de distance.
+
+## Schématiques détaillées et variantes réelles
+
+Les manuels Wyckoff modernes distinguent deux schématiques d'accumulation et deux de distribution, selon la façon dont la phase C se déroule.
+
+**Accumulation, schématique 1 (avec spring).** Celle du chapitre précédent : phase A (PS, SC, AR, ST), phase B, phase C avec **spring** sous le bas du range puis test, phase D (SOS, LPS), phase E. C'est la plus reconnaissable, parce que le spring est un événement net.
+
+**Accumulation, schématique 2 (sans spring).** La phase C se fait par un simple **test du bas** (LPS précoce) qui ne casse pas le range : le prix approche du support sur volume faible, tient, et le SOS part de là. Il n'y a pas de sweep du bas ; il n'en avait pas besoin, parce que l'offre restante était déjà négligeable. Cette variante est plus fréquente qu'on ne le croit et souvent manquée par les traders SMC qui attendent le sweep : quand la liquidité sous le range est faible, le gros acheteur n'a pas de raison d'aller la chercher.
+
+**Distribution, schématique 1 (avec UTAD).** Phase A (PSY, BC, AR, ST), phase B (avec souvent un ou plusieurs upthrusts qui échouent), phase C avec **UTAD** (upthrust after distribution) au-dessus du haut du range puis test, phase D (SOW, LPSY), phase E (markdown).
+
+**Distribution, schématique 2 (sans UTAD).** Le test final de phase C est un LPSY qui échoue sous le haut du range, sans sweep des EQH.
+
+Au-delà de ces quatre schématiques, ce que le réel ajoute :
+
+- **Des phases B interminables** avec plusieurs faux départs : des SOS apparents (sur volume insuffisant) qui échouent et ramènent le prix dans le range. Chaque échec allonge la cause ; le trader qui compte les colonnes voit l'objectif grandir, celui qui achète chaque « sortie » se fait stopper.
+- **Des springs multiples** : un premier spring suivi d'un test qui échoue et d'un second spring plus profond. Le second est souvent le bon, et le stop du premier acheteur a été pris. D'où la règle : achat sur le test, pas sur le spring, et taille réduite tant que le SOS n'est pas là.
+- **Des ranges inclinés** : accumulations qui dérivent lentement vers le bas (des LL très légers dans le range) ou distributions qui dérivent vers le haut. Les bornes du range ne sont plus horizontales ; la lecture des événements reste la même.
+- **Des échecs francs** : ce qui ressemblait à une accumulation casse par le bas sur volume et ne revient pas. Le range était en réalité une **redistribution** dans une baisse plus large (section suivante). La lecture Wyckoff se corrige à la clôture sous le range avec volume : le « spring » qui ne revient pas est une cassure, exactement comme au chapitre 2.
+
+<Figure caption="Figure 1 · Deux accumulations réelles : à gauche, schématique 1 avec deux springs (le premier échoue, le second tient) ; à droite, schématique 2 sans spring, le test du bas suffit. Le SOS et le LPS sont les mêmes dans les deux cas.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Deux variantes réelles d'accumulation" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Schématique 1 · deux springs</text>
+  <line x1="40" y1="200" x2="330" y2="200" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="40" y1="110" x2="330" y2="110" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <polyline points="50,60 75,200 95,110 115,190 135,140 155,185 170,215 185,175 205,150 220,225 235,190 250,180 270,100 290,125 320,60" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="170" cy="215" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="170" y="240" fontSize="9" textAnchor="middle" className="red">spring 1 : test échoue</text>
+  <circle cx="220" cy="225" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="220" y="255" fontSize="9" textAnchor="middle" className="green">spring 2 : test tient</text>
+  <text x="270" y="92" fontSize="9" textAnchor="middle" className="green">SOS</text>
+  <text x="295" y="140" fontSize="9" textAnchor="middle" className="green">LPS</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Schématique 2 · sans spring</text>
+  <line x1="400" y1="200" x2="690" y2="200" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <line x1="400" y1="110" x2="690" y2="110" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <polyline points="410,60 435,200 455,110 475,190 495,140 515,185 535,150 555,192 575,160 595,196 615,150 635,100 655,125 685,60" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="595" cy="196" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="595" y="240" fontSize="9" textAnchor="middle" className="green">test du bas, volume faible, pas de cassure</text>
+  <text x="635" y="92" fontSize="9" textAnchor="middle" className="green">SOS</text>
+  <text x="660" y="140" fontSize="9" textAnchor="middle" className="green">LPS</text>
+  <text x="360" y="285" fontSize="10" textAnchor="middle" className="muted">le trader SMC qui attend le sweep manque la schématique 2 ; le trader Wyckoff lit le volume du test</text>
+</svg>
+</Figure>
+
+## Le composite man comme grille de lecture
+
+Wyckoff proposait un exercice mental : imaginer que tous les mouvements du marché sont l'œuvre d'un seul opérateur, le **composite man**, qui achète bas, vend haut, et manipule les apparences pour y parvenir. Ce n'est pas une croyance (Wyckoff savait que le marché est fait de milliers d'acteurs) ; c'est une **grille de lecture** : à chaque mouvement, se demander « que ferait un opérateur rationnel qui doit construire ou liquider une grosse position ? ».
+
+Cette grille produit des questions concrètes, à poser devant chaque range et chaque cassure :
+
+- **S'il accumule, où va-t-il chercher de l'offre ?** Sous les supports évidents (spring), sur les mauvaises nouvelles (achats de panique des autres), pendant les phases ennuyeuses (phase B). Il n'achète pas les cassures haussières : il les vend, ou les laisse échouer.
+- **S'il distribue, où va-t-il chercher de la demande ?** Au-dessus des résistances évidentes (upthrust), sur les bonnes nouvelles, sur les cassures haussières que les particuliers achètent. Il ne vend pas les creux : il les achète pour soutenir le prix le temps de finir de vendre.
+- **Pourquoi ce mouvement, maintenant ?** Un mouvement qui piège le plus grand nombre (cassure haussière juste avant la baisse) est cohérent avec le composite man ; un mouvement qui rend service au plus grand nombre est suspect ou n'est qu'un repli.
+- **Que dit le volume de sa présence ?** Il ne peut pas cacher sa taille : l'absorption (effort sans résultat) le trahit là où il agit ; les phases où il est absent sont vides.
+
+Le composite man est le smart money des SMC, sans le folklore : une **contrainte** (la taille) et une **rationalité** (acheter bas, vendre haut, minimiser l'impact). Ce que le concept ajoute par rapport aux SMC : il oblige à raisonner en **campagne**, sur des semaines, et à replacer chaque sweep dans une intention plus large. Ce qu'il ne dit pas : que le composite man gagne toujours ; il se trompe, il est parfois forcé de liquider, et ses campagnes échouent (les accumulations qui cassent par le bas).
+
+## Réaccumulation et redistribution
+
+Tous les ranges ne sont pas des retournements. Au milieu d'une tendance haussière, le prix s'arrête, construit un range de plusieurs jours ou semaines, puis repart dans le même sens : c'est une **réaccumulation**. Le composite man complète sa position pendant que les traders de tendance prennent leurs profits et que les vendeurs à contre-tendance s'installent. Le miroir en tendance baissière est la **redistribution**.
+
+Reconnaître une réaccumulation plutôt qu'une distribution est la question la plus difficile de la méthode, parce que les deux commencent de la même façon : une hausse qui s'arrête, un range. Les indices, dans l'ordre :
+
+1. **Le contexte** : une réaccumulation survient dans une tendance qui a encore de la cause devant elle (l'objectif projeté de l'accumulation initiale n'est pas atteint) ; une distribution survient quand cet objectif est atteint ou dépassé, souvent après un climax d'achat sur volume énorme.
+2. **Le début du range** : la réaccumulation commence en général sans buying climax net (le prix ralentit et oscille) ; la distribution commence par un BC (bougie large, volume maximal, mèche haute).
+3. **Le comportement dans le range** : en réaccumulation, les tests du bas se font sur volume faible et le prix tient ; les upthrusts sont rares. En distribution, les upthrusts sont fréquents et les tests du bas se font sur volume croissant (le SOW).
+4. **La sortie** : la réaccumulation sort par le haut sur volume ; la distribution sort par le bas. C'est le juge final, et il arrive tard.
+
+La règle pratique : **dans une tendance haussière, un range est une réaccumulation jusqu'à preuve du contraire** (un SOW en clôture sous le range avec volume). C'est la traduction Wyckoff du « le contexte a raison jusqu'à preuve structurelle » du niveau 2. On n'achète pas dans le range (on ne sait pas), on achète la sortie confirmée par le haut sur son LPS ; on ne vend pas non plus tant que le range n'a pas cassé par le bas.
+
+<Figure caption="Figure 2 · Réaccumulation en cours de markup : le range n'a pas de climax d'achat, les tests du bas tiennent sur volume faible, la sortie se fait par le haut. La distribution aurait commencé par un BC et serait sortie par le bas.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Réaccumulation dans une tendance haussière" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <polyline points="50,240 90,200 130,170 160,130 190,145 220,110 250,135 280,120 310,150 340,125 370,155 400,130 430,148 460,120 490,80 520,95 560,55 600,70 650,30" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="215" y="105" width="245" height="55" className="gold" opacity="0.15" />
+  <text x="337" y="180" fontSize="10" textAnchor="middle" fontWeight="600" className="gold">réaccumulation</text>
+  <text x="337" y="196" fontSize="9" textAnchor="middle" className="muted">pas de BC · tests du bas sur volume faible · sortie par le haut</text>
+  <text x="120" y="130" fontSize="10" textAnchor="middle" fontWeight="600">markup 1</text>
+  <text x="580" y="110" fontSize="10" textAnchor="middle" fontWeight="600">markup 2</text>
+  <circle cx="370" cy="155" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" /><circle cx="430" cy="148" r="4" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="490" y="72" fontSize="9" textAnchor="middle" className="green">SOS</text>
+  <text x="520" y="112" fontSize="9" textAnchor="middle" className="green">LPS</text>
+  <text x="600" y="240" fontSize="9" textAnchor="middle" className="muted">règle : en tendance haussière, un range est une réaccumulation</text>
+  <text x="600" y="254" fontSize="9" textAnchor="middle" className="muted">jusqu'à un SOW en clôture sous le range avec volume</text>
+</svg>
+</Figure>
+
+## Projections d'objectifs
+
+La loi de cause à effet donne un moyen d'estimer l'ampleur du mouvement qui suivra un range : plus le range a duré (et plus il a été large), plus l'effet sera grand. Wyckoff mesurait la cause sur un **graphique en points et figures** (P&F), où le temps n'existe pas : seuls comptent les mouvements de prix d'une amplitude donnée (la taille de la boîte), et chaque colonne représente un aller ou un retour. La cause d'un range est le **nombre de colonnes** qu'il occupe.
+
+La projection classique :
+
+```text
+Objectif = Point de départ + (Nombre de colonnes × Taille de la boîte × Taille du retournement)
+```
+
+Un exemple simplifié : range d'accumulation sur l'ES entre 5 190 et 5 262 ; en P&F avec boîte de 4 points et retournement de 3 boîtes, le range compte 18 colonnes. Cause : 18 × 4 × 3 = 216 points. Point de départ : le bas du range (5 190) pour l'objectif minimal, ou le niveau du LPS pour un objectif plus conservateur. Objectif : 5 190 + 216 = **5 406** (ou 5 250 + 216 = 5 466 depuis un LPS à 5 250). Le trader Wyckoff donne en général une **fourchette** (les deux comptages) plutôt qu'un chiffre.
+
+Ce qu'il faut penser de cette méthode, honnêtement :
+
+- Elle a un **fondement empirique** faible mais réel : les ranges longs précèdent effectivement les mouvements longs, parce qu'une position plus grosse a été construite. La forme précise de la formule est une convention.
+- Le résultat dépend fortement du **choix de la boîte** et des bornes du comptage ; deux traders obtiendront des objectifs différents de 10 à 20 %.
+- Elle donne un **ordre de grandeur pour situer la tendance** (sommes-nous près de l'objectif, donc à surveiller une distribution, ou loin, donc en réaccumulation probable ?), pas une cible de sortie au tick.
+
+Une version simplifiée, sans P&F, que beaucoup utilisent : projeter la **hauteur du range** un certain nombre de fois (une, deux, trois) au-dessus de la cassure, ou utiliser la durée du range comme indication relative (« ce range a duré deux fois plus longtemps que le précédent, dont la sortie a fait 150 points »). C'est moins élégant, plus robuste, et cela sert au même usage : savoir où l'on en est dans la tendance.
+
+<Figure caption="Figure 3 · Projection par la cause : le range de 18 colonnes P&F (boîte 4, retournement 3) donne 216 points de cause ; objectifs depuis le bas du range et depuis le LPS. Un ordre de grandeur pour situer la tendance, pas une cible au tick.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Projection d'objectif Wyckoff par comptage" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <rect x="80" y="180" width="200" height="60" className="gold" opacity="0.2" />
+  <text x="180" y="256" fontSize="10" textAnchor="middle" className="muted">range 5 190-5 262 · 18 colonnes P&amp;F</text>
+  <text x="180" y="270" fontSize="10" textAnchor="middle" className="muted">cause = 18 × 4 × 3 = 216 points</text>
+  <polyline points="90,200 105,232 120,190 135,236 150,195 165,230 180,200 195,238 210,192 225,228 240,205 255,235 270,196 285,140 300,160 320,110 340,125 370,70 400,85 440,40" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="60" y1="240" x2="700" y2="240" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="690" y="236" fontSize="9" textAnchor="end" className="muted">5 190 · bas du range</text>
+  <line x1="60" y1="24" x2="700" y2="24" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="6 4" />
+  <text x="690" y="40" fontSize="10" textAnchor="end" className="green" fontWeight="600">objectif minimal 5 190 + 216 = 5 406</text>
+  <line x1="300" y1="160" x2="300" y2="240" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="2 3" />
+  <text x="300" y="176" fontSize="9" textAnchor="middle" className="red">LPS 5 250</text>
+  <text x="530" y="150" fontSize="9" className="muted">objectif depuis le LPS : 5 466 (hors cadre)</text>
+  <text x="530" y="164" fontSize="9" className="muted">fourchette 5 406-5 466 : zone où surveiller</text>
+  <text x="530" y="178" fontSize="9" className="muted">une distribution, pas cible de sortie au tick</text>
+</svg>
+</Figure>
+
+## Faire dialoguer Wyckoff et SMC moderne
+
+Ce niveau a présenté deux vocabulaires pour, en grande partie, une même lecture. Les mettre en correspondance permet de passer de l'un à l'autre, et surtout de prendre à chacun ce qu'il fait le mieux.
+
+| Wyckoff | SMC / ICT | Ce qui est identique | Ce qui diffère |
+| --- | --- | --- | --- |
+| Composite man | Smart money | Un opérateur contraint par la taille, rationnel | Wyckoff raisonne en campagne (semaines) ; SMC en séquence (heures) |
+| Range d'accumulation | Accumulation (PO3) | Construction de position, liquidité qui s'empile aux bornes | Wyckoff : phases A à E, événements nommés ; PO3 : trois temps sur une session |
+| Spring / UTAD | Liquidity sweep | Cassure brève d'un extrême pour prendre les stops, retour | Wyckoff exige un test après ; SMC exige un displacement |
+| Test du spring, LPS | Retour dans l'OB / FVG | L'entrée se prend au retour, pas sur l'événement | Wyckoff lit le volume du test ; SMC lit la zone laissée |
+| SOS / SOW | Displacement, BOS, CHoCH | Le mouvement qui révèle la position et casse la structure | SMC nomme la structure (BOS / CHoCH) ; Wyckoff nomme l'intention (force / faiblesse) |
+| Effort contre résultat | Absorption, volume aux niveaux | Le volume qui ne produit pas de prix trahit un gros opérateur | Wyckoff en fait une loi ; SMC l'utilise peu (l'order flow du niveau 4 la reprend) |
+| Cause et effet | Liquidité cible (PDH, EQH, HTF) | Où le mouvement va | Wyckoff projette une ampleur ; SMC vise le prochain réservoir |
+| Réaccumulation | Continuation après BOS, retour sur zone HTF | Le range en tendance est une pause de la même main | Wyckoff a un cadre pour le distinguer de la distribution ; SMC s'appuie sur la structure |
+
+Ce que **Wyckoff apporte aux SMC** : le temps long (une campagne, pas une session), le volume comme loi (l'effort et le résultat, que les SMC négligent), un cadre pour les ranges en tendance, et une méthode d'estimation de l'ampleur. Un trader SMC qui ne connaît pas Wyckoff prend chaque sweep pour un début de retournement ; celui qui le connaît sait qu'un spring de réaccumulation en phase E d'une accumulation plus large est une continuation.
+
+Ce que les **SMC apportent à Wyckoff** : la précision d'exécution (FVG au tick près, OB raffiné, stop sous le sweep mineur plutôt que sous le spring entier), la structure explicite (BOS / CHoCH plutôt que « force / faiblesse » laissées à l'appréciation), le temps court (killzones, modèles de session) qui permet de trader les campagnes de Wyckoff en intraday, et une meilleure gestion du ratio (le stop Wyckoff sous le spring est souvent large ; le stop SMC sous le sweep mineur du test est court).
+
+Le dialogue, en pratique : **lire le contexte en Wyckoff, exécuter en SMC**. Sur le quotidien et le H4, on identifie la campagne (accumulation, réaccumulation, distribution, phase, événements, projection) ; sur le H1 et le M15, on cherche la séquence SMC (sweep, displacement, FVG / OB, retour) dans le sens que la campagne indique. Le trader qui fait cela ne se demande plus si « les SMC marchent » ou si « Wyckoff est dépassé » : il a une lecture à deux échelles, avec deux vocabulaires cohérents.
+
+## Deux trades à deux échelles
+
+Reconstitutions pédagogiques : la même campagne, lue à deux échelles.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Réaccumulation en quotidien (contexte Wyckoff), sortie par le haut ; en H1, sweep du bas du LPS, displacement, FVG H1 ; entrée SMC dans le FVG"
+  entree="2 384,0"
+  stop="2 376,0 (8 $, sous le sweep mineur H1)"
+  objectif="2 424,0 (projection de la cause : première borne de la fourchette)"
+  r="+5R">
+
+Quotidien : markup depuis une accumulation dont l'objectif projeté est vers 2 470 ; range de deux semaines entre 2 372 et 2 398, sans BC, tests du bas sur volume faible : réaccumulation probable. SOS quotidien : clôture à 2 406 sur volume. Le trader attend le LPS. H1 : le repli revient vers 2 396-2 400 (l'ancien haut du range), une mèche H1 à 2 377 sous le bas du repli (sweep mineur), clôture à 2 388, displacement H1 à 2 410 avec FVG H1 entre 2 382 et 2 387. Entrée dans le FVG à 2 384, stop sous le sweep mineur : 8 $ au lieu des 30 $ qu'aurait coûté un stop sous le range de réaccumulation. Cible : la première borne de la projection Wyckoff, 2 424, atteinte en quatre jours. Contexte Wyckoff, exécution SMC : 5R.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MGC (or)"
+  direction="Short"
+  setup="Vente du haut du range de réaccumulation, lu comme une distribution parce que « le prix a beaucoup monté »"
+  entree="2 396,0"
+  stop="2 402,0 (6 $)"
+  objectif="2 350,0"
+  r="−1R">
+
+Même range, une semaine plus tôt. Ce trader voit une hausse de 120 $ suivie d'un range et conclut : distribution. Il vend le haut du range. Ce qui manquait à sa lecture : pas de buying climax au début du range (le prix avait ralenti sans bougie de panique), tests du bas sur volume faible qui tenaient (aucun SOW), objectif de la cause initiale (2 470) loin d'être atteint. Trois indices sur quatre disaient réaccumulation ; le quatrième (la sortie) n'était pas encore là. Il a vendu dans un range dont la règle disait de ne rien faire, et le SOS quotidien l'a stoppé. La hauteur d'une hausse ne dit pas si elle est finie ; la cause, le climax et le volume des tests, si.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Quatre schématiques** (accumulation et distribution, avec ou sans spring / UTAD) et des variantes réelles : phases B interminables, springs multiples, ranges inclinés, échecs francs. La schématique 2 (sans sweep) est plus fréquente que les traders SMC ne le pensent.
+- Le **composite man** est une grille de lecture, pas un mythe : que ferait un opérateur rationnel contraint par la taille ? Elle oblige à raisonner en campagne.
+- **Réaccumulation contre distribution** : contexte (cause restante), début (BC ou non), comportement des tests, sortie. En tendance haussière, un range est une réaccumulation jusqu'à un SOW confirmé.
+- **Projection par la cause** : nombre de colonnes × boîte × retournement, en fourchette ; un ordre de grandeur pour situer la tendance, pas une cible au tick.
+- **Wyckoff et SMC** décrivent la même chose à deux échelles : lire le contexte en Wyckoff (campagne, volume, ampleur), exécuter en SMC (sweep mineur, FVG, stop court).
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Réaccumulation ou distribution ?">
+
+Or en quotidien : accumulation terminée à 2 200 avec un objectif projeté de 2 200 + 260 = 2 460. Markup jusqu'à 2 380, puis range de trois semaines entre 2 356 et 2 392. Observations : le range a commencé par une bougie de 22 $ sur volume ×1,3 (pas de mèche notable) ; trois tests du bas vers 2 358 sur volumes ×0,6, ×0,5, ×0,7, tous tenus ; un dépassement du haut à 2 397 sur ×0,9 revenu dans le range ; aucune clôture sous 2 356.
+
+1. Passez en revue les quatre indices du chapitre.
+2. Concluez et écrivez la règle de conduite.
+3. Que faudrait-il observer pour changer d'avis ?
+
+<Solution>
+
+1. **Contexte** : objectif de la cause 2 460, le prix est à 2 380 : de la cause reste, réaccumulation favorisée. **Début** : bougie ordinaire sur volume ×1,3, pas de buying climax : favorise la réaccumulation. **Tests du bas** : volumes faibles et prix tenu, aucun SOW : réaccumulation. Le dépassement du haut à 2 397 sur volume faible est un upthrust mineur ; seul, il n'inverse pas la lecture. **Sortie** : pas encore observée.
+2. **Réaccumulation probable**. Règle : ne pas vendre dans le range ; ne pas acheter dans le range non plus ; attendre le SOS (clôture au-dessus de 2 392 sur volume) et acheter le LPS, stop sous le dernier test du bas ; cible : la projection restante (2 460), en fourchette.
+3. Un **SOW** : clôture quotidienne sous 2 356 sur volume ×1,5 ou plus, sans retour immédiat ; ou une série d'upthrusts sur volume croissant avec des tests du bas de plus en plus faibles. Alors la lecture bascule vers la distribution, et le retest de 2 356 par-dessous devient une zone de vente.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Projeter la cause">
+
+Range d'accumulation sur l'ES entre 5 120 et 5 176. En P&F avec une boîte de 4 points et un retournement de 3 boîtes, le range compte 14 colonnes. Le LPS s'est formé à 5 168.
+
+1. Calculez la cause en points.
+2. Donnez la fourchette d'objectifs (depuis le bas du range, depuis le LPS).
+3. Le prix atteint 5 300 et forme un nouveau range de deux semaines. Comment cette information oriente-t-elle la lecture de ce nouveau range ?
+
+<Solution>
+
+1. Cause : 14 × 4 × 3 = **168 points**.
+2. Depuis le bas : 5 120 + 168 = **5 288**. Depuis le LPS : 5 168 + 168 = **5 336**. Fourchette **5 288-5 336**.
+3. À 5 300, le prix est **dans la fourchette d'objectifs** : la cause initiale est largement dépensée. Le nouveau range est donc **suspect de distribution** ; les indices des sections précédentes (BC au début ? tests du bas sur volume croissant ? upthrusts ?) se lisent avec cette présomption. Ce n'est pas une certitude (une réaccumulation peut prolonger la cause), mais le trader n'achète plus le range « par défaut » et surveille un SOW.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Traduire dans les deux vocabulaires">
+
+Décrivez la séquence suivante d'abord en Wyckoff, puis en SMC : après une baisse, un range de dix jours en H4 ; une mèche H4 sous le bas du range sur volume modéré, clôture dans le range ; retour vers le bas sur volume faible qui tient ; bougie H4 de 3 ATR qui clôture au-dessus du haut du range en laissant un trou de prix ; repli de deux bougies vers l'ancien haut du range sur volume faible ; reprise de la hausse.
+
+<Solution>
+
+**Wyckoff** : accumulation (phase A puis B sur dix jours) ; **spring** de phase C sur volume modéré ; **test** du spring sur volume faible ; **SOS** de phase D (3 ATR, volume, sortie du range) ; **LPS** (repli sur volume faible vers l'ancien haut) ; début du **markup** (phase E). Entrée Wyckoff : sur le test ou sur le LPS ; stop sous le spring ; cible par projection de la cause.
+
+**SMC** : range qui construit des EQL ; **liquidity sweep** des EQL (mèche sous, clôture dans) ; **displacement** haussier avec **CHoCH** (cassure du dernier LH du range) et **FVG** (le trou de prix) ; l'**order block** est la bougie du sweep ; **retour** dans le FVG / sur l'ancien haut devenu support (changement de polarité) ; **BOS** haussier ensuite. Entrée SMC : dans le FVG au retour ; stop sous le sweep (ou sous le sweep mineur du retour, raffiné) ; cible : la liquidité au-dessus (EQH, PDH).
+
+Les deux descriptions désignent les mêmes bougies. Wyckoff ajoute le volume des tests et l'ampleur projetée ; SMC ajoute la zone au tick près et le stop court.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La schématique 2 d'accumulation (sans spring) :",
+      options: [
+        "N'existe pas",
+        "Sort du range après un simple test du bas sur volume faible, parce que l'offre restante est négligeable ; le trader qui attend le sweep la manque",
+        "Est toujours une distribution déguisée",
+        "Commence par un upthrust",
+      ],
+      answer: 1,
+      explain: "Quand la liquidité sous le range est faible, le gros acheteur n'a pas de raison d'aller la chercher. Le volume du test dit ce qu'il faut savoir.",
+    },
+    {
+      q: "Le composite man est :",
+      options: [
+        "Une entité réelle qui contrôle le marché",
+        "Une grille de lecture : que ferait un opérateur rationnel contraint par la taille ? Elle oblige à raisonner en campagne",
+        "Un indicateur",
+        "Le nom d'un broker",
+      ],
+      answer: 1,
+      explain: "Wyckoff savait que le marché est fait de milliers d'acteurs. Le composite man est un exercice mental ; le smart money des SMC en est l'héritier, avec plus de folklore.",
+    },
+    {
+      q: "En tendance haussière, un range de plusieurs semaines est, par défaut :",
+      options: [
+        "Une distribution",
+        "Une réaccumulation, jusqu'à un SOW confirmé (clôture sous le range avec volume)",
+        "Un signal de vente",
+        "Sans lecture possible",
+      ],
+      answer: 1,
+      explain: "Contexte (cause restante), absence de BC au début, tests du bas sur volume faible : les indices se lisent dans cet ordre. On ne trade pas le range ; on attend la sortie.",
+    },
+    {
+      q: "La projection par la cause donne :",
+      options: [
+        "Une cible de sortie au tick",
+        "Un ordre de grandeur en fourchette pour situer la tendance (près ou loin de l'objectif), dépendant du choix de la boîte",
+        "La date du sommet",
+        "Le volume attendu",
+      ],
+      answer: 1,
+      explain: "Nombre de colonnes × boîte × retournement, depuis le bas du range et depuis le LPS. Deux traders obtiendront des chiffres différents ; l'usage est de savoir où l'on en est.",
+    },
+    {
+      q: "Le spring de Wyckoff et le sweep des SMC :",
+      options: [
+        "N'ont rien à voir",
+        "Sont le même événement ; Wyckoff exige un test après (volume), SMC exige un displacement",
+        "Se contredisent",
+        "Sont des indicateurs",
+      ],
+      answer: 1,
+      explain: "Cassure brève d'un extrême pour prendre les stops, retour. Le test Wyckoff et le retour SMC dans la zone sont aussi le même moment d'entrée.",
+    },
+    {
+      q: "Le dialogue Wyckoff / SMC en pratique consiste à :",
+      options: [
+        "Choisir l'un et rejeter l'autre",
+        "Lire le contexte en Wyckoff (campagne, volume, ampleur) et exécuter en SMC (sweep mineur, FVG, stop court)",
+        "Utiliser les deux vocabulaires au hasard",
+        "Ne trader que les springs",
+      ],
+      answer: 1,
+      explain: "Deux échelles, deux vocabulaires cohérents. Wyckoff apporte le temps long et le volume ; SMC apporte la précision d'exécution et la structure explicite.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 3 est complet : liquidité, sweeps, displacement, FVG, order blocks, breakers, BOS, CHoCH, outils ICT, Wyckoff. L'examen du niveau vérifie que ces lectures s'articulent en une séquence cohérente, à deux échelles. Ensuite, le niveau 4 descend au niveau du carnet : volume profile, footprint, delta, DOM et tape reading, open interest et funding. C'est là que l'absorption et le displacement se voient au tick près.
