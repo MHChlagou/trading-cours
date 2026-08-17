@@ -1,0 +1,336 @@
+---
+title: "Wyckoff : fondamentaux"
+description: "Les trois lois de Wyckoff, les schémas de base d'accumulation et de distribution, les phases A à E et leurs événements (PS, SC, AR, ST, spring, SOS, LPS), les springs et upthrusts, et la lecture du volume par l'effort et le résultat."
+---
+
+# Wyckoff : fondamentaux
+
+Un siècle avant les Smart Money Concepts, Richard Wyckoff a décrit, sur les actions américaines des années 1900-1930, comment les gros opérateurs construisent une position pendant des semaines, la révèlent, puis la liquident. Sa méthode est l'ancêtre direct de tout ce qui précède dans ce niveau : le « composite man » est le smart money, le spring est un sweep, la phase de test est le retour sur l'order block. Ce chapitre présente les fondamentaux : les trois lois, les schémas d'accumulation et de distribution, les phases et leurs événements, les springs et upthrusts, et la lecture du volume par l'effort et le résultat. Le suivant approfondit.
+
+## Les trois lois de Wyckoff
+
+Wyckoff a résumé sa lecture des marchés en trois lois, qui restent le socle de la méthode.
+
+**Loi de l'offre et de la demande.** Le prix monte quand la demande dépasse l'offre, baisse dans le cas contraire, et stagne quand elles s'équilibrent. C'est trivial dit ainsi ; ce qui ne l'est pas, c'est que Wyckoff lit ce rapport **dans le prix et le volume** de chaque bougie et de chaque phase, au lieu de le supposer. Une hausse sur volume croissant montre une demande active ; une hausse sur volume décroissant montre une demande qui s'épuise. Le niveau 2 (chapitre 6) en a donné les bases.
+
+**Loi de cause à effet.** Un mouvement de prix (l'effet) est proportionnel à la préparation qui l'a précédé (la cause). Une accumulation qui a duré des semaines dans un range large produit une hausse plus ample qu'une accumulation de trois jours dans un range étroit. Wyckoff mesurait la cause en comptant les colonnes d'un graphique en points et figures et projetait l'effet ; le chapitre suivant reprend cette idée. La conséquence pratique : le temps passé dans un range n'est pas du temps perdu, c'est la construction de la cause.
+
+**Loi de l'effort et du résultat.** L'effort est le volume ; le résultat est le mouvement de prix. Quand les deux sont en harmonie (gros volume, grand mouvement), la tendance est saine. Quand ils divergent (gros volume, petit mouvement), quelque chose absorbe : c'est le signe d'un changement en préparation. Une bougie à volume énorme qui ne progresse pas sur un support est de l'absorption par des acheteurs ; sur une résistance, de la distribution par des vendeurs. C'est la loi la plus utile en intraday et elle a sa propre section plus bas.
+
+<Figure caption="Figure 1 · Les trois lois en une image : le déséquilibre offre / demande fait le prix ; la durée et la largeur du range font la cause ; le rapport entre volume (effort) et mouvement (résultat) dit si la tendance est saine ou si quelque chose absorbe.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Les trois lois de Wyckoff" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="215" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="127" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Offre et demande</text>
+  <polyline points="40,180 70,150 100,165 130,120 160,135 190,90 215,105" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="45" y="200" width="10" height="20" className="green" opacity="0.7" /><rect x="75" y="195" width="10" height="25" className="green" opacity="0.7" /><rect x="105" y="205" width="10" height="15" className="box" strokeWidth="1" /><rect x="135" y="190" width="10" height="30" className="green" opacity="0.7" /><rect x="165" y="208" width="10" height="12" className="box" strokeWidth="1" /><rect x="195" y="185" width="10" height="35" className="green" opacity="0.7" />
+  <text x="127" y="78" fontSize="10" textAnchor="middle" className="muted">demande active : hausse sur volume</text>
+
+  <rect x="252" y="30" width="215" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="359" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Cause et effet</text>
+  <rect x="270" y="130" width="120" height="50" className="gold" opacity="0.2" />
+  <polyline points="272,150 285,138 298,168 311,142 324,172 337,140 350,166 363,145 376,170 389,150 400,120 420,90 440,60 455,45" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="330" y="200" fontSize="10" textAnchor="middle" className="muted">cause : durée × largeur</text>
+  <text x="430" y="200" fontSize="10" textAnchor="middle" className="muted">effet</text>
+  <line x1="270" y1="215" x2="390" y2="215" stroke="var(--tm-gold)" strokeWidth="2" /><line x1="400" y1="215" x2="455" y2="215" stroke="var(--tm-green)" strokeWidth="2" />
+
+  <rect x="484" y="30" width="215" height="200" rx="8" className="box" strokeWidth="1.5" />
+  <text x="591" y="54" fontSize="12" fontWeight="600" textAnchor="middle">Effort et résultat</text>
+  <line x1="530" y1="90" x2="530" y2="160" className="line" strokeWidth="1.5" /><rect x="522" y="100" width="16" height="50" className="green" opacity="0.9" />
+  <rect x="520" y="185" width="20" height="35" className="green" opacity="0.7" />
+  <text x="530" y="235" fontSize="9" textAnchor="middle" className="muted">harmonie</text>
+  <line x1="640" y1="120" x2="640" y2="160" className="line" strokeWidth="1.5" /><rect x="632" y="140" width="16" height="10" className="green" opacity="0.9" />
+  <rect x="628" y="170" width="24" height="50" className="red" opacity="0.7" />
+  <text x="640" y="235" fontSize="9" textAnchor="middle" className="red">gros effort, petit résultat : absorption</text>
+</svg>
+</Figure>
+
+## Accumulation et distribution : les schémas de base
+
+Wyckoff décrit le cycle de marché en quatre temps : **accumulation** (les gros opérateurs achètent dans un range, après une baisse), **markup** (la hausse), **distribution** (ils vendent dans un range, après une hausse), **markdown** (la baisse). Les ranges d'accumulation et de distribution sont là où tout se décide ; les tendances ne sont que leur conséquence.
+
+**L'accumulation**, dans son schéma de base : après une tendance baissière, le prix cesse de faire des plus bas franchement plus bas ; il entre dans un range de plusieurs semaines (en quotidien) ou de plusieurs heures (en intraday, la méthode s'applique à toutes les échelles) ; à l'intérieur, les gros acheteurs absorbent tout ce que les vendeurs fatigués et les stops déclenchés leur offrent, sans faire monter le prix ; ils testent le range par le bas une dernière fois (le spring, un sweep) pour vérifier qu'il ne reste plus d'offre ; puis ils laissent le prix sortir par le haut (le markup). Le volume raconte l'histoire : énorme sur le climax de vente initial, décroissant sur les tests du bas, croissant sur les sorties par le haut.
+
+**La distribution** est le miroir : après une hausse, range, absorption des achats par les gros vendeurs, test final par le haut (l'upthrust, un sweep des EQH), sortie par le bas.
+
+Le point capital, que les SMC ont hérité : le range n'est pas une pause ; c'est une **campagne**. Le gros opérateur y construit une position que la taille de sa main lui interdit de construire d'un coup. Chaque événement du range est une étape de cette campagne, et il est identifiable.
+
+<Figure caption="Figure 2 · Le cycle de Wyckoff : accumulation (range après baisse, avec spring), markup, distribution (range après hausse, avec upthrust), markdown. Les ranges sont les campagnes ; les tendances en sont les effets.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Cycle accumulation, markup, distribution, markdown" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <polyline points="50,60 80,120 110,180 130,215 150,190 170,225 190,200 210,222 230,205 250,238 265,210 285,190 305,150 330,110 355,80 380,60 400,45 420,60 440,40 460,58 480,38 500,25 515,45 535,70 560,110 590,160 620,210 660,250" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="125" y="185" width="160" height="55" className="green" opacity="0.15" />
+  <text x="205" y="258" fontSize="10" textAnchor="middle" fontWeight="600" className="green">accumulation</text>
+  <circle cx="250" cy="238" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="250" y="180" fontSize="9" textAnchor="middle" className="green">spring</text>
+  <text x="330" y="180" fontSize="10" textAnchor="middle" fontWeight="600">markup</text>
+  <rect x="395" y="20" width="125" height="45" className="red" opacity="0.15" />
+  <text x="457" y="82" fontSize="10" textAnchor="middle" fontWeight="600" className="red">distribution</text>
+  <circle cx="500" cy="25" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="530" y="20" fontSize="9" className="red">upthrust</text>
+  <text x="600" y="130" fontSize="10" textAnchor="middle" fontWeight="600">markdown</text>
+  <text x="80" y="90" fontSize="10" textAnchor="middle" fontWeight="600">markdown</text>
+</svg>
+</Figure>
+
+## Les phases A à E et leurs événements
+
+Le schéma d'accumulation se découpe en cinq phases, avec des événements nommés. Voici la version pour l'accumulation ; la distribution a les mêmes phases avec des événements miroirs (nommés entre parenthèses).
+
+**Phase A : arrêt de la tendance précédente.**
+- **PS** (preliminary support ; en distribution : PSY, preliminary supply) : premier signe que des acheteurs importants s'intéressent : un rebond notable sur volume, dans la baisse, qui ne tient pas.
+- **SC** (selling climax ; en distribution : BC, buying climax) : le point bas de panique : bougie très large, volume énorme, longue mèche basse. Les derniers vendeurs capitulent ; les gros achètent tout. C'est le climax du niveau 2.
+- **AR** (automatic rally ; en distribution : AR, automatic reaction) : rebond automatique après le climax, parce que l'offre s'est tarie ; il définit le **haut du range**.
+- **ST** (secondary test) : retour vers le bas du SC sur volume plus faible et fourchette plus étroite : le test confirme que l'offre a diminué. Il peut y en avoir plusieurs.
+
+**Phase B : construction de la cause.** Le prix oscille dans le range défini par le SC et l'AR, souvent longtemps. Les gros accumulent ; le volume est irrégulier ; des tests du haut (qui échouent) et du bas se succèdent. C'est la phase la plus longue et la plus difficile à trader ; le trader Wyckoff y observe et attend.
+
+**Phase C : le test final.**
+- **Spring** (en distribution : upthrust, UT ou UTAD) : le prix casse le bas du range **en mèche** ou brièvement, déclenche les stops sous le range et piège les vendeurs de cassure, puis revient dans le range sur volume décroissant. C'est le sweep du chapitre 2, à l'échelle du range. Sa fonction : vérifier qu'il ne reste plus d'offre (le prix ne s'effondre pas malgré la cassure) et fournir la dernière liquidité aux acheteurs.
+- **Test** du spring : un retour vers le bas du spring, sur volume faible, qui tient. La confirmation.
+
+**Phase D : la sortie.**
+- **SOS** (sign of strength ; en distribution : SOW, sign of weakness) : mouvement haussier large sur volume croissant qui traverse le range et sort par le haut : le displacement.
+- **LPS** (last point of support ; en distribution : LPSY, last point of supply) : le ou les replis après le SOS, sur volume faible, qui tiennent au-dessus de l'ancien haut du range : c'est le retour sur la zone (retest de polarité, retour dans le FVG du SOS). Le point d'entrée classique de Wyckoff.
+
+**Phase E : le markup.** La tendance haussière proprement dite, avec ses propres replis (LPS successifs) jusqu'à la prochaine distribution.
+
+<Figure caption="Figure 3 · Schéma d'accumulation avec ses phases et événements : PS, SC, AR, ST (phase A), oscillations (B), spring et test (C), SOS et LPS (D), markup (E). Le volume est en bas : énorme sur SC, décroissant sur les tests, croissant sur SOS.">
+<svg className="tm-svg" viewBox="0 0 720 360" role="img" aria-label="Schéma d'accumulation Wyckoff avec phases et événements" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="260" x2="700" y2="260" className="line" strokeWidth="1" />
+  <line x1="120" y1="120" x2="600" y2="120" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="46" y="116" fontSize="9" className="red">haut du range (AR)</text>
+  <line x1="120" y1="220" x2="600" y2="220" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="46" y="234" fontSize="9" className="green">bas du range (SC)</text>
+  <polyline points="50,60 80,120 100,160 115,190 130,220 160,120 190,205 220,150 250,195 280,140 310,200 340,160 370,240 395,205 415,180 440,110 460,90 480,130 500,105 530,60 560,80 600,30" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="100" y="152" fontSize="9" textAnchor="middle" fontWeight="600">PS</text>
+  <text x="130" y="238" fontSize="9" textAnchor="middle" fontWeight="600" className="red">SC</text>
+  <text x="160" y="110" fontSize="9" textAnchor="middle" fontWeight="600">AR</text>
+  <text x="190" y="222" fontSize="9" textAnchor="middle" fontWeight="600">ST</text>
+  <text x="370" y="256" fontSize="9" textAnchor="middle" fontWeight="600" className="green">spring</text>
+  <text x="395" y="222" fontSize="8" textAnchor="middle" className="muted">test</text>
+  <text x="440" y="100" fontSize="9" textAnchor="middle" fontWeight="600" className="green">SOS</text>
+  <text x="480" y="146" fontSize="9" textAnchor="middle" fontWeight="600" className="green">LPS</text>
+  <text x="600" y="24" fontSize="9" textAnchor="middle" fontWeight="600">markup</text>
+
+  <rect x="50" y="270" width="150" height="14" rx="3" className="box" /><text x="125" y="281" fontSize="9" textAnchor="middle">A</text>
+  <rect x="205" y="270" width="140" height="14" rx="3" className="box" /><text x="275" y="281" fontSize="9" textAnchor="middle">B</text>
+  <rect x="350" y="270" width="70" height="14" rx="3" className="box" /><text x="385" y="281" fontSize="9" textAnchor="middle">C</text>
+  <rect x="425" y="270" width="95" height="14" rx="3" className="box" /><text x="472" y="281" fontSize="9" textAnchor="middle">D</text>
+  <rect x="525" y="270" width="95" height="14" rx="3" className="box" /><text x="572" y="281" fontSize="9" textAnchor="middle">E</text>
+
+  <line x1="40" y1="350" x2="700" y2="350" className="line" strokeWidth="1" />
+  <rect x="94" y="325" width="12" height="25" className="red" opacity="0.6" /><rect x="124" y="295" width="12" height="55" className="red" opacity="0.9" /><rect x="154" y="320" width="12" height="30" className="green" opacity="0.6" /><rect x="184" y="335" width="12" height="15" className="box" strokeWidth="1" /><rect x="220" y="330" width="12" height="20" className="box" strokeWidth="1" /><rect x="280" y="332" width="12" height="18" className="box" strokeWidth="1" /><rect x="310" y="336" width="12" height="14" className="box" strokeWidth="1" /><rect x="364" y="326" width="12" height="24" className="red" opacity="0.5" /><rect x="389" y="340" width="12" height="10" className="box" strokeWidth="1" /><rect x="434" y="305" width="12" height="45" className="green" opacity="0.9" /><rect x="474" y="338" width="12" height="12" className="box" strokeWidth="1" /><rect x="524" y="310" width="12" height="40" className="green" opacity="0.8" /><rect x="594" y="315" width="12" height="35" className="green" opacity="0.8" />
+  <text x="130" y="292" fontSize="8" textAnchor="middle" className="red">volume max</text>
+  <text x="440" y="302" fontSize="8" textAnchor="middle" className="green">volume ↑</text>
+</svg>
+</Figure>
+
+Une remarque de méthode : les schémas réels sont rarement aussi propres ; les événements peuvent manquer, se dédoubler, être ambigus. Le chapitre suivant en donne des variantes. Ce qui compte au niveau des fondamentaux, c'est de reconnaître la **logique** : arrêt, construction, test final, sortie, tendance.
+
+## Springs et upthrusts
+
+Le **spring** est l'événement de Wyckoff qui a le plus directement survécu dans les SMC : c'est le sweep du bas d'un range d'accumulation. Le prix passe sous le support du range (le niveau du SC et des ST), déclenche les stops des acheteurs qui s'y étaient placés et attire les vendeurs de cassure, puis **revient dans le range**. Wyckoff distinguait trois types de springs selon l'ampleur de la pénétration et le volume :
+
+- Spring sur **gros volume et forte pénétration** : de l'offre reste ; il faut un test réussi avant d'acheter ; risque que ce soit une vraie cassure.
+- Spring sur **volume modéré et pénétration modérée** : le cas typique, achat sur le test.
+- Spring sur **faible volume et faible pénétration** (ou simple test du bas sans cassure) : très peu d'offre restante ; le plus haussier.
+
+L'**upthrust** est le miroir : dépassement du haut d'un range de distribution, prise des stops des vendeurs et piégeage des acheteurs de cassure, retour dans le range. L'**UTAD** (upthrust after distribution) est l'upthrust de phase C, le test final avant la sortie par le bas.
+
+Comment cela se trade, en Wyckoff classique : on n'achète pas le spring lui-même (on ne sait pas encore s'il va tenir), on achète le **test** du spring (le retour vers le bas du spring sur volume faible qui tient), ou le **LPS** après le SOS. C'est exactement la règle du chapitre 2 (« on n'entre jamais sur la mèche, on entre au retour ») dite en 1930. Le stop va sous le point bas du spring.
+
+Ce que le spring ajoute au sweep : une **échelle** (celle du range entier, donc une cible bien plus lointaine, projetée par la loi de cause à effet) et un **contexte** (il survient en phase C, après une phase B lisible ; un sweep isolé n'a pas ce cadre).
+
+## Effort contre résultat : lire le volume avec Wyckoff
+
+La troisième loi devient un outil de lecture bougie par bougie et phase par phase. Le principe : comparer le **volume** (l'effort) à ce que le prix a fait (le résultat, mesuré par la fourchette de la bougie et la position de sa clôture).
+
+| Effort (volume) | Résultat (fourchette, clôture) | Lecture |
+| --- | --- | --- |
+| Élevé | Grande fourchette, clôture dans le sens du mouvement | Harmonie : le mouvement est porté par de la participation, il continue probablement |
+| Élevé | Petite fourchette, clôture au milieu ou contre le mouvement | Absorption : quelqu'un prend l'autre côté en taille ; changement en préparation |
+| Faible | Grande fourchette | Vide : peu de participants, le mouvement traverse un trou de liquidité (nuit, pré-annonce) ; fragile |
+| Faible | Petite fourchette | Repos ; sans information, sauf sur un test (spring, ST) où le volume faible est **le** signal recherché |
+
+Trois applications directes :
+
+**Sur les climax (SC, BC).** Effort maximal, résultat en apparence maximal (grande bougie), mais la clôture est loin de l'extrême (longue mèche) : l'effort n'a pas donné le résultat attendu ; le mouvement s'épuise. Le volume du climax est le plus élevé de la séquence, et c'est un signe d'arrêt, pas de continuation.
+
+**Sur les tests (ST, test du spring, LPS).** Le volume doit être **faible** : si le retour vers le bas du range se fait sans participation, il n'y a plus de vendeurs. Un test sur volume élevé est un mauvais test : de l'offre reste, la phase B continue.
+
+**Sur les sorties (SOS, SOW).** Le volume doit être **élevé** et le résultat large : le displacement est porté. Un SOS sur volume faible est suspect ; ce peut être un upthrust du haut du range d'accumulation (un test qui échoue) plutôt qu'une vraie sortie.
+
+Cette lecture demande du volume réel : futures et actions oui, forex spot non (niveau 2). Sur le forex, la partie « prix » de Wyckoff (phases, événements, springs) reste applicable ; la partie « effort » se fait avec les futures de devises ou pas du tout.
+
+## Deux trades lus par Wyckoff
+
+Reconstitutions pédagogiques : le même range, deux moments d'entrée.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500), swing sur quotidien"
+  direction="Long"
+  setup="Accumulation en quotidien sur trois semaines : SC, AR, ST, phase B, spring sur volume modéré, test sur volume faible, SOS ; entrée sur le LPS"
+  entree="5 250,00 (LPS, repli sur l'ancien haut du range)"
+  stop="5 188,00 (62 pts, sous le test du spring)"
+  objectif="5 350,00 (première projection de la cause, chapitre suivant)"
+  r="+1,6R">
+
+Après une baisse de 5 400 à 5 190 : SC à 5 186 sur le plus gros volume de l'année, AR à 5 262, ST à 5 195 sur volume moitié moindre. Trois semaines de phase B entre 5 190 et 5 262. Spring à 5 181 sur volume modéré, retour dans le range le jour même ; test à 5 192 sur volume faible qui tient. SOS : bougie de 45 points sur volume élevé qui clôture à 5 270, au-dessus du range. LPS : repli sur volume faible vers l'ancien haut du range, creux à 5 248. Entrée à 5 250, stop sous le test du spring à 5 188 (62 points, 310 $ par MES, 1 contrat sur un compte de 31 000 $ à 1 %), cible 5 350 atteinte trois semaines plus tard : +1,6R. Ratio modeste pour un swing, mais chaque événement était identifiable avant l'entrée, et le stop était structurel. Un stop sous le spring (5 178) aurait été plus sûr et le ratio plus faible encore ; c'est le compromis habituel.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500), swing sur quotidien"
+  direction="Long"
+  setup="Achat en phase B, sur un test du haut du range pris pour un SOS, volume faible"
+  entree="5 258,00"
+  stop="5 240,00 (18 pts)"
+  objectif="5 350,00"
+  r="−1R, deux fois">
+
+Même range, deux semaines plus tôt. Le trader voit le prix remonter vers le haut du range à 5 258 et achète « la cassure imminente ». Le volume de la montée est faible ; la bougie clôture sous 5 262 : c'était un test du haut de la phase B, pas un SOS. Le prix redescend vers 5 200 ; stop touché. Il recommence à la montée suivante : idem. Deux pertes en phase B, la phase où Wyckoff dit d'observer. Ce que le volume disait : effort faible sur les montées, aucune sortie n'était en cours. La phase B ne se trade pas ; elle se lit, pour être prêt en phase C.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Trois lois** : offre et demande (lues dans prix et volume), cause et effet (la durée et la largeur du range font l'ampleur du mouvement), effort et résultat (volume contre mouvement ; la divergence signale l'absorption).
+- Le cycle : **accumulation, markup, distribution, markdown**. Les ranges sont des campagnes de construction de position ; les tendances en sont les effets.
+- **Phases A à E** et événements : PS, SC, AR, ST (arrêt) ; phase B (construction) ; spring et test (test final) ; SOS et LPS (sortie) ; markup. La distribution est le miroir (PSY, BC, AR, ST, UT / UTAD, SOW, LPSY).
+- **Spring et upthrust** sont des sweeps à l'échelle du range : on n'achète pas le spring, on achète son test ou le LPS, stop sous le point bas du spring.
+- **Effort contre résultat** : climax = effort max sans résultat (arrêt) ; tests = volume faible souhaité ; sorties = volume élevé requis. Demande du volume réel.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Nommer les événements">
+
+Séquence quotidienne sur l'or (prix · volume relatif) après une baisse : 2 310 · 1,2 (rebond de 12 $ qui échoue) ; 2 268 · 3,4 (bougie de 40 $, longue mèche basse, clôture à 2 290) ; 2 332 · 1,5 (rebond) ; 2 276 · 0,9 (retour vers le bas, fourchette étroite) ; puis trois semaines entre 2 272 et 2 332 ; 2 262 · 1,3 (cassure du bas de 10 $, clôture à 2 284) ; 2 279 · 0,5 (retour vers le bas, tient) ; 2 348 · 2,2 (bougie de 50 $ qui clôture au-dessus de 2 332) ; 2 336 · 0,6 (repli).
+
+1. Nommez chaque événement (PS, SC, AR, ST, spring, test, SOS, LPS) et la phase.
+2. Quels volumes confirment la lecture, et lesquels la contrediraient ?
+3. Où est l'entrée classique de Wyckoff, et où va le stop ?
+
+<Solution>
+
+1. 2 310 : **PS** (phase A). 2 268 sur ×3,4 avec mèche : **SC** (A). 2 332 : **AR** (A), haut du range. 2 276 sur ×0,9 : **ST** (A). Trois semaines : **phase B**. 2 262 sur ×1,3, clôture dans le range : **spring** (C). 2 279 sur ×0,5 : **test** du spring (C). 2 348 sur ×2,2 clôturant au-dessus du range : **SOS** (D). 2 336 sur ×0,6 : **LPS** (D).
+2. Confirment : le SC sur le volume maximal, le ST sur volume plus faible que le SC, le test du spring sur volume très faible, le SOS sur volume élevé, le LPS sur volume faible. Contrediraient : un test du spring sur volume élevé (de l'offre reste), un « SOS » sur volume faible (probable test du haut qui échoue), un ST sur volume supérieur au SC (la baisse n'est pas finie).
+3. Entrée sur le **test du spring** (vers 2 280) ou, plus prudent, sur le **LPS** (vers 2 336, au-dessus de l'ancien haut du range à 2 332). Stop **sous le point bas du spring** : 2 262 moins une marge, vers 2 258.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Effort contre résultat">
+
+Sur MNQ en M15, sur un support suivi depuis deux jours, cinq bougies (fourchette en points · position de clôture · volume relatif) : (18 · clôture basse · 1,1) ; (22 · basse · 1,4) ; (9 · milieu · 3,1) ; (7 · haute · 2,6) ; (26 · haute · 2,0).
+
+1. Lisez chaque bougie avec la loi de l'effort et du résultat.
+2. Que se passe-t-il sur les bougies 3 et 4 ?
+3. La bougie 5 confirme-t-elle ? Que feriez-vous et où ?
+
+<Solution>
+
+1. Bougies 1 et 2 : effort modéré, résultat baissier cohérent : la baisse est portée. Bougie 3 : **effort très élevé (×3,1), résultat quasi nul** (9 points, clôture au milieu) : absorption, quelqu'un achète tout ce qui se vend sur le support. Bougie 4 : effort élevé, résultat faible mais clôture haute : l'absorption continue et commence à l'emporter. Bougie 5 : effort élevé, grand résultat haussier : harmonie, la demande a pris le contrôle.
+2. L'**absorption** : les vendeurs frappent (volume ×3), le prix ne baisse plus. C'est la signature d'acheteurs importants avec des ordres limites sur le support, le SC-ST en miniature.
+3. Oui : la bougie 5 est le SOS de cette mini-séquence. On n'achète pas la bougie 5 (déjà 26 points parcourus) ; on cherche le **retour** sur la zone d'absorption (les bougies 3-4, qui sont l'order block) ou dans le FVG laissé par la bougie 5, stop sous le bas de la bougie 3.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Spring ou cassure ?">
+
+Range d'accumulation en H4 sur EUR/USD entre 1,0790 (bas) et 1,0860 (haut) depuis six jours. Trois scénarios sur la bougie H4 qui passe sous 1,0790 :
+
+- (a) Bas 1,0781, clôture 1,0798, volume (6E) ×1,4 ; la bougie suivante revient à 1,0788 sur ×0,5 et clôture à 1,0805.
+- (b) Bas 1,0762, clôture 1,0770, volume ×2,9 ; la bougie suivante clôture à 1,0758.
+- (c) Bas 1,0784, clôture 1,0792, volume ×0,7 ; les trois bougies suivantes oscillent entre 1,0790 et 1,0810 sur volume faible.
+
+1. Qualifiez chaque scénario (spring de quel type, cassure, test).
+2. Dans quel cas achetez-vous, et où ?
+
+<Solution>
+
+1. **(a)** Spring à pénétration modérée sur volume modéré, suivi d'un **test réussi** (retour vers le bas sur volume très faible, clôture au-dessus) : le cas typique. **(b)** Pénétration forte (28 pips) sur gros volume, sans retour dans le range, clôture suivante plus bas : **cassure**, la baisse reprend ; ce n'était pas une accumulation, ou elle a échoué. **(c)** Pénétration faible sur volume faible, retour immédiat : spring **de faible intensité**, le plus haussier selon Wyckoff (il ne restait presque plus d'offre) ; les bougies suivantes sur volume faible sont le test.
+2. **(a)** : achat sur le test (vers 1,0790-1,0800), stop sous 1,0781 moins marge (1,0776). **(c)** : achat après le test, vers 1,0795-1,0800, stop sous 1,0784 moins marge (1,0779). **(b)** : pas d'achat ; le range est invalidé, et un short sur le retest de 1,0790 par-dessous (breaker) devient envisageable.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La loi de l'effort et du résultat dit que :",
+      options: [
+        "Le volume prédit la direction",
+        "Quand un gros volume ne produit qu'un petit mouvement, quelque chose absorbe : un changement se prépare",
+        "Le volume est inutile",
+        "Plus le volume est fort, plus le prix monte",
+      ],
+      answer: 1,
+      explain: "L'harmonie (gros effort, grand résultat) confirme la tendance ; la divergence signale l'absorption. C'est la loi la plus utile en intraday.",
+    },
+    {
+      q: "Dans le cycle de Wyckoff, les ranges d'accumulation et de distribution sont :",
+      options: [
+        "Des pauses sans intérêt",
+        "Des campagnes où les gros opérateurs construisent une position que leur taille interdit de construire d'un coup",
+        "Des erreurs de marché",
+        "Toujours symétriques",
+      ],
+      answer: 1,
+      explain: "Le range est la cause ; la tendance est l'effet. Chaque événement du range est une étape identifiable de la campagne.",
+    },
+    {
+      q: "Le selling climax (SC) se reconnaît à :",
+      options: [
+        "Un volume faible et une petite bougie",
+        "Une bougie très large sur volume maximal avec une longue mèche basse : les derniers vendeurs capitulent, les gros achètent",
+        "Une cassure de résistance",
+        "Un doji",
+      ],
+      answer: 1,
+      explain: "C'est le climax du niveau 2 : effort maximal dont le résultat s'épuise (la clôture est loin de l'extrême). Il définit le bas du range ; l'AR définit le haut.",
+    },
+    {
+      q: "Le spring de phase C est :",
+      options: [
+        "Une cassure baissière valide",
+        "Un sweep du bas du range : cassure brève qui piège les vendeurs, déclenche les stops, puis retour dans le range ; il vérifie qu'il ne reste plus d'offre",
+        "Le premier événement de l'accumulation",
+        "Un signal de vente",
+      ],
+      answer: 1,
+      explain: "C'est le sweep du chapitre 2 à l'échelle du range. On n'achète pas le spring, on achète son test (volume faible) ou le LPS après le SOS, stop sous le point bas du spring.",
+    },
+    {
+      q: "Sur un test (ST, test du spring, LPS), le volume souhaité est :",
+      options: [
+        "Élevé",
+        "Faible : le retour se fait sans participation, il n'y a plus de vendeurs",
+        "Indifférent",
+        "Maximal",
+      ],
+      answer: 1,
+      explain: "Un test sur volume élevé est un mauvais test : de l'offre reste. À l'inverse, une sortie (SOS) demande un volume élevé.",
+    },
+    {
+      q: "La phase B d'une accumulation est :",
+      options: [
+        "Le meilleur moment pour acheter",
+        "La phase de construction, la plus longue, où l'on observe sans trader ; les tests du haut y échouent sur volume faible",
+        "La phase de sortie",
+        "Inexistante",
+      ],
+      answer: 1,
+      explain: "Acheter les montées de phase B en les prenant pour des SOS est l'erreur classique. Le volume faible des montées dit qu'aucune sortie n'est en cours.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Les schémas de base sont posés. Le chapitre suivant les confronte au réel : schématiques détaillées et variantes, le composite man comme grille de lecture, réaccumulation et redistribution en cours de tendance, projections d'objectifs par la loi de cause à effet, et le dialogue entre Wyckoff et les SMC modernes.
