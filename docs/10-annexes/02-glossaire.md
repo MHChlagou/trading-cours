@@ -15,6 +15,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Ask** : meilleur prix auquel les vendeurs acceptent de vendre. On achète au ask.
 - **ATR (Average True Range)** : mesure de la volatilité moyenne sur N périodes, utilisée pour dimensionner stops et objectifs.
 - **Averaging down (moyenne à la baisse)** : ajout à une position perdante pour améliorer le prix moyen ; inverse du pyramidage, source de pertes de plusieurs R.
+- **Backwardation / contango (VIX)** : structure à terme des futures VIX : échéances lointaines plus chères que le spot (contango, normal) ou moins chères (backwardation, stress).
 - **Bid** : meilleur prix auquel les acheteurs acceptent d'acheter. On vend au bid.
 - **Bid × ask (footprint)** : à chaque prix d'une bougie, volume échangé au bid (ventes agressives) et à l'ask (achats agressifs) ; distingue qui a pris l'initiative.
 - **BOS (Break of Structure)** : cassure d'un swing dans le sens de la tendance, signe de continuation.
@@ -30,13 +31,18 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Changement de polarité** : un support cassé devient résistance (et inversement), parce que les participants piégés sortent au retour et les vainqueurs rajoutent.
 - **CHoCH (Change of Character)** : première cassure contre la tendance en cours, indice précoce de retournement.
 - **Climax** : bougie à volume extrême et grande fourchette en bout de mouvement prolongé, souvent suivie d'un retournement ou d'un range.
+- **Commercials / non-commercials / non-reportables** : les trois catégories du rapport COT legacy : hedgers, grands spéculateurs, petits ; leurs positions nettes se compensent.
 - **Commission** : frais fixe facturé par le broker par ordre, par contrat ou par lot, à l'achat et à la vente.
 - **Composite man** : grille de lecture de Wyckoff : imaginer un opérateur unique, rationnel, contraint par la taille, qui accumule bas et distribue haut.
 - **Confluence** : coïncidence de raisons indépendantes (structure, niveau horizontal, chiffre rond, volume) sur une même zone de prix.
+- **Consensus (macro)** : prévision moyenne des économistes pour une publication ; il est déjà dans le prix, seule la surprise (écart au consensus) fait bouger.
 - **Contraction / expansion** : cycle de la volatilité : bougies qui rétrécissent puis mouvement d'ampleur ; la contraction annonce un mouvement, pas sa direction.
 - **Corrélation** : mesure de −1 à +1 du lien entre les rendements de deux actifs sur une fenêtre donnée ; elle change avec le régime et monte dans les crises.
 - **COT (Commitments of Traders)** : rapport hebdomadaire de la CFTC détaillant le positionnement des grandes catégories d'intervenants sur les futures.
+- **Courbe des taux** : rendements des obligations d'État selon l'échéance ; normale (pentue), plate ou inversée ; le spread 2-10 ans en résume la forme.
+- **CPI / PCE / NFP** : indice des prix à la consommation, dépenses de consommation (mesure d'inflation préférée de la Fed), créations d'emplois non agricoles : les trois publications américaines les plus suivies.
 - **CVD (cumulative volume delta)** : delta cumulé bougie après bougie depuis un point de départ ; courbe de l'agressivité nette, à lire toujours avec le prix.
+- **Cycle économique** : alternance de phases (reprise, expansion, surchauffe / ralentissement, récession) lue avec deux variables, croissance et inflation ; les marchés basculent avant l'économie.
 - **DAY (durée d'ordre)** : ordre valable jusqu'à la fin de la séance, puis annulé ; dangereux pour un stop gardé la nuit.
 - **Dealing desk (market maker)** : modèle de broker qui prend l'autre côté des trades de ses clients, en couvrant ou non son risque.
 - **Dealing range** : fourchette entre un swing bas et un swing haut significatifs, partagée en premium (moitié haute) et discount (moitié basse).
@@ -50,7 +56,9 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Doji** : bougie à corps minuscule et mèches des deux côtés : les deux camps se sont battus sans vainqueur.
 - **DOM (Depth of Market)** : affichage de la profondeur du carnet, plusieurs niveaux de bids et d'asks, utilisé pour l'exécution et l'order flow.
 - **DOM (depth of market)** : affichage de la profondeur du carnet : ordres limites en attente à chaque prix ; se lit par ce qui est exécuté et ce qui reste, jamais par la photo.
+- **Dot plot** : graphique des projections de taux de chaque membre du FOMC, publié une réunion sur deux ; forme explicite de forward guidance.
 - **Drawdown** : baisse de la valeur du compte depuis son plus haut, exprimée en pourcentage ou en R.
+- **DXY (US Dollar Index)** : indice du dollar contre un panier de six devises (58 % d'euro) ; boussole des relations intermarket, à lire croisé avec les taux.
 
 ## E – O
 
@@ -59,14 +67,19 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Equity curve (courbe de capital)** : évolution du capital dans le temps, souvent tracée en R cumulés ; sert de base aux paliers de réduction du risque.
 - **ES / MES** : futures CME sur le S&P 500 ; ES vaut 50 $ le point, MES (micro) 5 $ le point, tick de 0,25.
 - **Expectancy (espérance)** : gain moyen par trade d'un système, en R, calculé sur une série représentative.
+- **Fed / BCE / BoJ** : banques centrales américaine (mandat double, FOMC), européenne (stabilité des prix) et japonaise (yen, contrôle de courbe) ; réagissent aux données et communiquent.
 - **FOK (fill or kill)** : ordre exécuté en totalité immédiatement ou annulé.
+- **FOMC** : comité de politique monétaire de la Fed ; huit réunions par an, communiqué puis conférence de presse, minutes trois semaines plus tard.
 - **Footprint** : graphique qui ouvre chaque bougie et affiche, par prix, le volume au bid et à l'ask ; montre absorption, déséquilibres et divergences au tick près.
+- **Forward guidance** : communication d'une banque centrale sur la trajectoire future de ses taux, qui déplace les anticipations avant la décision.
 - **Fourchette vraie (true range)** : le plus grand de : haut − bas, |haut − clôture précédente|, |bas − clôture précédente| ; intègre les gaps.
 - **Funding** : paiement périodique entre longs et shorts sur les contrats perpétuels crypto, reflet du déséquilibre de positionnement.
 - **Funding (perpétuels)** : paiement périodique (souvent toutes les 8 h) entre longs et shorts qui aligne le perpétuel sur le spot ; positif : les longs paient ; son extrême mesure la fragilité du côté qui paie.
 - **Futures (contrat à terme)** : contrat standardisé coté en Bourse engageant à acheter ou vendre un actif à une date et un prix fixés ; le trader clôture avant l'échéance.
+- **Futures de Fed funds** : contrats CME cotant le taux directeur moyen attendu par mois (100 − prix) ; donnent la probabilité implicite d'un mouvement à chaque réunion.
 - **FVG (Fair Value Gap)** : déséquilibre laissé par une bougie impulsive, zone où le prix n'a pas été échangé des deux côtés.
 - **GC / MGC** : futures CME sur l'or ; GC porte sur 100 onces (10 $ le tick de 0,10), MGC sur 10 onces (1 $ le tick).
+- **Grille de réaction** : scénarios écrits avant une publication (au-dessus, conforme, en dessous du consensus) avec la réaction attendue de chaque actif selon la phase.
 - **GTC (good till canceled)** : ordre valable jusqu'à annulation manuelle ; réglage normal d'un stop de protection.
 - **Heat (du portefeuille)** : risque total ouvert à un instant donné, somme des R de toutes les positions ; plafonné (3 à 5 %) avec des sous-plafonds par thème.
 - **HH / HL / LH / LL** : higher high, higher low, lower high, lower low : étiquettes des swings qui définissent tendance haussière (HH/HL) et baissière (LH/LL).
@@ -74,7 +87,9 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **HVN / LVN (high / low volume node)** : pic ou creux local de volume dans un profil ; HVN = zone d'acceptation et de réaction, LVN = vide traversé vite (souvent un FVG).
 - **Iceberg** : ordre dont seule une petite tranche est affichée, renouvelée à mesure qu'elle est exécutée ; outil standard de l'absorption institutionnelle.
 - **IFVG (FVG inversé)** : FVG traversé en clôture qui agit ensuite dans le sens opposé au retest ; changement de polarité appliqué au FVG.
+- **Index COT** : position nette d'une catégorie normalisée entre son minimum et son maximum sur N semaines, de 0 à 100 ; extrêmes au-delà de 90 et sous 10.
 - **Initial balance (IB)** : fourchette de la première heure de la séance ; ses bornes servent de référence, sa sortie sur volume signale souvent une journée de tendance.
+- **Intermarket** : lecture des marchés les uns par rapport aux autres : taux, dollar, actions, matières premières, et leurs corrélations qui dépendent du régime.
 - **Invalidation** : prix à partir duquel une lecture est fausse, défini par un swing objectif avec une marge contre le bruit ; c'est là que va le stop.
 - **IOC (immediate or cancel)** : ordre exécuté immédiatement pour la part disponible, le reste étant annulé.
 - **Kelly (fraction de)** : fraction du capital qui maximise la croissance théorique d'un pari répété, f* = p − (1 − p) ÷ b ; en pratique on en risque une petite fraction.
@@ -90,6 +105,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Markup / markdown** : tendance haussière (markup) ou baissière (markdown) qui suit un range d'accumulation ou de distribution.
 - **Marteau / étoile filante** : bougies à petit corps et longue mèche d'un seul côté : le prix a été poussé loin puis violemment ramené ; à lire en contexte, pas comme figure isolée.
 - **Matrice de corrélation** : tableau carré des corrélations entre plusieurs actifs, diagonale à 1, symétrique ; fait apparaître les blocs et les thèmes.
+- **Matrice de régimes** : croisement structure (tendance / range) × volatilité (basse / normale / stress) donnant, par case, les setups à sortir, ceux à ranger et les réglages de risque.
 - **Max drawdown** : plus grande baisse du capital entre un plus haut et le plus bas qui l'a suivi, en pourcentage ou en R.
 - **Migration de la value area** : déplacement jour après jour de la value area ; VA qui montent = tendance haussière par le volume ; VA sous le POC de la veille = premier signal d'inversion.
 - **Mitigation (d'un FVG ou OB)** : retour du prix dans la zone, réaction, reprise dans le sens du displacement ; la zone a été « utilisée ».
@@ -121,21 +137,27 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Profil composite** : profil de volume sur plusieurs séances ou semaines ; donne les HVN, LVN, POC et value area de contexte.
 - **Profil de session / de range** : profil de volume sur une séance (niveaux du lendemain) ou entre deux swings (valeur d'un mouvement).
 - **Profit factor** : gains bruts divisés par pertes brutes d'une série de trades.
+- **Protocole news** : règles écrites autour des annonces : fenêtres interdites, positions fermées ou réduites, aucun ordre au marché à la publication, entrée au plus tôt à +20 min.
 - **Pyramider (pyramiding)** : ajouter à une position gagnante par tranches décroissantes, avec un stop commun remonté avant chaque ajout et un risque total inférieur ou égal à 1R.
+- **QE / QT** : achats (quantitative easing) ou réduction du bilan (quantitative tightening) d'une banque centrale ; injection ou retrait de liquidités, effet sur les taux longs.
 - **R (R-multiple)** : unité de mesure des résultats, égale au risque initial du trade.
 - **Range** : phase où sommets et creux se forment aux mêmes niveaux, sans HH ni LL durables.
 - **Réaccumulation / redistribution** : range en cours de tendance où la même main complète sa position ; en tendance haussière, un range est une réaccumulation jusqu'à un SOW confirmé.
 - **Réalignement** : moment où la structure interne (unité d'exécution) recommence à aller dans le sens de la structure externe ; signal d'entrée du trade de tendance.
+- **Régime de marché** : état persistant (tendance, range, stress) défini par un faisceau : structure, volatilité, corrélations, sentiment ; change la probabilité de réussite des setups.
 - **Régime de volatilité** : période où l'amplitude des variations reste dans une fourchette donnée (calme, agité) ; les régimes durent puis basculent.
 - **Requote** : refus d'exécution au prix demandé, avec proposition d'un nouveau prix, fréquent chez certains brokers en dealing desk.
 - **Résistance** : zone de prix où les vendeurs ont arrêté une hausse par le passé.
 - **Retest** : retour du prix sur un niveau après sa cassure ; setup classique du changement de polarité.
 - **Risk of ruin (probabilité de ruine)** : probabilité qu'un système finisse par perdre une fraction définie du capital ; dépend surtout de la fraction risquée par trade.
+- **Risk-on / risk-off** : humeur du marché : recherche du rendement (actions, matières, devises à risque montent) ou fuite du risque (obligations, dollar, yen montent) ; grille rapide qui s'inverse en partie selon le régime.
 - **Risque fixe (en pourcentage)** : règle qui fixe la perte au stop à une fraction constante du capital courant (0,5 à 1 %), taille recalculée à chaque trade.
 - **RTH (regular trading hours)** : séance principale d'un marché, par exemple 9 h 30 à 16 h heure de New York pour les indices américains.
+- **Saisonnalité** : régularité calendaire d'un marché ; robuste si cause physique, échantillon long, survie au retrait des extrêmes ; biais de contexte à combiner, jamais tradé seul.
 - **SC / BC (selling / buying climax)** : bougie très large sur volume maximal avec longue mèche, qui arrête la tendance précédente et définit une borne du range Wyckoff.
 - **Scaling in / scaling out** : construire une position en plusieurs entrées, ou la solder en plusieurs sorties ; légitimes s'ils sont planifiés, dangereux par émotion.
 - **Ségrégation des fonds** : détention des fonds clients sur des comptes séparés de la trésorerie du broker, chez une banque tierce.
+- **Sentiment** : humeur agrégée des participants (enquêtes, put / call, flux, indices composites) ; lecture contrarienne aux extrêmes seulement.
 - **Série de pertes (losing streak)** : suite de pertes consécutives ; statistiquement certaine sur un échantillon long (7 de suite : 7 chances sur 10 sur 100 trades à 40 % de réussite).
 - **Short covering / long liquidation** : hausse (ou baisse) produite par le rachat (ou la vente) forcé de positions existantes, OI en baisse ; mouvement fragile, souvent bref.
 - **Silver bullet** : gabarit ICT : FVG formé dans une fenêtre horaire précise, dans le sens du biais, après une prise de liquidité ; cas particulier de la séquence sweep-FVG-retour.
@@ -144,6 +166,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **SOS / SOW (sign of strength / weakness)** : mouvement large sur volume qui sort du range Wyckoff par le haut (SOS) ou le bas (SOW) ; l'équivalent du displacement.
 - **Spoofing** : affichage d'une taille qu'on retire à l'approche du prix pour influencer les autres ; illégal sur les marchés régulés, néanmoins présent ; un mur non frappé n'est pas une information.
 - **Spread** : écart entre le bid et l'ask, coût implicite de chaque transaction.
+- **Spread 2-10 ans** : écart entre le rendement à 10 ans et à 2 ans ; sa valeur et son sens de variation situent le cycle (bull / bear steepening).
 - **Spring / upthrust (UTAD)** : cassure brève du bas (spring) ou du haut (upthrust) d'un range Wyckoff qui prend les stops puis revient ; sweep à l'échelle du range, suivi d'un test.
 - **Squeeze (short / long)** : mouvement violent provoqué par la liquidation forcée en cascade d'un côté trop chargé ; un sweep géant dont la suite dépend de la structure HTF.
 - **ST (secondary test)** : retour vers le climax sur volume plus faible et fourchette plus étroite ; confirme que l'offre (ou la demande) a diminué.
@@ -152,6 +175,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Structure externe / interne** : structure des swings de l'unité de contexte (externe) et de l'unité d'exécution à l'intérieur d'un mouvement externe (interne) ; un repli est « externe haussier, interne baissier ».
 - **Support** : zone de prix où les acheteurs ont arrêté une baisse par le passé.
 - **Sur-risque** : taille de position telle qu'une série normale de pertes détruit une part irrécupérable du compte.
+- **Surprise (macro)** : écart entre le chiffre publié (et le second chiffre, et les révisions) et le consensus ; c'est elle qui bouge les marchés.
 - **Swap (rollover, financement)** : intérêt payé ou reçu chaque nuit sur une position forex ou CFD gardée après l'heure de rollover.
 - **Swing (high / low)** : point de retournement local, confirmé après coup ; seuls les swings significatifs (unité de structure, réaction nette) définissent la structure.
 - **Tape (time and sales)** : liste des transactions exécutées en temps réel ; se lit aux moments clés avec une question précise, jamais en continu.
@@ -166,6 +190,8 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **UPS (onduleur)** : alimentation de secours qui maintient l'ordinateur et la box quelques minutes lors d'une coupure de courant.
 - **Value Area** : zone de prix concentrant environ 70 % du volume d'un profil (bornes VAH et VAL).
 - **Value area (VA), VAH, VAL** : zone contiguë autour du POC contenant environ 70 % du volume ; VAH et VAL sont ses bornes, frontières entre accepté et rejeté.
+- **VIX** : volatilité implicite à 30 jours des options sur le S&P 500 ; thermomètre de régime par son niveau, sa direction et sa structure à terme.
 - **Volume relatif** : volume d'une bougie rapporté au volume moyen des bougies comparables (mêmes heures des jours précédents) ; une valeur ≥ 2 est une anomalie à expliquer.
+- **Whipsaw (post-annonce)** : aller-retour brutal du prix dans les deux sens sur carnet vide dans les secondes qui suivent une publication ; exécute les stops serrés des deux côtés.
 - **Zone (support / résistance)** : bande de prix, et non ligne, englobant corps et mèches des réactions ; on entre dedans sur signal, on met le stop au-delà, on juge la cassure sur une clôture.
 - **Zoom-in émotionnel / zoom-out justificatif** : descendre d'unité pour surveiller (et sortir sur du bruit) ; monter d'unité pour ne pas avoir tort (et retirer son stop). Deux erreurs multi-timeframe classiques.
