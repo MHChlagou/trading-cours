@@ -1,0 +1,317 @@
+---
+title: "Backtesting manuel"
+description: "Mesurer une fiche sans code : le protocole bougie par bougie qui interdit de voir le futur, la taille d'échantillon minimale et pourquoi 30 trades ne disent rien, la feuille de collecte, les mesures à enregistrer à chaque ligne, et les biais du backtest manuel (regard en arrière, sélection, exécution optimiste) avec leurs parades."
+---
+
+# Backtesting manuel
+
+Une fiche écrite est une hypothèse. Le backtest la confronte au passé : on rejoue le marché, on applique la fiche à la lettre, on note ce qui se serait passé. Fait à la main, il est lent, mais il a deux vertus que le code n'a pas : il apprend au trader à **voir** ses signaux dans le bruit réel, et il ne demande aucune compétence technique. Ses défauts sont connus : il est petit (quelques centaines de trades), et il est **biaisé** par celui qui le fait, qui connaît la suite. Tout ce chapitre tient dans une phrase : rendre le backtest manuel aussi honnête qu'un backtest automatique, en acceptant qu'il reste plus petit.
+
+## Le protocole bar par bar sans triche
+
+Le seul protocole valable est celui où l'on **ne voit jamais la bougie suivante** avant d'avoir décidé. Toute plateforme sérieuse a un mode « replay » (lecture bougie par bougie) ; à défaut, on masque la partie droite de l'écran. La règle : à chaque bougie, on répond aux questions de la fiche dans l'ordre, on écrit la réponse, puis seulement on avance.
+
+1. **Préparer la séance comme en réel.** Avant de lancer le replay du jour J, on s'arrête à la clôture de la veille : on note le régime (matrice), la structure quotidienne et H1, la liste des réservoirs préparés, l'ADR ou l'ATR, le calendrier du jour (on a le droit de savoir qu'un CPI tombe à 14 h 30 ; on n'a pas le droit de savoir ce qu'il a dit). Ces lignes vont dans la feuille de collecte **avant** de voir la première bougie du jour.
+2. **Avancer bougie par bougie sur l'unité d'exécution.** À chaque bougie M5 (ou M15, ou H4 pour un swing), on pose les questions du bloc 2 dans l'ordre : S1 ? S2 ? S3 ? Chaque « oui » se date. Quand un signal est complet, on note **immédiatement** l'entrée prévue, le stop, la taille, C1, C2, la variante, avant d'avancer d'une seule bougie.
+3. **Exécuter mécaniquement.** On avance ; l'ordre limite est servi si la bougie touche son prix (règle conservatrice : le prix doit **traverser** l'ordre d'un tick, pas seulement le toucher : au tick exact, on suppose qu'on n'a pas été servi) ; le stop est déclenché si la bougie touche son prix (règle conservatrice inverse : au tick exact, on suppose qu'on a été sorti) ; les cibles idem (touchées d'un tick au-delà). Si une même bougie touche le stop et une cible, on suppose **le stop d'abord**, sauf si le M1 dit le contraire et qu'on l'a regardé avant de connaître la suite ; en pratique on compte la perte.
+4. **Gérer selon la séquence.** Breakeven, partielles, trailing, sortie sur temps : à chaque bougie, on regarde si une règle se déclenche, on l'applique, on l'écrit. On ne « voit » pas la cible venir ; on la traite quand elle est touchée.
+5. **Clore la ligne.** R net (coûts déduits : commission réelle et un tick de slippage par entrée au marché, zéro pour une limite servie), heure de sortie, raison, et deux colonnes que le réel ne donne pas : le **MFE** (excursion favorable maximale : jusqu'où le trade est allé dans le bon sens avant de se clore, en R) et le **MAE** (excursion adverse maximale). Ce sont ces deux colonnes qui, plus tard, disent si les cibles et les stops sont bien placés.
+6. **Noter aussi les non-trades.** Un signal incomplet, un signal complet refusé pour géométrie, un candidat hors fenêtre : une ligne courte chacun (date, heure, critère qui a tranché). Ce sont les lignes qui, au chapitre 9, permettront de vérifier qu'un seuil n'a pas été choisi pour éliminer les seules pertes.
+
+Ce qui est interdit : revenir en arrière pour « refaire » un jour ; sauter les jours ennuyeux (ils contiennent les faux signaux) ; changer un seuil au milieu du test (on finit l'échantillon avec la fiche telle qu'écrite, puis on décide) ; regarder l'unité inférieure après coup pour décider si le stop « aurait » tenu.
+
+<Figure caption="Figure 1 · Le protocole bar par bar : préparation à la clôture de la veille, avancée bougie par bougie avec les questions du bloc 2 dans l'ordre, ordres et stops exécutés selon des règles conservatrices (limite servie si traversée, stop touché si touché, stop avant cible en cas de doute), gestion mécanique, clôture de la ligne avec MFE et MAE, non-trades notés.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Protocole de backtest bar par bar" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="40" width="130" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="95" y="62" fontSize="10" fontWeight="600" textAnchor="middle">1 · Veille</text>
+  <text x="95" y="80" fontSize="9" textAnchor="middle" className="muted">régime, structure,</text>
+  <text x="95" y="94" fontSize="9" textAnchor="middle" className="muted">réservoirs, calendrier</text>
+  <line x1="160" y1="75" x2="185" y2="75" className="line" strokeWidth="1.5" />
+  <rect x="185" y="40" width="130" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="250" y="62" fontSize="10" fontWeight="600" textAnchor="middle">2 · Bougie suivante</text>
+  <text x="250" y="80" fontSize="9" textAnchor="middle" className="muted">S1 ? S2 ? S3 ? dans l'ordre</text>
+  <text x="250" y="94" fontSize="9" textAnchor="middle" className="muted">on écrit avant d'avancer</text>
+  <line x1="315" y1="75" x2="340" y2="75" className="line" strokeWidth="1.5" />
+  <rect x="340" y="40" width="130" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="405" y="62" fontSize="10" fontWeight="600" textAnchor="middle">3 · Signal complet</text>
+  <text x="405" y="80" fontSize="9" textAnchor="middle" className="muted">entrée, stop, taille,</text>
+  <text x="405" y="94" fontSize="9" textAnchor="middle" className="muted">C1, C2 notés d'abord</text>
+  <line x1="470" y1="75" x2="495" y2="75" className="line" strokeWidth="1.5" />
+  <rect x="495" y="40" width="195" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="592" y="62" fontSize="10" fontWeight="600" textAnchor="middle">4 · Exécution conservatrice</text>
+  <text x="592" y="80" fontSize="9" textAnchor="middle" className="muted">limite : servie si traversée d'un tick</text>
+  <text x="592" y="94" fontSize="9" textAnchor="middle" className="muted">stop : touché si touché ; stop avant cible</text>
+  <rect x="30" y="150" width="200" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="130" y="172" fontSize="10" fontWeight="600" textAnchor="middle">5 · Gestion mécanique</text>
+  <text x="130" y="190" fontSize="9" textAnchor="middle" className="muted">BE, partielles, trailing, temps :</text>
+  <text x="130" y="204" fontSize="9" textAnchor="middle" className="muted">appliqués quand ils se déclenchent</text>
+  <rect x="260" y="150" width="200" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="172" fontSize="10" fontWeight="600" textAnchor="middle">6 · Clôture de la ligne</text>
+  <text x="360" y="190" fontSize="9" textAnchor="middle" className="muted">R net, raison, heure,</text>
+  <text x="360" y="204" fontSize="9" textAnchor="middle" className="gold" fontWeight="600">MFE et MAE en R</text>
+  <rect x="490" y="150" width="200" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="590" y="172" fontSize="10" fontWeight="600" textAnchor="middle">7 · Non-trades aussi</text>
+  <text x="590" y="190" fontSize="9" textAnchor="middle" className="muted">incomplets, refusés, hors fenêtre :</text>
+  <text x="590" y="204" fontSize="9" textAnchor="middle" className="muted">une ligne courte, le critère qui a tranché</text>
+  <text x="360" y="260" fontSize="10" textAnchor="middle" className="red">interdits : revenir en arrière · sauter les jours calmes · changer un seuil en cours de test · regarder l'UT inférieure après coup</text>
+</svg>
+</Figure>
+
+## La taille d'échantillon minimale
+
+Le niveau 1 l'a montré avec les séries de pertes : le hasard produit des séquences longues. Il produit aussi des **moyennes trompeuses** sur de petits échantillons. Un ordre de grandeur suffit pour s'en convaincre.
+
+Prenons une stratégie dont la vraie expectancy est de +0,3R par trade, avec un écart-type des résultats d'environ 1,5R (typique pour un setup avec des pertes de −1R et des gains entre +1 et +4R). L'écart-type de la **moyenne** sur n trades est 1,5 / √n. Sur 30 trades : 1,5 / 5,5 = 0,27R ; la moyenne observée tombe donc, deux fois sur trois, entre +0,03R et +0,57R, et une fois sur six **sous zéro** : trente trades d'un bon setup peuvent afficher une expectancy négative, et trente trades d'un setup nul (0R) peuvent afficher +0,3R. Sur 100 trades : 0,15R ; on distingue +0,3R de zéro avec une marge de deux écarts-types. Sur 300 trades : 0,09R ; on commence à distinguer +0,3R de +0,15R.
+
+D'où les seuils du cours : **100 trades** au minimum pour dire qu'un setup a une expectancy probablement positive ; **300** pour comparer deux variantes ou juger un seuil ; **30** trades ne disent rien d'une expectancy et servent seulement à vérifier qu'on sait exécuter la fiche. Un backtest manuel de 100 trades sur un setup à deux signaux par semaine, c'est un an de marché à rejouer, soit 250 séances ; à raison de dix séances par heure de replay bien conduit, 25 heures. C'est le prix ; il est payé une fois par fiche.
+
+Deux précisions. La taille compte en **trades**, pas en jours ; un swing à dix trades par an demande dix ans de données, ce qui pousse vers le backtest automatique du chapitre suivant. Et l'échantillon doit couvrir **plusieurs régimes** : 100 trades pris dans une seule année de tendance calme ne disent rien de la tenue en année agitée ; on rejoue de préférence des périodes choisies pour leur diversité (une année calme, une agitée, une de range).
+
+<Figure caption="Figure 2 · L'incertitude sur l'expectancy mesurée décroît en 1 / √n. Avec un écart-type de 1,5R par trade : ±0,27R à 30 trades (un bon setup peut afficher une moyenne négative), ±0,15R à 100 (on distingue +0,3R de zéro), ±0,09R à 300 (on distingue deux variantes). Les seuils : 100 pour valider, 300 pour comparer.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Incertitude de l'expectancy selon la taille d'échantillon" xmlns="http://www.w3.org/2000/svg">
+  <line x1="70" y1="250" x2="690" y2="250" className="line" strokeWidth="1" />
+  <line x1="70" y1="40" x2="70" y2="250" className="line" strokeWidth="1" />
+  <text x="380" y="285" fontSize="10" textAnchor="middle" className="muted">nombre de trades n</text>
+  <text x="20" y="150" fontSize="10" className="muted" transform="rotate(-90 20 150)">expectancy mesurée (R)</text>
+  <line x1="70" y1="160" x2="690" y2="160" stroke="var(--tm-gold)" strokeWidth="1.5" strokeDasharray="4 3" /><text x="80" y="155" fontSize="9" className="gold">vraie expectancy +0,3R</text>
+  <line x1="70" y1="205" x2="690" y2="205" className="line" strokeWidth="1" /><text x="80" y="220" fontSize="9" className="muted">zéro</text>
+  <path d="M110,79 L200,115 L300,138 L420,147 L560,151 L690,153" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <path d="M110,241 L200,205 L300,182 L420,173 L560,169 L690,167" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <path d="M110,79 L200,115 L300,138 L420,147 L560,151 L690,153 L690,167 L560,169 L420,173 L300,182 L200,205 L110,241 Z" className="gold" opacity="0.15" />
+  <text x="110" y="265" fontSize="9" textAnchor="middle" className="muted">30</text><line x1="110" y1="79" x2="110" y2="241" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="118" y="70" fontSize="9" className="red">±0,27R : peut être négatif</text>
+  <text x="300" y="265" fontSize="9" textAnchor="middle" className="muted">100</text><line x1="300" y1="138" x2="300" y2="182" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="308" y="130" fontSize="9" className="green">±0,15R : distinct de zéro</text>
+  <text x="560" y="265" fontSize="9" textAnchor="middle" className="muted">300</text><line x1="560" y1="151" x2="560" y2="169" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="568" y="143" fontSize="9" className="green">±0,09R : compare deux variantes</text>
+  <text x="380" y="52" fontSize="10" textAnchor="middle" className="muted">bande à ±2 écarts-types de la moyenne = 1,5R / √n</text>
+</svg>
+</Figure>
+
+## La feuille de collecte des trades
+
+Un tableur, une ligne par trade (et une ligne courte par non-trade), des colonnes fixes ; jamais de texte libre là où un nombre est possible. Les colonnes du cours, à adapter au setup :
+
+**Identification** : numéro ; date ; instrument ; setup et version de fiche ; variante (A / B / C ; T1 / T2 / T3) ; contexte (sweep de quel réservoir ; côté de la manipulation).
+
+**Contexte** : régime (matrice) ; structure quotidienne (dans le sens / contre) ; VIX ou ratio ATR ; jour de la semaine ; annonce de niveau 1 dans la journée (oui / non, heure) ; ATR de l'unité de référence.
+
+**Signal** : heure de chaque critère validé ; valeurs mesurées (distance du sweep en ticks, displacement en ATR, FVG en ATR, volume relatif) ; optionnels présents ; qualité (complet / fort).
+
+**Exécution** : heure d'entrée ; prix d'entrée ; stop initial (prix, distance en ticks, en ATR) ; taille et coefficient ; C1 et C2 (prix, ratio) ; heure et prix de chaque sortie partielle ; raison de sortie finale (C2 / trailing / stop / BE / temps / news) ; heure de sortie.
+
+**Résultat** : R brut ; coûts ; **R net** ; MFE (R) ; MAE (R) ; durée ; conformité (oui / non, règle enfreinte).
+
+**Non-trades** : date, heure, critère qui a tranché (S2 à 1,3 ATR ; ratio 1,2 ; hors fenêtre ; régime interdit).
+
+Trois habitudes : remplir la ligne **pendant** le replay, pas après (la mémoire arrange) ; utiliser des listes déroulantes pour les colonnes catégorielles (elles se comptent ensuite) ; ne jamais supprimer une ligne (une erreur se corrige dans une colonne « correction », avec la date).
+
+## Les mesures à enregistrer systématiquement
+
+Une fois l'échantillon constitué, la feuille produit les mesures du niveau 1, plus quelques-unes propres au backtest.
+
+- **Expectancy** (R net moyen), avec son incertitude (écart-type / √n) : la mesure centrale, toujours accompagnée de n.
+- **Taux de réussite** (trades dont R net supérieur à 0) et **taux de C1** (trades ayant atteint C1) : deux chiffres différents (un trade sorti à BE après C1 est gagnant sur R et compté à C1).
+- **Gain moyen, perte moyenne, ratio des deux** ; le **profit factor** (somme des gains / somme des pertes en valeur absolue).
+- **Drawdown maximal** en R sur la séquence, et le nombre de trades pour en sortir ; la **plus longue série de pertes**.
+- **Distribution du MFE** : quel pourcentage des trades a atteint 1R, 1,5R, 2R, 3R de MFE ; c'est cette distribution qui dit si C1 est bien placé (si 70 % des trades atteignent 1,5R de MFE mais que C1 est à 2R et n'est atteint que par 45 %, C1 est trop loin ; si 90 % atteignent C1, il est peut-être trop près). **Distribution du MAE** : quel pourcentage des trades gagnants a eu un MAE supérieur à 0,5R, 0,8R ; si presque aucun gagnant ne dépasse 0,6R de MAE, le stop pourrait être plus serré (mais on ne le change qu'au chapitre 9, avec la validation).
+- **Décomposition** par régime, par variante, par jour de la semaine, par heure, par optionnels présents ; chaque sous-groupe avec son n (un sous-groupe de 12 trades ne dit rien : on le note, on ne conclut pas).
+- **Taux de refus** : signaux complets non exécutés (géométrie, annulation) sur signaux complets ; et **taux de conformité** du replay lui-même (le trader se surprend à tricher : la colonne le mesure).
+
+Ces mesures sont reportées dans la fiche, section « statistiques mesurées », avec la période testée et n. La fiche passe alors de « hypothèse » à « en test » ; elle passera à « validée » après la simulation.
+
+## Les biais du backtest manuel et leurs parades
+
+Le backtest manuel a un défaut structurel : celui qui le fait connaît le marché qu'il rejoue, ou le devine. Les biais ont des noms ; chacun a une parade.
+
+**Biais de regard en arrière (hindsight).** On « voit » le signal parce qu'on sait que ça a marché ; on ne le voit pas quand ça a raté. Parades : le replay bougie par bougie strict (jamais de graphique complet visible) ; des périodes **non familières** (une autre année, un autre marché du même type) ; les critères chiffrés (un displacement se mesure, il ne se ressent pas) ; les non-trades notés (ils forcent à regarder tous les candidats).
+
+**Biais de sélection des périodes.** On teste l'année où l'on sait que la stratégie a brillé. Parade : tirer les périodes **avant** de commencer, en couvrant plusieurs régimes, et ne pas les remplacer.
+
+**Exécution optimiste.** On suppose la limite servie au tick, le stop non touché sur la mèche, la cible touchée juste. Parades : les règles conservatrices du protocole (traversée d'un tick pour la limite, stop touché si touché, stop d'abord en cas de doute) ; coûts et slippage explicites ; en cas d'hésitation, la version défavorable.
+
+**Biais de survie de la fiche.** On ajuste un seuil en cours de test « parce que c'est évident », et l'échantillon final mesure une fiche qui n'existait pas au départ. Parade : finir l'échantillon avec la fiche telle qu'écrite ; toute idée de modification va dans une colonne « idées » et se teste **après**, sur un autre échantillon (chapitre 9).
+
+**Biais de fatigue.** Les dernières séances d'une session de replay sont bâclées ; on saute, on devine. Parade : sessions courtes (une heure), échantillon parcouru dans le désordre des dates (on ne finit pas toujours par la même période).
+
+**Biais de confirmation du non-trade.** On note peu de non-trades parce qu'ils sont ennuyeux ; le taux de refus est sous-estimé et le setup paraît plus fréquent qu'il n'est. Parade : quota (chaque séance rejouée produit au moins une ligne, trade ou non-trade « aucun candidat »).
+
+Un backtest manuel qui applique ces parades reste **optimiste** de quelques dixièmes de R par rapport au réel (l'exécution humaine en direct est moins bonne que dans le replay, l'attention aussi) ; c'est pour cela que la fiche exige une phase de simulation ou de petite taille avant d'être validée, et pour cela que les statistiques attendues des chapitres 2 à 4 sont données en fourchettes.
+
+<Figure caption="Figure 3 · Les biais du backtest manuel et leurs parades : regard en arrière (replay strict, périodes non familières, critères chiffrés, non-trades), sélection des périodes (tirées avant, plusieurs régimes), exécution optimiste (règles conservatrices, coûts), survie de la fiche (finir avec la fiche écrite, idées à part), fatigue (sessions courtes, ordre mélangé), non-trades oubliés (quota par séance).">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Biais du backtest manuel et parades" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="40" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Biais</text>
+  <text x="540" y="40" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Parade</text>
+  <line x1="40" y1="50" x2="700" y2="50" className="line" strokeWidth="1" />
+  <text x="50" y="76" fontSize="10">Regard en arrière</text><text x="370" y="76" fontSize="9" className="muted">replay strict · périodes non familières · critères chiffrés · non-trades</text>
+  <text x="50" y="108" fontSize="10">Sélection des périodes</text><text x="370" y="108" fontSize="9" className="muted">périodes tirées avant, plusieurs régimes, jamais remplacées</text>
+  <text x="50" y="140" fontSize="10">Exécution optimiste</text><text x="370" y="140" fontSize="9" className="muted">limite si traversée · stop si touché · stop d'abord · coûts et slippage</text>
+  <text x="50" y="172" fontSize="10">Survie de la fiche</text><text x="370" y="172" fontSize="9" className="muted">finir avec la fiche écrite · idées dans une colonne, testées après</text>
+  <text x="50" y="204" fontSize="10">Fatigue</text><text x="370" y="204" fontSize="9" className="muted">sessions d'une heure · dates dans le désordre</text>
+  <text x="50" y="236" fontSize="10">Non-trades oubliés</text><text x="370" y="236" fontSize="9" className="muted">quota : au moins une ligne par séance rejouée</text>
+  <line x1="40" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <text x="360" y="280" fontSize="10" textAnchor="middle" className="muted">même avec les parades, le manuel reste optimiste de quelques dixièmes de R : d'où la simulation avant validation</text>
+</svg>
+</Figure>
+
+## Deux trades du replay
+
+Deux lignes tirées d'un backtest manuel du setup 1, avec ce que le protocole y a changé.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (replay, séance d'un mardi de mars)"
+  direction="Long"
+  setup="Setup 1, variante A ; réservoir préparé à la veille : PDL 5 188 ; sweep à 15 h 50 (bas 5 186,75, clôture 5 189,25) ; displacement 1,6 ATR (ATR M15 5,5) ; FVG 5 191,50 - 5 194,00 (0,45 ATR) ; S5 non observable en replay (pas de footprint historique : noté « inconnu », traité comme absent) ; S6 : volume relatif 1,4"
+  entree="5 194,25 (limite : la bougie de 16 h 05 est descendue à 5 193,50, la limite est traversée d'un tick : servie)"
+  stop="5 184,00 (5 186,75 − 2,75 ; 41 ticks)"
+  objectif="C1 POC de la veille 5 210 (ratio 1,54) ; C2 VAH 5 226 (ratio 3,1)"
+  r="+0,75R">
+
+Compte de replay 20 000 $, budget 200 $ ; 41 ticks × 1,25 $ = 51,25 $ par MES ; 200 ÷ 51,25 = 3,9 → 3 MES × 2/3 (S5 inconnu, traité comme absent : convention de replay notée) = **2 MES**, risque 102,50 $. C1 touché à 16 h 55 (bougie haute 5 210,25 : traversée d'un tick, atteinte) : 1 MES sorti (+15,75 points = 78,75 $), stop du solde à 5 194,50. À 18 h 10 une bougie touche 5 194,50 (règle conservatrice : sortie) : +0,25 point = 1,25 $. Total +80 $ moins 3 $ de coûts = 77 $ sur 102,50 $ : **+0,75R**. La ligne est instructive au-delà de son R : MFE = 16 points = **1,56R** (C1 atteint, puis le solde rendu au breakeven), MAE = 0,4R. Sur 100 lignes comme celle-ci, la distribution du MFE dira combien de fois C1 est atteint puis rendu, et si sortir tout à C1 vaut mieux que garder la moitié vers C2 : question de fiche, à trancher au chapitre 9 sur l'échantillon complet, pas sur cette ligne.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (replay, séance d'un jeudi de septembre)"
+  direction="Short"
+  setup="Setup 1, variante A ; réservoir préparé : PDH 5 402 ; sweep à 20 h 05 (haut 5 403,50, clôture 5 400,75) ; displacement 1,5 ATR tout juste (ATR M15 6,0 : bougie de 9,0 points) ; FVG 0,45 ATR ; volume relatif 1,1 (S6 absent) ; CPI le lendemain à 14 h 30 (sans effet sur la séance)"
+  entree="5 397,25 (limite au bord bas du FVG, traversée)"
+  stop="5 406,50 (5 403,50 + 3,0 ; 37 ticks)"
+  objectif="C1 POC 5 383 (ratio 1,54) ; C2 VAL 5 372"
+  r="−1R">
+
+Le prix atteint 5 391 (MFE 6,25 points = 0,68R), remonte, traverse le FVG en clôture M5 et touche le stop à 20 h 50. La ligne est banale ; ce qui compte est ailleurs. D'abord la tentation du replay : à 20 h 35, la bougie qui remonte est « visiblement » une reprise ; le trader qui connaît la suite aurait envie de sortir à −0,3R « parce que ça sent mauvais » ; le protocole l'interdit (la fiche ne prévoit pas cette sortie) et la perte pleine est comptée. Ensuite le seuil : le displacement était à 1,5 ATR **tout juste** ; le trader note dans la colonne « idées » : « tester S2 à 1,7 ATR », et n'y touche pas. Enfin la conformité du replay : oui. La ligne va dans l'échantillon, sous-groupe « S2 limite », qui aura son n et sa moyenne à la fin.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le backtest manuel confronte la fiche au passé **sans jamais voir la bougie suivante** : préparation à la veille, questions du bloc 2 dans l'ordre, entrée / stop / cibles écrits avant d'avancer, exécution **conservatrice** (limite si traversée, stop si touché, stop d'abord), gestion mécanique, MFE et MAE, non-trades notés.
+- **Taille d'échantillon** : l'incertitude sur l'expectancy est de l'ordre de 1,5R / √n ; 30 trades ne disent rien, **100** valident un signe, **300** comparent deux variantes ; l'échantillon couvre plusieurs régimes ; il se compte en trades, pas en jours.
+- La **feuille de collecte** a des colonnes fixes (identification, contexte, signal, exécution, résultat, non-trades), remplies pendant le replay, jamais supprimées.
+- Les **mesures** : expectancy avec incertitude et n, taux de réussite et de C1, profit factor, drawdown et série de pertes, **distributions du MFE et du MAE** (placement des cibles et du stop), décomposition par sous-groupe avec n, taux de refus, conformité du replay.
+- Les **biais** (regard en arrière, sélection des périodes, exécution optimiste, survie de la fiche, fatigue, non-trades oubliés) ont chacun une parade ; même paré, le manuel reste optimiste de quelques dixièmes de R : la simulation vient avant la validation.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Combien de trades ?">
+
+Un setup a, d'après ses premiers résultats, une expectancy autour de +0,25R et un écart-type des résultats de 1,4R.
+
+1. Quelle est l'incertitude (un écart-type de la moyenne) à 40, 100 et 250 trades ?
+2. À partir de combien de trades la borne basse à deux écarts-types passe-t-elle au-dessus de zéro ?
+3. Le setup donne 3 signaux exécutés par semaine : combien de semaines de replay pour ce nombre ?
+
+<Solution>
+
+1. 1,4 / √40 = 1,4 / 6,32 = **0,22R** ; 1,4 / √100 = **0,14R** ; 1,4 / √250 = 1,4 / 15,8 = **0,089R**.
+2. On veut 0,25 − 2 × 1,4 / √n supérieur à 0, soit 1,4 / √n inférieur à 0,125, soit √n supérieur à 11,2, soit **n supérieur à 125** (à 126 trades, la borne basse est juste positive ; à 100, elle est à −0,03R : on n'est pas encore sûr du signe).
+3. 126 ÷ 3 = **42 semaines**, environ dix mois de marché à rejouer.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire un MFE">
+
+Sur 120 trades backtestés du setup 1 avec C1 à 1,5R et C2 à 3R : 78 % des trades ont un MFE supérieur ou égal à 1R, 62 % supérieur ou égal à 1,5R, 41 % supérieur ou égal à 2R, 22 % supérieur ou égal à 3R ; le taux de C1 mesuré est 60 % ; le taux de C2 est 20 %. Parmi les gagnants, 8 % ont eu un MAE supérieur à 0,7R.
+
+1. C1 est-il bien placé ?
+2. C2 ?
+3. Que suggère le MAE, et que ne faut-il pas faire ?
+
+<Solution>
+
+1. Le taux de C1 (60 %) est presque égal au pourcentage de trades qui atteignent 1,5R de MFE (62 %) : C1 capte presque tout ce que le mouvement offre à cette distance ; il est **cohérent**. Le mettre à 2R ferait tomber le taux à environ 41 % : le gain par trade à C1 monte de 33 % mais le taux baisse d'un tiers ; à voir sur l'expectancy totale, au chapitre 9, pas à l'œil.
+2. C2 à 3R n'est atteint que par 20 % des trades (22 % de MFE ≥ 3R) : c'est peu ; le solde après C1 est le plus souvent sorti sur trailing ou BE. Une idée à noter (colonne « idées ») : C2 à 2,5R, ou trailing plus serré après 2R. À **tester** sur un autre échantillon.
+3. Presque aucun gagnant ne va au-delà de 0,7R de MAE : le stop pourrait théoriquement être resserré (0,75R du stop actuel), ce qui augmenterait le ratio de tous les trades. Ce qu'il **ne faut pas faire** : resserrer maintenant et remesurer sur les mêmes 120 trades (le résultat serait un artefact : chapitre 9). On note, on teste sur une période nouvelle.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Repérer la triche">
+
+Un ami montre un backtest manuel de 60 trades à +0,9R d'expectancy et 70 % de réussite, sur un setup intraday d'indices, période : mars à mai d'une année de tendance calme, entrées « au meilleur prix du FVG », stops « jamais touchés sur mèche car le M1 montrait que ça tenait », aucun non-trade noté. Listez les biais présents et estimez ce que vaut ce chiffre.
+
+<Solution>
+
+Six problèmes : **n = 60** (incertitude ±0,2R au moins : le +0,9R est mal connu) ; **une seule période, un seul régime**, choisi après coup (sélection) ; « meilleur prix du FVG » = exécution optimiste (limite supposée servie au tick au fond de la zone) ; « stops jamais touchés sur mèche car le M1 montrait » = **regard en arrière** sur l'unité inférieure (interdit par le protocole) ; **aucun non-trade** = fréquence et taux de refus inconnus, regard en arrière probable sur les candidats ; et 70 % de réussite avec un ratio implicite élevé est incompatible avec les ordres de grandeur du cours pour ce type de setup, ce qui suggère que les pertes ont été « expliquées » plutôt que comptées. Le chiffre ne vaut rien tel quel : ni positif ni négatif ; il faut refaire le test avec le protocole. Ce n'est pas une accusation : c'est ce que produit tout backtest manuel sans parades.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La règle centrale du protocole bar par bar est :",
+      options: [
+        "Aller vite",
+        "Ne jamais voir la bougie suivante avant d'avoir écrit la décision ; entrée, stop et cibles notés avant d'avancer",
+        "Regarder le graphique complet d'abord",
+        "Tester seulement les jours intéressants",
+      ],
+      answer: 1,
+      explain: "Le replay strict est la seule parade au regard en arrière ; les jours calmes contiennent les faux signaux et se rejouent aussi.",
+    },
+    {
+      q: "En cas de doute (même bougie touchant le stop et la cible, limite juste touchée), le protocole choisit :",
+      options: [
+        "La version favorable",
+        "La version défavorable : stop d'abord, limite non servie si seulement touchée",
+        "Le M1 après coup",
+        "Un tirage au sort",
+      ],
+      answer: 1,
+      explain: "L'exécution conservatrice compense l'optimisme structurel du backtest manuel.",
+    },
+    {
+      q: "Avec un écart-type de 1,5R par trade, l'incertitude sur l'expectancy à 100 trades est d'environ :",
+      options: [
+        "0,015R",
+        "0,15R (1,5 / √100)",
+        "1,5R",
+        "0,5R",
+      ],
+      answer: 1,
+      explain: "L'incertitude décroît en 1 / √n : 100 trades distinguent +0,3R de zéro ; 30 ne le font pas.",
+    },
+    {
+      q: "Le MFE sert à :",
+      options: [
+        "Calculer les commissions",
+        "Savoir jusqu'où les trades vont dans le bon sens, donc si les cibles sont bien placées",
+        "Choisir le marché",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "La distribution du MFE se compare au taux d'atteinte des cibles ; celle du MAE dit si le stop est bien dimensionné.",
+    },
+    {
+      q: "Une idée de modification de seuil surgit pendant le replay. On :",
+      options: [
+        "L'applique tout de suite",
+        "La note dans une colonne « idées », finit l'échantillon avec la fiche telle qu'écrite, et la teste après sur un autre échantillon",
+        "Recommence tout",
+        "L'oublie",
+      ],
+      answer: 1,
+      explain: "Modifier en cours de test produit un échantillon qui mesure une fiche qui n'existait pas au départ (biais de survie de la fiche).",
+    },
+    {
+      q: "Pourquoi noter les non-trades ?",
+      options: [
+        "Pour remplir la feuille",
+        "Pour mesurer la fréquence et le taux de refus, forcer le regard sur tous les candidats, et vérifier plus tard qu'un seuil n'élimine pas seulement des pertes",
+        "Ce n'est pas utile",
+        "Pour le courtier",
+      ],
+      answer: 1,
+      explain: "Sans eux, le setup paraît plus fréquent et meilleur qu'il n'est.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Cent trades à la main, c'est un an de marché ; dix ans de swings, c'est impossible à la main. Le chapitre suivant passe au code : préparer et nettoyer des données OHLC, comprendre la différence entre backtest vectorisé et event-driven, simuler coûts, spread et slippage honnêtement, produire expectancy, profit factor et drawdown, avec un script Python complet, commenté et prêt à adapter.
