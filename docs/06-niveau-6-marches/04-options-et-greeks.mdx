@@ -1,0 +1,317 @@
+---
+title: "Options et les Greeks"
+description: "Calls et puts et leurs profils de gains, ce que mesurent delta, gamma, theta et vega, le rôle central de la volatilité implicite, les usages concrets pour un trader directionnel, et l'empreinte du marché d'options sur les indices."
+---
+
+# Options et les Greeks
+
+Ce cours n'est pas un cours d'options ; c'est un cours de trading directionnel sur futures et forex. Mais un trader d'indices qui ignore les options ne comprend pas une partie de ce qu'il voit : pourquoi le VIX est ce qu'il est (niveau 5), pourquoi l'ES colle à certains niveaux ronds les vendredis d'expiration, pourquoi certaines cassures s'accélèrent et d'autres s'étouffent. Ce chapitre donne le minimum solide : ce qu'est une option, comment se lit son profil de gains, ce que mesurent les quatre grecques principales, pourquoi la volatilité implicite est au centre, ce qu'un trader directionnel peut faire de tout cela, et surtout comment le marché d'options laisse son empreinte sur les indices.
+
+## Calls, puts et profils de gains
+
+Une **option** est un contrat qui donne à son acheteur le **droit**, sans obligation, d'acheter (**call**) ou de vendre (**put**) un actif à un prix fixé (le **strike**, ou prix d'exercice) jusqu'à une date fixée (l'**échéance**). Le vendeur de l'option encaisse une **prime** et prend l'obligation symétrique s'il est exercé.
+
+Sur les indices, les options les plus échangées portent sur le S&P 500 (SPX, réglées en espèces) et sur les futures ES ; une option porte sur un multiplicateur (100 $ par point pour le SPX, 50 $ pour une option sur ES) ; les échéances vont de la journée même (les options « 0DTE », zero days to expiration, devenues très échangées) à plusieurs mois ; le troisième vendredi du mois et les expirations trimestrielles concentrent les plus gros encours.
+
+Le vocabulaire de position : une option est **dans la monnaie** (ITM) si son exercice serait rentable maintenant (un call dont le strike est sous le prix, un put dont le strike est au-dessus), **à la monnaie** (ATM) si le strike est proche du prix, **hors de la monnaie** (OTM) sinon. La prime d'une option se décompose en **valeur intrinsèque** (ce que rapporterait l'exercice immédiat, nulle pour une option OTM) et **valeur temps** (le reste : le prix de la possibilité que le marché bouge d'ici l'échéance).
+
+Les quatre profils de gains à l'échéance, pour une prime payée ou reçue P et un strike K :
+
+- **Achat de call** : perte limitée à P si le prix finit sous K ; gain illimité au-dessus de K + P.
+- **Achat de put** : perte limitée à P si le prix finit au-dessus de K ; gain croissant sous K − P.
+- **Vente de call** : gain limité à P si le prix finit sous K ; perte illimitée au-dessus.
+- **Vente de put** : gain limité à P si le prix finit au-dessus de K ; perte croissante en dessous.
+
+Un exemple chiffré : le S&P à 5 300, un call de strike 5 300 à 30 jours coûte environ 108 points (soit 10 800 $ sur le SPX, 5 400 $ sur une option ES) avec une volatilité implicite de 16 %. À l'échéance, l'acheteur gagne si le S&P finit au-dessus de 5 408 ; en dessous de 5 300, il perd les 108 points ; entre les deux, il perd une partie. Le vendeur a le profil inverse. Un put 5 200 à 30 jours coûte environ 47 points ; un call 5 400, environ 64 points.
+
+<Figure caption="Figure 1 · Les quatre profils de gains à l'échéance (S&P à 5 300, call 5 300 à 108 points). L'acheteur a une perte bornée et un gain ouvert ; le vendeur l'inverse. La prime est la valeur temps que le vendeur encaisse et que l'acheteur voit fondre.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Profils de gains des quatre positions optionnelles" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Achat de call 5 300 (prime 108)</text>
+  <line x1="40" y1="130" x2="330" y2="130" className="line" strokeWidth="1" /><line x1="185" y1="50" x2="185" y2="200" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="185" y="214" fontSize="9" textAnchor="middle" className="muted">5 300</text><text x="245" y="214" fontSize="9" textAnchor="middle" className="muted">5 408</text>
+  <polyline points="45,160 185,160 245,130 325,90" fill="none" stroke="var(--tm-green)" strokeWidth="2.5" />
+  <text x="100" y="178" fontSize="9" textAnchor="middle" className="red">perte max : −108</text><text x="290" y="82" fontSize="9" textAnchor="middle" className="green">gain ouvert</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Vente de call 5 300 (prime 108)</text>
+  <line x1="400" y1="130" x2="690" y2="130" className="line" strokeWidth="1" /><line x1="545" y1="50" x2="545" y2="200" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="545" y="214" fontSize="9" textAnchor="middle" className="muted">5 300</text>
+  <polyline points="405,100 545,100 605,130 685,170" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="460" y="92" fontSize="9" textAnchor="middle" className="green">gain max : +108</text><text x="650" y="185" fontSize="9" textAnchor="middle" className="red">perte ouverte</text>
+
+  <text x="180" y="245" fontSize="11" fontWeight="600" textAnchor="middle">Achat de put 5 200 (prime 47)</text>
+  <line x1="40" y1="290" x2="330" y2="290" className="line" strokeWidth="1" />
+  <polyline points="45,255 140,285 165,304 325,304" fill="none" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="240" y="300" fontSize="8" textAnchor="middle" className="red">−47 au-dessus de 5 200</text>
+  <text x="540" y="245" fontSize="11" fontWeight="600" textAnchor="middle">Vente de put 5 200 (prime 47)</text>
+  <line x1="400" y1="290" x2="690" y2="290" className="line" strokeWidth="1" />
+  <polyline points="405,325 500,295 525,276 685,276" fill="none" stroke="var(--tm-red)" strokeWidth="2" />
+  <text x="600" y="272" fontSize="8" textAnchor="middle" className="green">+47 au-dessus de 5 200</text>
+</svg>
+</Figure>
+
+## Delta, gamma, theta, vega : ce que chacun mesure
+
+Le prix d'une option dépend de cinq choses : le prix du sous-jacent, le strike, le temps restant, la volatilité attendue et les taux. Les **grecques** mesurent la sensibilité de la prime à chacune de ces variables. Quatre comptent pour un trader directionnel.
+
+**Delta** : de combien la prime bouge quand le sous-jacent bouge d'un point. Un call ATM a un delta d'environ 0,5 (il gagne 0,5 point quand le S&P gagne 1 point) ; un call profondément ITM tend vers 1 ; un call OTM vers 0 ; les puts ont un delta négatif (−0,5 ATM). Le delta se lit aussi comme une **probabilité approximative** que l'option finisse dans la monnaie (un call de delta 0,30 a environ 30 % de chances de finir ITM), et comme l'**équivalent en sous-jacent** de la position : détenir un call de delta 0,5 sur ES revient, pour un petit mouvement, à être long 0,5 contrat ES.
+
+**Gamma** : de combien le delta bouge quand le sous-jacent bouge d'un point. C'est la courbure : le gamma est maximal à la monnaie et près de l'échéance ; un call ATM à 30 jours a un gamma d'environ 0,0016 par point (le delta passe de 0,545 à 0,561 si le S&P monte de 10 points) ; le même call à 7 jours a un gamma double. Le gamma est ce qui rend l'acheteur d'option **convexe** (il gagne de plus en plus vite dans le bon sens, perd de moins en moins vite dans le mauvais) et le vendeur concave. C'est aussi la grecque qui laisse la plus grosse empreinte sur les indices (dernière section).
+
+**Theta** : ce que la prime perd chaque jour par le seul écoulement du temps, toutes choses égales. Un call ATM à 30 jours perd environ 2 points par jour ; à 7 jours, près de 4 par jour ; la valeur temps fond de plus en plus vite à l'approche de l'échéance. Le theta est le revenu du vendeur et le coût de l'acheteur : celui qui achète une option paie chaque jour pour la possibilité d'un mouvement.
+
+**Vega** : de combien la prime bouge quand la volatilité implicite bouge de 1 point (de 16 % à 17 %). Un call ATM à 30 jours a un vega d'environ 6 points : si la volatilité implicite passe de 16 à 25 %, la prime passe d'environ 108 à environ 162 points, sans que le S&P ait bougé. Le vega est maximal à la monnaie et croît avec le temps restant. C'est la grecque qui explique pourquoi un acheteur d'option peut perdre alors qu'il a eu raison sur la direction (la volatilité implicite s'est effondrée) et pourquoi un vendeur peut perdre sans mouvement du prix (elle a explosé).
+
+Le tableau, pour un call ATM sur le S&P à 5 300, 30 jours, volatilité implicite 16 %, taux 5 % (chiffres calculés, arrondis) : prime ≈ 108, delta 0,545, gamma 0,0016, theta −2,0 par jour, vega 6,0. Ces ordres de grandeur suffisent pour la suite.
+
+<Figure caption="Figure 2 · Les quatre grecques d'un call ATM en une image : delta (la pente), gamma (la courbure, maximale à la monnaie et près de l'échéance), theta (la fonte de la valeur temps, qui s'accélère), vega (la sensibilité à la volatilité implicite, maximale à la monnaie).">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Représentation des grecques d'un call" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Delta et gamma : prime contre sous-jacent</text>
+  <line x1="40" y1="150" x2="330" y2="150" className="line" strokeWidth="1" /><line x1="185" y1="40" x2="185" y2="150" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <path d="M 45 148 Q 140 146 185 118 Q 250 70 325 45" fill="none" stroke="var(--tm-green)" strokeWidth="2.5" />
+  <line x1="145" y1="138" x2="225" y2="98" stroke="var(--tm-gold)" strokeWidth="1.5" strokeDasharray="4 3" /><text x="245" y="112" fontSize="9" className="gold">delta = pente ≈ 0,5</text>
+  <text x="185" y="164" fontSize="9" textAnchor="middle" className="muted">strike</text>
+  <text x="100" y="80" fontSize="9" className="muted">gamma = courbure,</text><text x="100" y="94" fontSize="9" className="muted">max à la monnaie</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">Theta : valeur temps contre jours restants</text>
+  <line x1="400" y1="150" x2="690" y2="150" className="line" strokeWidth="1" />
+  <text x="405" y="164" fontSize="9" className="muted">90 j</text><text x="640" y="164" fontSize="9" className="muted">7 j</text><text x="685" y="164" fontSize="9" textAnchor="end" className="muted">0</text>
+  <path d="M 405 60 Q 550 75 620 100 Q 665 125 688 148" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <text x="560" y="60" fontSize="9" className="muted">fonte lente puis accélérée :</text><text x="560" y="74" fontSize="9" className="muted">−2 / jour à 30 j, −4 à 7 j</text>
+
+  <text x="360" y="200" fontSize="12" fontWeight="600" textAnchor="middle">Vega : prime contre volatilité implicite (call ATM 30 j)</text>
+  <line x1="120" y1="290" x2="600" y2="290" className="line" strokeWidth="1" />
+  <text x="160" y="304" fontSize="9" textAnchor="middle" className="muted">VI 12 %</text><text x="300" y="304" fontSize="9" textAnchor="middle" className="muted">16 %</text><text x="450" y="304" fontSize="9" textAnchor="middle" className="muted">25 %</text><text x="580" y="304" fontSize="9" textAnchor="middle" className="muted">35 %</text>
+  <polyline points="160,270 300,246 450,214 580,178" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="300" y="238" fontSize="9" textAnchor="middle" className="mono">≈ 108</text><text x="450" y="206" fontSize="9" textAnchor="middle" className="mono">≈ 162</text>
+  <text x="620" y="240" fontSize="9" className="muted">vega ≈ 6 pts par point de VI</text>
+</svg>
+</Figure>
+
+## La volatilité implicite et son rôle central
+
+Quatre des cinq variables du prix d'une option sont connues (prix, strike, temps, taux) ; la cinquième, la volatilité future, ne l'est pas. Le marché la **cote** à travers le prix des options : la **volatilité implicite** (VI) est le niveau de volatilité qui, mis dans le modèle, redonne le prix observé. Le VIX du niveau 5 est la VI moyenne à 30 jours des options sur le S&P.
+
+Pourquoi c'est central :
+
+- **La VI est le prix de la peur.** Quand le marché craint un mouvement (avant une annonce, dans une baisse), la demande de protection (puts) monte, les primes montent, la VI monte ; quand le calme revient, elle retombe. Elle est mean-reverting : elle revient vers sa moyenne, en pics et en dégonflements.
+- **La VI se compare à la volatilité réalisée** (l'ATR annualisé, niveau 2). Si la VI est très au-dessus du réalisé, les options sont « chères » : le marché paie une prime de peur ; si elle est en dessous, elles sont « bon marché ». Cet écart (la « prime de risque de volatilité ») est en moyenne positif : les vendeurs d'options sont payés pour porter le risque, ce qui explique le rendement moyen des stratégies de vente de volatilité, et leurs pertes brutales quand la peur se matérialise.
+- **La VI a une structure par strike (le « skew »)** : sur les indices, les puts OTM ont une VI plus élevée que les calls OTM (le marché paie plus pour se protéger de la baisse que pour parier sur la hausse), et cette asymétrie change avec le sentiment (niveau 5).
+- **La VI a une structure par échéance** (le contango / backwardation du VIX, niveau 5).
+- **Autour des annonces**, la VI des options courtes monte dans les jours qui précèdent (le marché intègre le mouvement attendu) et **s'effondre juste après** la publication (le « vol crush ») : un acheteur d'option qui a raison sur la direction peut perdre parce que la VI a chuté plus que le prix n'a bougé.
+
+Ce que le trader directionnel en retient : la VI dit **combien de mouvement le marché attend**, ce qui donne une échelle aux stops et aux cibles (le mouvement quotidien attendu du niveau 5), et **quand les options sont chères ou bon marché**, ce qui décide si une couverture par option vaut son prix.
+
+## Usages concrets pour un trader directionnel
+
+Un trader de futures n'a pas besoin de trader les options ; il peut en tirer trois usages précis, sans en faire un métier.
+
+**1. Lire le mouvement attendu.** Le prix du straddle ATM (un call plus un put au même strike) à une échéance donnée est, en première approximation, le mouvement que le marché attend d'ici là ; divisé par le prix, il donne un pourcentage. Avant un CPI ou un FOMC, le straddle du jour dit combien de points d'ES le marché « prévoit » pour l'annonce : une échelle pour dimensionner (niveau 5, protocole news) et pour juger a posteriori si le mouvement a été grand ou petit par rapport à l'attente.
+
+**2. Couvrir une position swing à travers un événement.** Un trader long MES en swing qui doit traverser un FOMC peut, au lieu de fermer, acheter un put OTM court : il paie une prime (le theta et le vega, chers avant l'annonce), il garde sa position, et sa perte maximale est bornée pendant l'événement. C'est cher, souvent plus cher que de fermer et de reprendre ; c'est utile quand la position est difficile à reprendre (un swing construit sur plusieurs jours) ou quand le gap potentiel excède ce que la taille supporte. Le calcul se fait à froid : prime contre risque de gap contre coût de sortie / réentrée.
+
+**3. Remplacer un stop lointain par une prime connue.** Sur un trade dont l'invalidation structurelle est trop loin pour le budget (niveau 1 : le cas où « on ne prend pas le trade »), l'achat d'un call ou d'un put à échéance courte remplace le stop : la perte maximale est la prime, quel que soit le mouvement ; on accepte le theta et le vega en échange de l'absence de slippage et de sweep. C'est une solution pour les jours de régime de stress ou pour les traders qui ne peuvent pas surveiller ; elle demande de comprendre le vol crush et de ne pas acheter des options chères.
+
+Ce que le trader directionnel ne fait pas sans formation dédiée : vendre des options nues (le profil de perte illimitée avec un theta séduisant est le piège classique), construire des stratégies complexes (spreads, condors, calendriers) sans en mesurer les grecques nettes, ou trader les 0DTE comme des billets de loterie. Ces usages existent et ont leur cours ; ce n'est pas celui-ci.
+
+## L'empreinte du marché d'options sur les indices
+
+C'est la partie qui concerne directement le trader de futures d'indices : les options laissent une empreinte mécanique sur le prix du sous-jacent, par la couverture des vendeurs.
+
+Le mécanisme : les market makers d'options vendent aux investisseurs les options que ceux-ci demandent (des puts de protection surtout, des calls aussi) et se **couvrent en delta** en achetant ou vendant du sous-jacent (futures ES) pour rester neutres. Comme le delta bouge avec le prix (le gamma), ils doivent **rééquilibrer** en permanence, et le sens de ce rééquilibrement dépend de leur position en gamma :
+
+- **Market makers longs gamma** (ils ont acheté plus d'options qu'ils n'en ont vendues, typiquement quand les investisseurs vendent des calls couverts et des puts) : quand le prix monte, leur delta monte, ils **vendent** du sous-jacent ; quand il baisse, ils **achètent**. Leur couverture **freine** les mouvements : le marché est collant, les ranges dominent, la volatilité réalisée est basse. C'est le régime « gamma positif », fréquent en marché calme et haussier.
+- **Market makers courts gamma** (ils ont vendu plus d'options, typiquement des puts de protection dans une baisse) : quand le prix baisse, leur delta les oblige à **vendre** davantage ; quand il monte, à **acheter**. Leur couverture **amplifie** les mouvements : les cassures s'accélèrent, la volatilité réalisée monte. C'est le régime « gamma négatif », typique des baisses et des régimes de stress.
+
+Conséquences observables, à relier aux niveaux précédents :
+
+- **Les strikes à fort encours** (les grands niveaux ronds où beaucoup d'options sont ouvertes) agissent comme des **aimants** en régime de gamma positif (le prix y colle, surtout à l'approche des expirations) et comme des **accélérateurs** en gamma négatif. Un trader d'ES qui voit le prix hésiter à 5 300 un vendredi d'expiration voit souvent l'effet d'un gros encours d'options à ce strike.
+- **Le niveau où le gamma des market makers change de signe** (le « gamma flip », publié par plusieurs fournisseurs de données à partir des encours ouverts) sépare deux régimes : au-dessus, marché collant ; en dessous, marché accéléré. Il rejoint la matrice de régimes du niveau 5 : le franchissement du gamma flip à la baisse est souvent le moment où « range calme » devient « tendance agitée ».
+- **Les expirations** (mensuelle le troisième vendredi, trimestrielle, et les 0DTE quotidiennes désormais) concentrent ces effets : le prix « pinne » sur les gros strikes le jour de l'expiration, et les positions qui expirent libèrent le marché le lundi suivant (des mouvements plus francs après une grosse expiration).
+- **Le VIX et le skew** (niveau 5) sont les thermomètres de ce marché : une VI qui monte avec le prix, un skew qui se raidit, disent que la demande de protection monte et que le gamma des market makers penche vers le négatif.
+
+Ce que le trader de futures en fait : il note le régime de gamma probable (positif : les ranges et les retours au POC / VWAP dominent, les cassures s'étouffent ; négatif : les cassures s'accélèrent, les sweeps sont plus larges), il note les gros strikes du jour comme niveaux (ils s'ajoutent aux niveaux du chapitre 1 de ce niveau, avec un poids particulier les jours d'expiration), et il traite le gamma flip comme une frontière de régime. Il n'a pas besoin de calculer tout cela lui-même ; il a besoin de savoir que cela existe et de savoir où le lire.
+
+<Figure caption="Figure 3 · L'empreinte des options : en gamma positif (au-dessus du gamma flip), la couverture des market makers freine le prix, qui colle aux gros strikes ; en gamma négatif (en dessous), elle l'accélère. Le gamma flip est une frontière de régime ; les gros strikes sont des niveaux du jour.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Régimes de gamma positif et négatif sur l'ES" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <line x1="60" y1="150" x2="700" y2="150" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="6 4" /><text x="690" y="146" fontSize="10" textAnchor="end" className="red" fontWeight="600">gamma flip ≈ 5 260</text>
+  <rect x="60" y="40" width="640" height="110" className="green" opacity="0.06" /><text x="70" y="58" fontSize="11" fontWeight="600" className="green">gamma positif : la couverture freine</text>
+  <rect x="60" y="150" width="640" height="115" className="red" opacity="0.06" /><text x="70" y="255" fontSize="11" fontWeight="600" className="red">gamma négatif : la couverture accélère</text>
+  <line x1="60" y1="90" x2="700" y2="90" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="86" fontSize="9" textAnchor="end" className="gold">gros strike 5 300 : aimant</text>
+  <polyline points="70,100 110,88 150,95 190,86 230,96 270,90 310,94 350,86 390,92 420,100 440,120 460,145 480,150 500,180 520,215 540,205 560,235 600,225 640,250 680,240" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="240" y="120" fontSize="9" textAnchor="middle" className="muted">collant, ranges, retours au POC</text>
+  <text x="590" y="205" fontSize="9" textAnchor="middle" className="muted">cassures accélérées, sweeps larges</text>
+  <circle cx="480" cy="150" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="480" y="170" fontSize="9" textAnchor="middle" className="red">franchissement : changement de régime</text>
+</svg>
+</Figure>
+
+## Deux trades sous l'angle des options
+
+Reconstitutions pédagogiques : le même événement, deux usages des options par un trader de futures.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500), swing de trois jours, couvert par un put à travers un FOMC"
+  direction="Long"
+  setup="Long swing MES sur structure D haussière, construit sur deux jours ; FOMC le mercredi soir ; au lieu de fermer, achat d'un put ES 5 250 à 3 jours (le lundi, avant la hausse de la VI) pour borner la perte pendant l'événement"
+  entree="5 262,00 (MES, 4 contrats)"
+  stop="5 238,00 (structurel, 24 pts, mais couvert par le put pendant le FOMC)"
+  objectif="5 320,00"
+  r="+1,5R net de la prime">
+
+Compte de 50 000 $, budget 500 $ : 4 MES avec un stop de 24 points (24 × 5 $ × 4 = 480 $ ≈ 1R). Le put ES 5 250 à 3 jours coûte 9 points (450 $, soit 0,9 % du compte, environ 0,9R : cher). Il ne l'achète pas pour tous ses trades ; il l'achète parce que le FOMC a des projections, que le VIX est bas (VI bon marché) et que sa position vaut 4 MES construits sur deux jours qu'il ne veut pas refaire. Le FOMC est dovish : le MES monte à 5 320 le jeudi, la position est sortie (+58 points × 5 $ × 4 = 1 160 $), le put expire sans valeur (−450 $). Net : 710 $, environ +1,5R sur le risque initial. Sans la couverture, il aurait fermé mardi soir et manqué le mouvement, ou traversé le FOMC avec un stop de 24 points exposé au whipsaw. La couverture a coûté ; elle a acheté du temps.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Options sur ES, call 0DTE, en pari directionnel « pas cher »"
+  direction="Long (call)"
+  setup="Achat d'un call 0DTE 20 points au-dessus du prix, le matin d'un CPI, « parce que ça ne coûte que 6 points et que si le CPI est bon ça vaut 40 »"
+  entree="Prime 6 points (300 $) sur 1 call ES"
+  stop="Aucun : la perte maximale est la prime"
+  objectif="40 points"
+  r="−1R (la prime entière) : le CPI est bon, l'ES monte de 15 points, le call finit à zéro">
+
+Le trader a raison sur la direction : le CPI est dovish, l'ES monte. Mais trois mécanismes le battent : le mouvement de 15 points ne suffit pas à mettre un call 20 points OTM dans la monnaie ; la VI, gonflée avant le CPI, s'effondre après (vol crush : la prime perd sa valeur temps d'un coup) ; et le theta d'une option qui expire le soir même est brutal. À 22 h, le call vaut zéro. Il a perdu 300 $ en ayant eu raison sur le sens : c'est ce que les options font à ceux qui les tradent comme des futures. Une position MES longue avec un stop aurait gagné 15 points. La perte bornée est un avantage ; le theta, le vega et la distance au strike en sont le prix, et ils se paient même quand on a raison.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Une option est un **droit** (call d'acheter, put de vendre) à un **strike** jusqu'à une **échéance** ; l'acheteur paie une prime, perte bornée, gain ouvert ; le vendeur l'inverse. Prime = valeur intrinsèque + valeur temps.
+- **Delta** (pente, équivalent sous-jacent, probabilité approximative), **gamma** (courbure, max à la monnaie et près de l'échéance), **theta** (fonte du temps, qui s'accélère), **vega** (sensibilité à la volatilité implicite, max à la monnaie).
+- La **volatilité implicite** est le prix de la peur : cotée par le marché, mean-reverting, comparée au réalisé (prime de risque de volatilité), avec un skew et une structure par échéance ; elle monte avant les annonces et **s'effondre après** (vol crush).
+- Usages pour un trader directionnel : **lire le mouvement attendu** (straddle), **couvrir un swing** à travers un événement (cher, parfois justifié), **remplacer un stop lointain** par une prime ; pas de vente nue ni de 0DTE en billet de loterie sans formation dédiée.
+- **Empreinte sur les indices** : la couverture des market makers **freine** en gamma positif (marché collant, gros strikes aimants, expirations) et **accélère** en gamma négatif ; le **gamma flip** est une frontière de régime à relier à la matrice du niveau 5.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire une chaîne d'options">
+
+S&P à 5 300, 30 jours à l'échéance, VI 16 %. Chaîne simplifiée : call 5 300 : prime 108, delta 0,545 ; call 5 400 : prime 64, delta 0,38 ; put 5 200 : prime 47, delta −0,30 ; put 5 300 : prime 100, delta −0,455.
+
+1. Quel est le point mort à l'échéance de l'achat du call 5 300 ? Du put 5 200 ?
+2. Que vaut approximativement le straddle 5 300, et quel mouvement attendu en pourcentage cela représente-t-il à 30 jours ?
+3. Le call 5 400 a un delta de 0,38 : comment le lire (équivalent sous-jacent, probabilité) ?
+
+<Solution>
+
+1. Call 5 300 : point mort **5 408** (5 300 + 108). Put 5 200 : point mort **5 153** (5 200 − 47).
+2. Straddle 5 300 = 108 + 100 = **208 points**, soit 208 ÷ 5 300 ≈ **3,9 %** : le marché « attend » un mouvement de cet ordre (dans un sens ou l'autre) d'ici 30 jours ; c'est cohérent avec une VI de 16 % annualisée ramenée à un mois (16 % × racine de 30/365 ≈ 4,6 %, la différence tenant à la convention du straddle).
+3. Détenir ce call revient, pour un petit mouvement, à être long **0,38 contrat** de S&P ; et le marché lui donne environ **38 %** de chances de finir dans la monnaie (au-dessus de 5 400) à l'échéance. Le gamma fera monter ce delta si le prix monte.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Couvrir ou fermer ?">
+
+Vous êtes long 6 MES à 5 270 en swing (stop structurel 5 240, 30 points, 900 $ = 1R sur un compte de 90 000 $), FOMC ce soir. Un put ES 5 250 à 2 jours coûte 8 points (400 $ pour un put ES qui couvre 10 MES ; vous ne pouvez couvrir que par tranche de 10 MES, donc vous surcouvrez ou vous ne couvrez pas). Alternative : fermer et reprendre demain.
+
+1. Que coûte la couverture en R, et que borne-t-elle exactement ?
+2. Quels sont les coûts et risques de l'alternative « fermer et reprendre » ?
+3. Quel critère tranche, et que faut-il avoir écrit dans le plan ?
+
+<Solution>
+
+1. 400 $ ≈ **0,44R**. Le put borne la perte sous 5 250 pendant sa vie (avec la nuance de la surcouverture : 10 MES couverts pour 6 détenus, la position devient légèrement short delta sous 5 250) ; entre 5 250 et 5 270 la position perd normalement ; le stop à 5 240 reste, mais un whipsaw qui le traverse est amorti par le put.
+2. Fermer coûte le spread aller-retour (négligeable) et le **risque de manquer le mouvement** ou de reprendre plus haut le lendemain ; il expose aussi à devoir « refaire » un swing construit sur des jours. Il supprime tout risque de whipsaw.
+3. Le critère : la **valeur de la position déjà construite** contre le **coût de la prime** (0,44R ici, avec une VI probablement gonflée avant l'événement) et le **risque de gap** que la taille supporte ou non. Un plan écrit : « swing traversant un événement de niveau 1 : fermer si le coût de la couverture dépasse 0,3R ou si la VI est au-dessus de son 80e centile ; couvrir sinon ; jamais traverser sans l'un ni l'autre ». Ici, à 0,44R, le plan dit plutôt **fermer** ; couvrir reste défendable si la position est difficile à reconstruire.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Régime de gamma et niveaux du jour">
+
+Vendredi d'expiration mensuelle. Un fournisseur de données indique : gamma flip à 5 255, gros encours d'options aux strikes 5 300 (le plus gros) et 5 350, ES à 5 292 à l'ouverture, VIX 13.
+
+1. Dans quel régime de gamma le marché ouvre-t-il, et quel comportement attendez-vous ?
+2. Quels niveaux ajoutez-vous à ceux du chapitre 1 de ce niveau, et avec quel poids aujourd'hui ?
+3. Le prix casse 5 255 à la baisse à 17 h sur volume. Que change cela pour vos réglages ?
+
+<Solution>
+
+1. **Gamma positif** (prix au-dessus du flip, VIX bas) : la couverture des market makers freine ; attendre un marché collant, des ranges, des retours au VWAP / POC, et un prix qui « pinne » vers 5 300 (le plus gros encours) à mesure que la journée avance ; les cassures s'étouffent.
+2. Les strikes **5 300** (poids fort aujourd'hui : aimant d'expiration) et **5 350** (secondaire, au-dessus), et le **gamma flip 5 255** comme frontière de régime. Ils s'ajoutent aux PDH / PDL / POC / VAH / VAL et à la structure ; 5 300 coïncide peut-être avec un niveau existant (chiffre rond, niveau 2).
+3. Sous 5 255, le régime devient **gamma négatif** : la couverture accélère, les cassures se prolongent, les sweeps s'élargissent. Réglages : la matrice change de case (de « range calme » vers « tendance agitée » si la structure suit), stops multipliés, taille réduite, setups de rotation rangés, setups de continuation baissière avec stops larges autorisés ; et le lundi suivant l'expiration, attendre des mouvements plus francs.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "L'acheteur d'un call :",
+      options: [
+        "A une perte illimitée",
+        "A une perte bornée à la prime et un gain ouvert au-dessus du strike plus la prime",
+        "Doit acheter le sous-jacent à l'échéance",
+        "Reçoit la prime",
+      ],
+      answer: 1,
+      explain: "Le vendeur a le profil inverse : gain borné à la prime, perte ouverte. La prime est la valeur temps que le vendeur encaisse et que l'acheteur voit fondre.",
+    },
+    {
+      q: "Le delta d'une option mesure :",
+      options: [
+        "La fonte du temps",
+        "De combien la prime bouge quand le sous-jacent bouge d'un point ; aussi l'équivalent sous-jacent et une probabilité approximative de finir dans la monnaie",
+        "La sensibilité à la volatilité",
+        "La courbure",
+      ],
+      answer: 1,
+      explain: "Gamma = courbure du delta (max à la monnaie et près de l'échéance) ; theta = fonte du temps ; vega = sensibilité à la volatilité implicite.",
+    },
+    {
+      q: "La volatilité implicite est :",
+      options: [
+        "La volatilité passée",
+        "Le niveau de volatilité coté par le prix des options : le prix de la peur, mean-reverting, comparé au réalisé, avec un skew et une structure par échéance",
+        "L'ATR",
+        "Fixe",
+      ],
+      answer: 1,
+      explain: "Elle monte avant les annonces et s'effondre après (vol crush) : un acheteur d'option peut perdre en ayant raison sur la direction.",
+    },
+    {
+      q: "Le prix du straddle ATM sert au trader directionnel à :",
+      options: [
+        "Rien",
+        "Lire le mouvement attendu par le marché d'ici l'échéance, une échelle pour dimensionner autour d'une annonce",
+        "Calculer la marge",
+        "Remplacer la structure",
+      ],
+      answer: 1,
+      explain: "Divisé par le prix, il donne un pourcentage cohérent avec la VI ramenée à l'horizon.",
+    },
+    {
+      q: "En régime de gamma positif, la couverture des market makers :",
+      options: [
+        "Accélère les mouvements",
+        "Freine les mouvements : marché collant, ranges, gros strikes aimants, surtout à l'approche des expirations",
+        "N'a aucun effet",
+        "Fait monter le VIX",
+      ],
+      answer: 1,
+      explain: "En gamma négatif (sous le gamma flip, typiquement dans les baisses), elle accélère : cassures prolongées, sweeps larges. Le flip est une frontière de régime.",
+    },
+    {
+      q: "Acheter un call 0DTE 20 points OTM le matin d'un CPI « parce qu'il ne coûte que 6 points » :",
+      options: [
+        "Est un trade à espérance positive",
+        "Expose au vol crush, au theta brutal et à la distance au strike : on peut avoir raison sur la direction et perdre toute la prime",
+        "Équivaut à un long MES avec stop",
+        "Est sans risque",
+      ],
+      answer: 1,
+      explain: "La perte bornée est un avantage ; le theta, le vega et la distance au strike en sont le prix, et ils se paient même quand on a raison.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le dernier marché du niveau, et le plus jeune : la crypto. Le chapitre suivant décrit la microstructure des plateformes, les perpétuels, le funding et les bases, les liquidations en cascade et leurs signatures, les données on-chain utiles au trader, et les risques propres à ce marché : plateformes, week-ends, manipulation.
