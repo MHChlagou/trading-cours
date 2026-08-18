@@ -1,0 +1,328 @@
+---
+title: "Or et pétrole"
+description: "Les drivers fondamentaux de l'or et du brut, les contrats GC et CL avec leurs horaires et leurs pièges, les stocks EIA, l'OPEP et la géopolitique, les corrélations avec le dollar et les taux réels, et les profils de volatilité qui décident des stops et des tailles."
+---
+
+# Or et pétrole
+
+L'or et le pétrole sont les deux matières premières du cours, et elles ne se ressemblent pas. L'or est un actif monétaire sans usage industriel dominant, piloté par le dollar, les taux réels et la peur ; le pétrole est une matière première physique, pilotée par l'offre, la demande, les stocks et la géopolitique. Ce chapitre donne pour chacun les drivers, les contrats et leurs pièges, les publications et acteurs spécifiques, les corrélations à surveiller, et les profils de volatilité qui décident, concrètement, de la taille des stops et des positions.
+
+## Les drivers fondamentaux de l'or et du brut
+
+### L'or
+
+L'or n'a ni rendement ni bénéfices ; il ne se valorise pas comme une action. Il se comporte comme une **monnaie sans banque centrale**, et ses drivers sont ceux d'une monnaie :
+
+- **Les taux réels** (le rendement des obligations moins l'inflation anticipée) : c'est le driver principal. L'or ne rapporte rien ; quand les obligations rapportent un rendement réel élevé, détenir de l'or coûte cher (le manque à gagner) et il baisse ; quand les taux réels baissent ou deviennent négatifs, l'or n'a plus de concurrent et il monte. Le rendement réel du 10 ans américain (les TIPS) est la série à suivre.
+- **Le dollar** : l'or est libellé en dollars ; un dollar fort le rend cher pour le reste du monde ; la corrélation est en général négative (niveau 5). Mais l'or est aussi une alternative au dollar : quand la confiance dans le dollar baisse (déficits, sanctions, dédollarisation des réserves), l'or monte même sans faiblesse du dollar contre les autres devises.
+- **La demande des banques centrales** : depuis quelques années, les banques centrales (émergentes surtout) achètent massivement de l'or pour diversifier leurs réserves ; c'est un flux structurel qui a soutenu l'or malgré des taux réels élevés, et qui a affaibli la corrélation classique or / taux réels.
+- **La peur** : crises financières, guerres, chocs ; l'or monte comme refuge, mais pas toujours et pas immédiatement (dans une liquidation généralisée, il peut baisser avec tout le reste avant de repartir).
+- **La demande physique** (bijouterie indienne et chinoise, saisonnalité du niveau 5) et l'**offre minière** : des drivers de fond, lents, rarement décisifs à l'horizon du trader.
+
+### Le pétrole
+
+Le brut est une marchandise : son prix résulte de l'équilibre offre / demande, avec des stocks comme tampon.
+
+- **L'offre** : la production des grands producteurs (États-Unis, Arabie saoudite, Russie…), les décisions de l'**OPEP+** (quotas, coupes, hausses), les perturbations (guerres, sanctions, ouragans, pannes). L'offre est rigide à court terme, ce qui rend le prix très sensible aux chocs.
+- **La demande** : la croissance mondiale (Chine, États-Unis, Inde), la saisonnalité (driving season, hiver), les transitions énergétiques à long terme.
+- **Les stocks** : le tampon entre offre et demande ; les stocks américains, publiés chaque semaine (EIA), sont la donnée à haute fréquence qui bouge le prix ; les stocks stratégiques et leur utilisation aussi.
+- **Le dollar** : libellé en dollars, le pétrole souffre d'un dollar fort, mais moins mécaniquement que l'or ; l'offre et la géopolitique dominent souvent.
+- **La géopolitique** : le pétrole est le marché où la géopolitique se transmet le plus vite au prix (Moyen-Orient, Russie, détroits, sanctions) ; les primes de risque montent et retombent en jours.
+- **La structure à terme** : contango (échéances lointaines plus chères : marché sur-approvisionné, stockage rentable) ou backwardation (échéances proches plus chères : tension immédiate) ; c'est le thermomètre de l'équilibre physique.
+
+Le contraste : l'or se lit avec le tableau de bord macro (taux réels, dollar, sentiment) ; le pétrole se lit avec les stocks, l'OPEP et la géopolitique, la macro (croissance) venant en second.
+
+<Figure caption="Figure 1 · Les drivers de l'or (monétaires : taux réels, dollar, banques centrales, peur) et du pétrole (physiques : offre, OPEP, stocks, demande, géopolitique). Le dollar est le seul driver commun ; il pèse plus sur l'or.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Drivers de l'or et du pétrole" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="200" cy="150" r="55" className="gold" opacity="0.9" /><text x="200" y="146" fontSize="16" fontWeight="700" textAnchor="middle" fill="#141414">OR</text><text x="200" y="164" fontSize="9" textAnchor="middle" fill="#141414">monnaie sans banque</text>
+  <rect x="30" y="40" width="130" height="36" rx="6" className="box" strokeWidth="1" /><text x="95" y="56" fontSize="10" fontWeight="600" textAnchor="middle">Taux réels</text><text x="95" y="70" fontSize="9" textAnchor="middle" className="muted">le driver principal</text>
+  <rect x="30" y="220" width="130" height="36" rx="6" className="box" strokeWidth="1" /><text x="95" y="236" fontSize="10" fontWeight="600" textAnchor="middle">Banques centrales</text><text x="95" y="250" fontSize="9" textAnchor="middle" className="muted">achats structurels</text>
+  <rect x="200" y="30" width="110" height="36" rx="6" className="box" strokeWidth="1" /><text x="255" y="46" fontSize="10" fontWeight="600" textAnchor="middle">Peur, refuge</text><text x="255" y="60" fontSize="9" textAnchor="middle" className="muted">pas toujours immédiat</text>
+  <rect x="200" y="230" width="110" height="36" rx="6" className="box" strokeWidth="1" /><text x="255" y="246" fontSize="10" fontWeight="600" textAnchor="middle">Demande physique</text><text x="255" y="260" fontSize="9" textAnchor="middle" className="muted">lente, saisonnière</text>
+  <line x1="160" y1="70" x2="170" y2="110" className="line" strokeWidth="1" /><line x1="160" y1="225" x2="170" y2="190" className="line" strokeWidth="1" /><line x1="230" y1="66" x2="215" y2="96" className="line" strokeWidth="1" /><line x1="230" y1="230" x2="215" y2="204" className="line" strokeWidth="1" />
+
+  <rect x="310" y="130" width="100" height="40" rx="6" className="gold" opacity="0.4" /><text x="360" y="148" fontSize="11" fontWeight="600" textAnchor="middle">Dollar</text><text x="360" y="162" fontSize="9" textAnchor="middle" className="muted">commun ; pèse plus sur l'or</text>
+  <line x1="255" y1="150" x2="310" y2="150" className="line" strokeWidth="1.5" /><line x1="410" y1="150" x2="465" y2="150" className="line" strokeWidth="1" strokeDasharray="4 3" />
+
+  <circle cx="520" cy="150" r="55" className="box" strokeWidth="1.5" /><text x="520" y="146" fontSize="16" fontWeight="700" textAnchor="middle">PÉTROLE</text><text x="520" y="164" fontSize="9" textAnchor="middle" className="muted">marchandise physique</text>
+  <rect x="560" y="40" width="130" height="36" rx="6" className="box" strokeWidth="1" /><text x="625" y="56" fontSize="10" fontWeight="600" textAnchor="middle">Offre, OPEP+</text><text x="625" y="70" fontSize="9" textAnchor="middle" className="muted">rigide, chocs</text>
+  <rect x="560" y="220" width="130" height="36" rx="6" className="box" strokeWidth="1" /><text x="625" y="236" fontSize="10" fontWeight="600" textAnchor="middle">Stocks EIA</text><text x="625" y="250" fontSize="9" textAnchor="middle" className="muted">le tampon, hebdomadaire</text>
+  <rect x="440" y="30" width="110" height="36" rx="6" className="box" strokeWidth="1" /><text x="495" y="46" fontSize="10" fontWeight="600" textAnchor="middle">Géopolitique</text><text x="495" y="60" fontSize="9" textAnchor="middle" className="muted">primes de risque</text>
+  <rect x="440" y="230" width="110" height="36" rx="6" className="box" strokeWidth="1" /><text x="495" y="246" fontSize="10" fontWeight="600" textAnchor="middle">Demande, croissance</text><text x="495" y="260" fontSize="9" textAnchor="middle" className="muted">Chine, saisons</text>
+  <line x1="560" y1="70" x2="550" y2="110" className="line" strokeWidth="1" /><line x1="560" y1="225" x2="550" y2="190" className="line" strokeWidth="1" /><line x1="500" y1="66" x2="510" y2="96" className="line" strokeWidth="1" /><line x1="500" y1="230" x2="510" y2="204" className="line" strokeWidth="1" />
+</svg>
+</Figure>
+
+## GC et CL : contrats, horaires, pièges
+
+| | GC (or) | MGC (micro or) | CL (brut WTI) | MCL (micro brut) |
+| --- | --- | --- | --- | --- |
+| Bourse | COMEX (CME) | COMEX | NYMEX (CME) | NYMEX |
+| Taille | 100 onces | 10 onces | 1 000 barils | 100 barils |
+| Tick | 0,10 $ = 10 $ | 0,10 $ = 1 $ | 0,01 $ = 10 $ | 0,01 $ = 1 $ |
+| Valeur notionnelle (or 2 400 / brut 80) | ≈ 240 000 $ | ≈ 24 000 $ | ≈ 80 000 $ | ≈ 8 000 $ |
+| Échéances actives | fév., avr., juin, août, oct., déc. (les plus liquides) | idem | **mensuelles** | mensuelles |
+| Heures (Paris, été) | Globex quasi continu ; pic 14 h - 19 h 30 (Londres + New York) | idem | Globex quasi continu ; pic 15 h - 20 h 30 ; pit 15 h 30 - 20 h 30 | idem |
+| Marge intraday broker (ordre de grandeur) | 1 000 à 3 000 $ | 100 à 300 $ | 1 000 à 3 000 $ | 100 à 300 $ |
+
+Les pièges propres à ces contrats :
+
+**Le roulement mensuel du CL.** Contrairement aux indices, le brut a une échéance **chaque mois**, et le contrat expire vers le 20 du mois précédant la livraison ; le front month change chaque mois, avec un écart de prix entre les deux échéances (le « spread calendaire », positif en contango, négatif en backwardation) qui peut atteindre plusieurs dizaines de cents. Un trader qui garde un contrat trop près de l'expiration risque une liquidité qui s'effondre et, en théorie, la livraison physique (les brokers ferment les positions de force avant). Règle : rouler au moins une semaine avant l'expiration ; regarder le contrat continu **ajusté** pour les niveaux (les niveaux du contrat précédent ne sont pas ceux du suivant sans ajustement).
+
+**Le contrat de l'or roule tous les deux mois** sur les échéances actives ; même règle, moins de fréquence.
+
+**Le pit du CL et le settlement.** Le pétrole a une séance « pit » (15 h 30 - 20 h 30 Paris) héritée de la criée, pendant laquelle le volume est concentré ; le prix de règlement quotidien (settlement) est fixé à 20 h 30 ; les mouvements autour de 20 h 30 et de la fermeture du pit sont souvent violents (rééquilibrages, options).
+
+**Le rapport EIA du mercredi à 16 h 30** (Paris) et le rapport API du mardi soir : voir section suivante ; c'est le protocole news du niveau 5 appliqué au brut.
+
+**Les gaps du dimanche soir.** L'or et surtout le pétrole ouvrent souvent en gap le dimanche soir sur les événements géopolitiques du week-end ; un swing gardé sur le week-end doit avoir une taille qui supporte un gap de 3 à 5 % (le niveau 1 : la taille est la seule protection contre un gap).
+
+**Le slippage de nuit** : l'or est correctement liquide la nuit asiatique (Shanghai, Tokyo, puis Londres) ; le pétrole beaucoup moins ; les stops de nuit sur MCL glissent.
+
+## Stocks EIA, OPEP et géopolitique
+
+Trois sources d'information propres au pétrole, à intégrer au calendrier et à la veille (niveau 5).
+
+**Les stocks EIA.** Chaque mercredi à 10 h 30 heure de New York (16 h 30 à Paris en été), l'Energy Information Administration publie les variations hebdomadaires des stocks américains de brut, d'essence et de distillats, avec la production, les importations et le taux d'utilisation des raffineries. La veille au soir, l'API (une association professionnelle) publie une estimation privée qui donne le ton. La lecture est celle du niveau 5 : le consensus (une variation attendue en millions de barils), la surprise (une hausse des stocks plus forte que prévu est baissière : l'offre dépasse la demande ; une baisse plus forte est haussière), et la composition (les stocks de Cushing, le point de livraison du CL ; les produits raffinés ; les exportations). Volatilité typique dans les minutes qui suivent : 1 à 3 % sur le brut. Protocole news : pas de position nouvelle 16 h 15 - 16 h 50, positions intraday fermées ou réduites.
+
+**L'OPEP+.** L'organisation des pays exportateurs et ses alliés (dont la Russie) fixent des quotas de production lors de réunions régulières (souvent mensuelles pour le comité de suivi, semestrielles pour les décisions majeures), et interviennent parfois par surprise (annonces de coupes ou de hausses le week-end). Ce que le trader suit : les dates des réunions (calendrier), les fuites et déclarations dans les jours qui précèdent (les prix intègrent la décision attendue ; la surprise fait le mouvement), la discipline réelle des membres (les quotas annoncés et la production observée divergent). Une décision de l'OPEP+ contraire à l'attente produit un gap et une journée de tendance ; conforme, un mouvement de « sell the fact ».
+
+**La géopolitique.** Le pétrole réagit en secondes aux titres concernant le Moyen-Orient, la Russie, les détroits stratégiques, les sanctions, les attaques d'infrastructures. Ces mouvements ont une signature : un pic brutal (la prime de risque), souvent suivi d'un reflux partiel ou total dans les jours suivants si l'offre physique n'est pas réellement affectée. Le trader distingue **le titre** (qui fait le pic) et **l'effet sur les barils** (qui fait la tendance) ; il ne court pas après le pic, il attend de voir si les stocks, la structure à terme et l'OPEP confirment un effet réel. Le niveau 5 (annonces non programmées) s'applique : réduction ou fermeture des positions dont la thèse est concernée, pas de trade tant que la volatilité n'a pas retrouvé un niveau où le stop a un sens.
+
+Pour l'or, l'équivalent de ces sources : le calendrier des banques centrales (niveau 5), les publications de la demande des banques centrales (mensuelles et trimestrielles, par les organismes du secteur), et les flux des ETF adossés à l'or (quotidiens, un indicateur de la demande d'investissement occidentale).
+
+<Figure caption="Figure 2 · Le brut autour d'un rapport EIA à 16 h 30 : consensus, surprise (stocks en forte hausse), displacement baissier, retour, continuation. Même mécanique qu'un CPI (niveau 5) ; même protocole : rien à 16 h 30, entrée sur le retour si la séquence est complète.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Comportement du brut autour d'un rapport EIA" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="250" x2="700" y2="250" className="line" strokeWidth="1" />
+  <text x="150" y="268" fontSize="10" textAnchor="middle" className="muted">16 h 00</text>
+  <text x="330" y="268" fontSize="10" textAnchor="middle" className="muted">16 h 30</text>
+  <text x="520" y="268" fontSize="10" textAnchor="middle" className="muted">17 h 15</text>
+  <polyline points="50,120 90,115 130,122 170,118 210,124 250,120 290,122 320,120 328,140 336,95 344,170 352,190 370,205 400,185 430,178 460,190 490,205 530,225 580,235 640,240 690,242" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="180" y="100" fontSize="10" textAnchor="middle" className="muted">consensus : −2,0 M barils</text>
+  <line x1="330" y1="60" x2="330" y2="250" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="4 3" />
+  <text x="330" y="52" fontSize="10" textAnchor="middle" className="red" fontWeight="600">publié : +4,8 M</text>
+  <text x="380" y="80" fontSize="9" className="muted">surprise baissière nette</text>
+  <rect x="400" y="180" width="30" height="14" className="gold" opacity="0.3" /><text x="415" y="176" fontSize="8" textAnchor="middle" className="gold">FVG</text>
+  <circle cx="460" cy="190" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="500" y="170" fontSize="9" className="red" fontWeight="600">retour : entrée short</text>
+  <text x="600" y="215" fontSize="9" textAnchor="middle" className="muted">continuation vers la liquidité</text>
+</svg>
+</Figure>
+
+## Corrélations avec le dollar et les taux réels
+
+Le niveau 5 a posé les relations ; voici comment elles s'utilisent au quotidien sur ces deux marchés.
+
+**Or, taux réels et dollar.** Le trader d'or a deux séries sur son écran de contexte : le rendement réel du 10 ans américain et le DXY. Trois configurations :
+
+- **Taux réels en baisse et DXY en baisse** : les deux moteurs poussent l'or ; une structure haussière de l'or est cohérente, les cibles peuvent être ambitieuses.
+- **Taux réels en hausse et DXY en hausse** : les deux moteurs pèsent ; une hausse de l'or dans ce contexte est « contre le vent » (achats de banques centrales, peur) : elle peut tenir, mais on la trade avec des cibles courtes et une surveillance de la corrélation glissante.
+- **Divergence** (taux réels en hausse, DXY en baisse, ou l'inverse) : le contexte est mixte ; l'or suit en général les taux réels davantage que le dollar ; la corrélation glissante (niveau 1) dit lequel domine cette saison.
+
+Une règle pratique : **quand la corrélation or / taux réels glissante s'affaiblit nettement** (comme cela s'est produit avec les achats massifs de banques centrales), le trader ne renonce pas au tableau de bord ; il note que le driver monétaire est temporairement dominé par un flux, et il donne plus de poids à la structure et au COT (niveau 5) qu'aux taux.
+
+**Pétrole, dollar et croissance.** La corrélation pétrole / dollar est négative mais faible ; celle avec les indices actions est positive en régime de croissance et négative en cas de choc d'offre (niveau 5, chapitre 3). Le trader de brut regarde surtout la **structure à terme** (contango / backwardation) et les **spreads de raffinage** (l'écart entre les produits raffinés et le brut, qui dit si la demande finale est solide), plus que le dollar. Une backwardation qui s'accentue est le signe le plus fiable de tension physique.
+
+**Or et pétrole entre eux.** Le ratio or / pétrole (combien de barils pour une once) est un indicateur de régime : il monte quand la peur domine (or) et que la croissance faiblit (pétrole) ; il baisse en expansion et en inflation par l'énergie. Une lecture de contexte, pas de trading.
+
+## Profils de volatilité et conséquences pratiques
+
+Les deux marchés n'ont pas le même tempérament, et cela décide des stops, des tailles et des heures.
+
+**L'or** a une volatilité modérée et assez régulière : ATR quotidien de l'ordre de 15 à 40 $ selon le régime (soit 0,7 à 1,7 %) ; ATR H1 de 3 à 8 $ ; ATR M15 de 1,5 à 4 $. Ses mouvements intraday sont concentrés sur la session de Londres (à partir de 9 h) et le début de New York (14 h - 17 h) ; l'après-midi américain est plus calme, la nuit asiatique aussi (sauf événement). Ses sweeps sont nets, ses FVG lisibles, ses structures respectueuses (le niveau 3 s'applique bien). Conséquence : sur MGC, un stop intraday de 3 à 6 $ (30 à 60 $ par contrat) est courant ; un stop de swing sous un swing H4 fait 10 à 25 $ ; les tailles se calculent en conséquence (niveau 1).
+
+**Le pétrole** est plus volatil et plus irrégulier : ATR quotidien de 1,5 à 4 $ (soit 2 à 5 % à 80 $, deux à trois fois l'or en pourcentage) ; ATR M15 de 0,15 à 0,50 $ ; des journées à 5 % ne sont pas rares ; des gaps de plusieurs pourcents sur les week-ends géopolitiques. Ses mouvements sont concentrés sur le pit (15 h 30 - 20 h 30) et autour de l'EIA ; ses sweeps sont plus larges et ses mèches plus longues ; les stops serrés y sont punis. Conséquence : sur MCL, un stop intraday de 0,30 à 0,60 $ (30 à 60 $ par contrat) est un minimum en régime normal ; un swing demande 1,5 à 3 $ de stop (150 à 300 $ par micro), ce qui exclut le swing sur MCL pour les petits comptes à 1 % ; le pétrole est un marché où l'on trade **plus petit et plus large** que l'intuition ne le suggère.
+
+Deux conséquences transverses :
+
+- **La matrice de régimes** (niveau 5) se remplit séparément pour chaque marché : l'or peut être en tendance calme pendant que le pétrole est en régime de stress géopolitique. Un stop d'or à 1 ATR M15 est raisonnable ; le même en pourcentage sur le pétrole ne l'est pas.
+- **Les heures** : le trader d'or travaille 9 h - 17 h (Paris) ; le trader de pétrole 15 h 30 - 20 h 30 avec le rendez-vous du mercredi 16 h 30 ; en dehors, les deux marchés se lisent mais se tradent peu.
+
+<Figure caption="Figure 3 · Profils de volatilité comparés : ATR quotidien en pourcentage du prix, heures actives, taille de stop intraday type sur les micros. Le pétrole exige des stops deux à trois fois plus larges en pourcentage, donc des tailles plus petites, et exclut le swing sur micro pour les petits comptes.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Volatilité et heures actives de l'or et du pétrole" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="30" fontSize="13" fontWeight="600" textAnchor="middle">Or (MGC)</text>
+  <text x="540" y="30" fontSize="13" fontWeight="600" textAnchor="middle">Pétrole (MCL)</text>
+  <text x="180" y="60" fontSize="11" textAnchor="middle" className="mono">ATR D : 0,7 à 1,7 % (15 à 40 $)</text>
+  <text x="540" y="60" fontSize="11" textAnchor="middle" className="mono">ATR D : 2 à 5 % (1,5 à 4 $)</text>
+  <text x="180" y="84" fontSize="11" textAnchor="middle" className="mono">stop intraday : 3 à 6 $ = 30 à 60 $</text>
+  <text x="540" y="84" fontSize="11" textAnchor="middle" className="mono">stop intraday : 0,30 à 0,60 $ = 30 à 60 $</text>
+  <text x="180" y="108" fontSize="11" textAnchor="middle" className="mono">stop swing : 10 à 25 $ = 100 à 250 $</text>
+  <text x="540" y="108" fontSize="11" textAnchor="middle" className="mono red">stop swing : 1,5 à 3 $ = 150 à 300 $</text>
+  <line x1="60" y1="170" x2="330" y2="170" className="line" strokeWidth="1" />
+  <text x="60" y="188" fontSize="9" className="muted">0h</text><text x="150" y="188" fontSize="9" className="muted">8h</text><text x="240" y="188" fontSize="9" className="muted">16h</text><text x="330" y="188" fontSize="9" textAnchor="end" className="muted">24h</text>
+  <rect x="160" y="150" width="95" height="18" rx="3" className="gold" opacity="0.7" /><text x="207" y="163" fontSize="9" textAnchor="middle" fill="#141414">9 h - 17 h 30</text>
+  <rect x="60" y="150" width="100" height="18" rx="3" className="gold" opacity="0.2" /><text x="110" y="163" fontSize="8" textAnchor="middle" className="muted">Asie : lisible</text>
+  <line x1="420" y1="170" x2="690" y2="170" className="line" strokeWidth="1" />
+  <text x="420" y="188" fontSize="9" className="muted">0h</text><text x="510" y="188" fontSize="9" className="muted">8h</text><text x="600" y="188" fontSize="9" className="muted">16h</text><text x="690" y="188" fontSize="9" textAnchor="end" className="muted">24h</text>
+  <rect x="594" y="150" width="56" height="18" rx="3" className="gold" opacity="0.7" /><text x="622" y="163" fontSize="9" textAnchor="middle" fill="#141414">pit</text>
+  <rect x="420" y="150" width="174" height="18" rx="3" className="red" opacity="0.12" /><text x="507" y="163" fontSize="8" textAnchor="middle" className="muted">nuit : slippage</text>
+  <line x1="606" y1="140" x2="606" y2="170" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="606" y="134" fontSize="8" textAnchor="middle" className="red">EIA mer. 16 h 30</text>
+  <text x="180" y="230" fontSize="10" textAnchor="middle" className="muted">sweeps nets, structures lisibles, gaps modérés</text>
+  <text x="540" y="230" fontSize="10" textAnchor="middle" className="muted">mèches longues, gaps du dimanche, prime géopolitique</text>
+  <text x="360" y="262" fontSize="10" textAnchor="middle">règle : sur le pétrole, on trade plus petit et plus large que l'intuition ne le suggère</text>
+</svg>
+</Figure>
+
+## Deux trades, or et pétrole
+
+Reconstitutions pédagogiques : un trade sur chaque marché, avec ses spécificités.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MGC (or)"
+  direction="Long"
+  setup="Taux réels en baisse et DXY en baisse (contexte cohérent, corrélation or / DXY à −0,7) ; structure D haussière ; sweep du plus bas de la session de Londres à 14 h 10 puis displacement, FVG M15 ; entrée au retour, session New York"
+  entree="2 383,5"
+  stop="2 379,0 (4,5 $ = 45 $ par contrat, sous le sweep, ≈ 1,3 ATR M15)"
+  objectif="2 397,0 (nPOC et EQH de la veille)"
+  r="+3R">
+
+Compte de 8 000 $, budget 80 $ : 1 MGC (45 $ de risque). Le contexte macro (les deux moteurs de l'or dans le même sens), les heures (le chevauchement Londres - New York, l'heure la plus active de l'or), la séquence (niveau 3) et un stop calibré en ATR M15 de l'or (pas d'un autre marché). Le trade a duré deux heures. Rien de propre au pétrole ici : l'or se trade comme un marché lisible et modéré, avec le tableau de bord macro en arrière-plan.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MCL (pétrole WTI)"
+  direction="Long"
+  setup="Achat au marché à 16 h 32, deux minutes après un rapport EIA « haussier » (stocks en forte baisse), stop de 0,20 $ « comme sur l'or en pourcentage »"
+  entree="79,60 (servi à 79,74)"
+  stop="79,40 (20 ticks), exécuté à 79,18"
+  objectif="80,80"
+  r="−2,8R">
+
+Le trader applique au pétrole les réflexes de l'or : un stop serré et une entrée rapide. Trois erreurs propres au marché : entrer au marché à +2 minutes d'un rapport EIA (protocole news, niveau 5 ; le carnet est vide, 14 cents de slippage à l'entrée), un stop de 20 ticks soit 0,25 % du prix (l'ATR M15 du brut est de 0,40 $ ce jour-là : le stop est à la moitié d'une bougie), et une lecture du titre (« stocks en baisse ») sans le second chiffre (les stocks de produits raffinés étaient en forte hausse, la demande faiblissait : le marché a lu baissier). Le whipsaw exécute le stop 22 ticks plus bas que prévu. Sur le pétrole, on trade plus petit, plus large, et pas à 16 h 32.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **L'or** est une monnaie sans banque centrale : **taux réels** (driver principal), **dollar**, achats des **banques centrales**, peur, demande physique. **Le pétrole** est une marchandise : **offre / OPEP+**, demande, **stocks EIA**, géopolitique, structure à terme ; le dollar est secondaire.
+- **GC / MGC** : 100 / 10 onces, tick 0,10 $ = 10 $ / 1 $, échéances bimestrielles ; **CL / MCL** : 1 000 / 100 barils, tick 0,01 $ = 10 $ / 1 $, **échéances mensuelles** (rouler une semaine avant), pit 15 h 30 - 20 h 30, gaps du dimanche.
+- **EIA** le mercredi 16 h 30 (protocole news), **OPEP+** (calendrier, fuites, discipline), **géopolitique** (le titre fait le pic, les barils font la tendance).
+- **Or / taux réels / DXY** : deux moteurs, trois configurations, corrélation glissante à surveiller ; **pétrole** : structure à terme et spreads de raffinage plus que le dollar ; le ratio or / pétrole lit le régime.
+- **Volatilité** : or 0,7 à 1,7 % par jour, lisible, heures 9 h - 17 h 30 ; pétrole 2 à 5 %, mèches longues, pit et EIA ; sur le pétrole, **plus petit et plus large** ; le swing sur MCL est hors de portée des petits comptes à 1 %.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Taille et stop sur MGC et MCL">
+
+Compte de 6 000 $, risque 1 %. Deux setups intraday : sur MGC, stop de 5,0 $ (ATR M15 : 3,5 $) ; sur MCL, stop de 0,45 $ (ATR M15 : 0,40 $).
+
+1. Calculez le risque par contrat et la taille pour chacun.
+2. Les stops sont-ils raisonnables en ATR M15 ?
+3. Vous voulez un swing sur MCL avec un stop de 2,20 $ sous un swing H4. Que dit le calcul ?
+
+<Solution>
+
+1. Budget 60 $. MGC : 5,0 × 10 $ = 50 $ → **1 MGC** (risque 50 $). MCL : 0,45 $ = 45 ticks × 1 $ = 45 $ → **1 MCL** (risque 45 $).
+2. MGC : 5,0 ÷ 3,5 ≈ **1,4 ATR** : raisonnable. MCL : 0,45 ÷ 0,40 ≈ **1,1 ATR** : le minimum acceptable pour le brut ; 0,55-0,60 serait plus prudent vu les mèches, ce qui ferait 55-60 $, encore dans le budget avec 1 contrat.
+3. 2,20 $ = 220 ticks = **220 $** par MCL, soit 3,7 % du compte : hors budget (60 $). Le calcul dit **pas de swing sur MCL** avec ce compte à 1 % ; les options : attendre une entrée plus proche du swing (stop de 0,60 $ maximum), passer sur un véhicule à R plus petit, ou renoncer. Le pétrole en swing demande un compte de l'ordre de 22 000 $ à 1 % pour ce stop.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire le contexte de l'or">
+
+Ce matin : rendement réel du 10 ans en baisse de 12 pb sur la semaine ; DXY en hausse de 0,8 % (fuite vers le dollar sur un choc géopolitique) ; corrélation glissante or / DXY à −0,3 (elle était à −0,7 il y a un mois) ; flux ETF or positifs trois jours de suite ; structure D de l'or haussière ; COT des fonds à 84.
+
+1. Les deux moteurs de l'or vont-ils dans le même sens ?
+2. Que dit l'affaiblissement de la corrélation or / DXY ?
+3. Quelle conduite pour un long de swing sur MGC ?
+
+<Solution>
+
+1. **Non** : les taux réels en baisse poussent l'or ; le DXY en hausse pèse. Configuration de divergence ; l'or suit en général les taux réels davantage, et ici la hausse du dollar est un mouvement de refuge (choc), pas de différentiel de taux : elle pèse moins.
+2. Que le driver dollar est temporairement dominé par autre chose : la peur (choc), les flux (ETF positifs), peut-être les banques centrales. On donne plus de poids à la structure et au COT qu'au dollar cette saison.
+3. Structure haussière, taux réels favorables, flux positifs : contexte haussier ; COT à 84 : chargé sans être extrême, prudence sur l'ambition. Long de swing possible sur une séquence D / H4, avec un stop structurel, une taille prudente, et une cible qui ne présume pas que le dollar va se retourner ; surveiller le COT suivant et la corrélation.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le mercredi du pétrole">
+
+Rédigez le protocole du mercredi pour un trader de MCL : consensus API / EIA, fenêtres interdites, ce qui se lit à 16 h 30 (chiffre principal, second chiffre, Cushing, produits), et à partir de quand et sur quoi une entrée est possible. Ajoutez la règle pour un roulement de contrat qui tomberait la même semaine.
+
+<Solution>
+
+Un protocole acceptable : « Mardi 22 h 30 : noter l'API. Mercredi matin : consensus EIA (brut, essence, distillats), niveaux du jour, structure à terme (contango / backwardation). 16 h 15 : aucune nouvelle position ; positions intraday fermées. 16 h 30 : lire brut vs consensus, puis produits raffinés (la demande), Cushing, exportations ; réaction du prix cohérente ou non avec la surprise. 16 h 30 - 16 h 35 : aucun ordre. 16 h 50 au plus tôt : entrée sur le retour dans les zones laissées par le displacement, dans le sens confirmé, stop hors du whipsaw et d'au moins 1 ATR M15, taille calculée. Roulement : si le front month expire dans la semaine, trader le contrat suivant dès le lundi et recalculer les niveaux sur la série ajustée ; ne jamais garder le contrat expirant après le mercredi. » Le soir : surprise, réaction, justesse au journal.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le driver principal de l'or est :",
+      options: [
+        "La demande de bijouterie",
+        "Les taux réels : quand ils baissent, l'or n'a plus de concurrent ; le dollar et les achats des banques centrales viennent ensuite",
+        "Le pétrole",
+        "Les résultats des entreprises",
+      ],
+      answer: 1,
+      explain: "L'or ne rapporte rien ; son coût d'opportunité est le rendement réel des obligations. Les banques centrales ont récemment affaibli cette corrélation par leurs achats.",
+    },
+    {
+      q: "Le contrat CL :",
+      options: [
+        "Expire trimestriellement",
+        "A une échéance mensuelle ; il faut rouler une semaine avant l'expiration et lire les niveaux sur une série ajustée",
+        "N'expire jamais",
+        "Est coté sur le COMEX",
+      ],
+      answer: 1,
+      explain: "Le spread calendaire entre deux échéances peut atteindre plusieurs dizaines de cents ; garder un contrat trop près de l'expiration expose à une liquidité qui s'effondre.",
+    },
+    {
+      q: "Le rapport EIA du mercredi :",
+      options: [
+        "Est sans effet",
+        "Publie les stocks américains à 16 h 30 (Paris) et bouge le brut de 1 à 3 % ; il se lit comme un CPI (consensus, surprise, second chiffre) avec le même protocole",
+        "Concerne l'or",
+        "Tombe le lundi",
+      ],
+      answer: 1,
+      explain: "Une hausse des stocks plus forte que prévu est baissière ; les produits raffinés et Cushing sont les seconds chiffres.",
+    },
+    {
+      q: "Un titre géopolitique fait bondir le pétrole de 4 % en une heure. La lecture correcte :",
+      options: [
+        "Acheter le pic",
+        "Distinguer le titre (qui fait le pic) de l'effet sur les barils (qui fait la tendance) ; attendre stocks, structure à terme et OPEP ; ne pas courir après",
+        "Vendre immédiatement",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "La prime de risque monte et retombe en jours si l'offre physique n'est pas affectée. Le protocole des annonces non programmées s'applique.",
+    },
+    {
+      q: "Le pétrole comparé à l'or, en volatilité :",
+      options: [
+        "Est moins volatil",
+        "Est deux à trois fois plus volatil en pourcentage, avec des mèches plus longues et des gaps ; on y trade plus petit et plus large",
+        "Est identique",
+        "N'a pas de volatilité",
+      ],
+      answer: 1,
+      explain: "ATR quotidien de 2 à 5 % contre 0,7 à 1,7 % ; le swing sur MCL est hors de portée des petits comptes à 1 %.",
+    },
+    {
+      q: "Le trader d'or a sur son écran de contexte :",
+      options: [
+        "Les stocks EIA",
+        "Le rendement réel du 10 ans américain et le DXY, avec leur corrélation glissante à l'or",
+        "Le prix du blé",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Deux moteurs, trois configurations ; quand la corrélation s'affaiblit, on donne plus de poids à la structure et au COT.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le marché le plus vaste et le moins centralisé du cours : le forex. Le chapitre suivant décrit la journée du forex de Sydney à New York, le comportement du prix par session, les paires majeures, croisées et exotiques, les spreads, le rollover et les heures à éviter, et la construction d'une stratégie autour d'une session.
