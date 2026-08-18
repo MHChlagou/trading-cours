@@ -1,0 +1,317 @@
+---
+title: "Checklists imprimables"
+description: "Les gestes du cours ramenés à des listes à cocher : préparation pré-marché, entrée en position, gestion et sortie, débrief de séance, revue hebdomadaire et mensuelle, protocole de tilt, passage au réel et validation d'une nouvelle fiche. Chaque liste est interactive et imprimable."
+---
+
+# Checklists imprimables
+
+Ce chapitre ne contient presque pas de théorie : il contient des **listes à cocher**. Chacune reprend un geste décrit dans les niveaux précédents et le ramène à sa forme utilisable en séance, quand il n'y a plus de temps pour réfléchir. Toutes sont interactives (cochez-les à l'écran) et **imprimables** : le bouton « Imprimer » de chaque encadré produit une version papier à poser à côté du clavier.
+
+Trois règles d'usage, qui décident de leur efficacité.
+
+**On coche réellement.** Une checklist parcourue de mémoire ne sert à rien : c'est précisément quand on est sûr de la connaître qu'on saute la ligne qui aurait compté. Cocher une liste de six lignes prend vingt secondes ; un trade forcé coûte quatorze trades conformes (niveau 8).
+
+**Une case non cochable annule l'action.** Ce n'est pas un score : il n'y a pas de « cinq sur six, c'est suffisant ». Une seule case impossible à cocher annule le trade, la séance ou le passage concerné.
+
+**On les adapte, puis on les fige.** Ces listes sont un point de départ ; vos seuils, vos horaires et vos instruments doivent y figurer. Une fois adaptées, elles se modifient au rythme du playbook (une décision par revue hebdomadaire, trois modifications par mois au maximum), pas au gré des séances.
+
+Les seuils numériques ci-dessous reprennent ceux du cours (fiche Sweep-FVG, séance américaine, micros). Remplacez-les par les vôtres avant d'imprimer.
+
+## Checklist de préparation pré-marché
+
+Trente minutes, six étapes, dans l'ordre. Elle se fait **avant** d'ouvrir le graphique en temps réel.
+
+<Checklist
+  title="Préparation pré-marché (30 min, à finir 15 min avant la fenêtre)"
+  items={[
+    "État : heures de sommeil notées, disponibilité du créneau confirmée, état déclaré (normal / fatigué / pressé / perturbé)",
+    "Si état perturbé, ou nuit blanche : je ne trade pas aujourd'hui, la préparation s'arrête ici",
+    "Si nuit de moins de six heures : taille divisée par deux et un seul trade, noté dans le plan",
+    "Régime : ratio ATR 5 j / 20 j calculé, VIX et sa structure relevés, verdict écrit en un mot",
+    "Setups autorisés par ce régime listés ; setups interdits aujourd'hui écrits noir sur blanc",
+    "Structure : tendance quotidienne et H1 identifiées (HH / HL, LH / LL, range)",
+    "Réservoirs tracés : sept au maximum, confluences en priorité, notés dans le journal (couche 2)",
+    "Calendrier : annonces du jour avec heure et niveau ; fenêtres neutralisées calculées (−15 min / +20 min)",
+    "Jours particuliers vérifiés : FOMC, rollover, expiration, changement d'heure, fin de mois",
+    "Plan écrit : scénario haussier (si X alors entrée Y, stop Z, cibles C1 / C2)",
+    "Plan écrit : scénario baissier symétrique",
+    "Plan écrit : ce que je ne traderai pas aujourd'hui",
+    "Limites du jour écrites : budget en R, nombre de trades, heure limite d'entrée, heure de fermeture",
+    "Matériel : plateforme connectée, ordres résiduels annulés, position résiduelle vérifiée, marge suffisante",
+    "Matériel : taille par défaut réglée, P&L masqué, téléphone hors de portée, carte des protocoles visible",
+    "Ligne de journal (couche 2) créée pour aujourd'hui, même si je ne prends aucun trade",
+  ]}
+/>
+
+## Checklist d'entrée en position
+
+Vingt secondes, six cases, avant chaque envoi d'ordre. C'est la plus importante du cours.
+
+<Checklist
+  title="Entrée en position (à cocher avant chaque ordre, sans exception)"
+  items={[
+    "1 · Régime autorisé pour ce setup aujourd'hui (verdict du matin, non révisé en séance)",
+    "2 · Le réservoir visé figure dans les niveaux préparés ce matin (pas un niveau trouvé en direct)",
+    "3 · Tous les critères obligatoires du signal sont validés, valeurs mesurées notées (sweep en ticks, displacement en ATR, FVG en ATR)",
+    "4 · Géométrie : la première cible donne au moins le ratio minimal de la fiche depuis l'entrée prévue avec le stop prévu",
+    "5 · Taille issue de la formule (budget ÷ distance × valeur du point) et des coefficients (optionnels manquants, régime, structure) ; zéro contrat = pas de trade",
+    "6 · Budget du jour et nombre de trades encore disponibles ; aucune position corrélée déjà ouverte au-delà du plafond de chaleur",
+    "Ordre envoyé en bracket : entrée, stop et cibles ensemble ; stop jamais laissé « dans la tête »",
+    "Ligne de journal pré-remplie : setup, variante, qualité du signal, valeurs mesurées, entrée, stop, C1, C2, taille",
+    "Captures prises : contexte et exécution (avant ou juste après l'exécution, jamais reconstituées le soir)",
+  ]}
+/>
+
+## Checklist de gestion et de sortie
+
+À relire une fois après l'exécution, puis à appliquer sans y revenir.
+
+<Checklist
+  title="Gestion et sortie (pendant la position)"
+  items={[
+    "Bracket vérifié une fois : stop et cibles bien présents chez le courtier, quantités correctes",
+    "Ordre non exécuté : annulation prévue (délai de la fiche écoulé, invalidation du signal, fin de fenêtre, annonce imminente)",
+    "Aucune décision hors fiche : pas de changement de cible, pas de sortie « parce que ça hésite », pas de descente d'unité de temps",
+    "Première cible atteinte : sortie partielle prévue par la fiche exécutée, stop du solde remonté selon la règle (breakeven + 1 tick)",
+    "Trailing : uniquement structurel (sous chaque nouveau point de structure de l'unité prévue), jamais en points fixes, jamais resserré sur une impression",
+    "Sortie sur temps : heure écrite respectée quel que soit le résultat",
+    "Annonce imminente pendant la position : protocole appliqué (gain supérieur à 1R : stop remonté, sinon sortie)",
+    "Stop touché : aucune re-entrée avant le délai de verrouillage écrit (30 minutes)",
+    "Position fermée : capture du résultat prise, ligne de journal complétée (sorties, R net, MFE, MAE, raison, conformité, tags)",
+  ]}
+/>
+
+## Checklist de débrief de fin de séance
+
+Dix minutes, le jour même, plateforme fermée.
+
+<Checklist
+  title="Débrief de séance (10 min, le jour même)"
+  items={[
+    "Couche 1 complétée pour chaque trade : sorties, R net, MFE, MAE, raison de sortie, conformité, tags d'erreur",
+    "Captures enregistrées et nommées (date_instrument_setup_numéro_contexte|exec|resultat)",
+    "Couche 2 complétée : signaux vus, pris, refusés avec le critère qui a tranché ; R du jour ; conformité du jour ; protocoles déclenchés",
+    "Question 1 : ai-je exécuté ce que j'avais écrit ? (une ligne)",
+    "Question 2 : qu'est-ce qui a failli me faire dévier ? (une ligne)",
+    "Question 3 : qu'est-ce que je referais à l'identique ? (une ligne)",
+    "Aucune modification de règle décidée ce soir : les idées vont au carnet, les décisions à la revue",
+    "Case « journal rempli » cochée, heure de fin notée, plateforme et graphiques fermés",
+  ]}
+/>
+
+## Checklist de revue hebdomadaire
+
+Quarante-cinq minutes chronométrées, à jour et heure fixes.
+
+<Checklist
+  title="Revue hebdomadaire (45 min, jour et heure fixes)"
+  items={[
+    "1 · Chiffres (5 min) : nombre de trades, R net, conformité en %, trades hors plan, position du drawdown dans la distribution Monte Carlo",
+    "2 · Conformité (10 min) : lister chaque trade non conforme et chaque écart mineur, avec déclencheur, signaux ignorés, coût en R",
+    "3 · Pertes conformes (5 min) : contexte conforme à la fiche ? si oui, écrire « rien à faire »",
+    "4 · Non-trades (5 min) : critère qui a tranché ; distinguer refusés (bien) et manqués par inattention (problème de routine)",
+    "5 · Captures (10 min) : rouvrir les trois à cinq plus instructives, y compris de non-trades, et les ranger dans leur album de tag",
+    "6 · Une seule décision (5 min) : une modification de process, concrète, vérifiable dans quatre semaines ; aucune modification de fiche ici",
+    "7 · Préparation de la semaine (5 min) : régimes attendus, calendrier, setups autorisés, budget, jours où je ne traderai pas",
+    "Bloc process mis à jour : préparations faites, débriefs du jour même, revues tenues",
+  ]}
+/>
+
+## Checklist de revue mensuelle
+
+Une heure, en plus de la revue hebdomadaire.
+
+<Checklist
+  title="Revue mensuelle (1 h)"
+  items={[
+    "Statistiques par setup : n, R moyen, incertitude (écart-type / racine de n), R total, taux d'atteinte de C1",
+    "Décompositions : par régime, par session, par qualité de signal, par numéro du trade dans la journée ; aucune conclusion sous 30 trades",
+    "Courbe d'équité en R mise à jour, deux tracés (tous les trades et conformes seulement)",
+    "Falaises éventuelles pointées et reliées à leur ligne de journal",
+    "Monte Carlo actualisé avec les trades réels : p90 et p95 recalculés, position du drawdown courant",
+    "Conditions d'invalidité de chaque fiche vérifiées une par une",
+    "Tableau des fuites mis à jour ; vérification de la modification de process du mois précédent (a-t-elle réduit la fuite visée ?)",
+    "Décision de taille éventuelle : uniquement si conformité supérieure à 90 % sur trois mois, échantillon suffisant et drawdown sous le p90",
+    "Administratif : frais réels vérifiés, relevés archivés, marge et exigences du courtier contrôlées",
+    "Journal des versions du playbook à jour (au plus trois modifications ce mois-ci)",
+  ]}
+/>
+
+## Checklist de protocole de tilt et de reprise
+
+À afficher près de l'écran. Elle doit être exécutable par quelqu'un qui ne va pas bien.
+
+<Checklist
+  title="Protocole de tilt (déclenchement et reprise)"
+  items={[
+    "Déclencheurs (trois simultanés suffisent) : délai entre trades effondré, taille hors formule, qualité de signal en baisse, vocabulaire flou, P&L regardé en euros, corps tendu",
+    "Action 1 : annuler tous les ordres en attente",
+    "Action 2 : quitter la pièce dix minutes, sans téléphone, boire de l'eau",
+    "Action 3 : écrire trois lignes au journal (ce qui vient de se passer, ce que j'ai envie de faire, ce que dit la fiche)",
+    "Action 4 : relire la préparation du matin et les limites du jour",
+    "Reprise autorisée seulement si : la checklist d'entrée est cochable ligne à ligne ET le budget du jour reste au-dessus de 1R",
+    "Budget quotidien atteint : plateforme fermée pour la journée, y compris en simulation",
+    "Trade hors plan exécuté : le fermer immédiatement au marché quel que soit son signe, arrêter la journée, écrire l'analyse le soir",
+    "Drawdown au-delà du 95e percentile du Monte Carlo : taille divisée par deux, retour au setup le plus simple, revue quotidienne pendant deux semaines",
+    "Choc extérieur (nouvelle grave, nuit blanche, conflit, maladie) : ne pas ouvrir la plateforme",
+  ]}
+/>
+
+## Checklist de passage au réel
+
+À utiliser une fois, avant le premier trade avec de l'argent réel. Les cinq conditions sont **simultanées**.
+
+<Checklist
+  title="Passage de la simulation au petit réel"
+  items={[
+    "1 · Au moins 100 occurrences de la fiche backtestées à la main ou en code, avec MFE et MAE renseignés",
+    "1 bis · Expectancy backtestée positive, intervalle de confiance calculé, checklist anti-overfitting passée",
+    "2 · Au moins 30 trades exécutés en simulation avec la routine complète",
+    "3 · Conformité supérieure ou égale à 90 % sur ces 30 trades, et aucun trade hors setup",
+    "4 · Journal rempli en séance sur 100 % des jours tradés ; quatre revues hebdomadaires tenues d'affilée",
+    "5 · Monte Carlo réalisé : p90 et p95 connus ; taille réelle calculée pour que le p90 reste une baisse acceptable, écrite dans le playbook",
+    "Taille de départ : la plus petite possible (un micro ou le plus petit lot), pour trois mois, quel que soit le résultat",
+    "Un seul setup, une seule fenêtre horaire, un seul instrument pour commencer",
+    "Règle de retour écrite : conformité sous 80 % sur vingt trades réels, retour en simulation deux semaines avec revue quotidienne",
+  ]}
+/>
+
+## Checklist de validation d'une nouvelle fiche
+
+À passer avant de déclarer une fiche « validée » et de la trader en taille normale.
+
+<Checklist
+  title="Validation d'une fiche (anti-overfitting)"
+  items={[
+    "La fiche a été écrite avant le test, avec ses seuils, et testée telle quelle",
+    "Le nombre de versions et de variantes essayées est compté et écrit dans la fiche",
+    "Les seuils sont grossiers (ATR à une décimale, ticks entiers, minutes rondes) et arrondis",
+    "Le jeu de paramètres retenu est au milieu d'un plateau, pas au sommet d'un pic ni au bord de la grille",
+    "Un out-of-sample postérieur existe, d'au moins 50 à 100 trades, regardé une seule fois après que la fiche a été figée",
+    "L'expectancy out-of-sample vaut au moins la moitié de l'in-sample",
+    "Un walk-forward a été fait si les données le permettent : paramètres stables, résultats hors échantillon réguliers",
+    "Le résultat tient sur un marché voisin (affaibli mais du même signe) et sur chaque sous-période majeure",
+    "Le résultat survit à des coûts doublés, à un tick de slippage supplémentaire et au retrait des cinq meilleurs trades",
+    "Chaque filtre du bloc 1 correspond à un comportement de marché nommé, pas à l'élimination de pertes vues après coup",
+    "Les non-trades ont été enregistrés et le taux de refus est raisonnable",
+    "Conditions d'invalidité écrites (drawdown, expectancy glissante avec conformité, changement de microstructure, absence de signal)",
+    "Phase de simulation ou de petite taille effectuée (au moins 30 trades) avant la taille normale",
+  ]}
+/>
+
+<Figure caption="Figure 1 · Où chaque checklist intervient dans la journée et dans le cycle : préparation avant la fenêtre, entrée avant chaque ordre, gestion pendant la position, débrief le soir, revue chaque semaine et chaque mois ; en dehors du cycle, le protocole de tilt (déclenché par des signaux), le passage au réel (une fois) et la validation d'une fiche (par fiche).">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Placement des checklists dans le cycle" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="120" x2="640" y2="120" className="line" strokeWidth="1.5" />
+  <polygon points="648,120 636,114 636,126" className="line" />
+  <text x="60" y="140" fontSize="8" className="muted">15 h 00</text><text x="200" y="140" fontSize="8" className="muted">signal</text><text x="340" y="140" fontSize="8" className="muted">position</text><text x="470" y="140" fontSize="8" className="muted">21 h 25</text><text x="600" y="140" fontSize="8" className="muted">samedi</text>
+  <rect x="30" y="60" width="120" height="46" rx="6" className="gold" opacity="0.3" />
+  <text x="90" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Préparation</text>
+  <text x="90" y="96" fontSize="8" textAnchor="middle" className="muted">30 min · 16 lignes</text>
+  <rect x="165" y="60" width="120" height="46" rx="6" className="gold" opacity="0.45" />
+  <text x="225" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Entrée</text>
+  <text x="225" y="96" fontSize="8" textAnchor="middle" className="muted">20 s · 6 cases + journal</text>
+  <rect x="300" y="60" width="120" height="46" rx="6" className="gold" opacity="0.3" />
+  <text x="360" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Gestion et sortie</text>
+  <text x="360" y="96" fontSize="8" textAnchor="middle" className="muted">une relecture, puis rien</text>
+  <rect x="435" y="60" width="120" height="46" rx="6" className="gold" opacity="0.3" />
+  <text x="495" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Débrief</text>
+  <text x="495" y="96" fontSize="8" textAnchor="middle" className="muted">10 min · le jour même</text>
+  <rect x="570" y="60" width="120" height="46" rx="6" className="gold" opacity="0.3" />
+  <text x="630" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Revues</text>
+  <text x="630" y="96" fontSize="8" textAnchor="middle" className="muted">45 min · + 1 h / mois</text>
+  <rect x="60" y="180" width="170" height="60" rx="6" className="red" opacity="0.15" />
+  <rect x="60" y="180" width="170" height="60" rx="6" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="145" y="202" fontSize="9" fontWeight="600" textAnchor="middle" className="red">Protocole de tilt</text>
+  <text x="145" y="220" fontSize="8" textAnchor="middle" className="muted">déclenché par trois signaux,</text>
+  <text x="145" y="232" fontSize="8" textAnchor="middle" className="muted">à tout moment de la journée</text>
+  <rect x="270" y="180" width="170" height="60" rx="6" className="box" strokeWidth="1" />
+  <text x="355" y="202" fontSize="9" fontWeight="600" textAnchor="middle">Passage au réel</text>
+  <text x="355" y="220" fontSize="8" textAnchor="middle" className="muted">une seule fois,</text>
+  <text x="355" y="232" fontSize="8" textAnchor="middle" className="muted">cinq conditions simultanées</text>
+  <rect x="480" y="180" width="180" height="60" rx="6" className="box" strokeWidth="1" />
+  <text x="570" y="202" fontSize="9" fontWeight="600" textAnchor="middle">Validation d'une fiche</text>
+  <text x="570" y="220" fontSize="8" textAnchor="middle" className="muted">une fois par fiche, avant</text>
+  <text x="570" y="232" fontSize="8" textAnchor="middle" className="muted">de passer en taille normale</text>
+  <text x="360" y="275" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">une case non cochable annule l'action : ce n'est pas un score</text>
+</svg>
+</Figure>
+
+## Comment les adapter à votre playbook
+
+Quatre opérations, une seule fois, puis on fige.
+
+**Remplacer les seuils.** Chaque nombre du cours (1,5 ATR, 0,4 ATR, deux trades par jour, −2R, 21 h 15) doit devenir le vôtre, issu de votre fiche et de votre Monte Carlo. Une checklist avec les seuils de quelqu'un d'autre produit des trades de quelqu'un d'autre.
+
+**Retirer ce qui ne s'applique pas.** Si vous ne tradez qu'un setup et une fenêtre, la ligne sur les positions corrélées peut disparaître ; si vous n'avez pas de footprint, la ligne S5 devient « non disponible : coefficient appliqué ». Une liste plus courte, mais entièrement applicable, vaut mieux qu'une liste exhaustive dont on saute trois lignes chaque jour.
+
+**Ajouter vos pièges personnels.** Le journal des trois derniers mois vous dit lesquels : « vérifier que je ne suis pas dans les dix minutes qui suivent une perte », « vérifier que ce n'est pas mon troisième trade », « vérifier que le régime a été relu aujourd'hui ». Chaque ligne ajoutée doit correspondre à une **fuite mesurée** (niveau 8), pas à une crainte.
+
+**Imprimer et poser.** La version papier a un avantage sur la version écran : elle ne se ferme pas. Un stylo qui coche est un geste physique qui ralentit juste assez pour que l'attention revienne. Beaucoup de traders expérimentés impriment une page par semaine et la conservent : au bout d'un trimestre, la pile est la meilleure preuve de régularité qui existe.
+
+## Deux trades et une case
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, checklist d'entrée utilisée normalement"
+  direction="Long"
+  setup="Signal complet à 16 h 40 sur un réservoir préparé ; checklist parcourue en dix-huit secondes, six cases cochées, valeurs mesurées notées (sweep 3 ticks, displacement 1,7 ATR, FVG 0,48 ATR) ; taille 3 MES issue de la formule"
+  entree="5 344,75"
+  stop="5 336,25 (34 ticks)"
+  objectif="C1 5 357,50 (1,5R) ; C2 5 370,25 (3R)"
+  r="+1,9R">
+
+Rien de remarquable : c'est le but. La checklist n'a rien empêché ce jour-là, elle a seulement rendu l'exécution automatique, y compris la ligne de journal pré-remplie qui a permis, trois mois plus tard, de mesurer que les signaux « forts » de la fiche avaient une expectancy supérieure aux « complets ». Le coût du geste : dix-huit secondes. Sur deux cents trades, une heure de checklist au total.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, case 2 non cochable (trade pris quand même)"
+  direction="Short"
+  setup="Signal d'apparence complète à 19 h 58 : sweep, displacement 1,6 ATR, FVG 0,5 ATR ; mais le plus haut balayé n'était pas dans les sept niveaux préparés le matin (il s'était formé en séance) : la case 2 n'était pas cochable ; le trader s'est dit que « c'est un plus haut quand même »"
+  entree="18 502,00"
+  stop="18 538,00 (144 ticks)"
+  objectif="18 430,00"
+  r="−1,05R">
+
+La perte n'est pas la leçon : un trade conforme aurait pu perdre de la même manière. La leçon est que ce trade est **inclassable** : il ne peut pas être compté dans les statistiques de la fiche (le réservoir n'était pas préparé, donc ce n'est pas le setup testé), et il ne peut rien enseigner puisqu'il n'appartient à aucune population mesurée. Une case non cochable n'est pas un détail administratif : c'est la frontière entre un trade qui produit de l'information et un trade qui n'en produit aucune. Le journal le classe hors plan ; la revue en tire, comme d'habitude, une seule décision : ajouter la ligne « le niveau balayé figurait-il dans ma liste du matin ? » en gras et en première position de la checklist d'entrée.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Les checklists sont l'**extrait quotidien du playbook** : préparation (30 min), entrée (20 s), gestion et sortie, débrief (10 min), revues hebdomadaire et mensuelle, protocole de tilt, passage au réel, validation d'une fiche.
+- **On coche réellement** : une liste parcourue de mémoire saute la ligne qui aurait compté ; **une case non cochable annule l'action** ; ce n'est pas un score.
+- La checklist d'entrée en six cases est la plus importante du cours : régime, réservoir préparé, critères mesurés, géométrie, taille par formule, budget et chaleur.
+- On **adapte** (seuils personnels, lignes retirées, pièges personnels issus des fuites mesurées) puis on **fige** : les modifications suivent le rythme du playbook, une par revue hebdomadaire.
+- La version **papier** ne se ferme pas ; la pile de pages cochées d'un trimestre est la meilleure preuve de régularité qui existe.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Personnaliser la checklist d'entrée">
+
+Recopiez la checklist d'entrée en six cases en remplaçant chaque élément générique par vos valeurs : votre régime autorisé, votre liste de réservoirs, vos seuils chiffrés, votre ratio minimal, votre formule de taille, vos limites du jour. Puis ajoutez une septième ligne issue d'une fuite mesurée dans votre journal.
+
+<Solution>
+
+Pas de corrigé unique. Trois vérifications : (1) chaque case contient-elle un **nombre** ou une **liste fermée** ? « Signal valide » n'est pas cochable, « displacement ≥ 1,5 ATR M15, corps ≥ 60 %, casse le LH interne » l'est ; (2) la case 5 permet-elle d'aboutir à **zéro contrat**, et avez-vous écrit ce que vous faites dans ce cas (ne pas trader) ? ; (3) la septième ligne correspond-elle à une fuite **mesurée** (par exemple « ce n'est pas mon troisième trade du jour : les 9 troisièmes trades du trimestre totalisent −4,8R ») et non à une crainte générale ? Si vous n'avez pas encore de journal exploitable, laissez la septième ligne vide : elle s'écrira au premier bilan mensuel.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Simuler un blocage">
+
+Prenez une journée récente où vous avez pris un trade regretté. Parcourez la checklist d'entrée de ce chapitre ligne par ligne, telle qu'elle est écrite, en vous replaçant à l'instant de l'ordre. Quelle case, précisément, n'était pas cochable ? Combien de secondes auraient suffi à le voir ?
+
+<Solution>
+
+Pas de corrigé unique, mais un résultat très répétable : dans la grande majorité des cas, la case non cochable est la **2** (le niveau n'était pas préparé) ou la **6** (budget ou nombre de trades dépassé), rarement la 3 (les critères du signal sont ceux qu'on regarde spontanément). C'est une information utile en soi : notre attention se porte naturellement sur le signal, et les fautes viennent presque toujours du **contexte** et des **limites**, c'est-à-dire des cases que l'on saute quand on est pressé. D'où l'ordre de la liste : le contexte d'abord, le signal ensuite.
+
+</Solution>
+</Exercise>
+
+## Prochain chapitre
+
+Il reste à parler de ce qui vient après : les prop firms et leurs règles, la gestion d'un compte qui grossit, les points de vigilance fiscaux à vérifier localement, la formation continue, et la manière de reconnaître une communauté utile d'un piège coûteux.
