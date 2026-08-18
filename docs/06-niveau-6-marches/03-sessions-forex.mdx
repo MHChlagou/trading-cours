@@ -1,0 +1,313 @@
+---
+title: "Forex : sessions et paires"
+description: "La journée du forex de Sydney à New York, le comportement du prix par session, les paires majeures, croisées et exotiques, les spreads, le rollover et les heures à éviter, et la construction d'une stratégie autour d'une session."
+---
+
+# Forex : sessions et paires
+
+Le forex est le marché le plus vaste du monde et le moins centralisé (niveau 0) ; il tourne 24 heures sur 24, cinq jours sur sept, en passant de place en place. Cette continuité est un piège pour le débutant : elle donne l'impression qu'on peut trader à toute heure, alors que chaque paire a ses heures, son comportement par session et ses coûts. Ce chapitre décrit la journée du forex, ce que le prix fait dans chaque session, ce que sont les paires et comment les choisir, les coûts propres au forex (spreads, rollover) et les heures à éviter, puis montre comment une stratégie se construit **autour** d'une session plutôt qu'autour d'une paire.
+
+## Sydney, Tokyo, Londres, New York : la journée du forex
+
+Le forex n'a pas d'ouverture ni de clôture ; il a des places qui se relaient. Heures de Paris (été) ; en hiver, décaler d'une heure les places qui n'ont pas de changement d'heure synchronisé.
+
+| Session | Heures (Paris, été) | Ce qui s'y passe |
+| --- | --- | --- |
+| **Sydney** | 23 h - 8 h | Ouverture de la semaine le dimanche à 23 h ; volume très faible ; AUD, NZD un peu actifs ; le reste dort. |
+| **Tokyo (Asie)** | 1 h - 10 h | Volume modeste ; JPY, AUD, NZD actifs ; les paires en EUR et GBP font des ranges étroits ; les données japonaises, chinoises et australiennes tombent. |
+| **Londres (Europe)** | 9 h - 18 h | La session la plus volumineuse (près de 40 % du volume mondial) ; EUR, GBP, CHF s'animent ; les ranges asiatiques sont balayés dans la première heure ; les données européennes tombent (10 h - 11 h). |
+| **New York** | 14 h - 23 h | Second pôle ; USD, CAD ; les données américaines à 14 h 30 et 16 h ; le **chevauchement Londres - New York (14 h - 18 h)** concentre le maximum de volume et de volatilité ; après 18 h, Londres ferme et le volume décroît ; après 21 h, le marché s'assèche. |
+
+Trois régularités qui découlent de ce relais :
+
+- **Le chevauchement Londres - New York** est l'heure de vérité : spreads les plus serrés, mouvements les plus francs, sweeps de niveaux de référence, réactions aux données américaines. La plupart des stratégies intraday sérieuses sur les majeures y concentrent leurs entrées.
+- **L'ouverture de Londres** (9 h - 11 h) est le moment du premier balayage : le range asiatique est pris d'un côté (souvent le côté opposé à la direction finale de la journée : le PO3 du niveau 3), et le plus haut ou le plus bas de la journée sur EUR/USD ou GBP/USD se forme fréquemment dans ces deux heures.
+- **La nuit asiatique** construit la liquidité que Londres et New York vont prendre : ranges étroits, EQH / EQL nets. C'est une session pour lire, pas pour trader les majeures (elle se trade sur les paires en JPY, AUD, NZD, avec leurs propres règles).
+
+<Figure caption="Figure 1 · Le relais des sessions sur 24 heures (Paris, été) et le volume relatif : le chevauchement Londres - New York concentre l'activité ; l'ouverture de Londres balaie le range asiatique ; la fin de New York et Sydney sont les heures creuses.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Sessions du forex et volume relatif" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" />
+  <text x="60" y="218" fontSize="9" textAnchor="middle" className="muted">0h</text><text x="167" y="218" fontSize="9" textAnchor="middle" className="muted">4h</text><text x="273" y="218" fontSize="9" textAnchor="middle" className="muted">8h</text><text x="380" y="218" fontSize="9" textAnchor="middle" className="muted">12h</text><text x="487" y="218" fontSize="9" textAnchor="middle" className="muted">16h</text><text x="593" y="218" fontSize="9" textAnchor="middle" className="muted">20h</text><text x="700" y="218" fontSize="9" textAnchor="middle" className="muted">24h</text>
+  <rect x="60" y="40" width="213" height="16" rx="3" className="box" opacity="0.6" /><text x="166" y="52" fontSize="9" textAnchor="middle">Sydney · Tokyo</text>
+  <rect x="300" y="62" width="240" height="16" rx="3" className="gold" opacity="0.5" /><text x="420" y="74" fontSize="9" textAnchor="middle">Londres 9 h - 18 h</text>
+  <rect x="433" y="84" width="240" height="16" rx="3" className="gold" opacity="0.5" /><text x="553" y="96" fontSize="9" textAnchor="middle">New York 14 h - 23 h</text>
+  <rect x="433" y="62" width="107" height="38" rx="3" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="4 3" /><text x="486" y="118" fontSize="9" textAnchor="middle" className="red" fontWeight="600">chevauchement 14 h - 18 h</text>
+  <path d="M 60 190 L 100 188 L 160 186 L 220 184 L 270 182 L 300 170 L 320 140 L 350 130 L 400 138 L 433 130 L 460 110 L 490 105 L 520 112 L 540 130 L 580 150 L 620 175 L 660 188 L 700 192" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="150" y="176" fontSize="9" textAnchor="middle" className="muted">ranges étroits, liquidité qui s'empile</text>
+  <text x="315" y="128" fontSize="9" textAnchor="middle" className="muted">balayage</text>
+  <text x="490" y="95" fontSize="8" textAnchor="middle" className="muted">pic</text>
+  <text x="640" y="170" fontSize="9" textAnchor="middle" className="muted">assèchement</text>
+  <text x="380" y="250" fontSize="10" textAnchor="middle" className="muted">volume relatif indicatif sur les majeures ; les paires en JPY, AUD, NZD ont leur pic en Asie</text>
+</svg>
+</Figure>
+
+## Le comportement du prix par session
+
+Chaque session imprime un comportement type au prix des majeures. Le connaître évite d'appliquer un setup de Londres à 3 h du matin.
+
+**Asie (1 h - 9 h) : le range.** Faible participation, mouvements de quelques dizaines de pips au plus sur EUR/USD, oscillation entre deux bornes qui deviennent les EQH / EQL du matin. Les rares mouvements directionnels viennent des données asiatiques ou d'un événement de nuit. Comportement à retenir : **construction de liquidité** ; les cassures du range asiatique pendant la session asiatique elle-même sont presque toujours fausses.
+
+**Ouverture de Londres (9 h - 11 h) : le balayage.** Le volume arrive d'un coup ; le prix sort du range asiatique, souvent d'abord du « mauvais » côté (le sweep, la manipulation du PO3), puis se retourne et prend sa direction. Le plus haut ou le plus bas de la journée se forme fréquemment ici. Comportement à retenir : **premier sweep, puis displacement** ; c'est la première fenêtre de la séquence du niveau 3.
+
+**Milieu de matinée européenne (11 h - 14 h) : la digestion.** Après le balayage, le prix consolide, retrace une partie du mouvement, forme les FVG et OB que New York viendra tester. Les données européennes tombent (10 h - 11 h) et donnent parfois un second mouvement. Comportement : **retour dans les zones**, préparation.
+
+**Chevauchement (14 h - 18 h) : la décision.** Les données américaines à 14 h 30 (protocole news, niveau 5), l'ouverture de New York, le maximum de volume. Le prix prend ou confirme sa direction de journée, balaie les extrêmes de Londres (le sweep du plus haut / plus bas de Londres est un schéma quotidien), et va chercher la liquidité de la veille (PDH, PDL). Comportement : **le mouvement principal**, avec ses retours ; la seconde fenêtre du niveau 3, souvent la meilleure.
+
+**Fin de New York (18 h - 21 h) : le retracement.** Londres ferme à 18 h ; les traders européens débouclent ; le prix retrace souvent une partie du mouvement de la journée, ou dérive. Le « fixing » de Londres (17 h, un moment de flux liés aux fixations de change) produit parfois un pic. Comportement : **retracement, moins de conviction**.
+
+**Nuit (21 h - 1 h) : le vide.** Volume minimal, spreads qui s'écartent, mouvements erratiques de quelques pips ; le rollover à 23 h (section suivante). Comportement : **rien** ; on ne trade pas les majeures.
+
+Le fil : le forex a une **structure de journée**, avec un range, un balayage, une décision, un retracement ; la séquence du niveau 3 (sweep, displacement, retour) s'y répète à des heures prévisibles.
+
+## Paires majeures, croisées et exotiques
+
+Une paire cote la devise de base contre la devise de cotation : EUR/USD à 1,0850 signifie qu'un euro vaut 1,0850 dollar. Acheter la paire, c'est acheter l'euro et vendre le dollar.
+
+**Les majeures** : les paires qui contiennent le dollar contre une grande devise : **EUR/USD** (la plus échangée au monde), **USD/JPY**, **GBP/USD**, **USD/CHF**, **AUD/USD**, **USD/CAD**, **NZD/USD**. Spreads les plus serrés (0,1 à 1 pip selon le broker et l'heure), liquidité maximale, données macro abondantes des deux côtés. C'est là que se trade l'essentiel, et c'est là que le cours conseille de commencer (EUR/USD ou GBP/USD pour Londres et New York, USD/JPY pour l'Asie et New York).
+
+**Les croisées** (crosses) : deux grandes devises sans le dollar : **EUR/GBP, EUR/JPY, GBP/JPY, AUD/JPY, EUR/CHF**… Spreads un peu plus larges (1 à 3 pips), volatilité parfois plus forte (GBP/JPY est réputée nerveuse), et un intérêt propre : elles isolent un thème (EUR/GBP pour le différentiel BCE / BoE ; AUD/JPY pour le risk-on / risk-off, niveau 5) sans le bruit du dollar. Un trader qui a une vue sur l'euro contre la livre trade EUR/GBP plutôt que deux positions contre le dollar.
+
+**Les exotiques** : une grande devise contre une devise émergente ou peu liquide (USD/TRY, USD/ZAR, USD/MXN, EUR/PLN…). Spreads larges (10 à 100 pips ou plus), liquidité mince, gaps fréquents, rollover coûteux (différentiels de taux élevés), risque politique. Le cours les écarte pour l'apprentissage ; leur seul intérêt pour un débutant est de savoir qu'elles existent et pourquoi les éviter.
+
+**La valeur du pip** (niveau 0 et 1) : pour les paires en XXX/USD, 10 $ par lot standard, 1 $ par mini, 0,10 $ par micro ; pour les paires en USD/XXX et les croisées, la valeur du pip dépend du cours et se lit sur la plateforme (par exemple environ 6,50 $ par lot standard sur USD/JPY à 153, environ 6,50 $ aussi sur EUR/GBP selon le cours de la livre). Le trader vérifie la valeur du pip **avant** de calculer sa taille ; c'est la première cause d'erreur de position sizing sur le forex.
+
+**Le lien avec les futures** : chaque majeure a son future CME (6E pour l'euro, 6B la livre, 6J le yen, 6A l'australien, 6C le canadien) coté dans l'autre sens pour certaines (6J cote des yens en dollars, l'inverse d'USD/JPY). Ils donnent le volume réel et le COT (niveaux 2, 4, 5) ; le spot donne l'exécution fine et les micro-lots.
+
+## Spreads, rollover et heures à éviter
+
+Le forex n'a pas de commission de Bourse ; ses coûts sont le spread, le rollover, et le slippage aux heures creuses.
+
+**Le spread** varie avec l'heure et l'événement. Sur EUR/USD chez un bon broker : 0,1 à 0,3 pip pendant le chevauchement, 0,5 à 1 pip en Asie, 2 à 5 pips (ou plus) dans les minutes qui entourent une annonce majeure ou au rollover, 5 à 20 pips à l'ouverture du dimanche soir. Le spread est un pourcentage du gain cible (niveau 0) : sur un scalp de 5 pips, un spread de 1 pip est 20 % du gain ; sur un swing de 100 pips, il ne compte pas. Le trader intraday trade quand le spread est serré ; c'est une raison de plus de se concentrer sur Londres et le chevauchement.
+
+**Le rollover** (swap) : chaque jour à 23 h (Paris, été ; l'heure de New York 17 h), les positions ouvertes sont « roulées » au lendemain et le broker crédite ou débite le différentiel de taux d'intérêt entre les deux devises, ajusté de sa marge. Long d'une devise à taux élevé contre une devise à taux bas : on reçoit (un peu) ; l'inverse : on paie. Le mercredi, le rollover compte triple (pour couvrir le week-end). Conséquences : un swing contre le différentiel de taux paie chaque nuit (à intégrer à l'expectancy, niveau 1) ; autour de 23 h, le spread s'écarte pendant quelques minutes et des mèches apparaissent : on ne place ni stop serré ni entrée dans cette fenêtre.
+
+**Les heures à éviter** pour les majeures, résumées :
+
+- **21 h - 1 h** (fin de New York, Sydney) : vide, spreads larges, mouvements sans conviction.
+- **23 h ± 5 minutes** : rollover, spread écarté, mèches.
+- **Le dimanche 23 h - lundi 1 h** : ouverture de la semaine, gaps, spreads très larges ; on laisse le marché se stabiliser.
+- **Le vendredi après 20 h** : les positions se ferment, le volume s'effondre, et le week-end approche avec son risque de gap ; les swings gardés sur le week-end ont une taille qui supporte un gap (niveau 1).
+- **Les minutes autour des annonces de niveau 1** (protocole news, niveau 5).
+- **Les jours fériés** des grandes places (américains et britanniques surtout) : volume moitié moindre, ranges, faux signaux.
+
+<Figure caption="Figure 2 · Le spread d'EUR/USD au fil de la journée chez un broker de détail correct : serré pendant Londres et le chevauchement, élargi en Asie et la nuit, pics au rollover et aux annonces. Le spread est un pourcentage du gain cible : les heures serrées sont les heures tradables.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Spread d'EUR/USD au fil de la journée" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="200" className="line" strokeWidth="1" />
+  <text x="50" y="204" fontSize="9" textAnchor="end" className="mono muted">0</text>
+  <text x="50" y="164" fontSize="9" textAnchor="end" className="mono muted">1 pip</text>
+  <text x="50" y="124" fontSize="9" textAnchor="end" className="mono muted">2</text>
+  <text x="50" y="84" fontSize="9" textAnchor="end" className="mono muted">3</text>
+  <text x="50" y="44" fontSize="9" textAnchor="end" className="mono muted">4+</text>
+  <text x="60" y="218" fontSize="9" textAnchor="middle" className="muted">0h</text><text x="273" y="218" fontSize="9" textAnchor="middle" className="muted">8h</text><text x="433" y="218" fontSize="9" textAnchor="middle" className="muted">14h</text><text x="540" y="218" fontSize="9" textAnchor="middle" className="muted">18h</text><text x="673" y="218" fontSize="9" textAnchor="middle" className="muted">23h</text><text x="700" y="218" fontSize="9" textAnchor="middle" className="muted">24h</text>
+  <polyline points="62,150 100,168 160,170 220,168 273,165 300,185 340,190 400,190 433,190 445,192 447,110 452,192 490,193 540,192 580,180 620,165 660,150 673,60 678,150 700,150" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="447" y="102" fontSize="9" textAnchor="middle" className="red">14 h 30 : annonce</text>
+  <text x="673" y="52" fontSize="9" textAnchor="middle" className="red">rollover</text>
+  <rect x="300" y="40" width="240" height="14" rx="3" className="green" opacity="0.2" /><text x="420" y="51" fontSize="9" textAnchor="middle" className="green" fontWeight="600">heures tradables : 9 h - 18 h</text>
+  <text x="160" y="240" fontSize="9" textAnchor="middle" className="muted">Asie : élargi</text>
+  <text x="620" y="240" fontSize="9" textAnchor="middle" className="muted">nuit : élargi, vide</text>
+</svg>
+</Figure>
+
+## Construire une stratégie autour d'une session
+
+Le trader de forex qui réussit ne trade pas « EUR/USD » ; il trade « l'ouverture de Londres sur EUR/USD » ou « le chevauchement sur GBP/USD ». La session est l'unité de construction, parce qu'elle fixe le comportement du prix, la liquidité, les coûts et les heures de présence. Voici comment une stratégie de session se construit, avec les outils des niveaux précédents.
+
+**1. Choisir la session selon sa disponibilité et son tempérament.** L'ouverture de Londres (9 h - 11 h) pour qui est libre le matin et aime les mouvements rapides ; le chevauchement (14 h - 18 h) pour qui est libre l'après-midi et veut la liquidité maximale et les données américaines ; l'Asie (1 h - 9 h) pour les noctambules sur les paires en JPY et AUD, avec des attentes de mouvement plus modestes.
+
+**2. Choisir la ou les paires actives dans cette session.** Londres : EUR/USD, GBP/USD, EUR/GBP ; chevauchement : EUR/USD, GBP/USD, USD/CAD (données canadiennes à 14 h 30 aussi), USD/JPY ; Asie : USD/JPY, AUD/USD, AUD/JPY. Une ou deux paires ; pas cinq (niveau 1, corrélation : EUR/USD et GBP/USD sont corrélées à 0,7-0,8).
+
+**3. Définir la préparation.** Avant la session : le range de la session précédente (asiatique pour Londres, Londres pour New York) et ses EQH / EQL, le PDH / PDL, les niveaux HTF (structure H4 / D, FVG et OB non mitigés, niveau 3), le biais du tableau de bord (DXY, taux, risk-on / off, niveau 5), les annonces de la session (protocole news), le spread courant.
+
+**4. Définir la séquence attendue.** Pour Londres : sweep du range asiatique dans la première heure, displacement, retour dans le FVG / OB, continuation vers la liquidité opposée (l'autre borne du range asiatique, puis le PDH / PDL). Pour le chevauchement : sweep du plus haut / plus bas de Londres autour des données ou de l'ouverture de New York, displacement, retour, continuation vers la liquidité de la veille. C'est la séquence du niveau 3, placée dans le temps par le niveau 3 (killzones) et le niveau 5.
+
+**5. Fixer les règles d'exécution.** Entrée sur le retour (limite dans le FVG ou réalignement M5), stop sous le sweep + marge ATR M15 de la paire (niveau 2), taille au niveau 1 (valeur du pip vérifiée), cible sur la liquidité, gestion sur H1. Une fenêtre d'entrée bornée (par exemple 9 h - 11 h 30, ou 14 h 45 - 17 h) : hors fenêtre, pas d'entrée, quel que soit le setup.
+
+**6. Fixer les interdictions.** Pas d'entrée les 15 minutes avant une annonce de niveau 1 ; pas d'entrée si le spread dépasse un seuil (par exemple 1 pip sur EUR/USD) ; pas de position gardée après la fin de la fenêtre de gestion (par exemple 18 h pour un intraday de Londres) sauf règle de swing écrite ; pas de trade les jours fériés majeurs.
+
+**7. Mesurer.** Journal avec la session, la paire, la séquence, le contexte, le R (niveau 1) ; après cent trades, l'expectancy de **cette** stratégie de session ; le niveau 7 en fera un backtest.
+
+Une stratégie ainsi construite tient sur une page et se répète chaque jour à la même heure. C'est sa force : la répétition dans des conditions comparables est ce qui rend l'expectancy mesurable.
+
+<Figure caption="Figure 3 · Une stratégie « ouverture de Londres sur EUR/USD » : préparation (range asiatique, niveaux HTF, biais), fenêtre 9 h - 11 h 30, séquence sweep → displacement → retour, cibles sur la liquidité, gestion jusqu'à 18 h. La session est l'unité ; la paire vient ensuite.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Schéma d'une stratégie de session sur EUR/USD" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="270" x2="700" y2="270" className="line" strokeWidth="1" />
+  <text x="120" y="288" fontSize="9" textAnchor="middle" className="muted">1 h - 9 h</text><text x="330" y="288" fontSize="9" textAnchor="middle" className="muted">9 h - 11 h 30</text><text x="560" y="288" fontSize="9" textAnchor="middle" className="muted">11 h 30 - 18 h</text>
+  <rect x="50" y="130" width="180" height="50" fill="none" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="4 3" /><text x="140" y="124" fontSize="9" textAnchor="middle" className="muted">range asiatique : EQH / EQL</text>
+  <polyline points="55,155 80,140 105,170 130,145 155,172 180,150 205,168 230,155 250,190 262,205 275,175 290,120 310,135 330,150 350,140 380,100 420,90 460,105 500,80 540,95 580,60 620,70 660,50" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="240" y1="40" x2="240" y2="270" className="line" strokeWidth="1" strokeDasharray="2 3" /><text x="240" y="34" fontSize="10" textAnchor="middle" fontWeight="600">9 h</text>
+  <line x1="470" y1="40" x2="470" y2="270" className="line" strokeWidth="1" strokeDasharray="2 3" /><text x="470" y="34" fontSize="10" textAnchor="middle" fontWeight="600">11 h 30</text>
+  <circle cx="262" cy="205" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="262" y="228" fontSize="9" textAnchor="middle" className="green">sweep de l'EQL</text>
+  <rect x="320" y="132" width="30" height="16" className="gold" opacity="0.3" /><text x="335" y="128" fontSize="8" textAnchor="middle" className="gold">FVG</text>
+  <circle cx="330" cy="150" r="5" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="360" y="170" fontSize="9" className="gold" fontWeight="600">retour : entrée</text>
+  <line x1="50" y1="60" x2="700" y2="60" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="56" fontSize="9" textAnchor="end" className="red">PDH : cible</text>
+  <text x="560" y="250" fontSize="9" textAnchor="middle" className="muted">gestion sur H1, sortie avant 18 h</text>
+  <text x="330" y="250" fontSize="9" textAnchor="middle" className="muted">fenêtre d'entrée</text>
+  <text x="120" y="250" fontSize="9" textAnchor="middle" className="muted">préparation, pas de trade</text>
+</svg>
+</Figure>
+
+## Deux trades sur le forex
+
+Reconstitutions pédagogiques : la même paire, deux heures.
+
+<TradeExample
+  resultat="gain"
+  instrument="EUR/USD (micro-lots)"
+  direction="Long"
+  setup="Stratégie « ouverture de Londres » : sweep de l'EQL asiatique à 9 h 20, displacement M15, retour dans le FVG à 9 h 50 ; DXY en repli, structure H4 haussière ; spread 0,3 pip"
+  entree="1,0842"
+  stop="1,0828 (14 pips, sous le sweep + marge)"
+  objectif="1,0884 (PDH)"
+  r="+3R">
+
+Compte de 5 000 $, budget 50 $ : 14 pips × 0,10 $ = 1,40 $ par micro-lot → 35 micro-lots (0,35 lot), risque 49 $. La préparation à 8 h 45 : range asiatique 1,0838-1,0862, EQL à 1,0838-1,0840, PDH 1,0884, structure H4 haussière, DXY en repli. 9 h 20 : mèche à 1,0831, clôture M15 à 1,0845 : sweep. Displacement à 1,0866, FVG M15 1,0840-1,0848. 9 h 50 : retour, entrée limite à 1,0842. Cible le PDH, atteinte à 15 h 10 pendant le chevauchement. Gestion sur H1, aucune intervention. La session a fourni le comportement (balayage puis direction), la paire la liquidité, le protocole les heures.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="EUR/USD (micro-lots)"
+  direction="Long"
+  setup="Achat de la « cassure » du haut du range asiatique à 3 h 40 du matin, spread 1,2 pip, stop de 8 pips"
+  entree="1,0864 (servi à 1,0865)"
+  stop="1,0856 (8 pips), exécuté à 1,0854"
+  objectif="1,0890"
+  r="−1,5R avec le spread et le slippage">
+
+Même range asiatique, six heures plus tôt. Le trader voit le prix dépasser 1,0862 à 3 h 40 et achète la cassure. Session asiatique : volume minimal, spread de 1,2 pip (15 % de son gain cible avant de commencer), et une cassure de range asiatique en pleine session asiatique, c'est-à-dire précisément le type de cassure qui est presque toujours fausse. Le prix revient dans le range en vingt minutes, son stop de 8 pips (moins qu'une bougie H1 asiatique ordinaire) est exécuté avec 2 pips de slippage. À 9 h 20, Londres balaiera le bas du range et partira à la hausse : il avait la bonne direction, la mauvaise session, la mauvaise heure et le mauvais stop.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le forex se relaie de **Sydney à Tokyo, Londres, New York** ; le **chevauchement 14 h - 18 h** concentre le volume ; l'**ouverture de Londres** balaie le range asiatique ; la nuit construit la liquidité.
+- Comportement par session : Asie = **range**, Londres = **balayage puis direction**, chevauchement = **décision**, fin de New York = **retracement**, nuit = **vide**. La séquence du niveau 3 se répète à des heures prévisibles.
+- **Majeures** (dollar contre grande devise) pour apprendre ; **croisées** pour isoler un thème ; **exotiques** à éviter. Vérifier la **valeur du pip** avant toute taille ; les futures CME donnent volume et COT.
+- Coûts : **spread** variable (serré 9 h - 18 h, élargi la nuit et aux annonces), **rollover** à 23 h (triple le mercredi, à intégrer aux swings), slippage aux heures creuses ; **heures à éviter** : 21 h - 1 h, rollover, ouverture du dimanche, vendredi soir, annonces, fériés.
+- Une stratégie se construit **autour d'une session** : disponibilité, paires actives, préparation, séquence attendue, règles d'exécution avec fenêtre bornée, interdictions, mesure. La répétition à heure fixe rend l'expectancy mesurable.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Valeur du pip et taille">
+
+Compte de 4 000 €, risque 1 %, compte en euros (1 € = 1,08 $). Trois setups avec un stop de 20 pips : (a) EUR/USD ; (b) USD/JPY à 153,00 (valeur du pip par lot standard ≈ 6,50 $) ; (c) EUR/GBP (valeur du pip par lot standard ≈ 12,70 $ au cours du jour).
+
+1. Calculez la taille en micro-lots pour chaque paire.
+2. Pourquoi les tailles diffèrent-elles pour le même stop en pips ?
+3. Quelle erreur commet le trader qui applique « 0,10 $ par pip par micro-lot » à toutes les paires ?
+
+<Solution>
+
+1. Budget : 40 € ≈ 43,20 $. (a) EUR/USD : 0,10 $ par pip par micro-lot × 20 = 2 $ → 43,20 ÷ 2 = 21,6 → **21 micro-lots** (0,21 lot). (b) USD/JPY : 6,50 $ ÷ 100 = 0,065 $ par pip par micro-lot × 20 = 1,30 $ → 33,2 → **33 micro-lots**. (c) EUR/GBP : 0,127 $ × 20 = 2,54 $ → 17,0 → **17 micro-lots**.
+2. Parce que la **valeur du pip** dépend de la devise de cotation et du cours : un pip d'USD/JPY vaut moins de dollars qu'un pip d'EUR/USD ; un pip d'EUR/GBP en vaut plus (la livre est chère). Même stop en pips, risque en dollars différent, taille différente.
+3. Il sur-dimensionne EUR/GBP d'environ 25 % (21 micro-lots : risque réel 53,34 $ au lieu de 43,20) et sous-dimensionne USD/JPY. C'est la première cause d'erreur de position sizing sur le forex ; la plateforme affiche la valeur du pip, il faut la lire avant chaque calcul.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Session et comportement">
+
+Quatre observations sur GBP/USD : (a) 4 h 15, cassure du haut du range asiatique de 6 pips ; (b) 9 h 25, mèche de 12 pips sous le bas du range asiatique, clôture M15 dans le range, puis bougie de 25 pips à la hausse ; (c) 14 h 32, mouvement de 40 pips en trente secondes sur un chiffre américain ; (d) 22 h 58, mèche de 9 pips sans volume.
+
+1. Qualifiez chaque observation avec le comportement de session attendu.
+2. Laquelle est un début de séquence tradable, et à quel moment ?
+3. Que dit le protocole pour (c) et (d) ?
+
+<Solution>
+
+1. **(a)** Cassure de range asiatique en session asiatique : presque toujours fausse ; on ne la trade pas ; on note les EQH. **(b)** Le balayage de Londres : sweep du bas du range, displacement : le comportement type de 9 h - 11 h et le début de la séquence du niveau 3. **(c)** Whipsaw d'annonce pendant le chevauchement : protocole news. **(d)** Mèche de rollover : spread écarté, pas d'information.
+2. **(b)** : entrée au retour dans le FVG laissé par la bougie de 25 pips, dans la fenêtre 9 h - 11 h 30, stop sous la mèche + marge, cible l'autre borne du range asiatique puis le PDH.
+3. **(c)** : aucun ordre au marché 14 h 30 - 14 h 35, aucune entrée avant 14 h 50, puis retour dans les zones laissées, sens confirmé par le DXY et les taux. **(d)** : pas de stop serré ni d'entrée autour de 23 h ; si une position swing est ouverte, son stop doit être hors de portée d'une mèche de rollover.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire sa stratégie de session">
+
+Rédigez sur une page votre stratégie de session : session et heures, une ou deux paires, préparation (liste), séquence attendue, règles d'exécution (entrée, stop en ATR M15, taille, cible, gestion, fenêtre bornée), interdictions (annonces, spread, heures, fériés), et ce que vous mesurez au journal. Puis appliquez-la en simulation pendant vingt sessions et notez : combien de séquences complètes, combien de trades pris, combien hors fenêtre évités.
+
+<Solution>
+
+Pas de corrigé unique ; la figure 3 et la section « Construire une stratégie autour d'une session » donnent le gabarit. Ce qu'on attend après vingt sessions : cinq à dix séquences complètes, autant de trades ou moins, et surtout la liste des trades **non pris** parce que hors fenêtre, hors spread ou trop près d'une annonce : c'est cette liste qui montre que la stratégie de session filtre. Le niveau 7 transformera ce journal en backtest et en statistiques.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "L'heure de vérité du forex sur les majeures est :",
+      options: [
+        "La session asiatique",
+        "Le chevauchement Londres - New York (14 h - 18 h, Paris) : volume maximal, spreads les plus serrés, données américaines",
+        "La nuit",
+        "L'ouverture du dimanche",
+      ],
+      answer: 1,
+      explain: "L'ouverture de Londres (9 h - 11 h) est le premier balayage ; le chevauchement est la décision.",
+    },
+    {
+      q: "Une cassure du range asiatique pendant la session asiatique est :",
+      options: [
+        "Un signal fort",
+        "Presque toujours fausse : la session asiatique construit la liquidité que Londres et New York vont prendre",
+        "Le meilleur trade de la journée",
+        "Sans lien avec l'heure",
+      ],
+      answer: 1,
+      explain: "L'Asie = range ; Londres = balayage puis direction. On lit la nuit, on trade le matin.",
+    },
+    {
+      q: "Les paires croisées servent à :",
+      options: [
+        "Trader les devises émergentes",
+        "Isoler un thème (EUR/GBP pour BCE contre BoE, AUD/JPY pour le risk-on) sans le bruit du dollar",
+        "Payer moins de spread que les majeures",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Spreads un peu plus larges, parfois plus de volatilité (GBP/JPY) ; les exotiques, elles, sont à éviter pour l'apprentissage.",
+    },
+    {
+      q: "Avant de calculer une taille sur USD/JPY ou EUR/GBP, il faut :",
+      options: [
+        "Appliquer 0,10 $ par pip par micro-lot",
+        "Vérifier la valeur du pip, qui dépend de la devise de cotation et du cours",
+        "Doubler la taille",
+        "Rien de particulier",
+      ],
+      answer: 1,
+      explain: "C'est la première cause d'erreur de position sizing sur le forex ; la plateforme l'affiche.",
+    },
+    {
+      q: "Le rollover :",
+      options: [
+        "N'existe pas sur le forex",
+        "Crédite ou débite chaque nuit (23 h) le différentiel de taux, triple le mercredi ; le spread s'écarte autour ; à intégrer aux swings",
+        "Est une commission fixe",
+        "A lieu à midi",
+      ],
+      answer: 1,
+      explain: "Un swing contre le différentiel de taux paie chaque nuit ; on ne place ni stop serré ni entrée autour de 23 h.",
+    },
+    {
+      q: "Une stratégie de forex se construit :",
+      options: [
+        "Autour d'une paire, à toute heure",
+        "Autour d'une session : disponibilité, paires actives, préparation, séquence attendue, fenêtre d'entrée bornée, interdictions, mesure",
+        "Autour du spread le plus bas",
+        "Autour du rollover",
+      ],
+      answer: 1,
+      explain: "La session fixe le comportement du prix, la liquidité, les coûts et les heures ; la répétition à heure fixe rend l'expectancy mesurable.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le marché qui donne aux indices leur empreinte cachée : les options. Le chapitre suivant décrit les calls et les puts et leurs profils de gains, ce que mesurent delta, gamma, theta et vega, le rôle central de la volatilité implicite, les usages concrets pour un trader directionnel, et l'empreinte du marché d'options sur les indices.
