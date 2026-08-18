@@ -1,0 +1,335 @@
+---
+title: "Statistiques et simulation Monte Carlo"
+description: "Ce qu'un échantillon de trades peut dire et ne pas dire : la distribution réelle des résultats d'un système (deux bosses et une queue, pas une cloche), les intervalles de confiance sur l'expectancy par formule et par bootstrap, la simulation Monte Carlo pas à pas, le drawdown probable contre le drawdown historique, la taille d'échantillon et la significativité, avec un second script."
+---
+
+# Statistiques et simulation Monte Carlo
+
+Le chapitre 7 a laissé une question ouverte : 43 trades, un drawdown de 2R, une expectancy de +0,39 ± 0,16R ; qu'est-ce que cela vaut ? Ce chapitre donne les outils pour répondre, et surtout pour ne pas répondre trop vite. Il n'y a pas de mathématiques au-delà de la racine carrée et du percentile ; il y a en revanche une idée à laquelle il faut se faire : **une série de trades est un tirage**, une parmi toutes celles que le même système aurait pu produire, et ce qu'on veut connaître, c'est le système, pas le tirage. Le script [`monte_carlo_drawdown.py`](pathname:///code/monte_carlo_drawdown.py) accompagne le chapitre ; il construit un système dont on **connaît** la vraie expectancy, pour montrer ce qu'un échantillon fini en dit.
+
+## La distribution réelle des rendements d'un système
+
+Le premier réflexe, devant une série de résultats, est de calculer une moyenne et de la traiter comme un fait. Le second devrait être de regarder la **forme** de la distribution ; elle n'a rien d'une cloche.
+
+Un système à stop fixe et deux cibles produit trois issues principales : la perte au stop (autour de −1R, un peu moins avec les coûts et le slippage : −1,02, −1,05), le gain partiel (moitié à C1, solde au breakeven : autour de +0,7R), le gain complet (moitié à C1, moitié à C2 : autour de +2,2R), plus quelques valeurs intermédiaires (sorties sur temps, trailing). Le résultat est une distribution à **deux ou trois bosses** avec une **queue à droite** : la médiane est souvent négative (−1R : plus de la moitié des trades sont des stops), la moyenne est positive grâce aux gains complets, l'écart-type est de l'ordre de 1,3 à 1,5R. Le script le montre sur son système synthétique (taux de réussite 50 %, moitié des gains à C1 seulement, coûts 0,04R) : moyenne mesurée +0,15R, **médiane −1,00R**, 10e percentile −1,07R, 90e percentile +2,23R.
+
+Deux conséquences pratiques. D'abord, l'écart-type est **grand devant la moyenne** (1,37 contre 0,15 : un rapport de 9) ; c'est ce rapport qui rend l'expectancy si lente à mesurer, et c'est le cas de presque tous les systèmes de trading discrétionnaire ; un système à +0,3R et 1,4R d'écart-type est un bon système, et il faut des centaines de trades pour le distinguer du hasard. Ensuite, la **moyenne dépend de la queue** : quelques gains complets font toute la différence entre un système positif et un système nul ; le test « retirer les cinq meilleurs trades » du chapitre 7 mesure exactement cette dépendance.
+
+<Figure caption="Figure 1 · La distribution réelle des résultats d'un système à stop et deux cibles : une bosse à −1R (les stops, plus de la moitié des trades), une bosse vers +0,7R (C1 puis breakeven), une bosse vers +2,2R (C1 puis C2), des valeurs intermédiaires. Médiane négative, moyenne positive, écart-type de 1,3 à 1,5R : neuf fois la moyenne. La moyenne dépend de la queue droite.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Distribution des résultats d'un système" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="240" x2="690" y2="240" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="240" className="line" strokeWidth="1" />
+  <text x="375" y="275" fontSize="10" textAnchor="middle" className="muted">résultat du trade (R net)</text>
+  <text x="200" y="258" fontSize="9" textAnchor="middle" className="muted">−1</text>
+  <text x="330" y="258" fontSize="9" textAnchor="middle" className="muted">0</text>
+  <text x="420" y="258" fontSize="9" textAnchor="middle" className="muted">+0,7</text>
+  <text x="590" y="258" fontSize="9" textAnchor="middle" className="muted">+2,2</text>
+  <rect x="180" y="70" width="40" height="170" className="red" opacity="0.7" />
+  <text x="200" y="62" fontSize="9" textAnchor="middle" className="red" fontWeight="600">stops : 50 %</text>
+  <rect x="150" y="215" width="28" height="25" className="red" opacity="0.4" />
+  <rect x="222" y="200" width="28" height="40" className="muted" opacity="0.5" />
+  <rect x="300" y="215" width="28" height="25" className="muted" opacity="0.5" />
+  <rect x="330" y="205" width="28" height="35" className="muted" opacity="0.5" />
+  <rect x="400" y="140" width="40" height="100" className="green" opacity="0.6" />
+  <text x="420" y="132" fontSize="9" textAnchor="middle" className="green" fontWeight="600">C1 + BE : 25 %</text>
+  <rect x="470" y="222" width="28" height="18" className="green" opacity="0.4" />
+  <rect x="510" y="225" width="28" height="15" className="green" opacity="0.4" />
+  <rect x="570" y="140" width="40" height="100" className="green" opacity="0.8" />
+  <text x="590" y="132" fontSize="9" textAnchor="middle" className="green" fontWeight="600">C1 + C2 : 25 %</text>
+  <rect x="620" y="228" width="28" height="12" className="green" opacity="0.4" />
+  <line x1="200" y1="240" x2="200" y2="30" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="3 3" /><text x="205" y="40" fontSize="9" className="gold">médiane ≈ −1R</text>
+  <line x1="349" y1="240" x2="349" y2="30" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="354" y="52" fontSize="9" className="gold" fontWeight="600">moyenne ≈ +0,2R</text>
+  <text x="520" y="80" fontSize="9" className="muted">écart-type ≈ 1,4R : neuf fois la moyenne</text>
+  <text x="520" y="96" fontSize="9" className="muted">la moyenne dépend de la bosse de droite</text>
+</svg>
+</Figure>
+
+## Intervalles de confiance sur l'expectancy
+
+Le chapitre 6 a donné la formule : l'incertitude sur la moyenne est l'écart-type divisé par la racine de n. On la précise ici en **intervalle de confiance à 95 %** : la moyenne mesurée plus ou moins environ deux fois cette incertitude (1,96 exactement). Sur l'échantillon de 120 trades du script : moyenne +0,152R, écart-type 1,37R, erreur standard 1,37 / √120 = 0,125R, intervalle **[−0,09 ; +0,40]**. Lecture : si l'on répétait l'expérience (120 nouveaux trades du même système) un grand nombre de fois, l'intervalle ainsi construit contiendrait la vraie expectancy dans 95 % des cas ; ici, l'intervalle contient zéro : **on ne peut pas exclure que le système soit nul**, alors qu'il vaut en réalité +0,21R (le script le sait ; le trader qui n'aurait que ces 120 trades ne le saurait pas).
+
+La formule suppose que la moyenne d'un échantillon suit à peu près une loi normale, ce qui est vrai à partir de quelques dizaines de trades même si les résultats individuels ne le sont pas. Une seconde méthode ne suppose rien : le **bootstrap**. On tire, avec remise, 120 trades parmi les 120 observés (certains sortent deux fois, d'autres pas), on calcule la moyenne ; on recommence dix mille fois ; les 2,5e et 97,5e percentiles de ces dix mille moyennes donnent l'intervalle. Le script obtient **[−0,08 ; +0,40]** : la même chose, ce qui rassure sur la formule, et ce qui montre que le problème n'est pas la méthode mais l'échantillon.
+
+```python
+def bootstrap_expectancy(r, n_boot=10_000):
+    n = len(r)
+    idx = rng.integers(0, n, size=(n_boot, n))   # n_boot tirages de n indices avec remise
+    means = r[idx].mean(axis=1)                   # une moyenne par tirage
+    return np.percentile(means, 2.5), np.percentile(means, 97.5)
+```
+
+Ce qu'un intervalle de confiance apporte au trader : une phrase honnête. « Mon setup a une expectancy de +0,15R » est faux ; « mon setup a une expectancy mesurée de +0,15R sur 120 trades, avec un intervalle de −0,09 à +0,40 : probablement positive, pas encore démontrée » est vrai, et dicte la conduite : continuer à collecter, trader petit, ne pas augmenter la taille sur la foi de la moyenne.
+
+## La simulation Monte Carlo expliquée pas à pas
+
+L'intervalle de confiance parle de la moyenne. Le trader vit autre chose : les **séquences**, les séries de pertes, le drawdown, la question « puis-je toucher −20R ? ». Pour cela on simule.
+
+L'idée est simple. On dispose de n résultats observés (les 120 trades). On les met dans une urne. On tire, avec remise, un résultat ; puis un autre ; jusqu'à en avoir 120 (ou 500, ou 1 000 : l'horizon qu'on veut regarder) ; on obtient une **séquence possible** du même système, avec la même distribution de résultats mais dans un autre ordre et avec d'autres répétitions. On note son drawdown maximal, sa plus longue série de pertes, son résultat final, et si elle est passée sous un seuil de ruine. On recommence cinq mille fois. On regarde la **distribution** de ces cinq mille drawdowns.
+
+```python
+def monte_carlo(r, n_sims=5_000, horizon=None, ruin_level=-20.0):
+    n = len(r)
+    idx = rng.integers(0, n, size=(n_sims, horizon))   # n_sims séquences de `horizon` tirages
+    sims = r[idx]
+    paths = np.cumsum(sims, axis=1)                     # courbes de capital en R
+    peaks = np.maximum.accumulate(paths, axis=1)        # plus haut atteint jusqu'ici
+    dds = (peaks - paths).max(axis=1)                   # drawdown max de chaque séquence
+    finals = paths[:, -1]
+    ruined = (paths.min(axis=1) <= ruin_level).mean()   # part des séquences qui touchent le seuil
+    return dict(dd=dds, final=finals, ruin_prob=ruined, paths=paths)
+```
+
+Résultat du script sur les 120 trades, horizon 120 : **drawdown médian 10,3R**, 90e percentile **17,0R**, 99e percentile **26,5R** ; plus longue série de pertes médiane 6, 95e percentile 10 ; probabilité de toucher −20R **1,5 %** ; probabilité de finir les 120 trades en négatif **10,3 %**. Sur un horizon de 500 trades : drawdown médian 16,9R, 90e percentile 26,1R, 99e percentile 38R ; probabilité de toucher −20R **2,7 %**.
+
+Deux hypothèses de la méthode, à connaître pour ne pas la surinterpréter. Les tirages sont **indépendants** : le résultat d'un trade ne dépend pas du précédent ; c'est à peu près vrai pour un setup bien défini, mais les régimes existent (une semaine de range de stress produit des pertes groupées) et le réel a donc des séries un peu plus longues que le Monte Carlo ; on le sait, on l'écrit, on garde une marge. Et les tirages viennent de **l'échantillon observé** : si les 120 trades n'ont pas connu de vrai régime agité, la simulation ne l'inventera pas ; le Monte Carlo ne fabrique pas de risque que l'échantillon ne contient pas ; il redistribue celui qui s'y trouve. C'est déjà beaucoup : il transforme une séquence en une distribution.
+
+<Figure caption="Figure 2 · Le Monte Carlo pas à pas : les n résultats observés dans une urne, tirages avec remise pour construire des milliers de séquences possibles, une courbe de capital par séquence, un drawdown maximal par courbe, la distribution de ces drawdowns. Hypothèses : indépendance des trades, échantillon représentatif ; le Monte Carlo redistribue le risque observé, il n'en invente pas.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Simulation Monte Carlo pas à pas" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="60" width="120" height="120" rx="8" className="box" strokeWidth="1.5" />
+  <text x="90" y="52" fontSize="10" fontWeight="600" textAnchor="middle">1 · L'urne : n trades</text>
+  <text x="45" y="85" fontSize="9" className="red">−1,02  −1,05  −0,98</text>
+  <text x="45" y="102" fontSize="9" className="green">+0,71  +2,21  +0,68</text>
+  <text x="45" y="119" fontSize="9" className="red">−1,01  −1,03</text>
+  <text x="45" y="136" fontSize="9" className="green">+2,24  +0,73  …</text>
+  <text x="90" y="165" fontSize="9" textAnchor="middle" className="muted">(les 120 observés)</text>
+  <line x1="150" y1="120" x2="180" y2="120" className="line" strokeWidth="1.5" />
+  <text x="165" y="110" fontSize="9" textAnchor="middle" className="muted">tirages</text>
+  <text x="165" y="135" fontSize="9" textAnchor="middle" className="muted">avec remise</text>
+  <rect x="185" y="40" width="200" height="200" rx="6" className="box" strokeWidth="1" />
+  <text x="285" y="32" fontSize="10" fontWeight="600" textAnchor="middle">2 · 5 000 séquences de 120 (ou 500)</text>
+  <line x1="195" y1="180" x2="375" y2="180" className="line" strokeWidth="1" />
+  <polyline points="195,180 215,172 235,178 255,160 275,150 295,158 315,140 335,132 355,138 375,120" fill="none" stroke="var(--tm-gold)" strokeWidth="1.2" opacity="0.7" />
+  <polyline points="195,180 215,190 235,200 255,192 275,210 295,198 315,190 335,180 355,170 375,160" fill="none" stroke="var(--tm-gold)" strokeWidth="1.2" opacity="0.7" />
+  <polyline points="195,180 215,176 235,168 255,175 275,165 295,150 315,158 335,145 355,150 375,138" fill="none" stroke="var(--tm-gold)" strokeWidth="1.2" opacity="0.7" />
+  <polyline points="195,180 215,186 235,182 255,196 275,190 295,205 315,215 335,205 355,198 375,188" fill="none" stroke="var(--tm-red)" strokeWidth="1.2" opacity="0.8" />
+  <polyline points="195,180 215,170 235,160 255,168 275,150 295,142 315,148 335,130 355,120 375,110" fill="none" stroke="var(--tm-green)" strokeWidth="1.2" opacity="0.8" />
+  <text x="285" y="230" fontSize="9" textAnchor="middle" className="muted">une courbe de capital par séquence ; un DD max par courbe</text>
+  <line x1="385" y1="140" x2="415" y2="140" className="line" strokeWidth="1.5" />
+  <rect x="420" y="40" width="270" height="200" rx="6" className="box" strokeWidth="1" />
+  <text x="555" y="32" fontSize="10" fontWeight="600" textAnchor="middle">3 · Distribution des drawdowns max</text>
+  <line x1="435" y1="200" x2="680" y2="200" className="line" strokeWidth="1" />
+  <rect x="440" y="170" width="18" height="30" className="gold" opacity="0.5" /><rect x="460" y="120" width="18" height="80" className="gold" opacity="0.5" /><rect x="480" y="90" width="18" height="110" className="gold" opacity="0.5" /><rect x="500" y="100" width="18" height="100" className="gold" opacity="0.5" /><rect x="520" y="125" width="18" height="75" className="gold" opacity="0.5" /><rect x="540" y="150" width="18" height="50" className="gold" opacity="0.5" /><rect x="560" y="168" width="18" height="32" className="gold" opacity="0.5" /><rect x="580" y="180" width="18" height="20" className="gold" opacity="0.5" /><rect x="600" y="188" width="18" height="12" className="gold" opacity="0.5" /><rect x="620" y="193" width="18" height="7" className="gold" opacity="0.5" /><rect x="640" y="196" width="18" height="4" className="gold" opacity="0.5" />
+  <line x1="509" y1="200" x2="509" y2="70" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="509" y="62" fontSize="9" textAnchor="middle">médiane 10R</text>
+  <line x1="589" y1="200" x2="589" y2="90" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="3 3" /><text x="589" y="82" fontSize="9" textAnchor="middle" className="red">p90 : 17R</text>
+  <line x1="649" y1="200" x2="649" y2="110" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="655" y="104" fontSize="9" className="red">p99 : 26R</text>
+  <text x="555" y="222" fontSize="9" textAnchor="middle" className="muted">+ séries de pertes, P(−20R), P(final négatif)</text>
+  <text x="360" y="275" fontSize="10" textAnchor="middle" className="muted">hypothèses : trades indépendants (le réel a des régimes : marge), échantillon représentatif (le MC n'invente pas de risque)</text>
+  <text x="360" y="300" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">le Monte Carlo transforme une séquence en une distribution</text>
+</svg>
+</Figure>
+
+## Drawdown probable contre drawdown historique
+
+C'est le point le plus utile du chapitre, et le plus souvent ignoré. La séquence observée (le backtest, ou l'année de journal) a un drawdown maximal : **6,5R** dans le script, avec une plus longue série de six pertes. Le trader qui s'arrête là dimensionne son compte et sa taille pour supporter 6,5R, peut-être 10R « par prudence ». Or le Monte Carlo du **même** système, sur le **même** horizon, dit : drawdown médian 10,3R, un cas sur dix au-delà de 17R, un cas sur cent au-delà de 26R. Le 6,5R observé est **une valeur tirée de cette distribution**, plutôt favorable (en dessous de la médiane) : le système n'a pas encore montré ce qu'il sait faire de pire ; il le montrera.
+
+D'où trois règles de dimensionnement, qui complètent le niveau 1 :
+
+- On dimensionne le risque par trade pour supporter le **90e percentile** du drawdown Monte Carlo sur l'horizon prévu (par exemple 500 trades, soit deux à trois ans), pas le drawdown historique. Si le p90 est 26R et que le trader ne veut pas voir son compte baisser de plus de 20 %, le risque par trade est au plus 20 % / 26 = 0,77 % du capital ; avec le p99 à 38R, à 0,5 % il ne verrait −19 % qu'une fois sur cent.
+- Le seuil de **suspension** de la fiche (chapitre 2 : DD supérieur à 1,5 fois le pire drawdown backtesté) se lit désormais avec la distribution : on suspend quand le drawdown réel dépasse le **95e percentile** du Monte Carlo ; en dessous, la série est ordinaire et n'appelle aucune décision ; c'est ce qui permet de traverser un drawdown de 15R sans toucher à la fiche, si le Monte Carlo l'annonçait.
+- Le **risque de ruine** du niveau 1 devient un chiffre : la part des séquences qui touchent le seuil qu'on s'est fixé (−20R, ou le drawdown qui correspond à la perte maximale tolérée du compte). Il faut qu'il soit petit (quelques pour cent au plus sur l'horizon prévu) ; s'il ne l'est pas, on réduit la taille, ce qui ne change pas le drawdown en R mais divise sa traduction en pourcentage du compte.
+
+Le drawdown historique n'a qu'un usage : vérifier que la séquence observée est **compatible** avec la distribution (un historique de 30R quand le p99 est à 26R signale que l'échantillon simulé n'était pas représentatif, ou que le système a changé).
+
+<Figure caption="Figure 3 · Drawdown historique contre drawdown probable : la séquence observée (6,5R) est un tirage, ici favorable, de la distribution Monte Carlo (médiane 10R, p90 17R, p99 26R sur 120 trades ; 17 / 26 / 38R sur 500). On dimensionne sur le p90 de l'horizon prévu, on suspend au-delà du p95, on mesure le risque de ruine comme la part des séquences qui touchent le seuil.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Drawdown historique contre probable" xmlns="http://www.w3.org/2000/svg">
+  <text x="60" y="40" fontSize="10" fontWeight="600">Drawdown max (R)</text>
+  <line x1="60" y1="60" x2="60" y2="230" className="line" strokeWidth="1" />
+  <line x1="60" y1="230" x2="690" y2="230" className="line" strokeWidth="1" />
+  <text x="180" y="250" fontSize="10" textAnchor="middle">horizon 120 trades</text>
+  <text x="480" y="250" fontSize="10" textAnchor="middle">horizon 500 trades</text>
+  <rect x="120" y="185" width="120" height="45" className="gold" opacity="0.35" /><text x="180" y="180" fontSize="9" textAnchor="middle">médiane 10R</text>
+  <rect x="120" y="155" width="120" height="30" className="gold" opacity="0.2" /><text x="180" y="150" fontSize="9" textAnchor="middle" className="red">p90 : 17R</text>
+  <rect x="120" y="115" width="120" height="40" className="red" opacity="0.15" /><text x="180" y="110" fontSize="9" textAnchor="middle" className="red">p99 : 26R</text>
+  <line x1="110" y1="201" x2="250" y2="201" stroke="var(--tm-green)" strokeWidth="2.5" /><text x="255" y="205" fontSize="9" className="green" fontWeight="600">historique 6,5R : un tirage favorable</text>
+  <rect x="420" y="155" width="120" height="75" className="gold" opacity="0.35" /><text x="480" y="150" fontSize="9" textAnchor="middle">médiane 17R</text>
+  <rect x="420" y="115" width="120" height="40" className="gold" opacity="0.2" /><text x="480" y="110" fontSize="9" textAnchor="middle" className="red">p90 : 26R</text>
+  <rect x="420" y="62" width="120" height="53" className="red" opacity="0.15" /><text x="480" y="57" fontSize="9" textAnchor="middle" className="red">p99 : 38R</text>
+  <text x="600" y="130" fontSize="9" className="muted">dimensionner sur le p90</text>
+  <text x="600" y="146" fontSize="9" className="muted">de l'horizon prévu</text>
+  <text x="600" y="170" fontSize="9" className="muted">suspendre au-delà du p95</text>
+  <text x="600" y="194" fontSize="9" className="muted">risque de ruine = part des</text>
+  <text x="600" y="208" fontSize="9" className="muted">séquences sous le seuil</text>
+  <text x="375" y="285" fontSize="10" textAnchor="middle" className="muted">le système n'a pas encore montré ce qu'il sait faire de pire ; il le montrera ; on le sait d'avance</text>
+</svg>
+</Figure>
+
+## Taille d'échantillon et significativité
+
+Le script termine par une table qui répond à la question du chapitre 6 avec des chiffres : pour ce système à +0,21R d'expectancy vraie et 1,4R d'écart-type, quelle est la demi-largeur de l'intervalle à 95 %, et quelle est la probabilité qu'un échantillon de taille n affiche une expectancy **négative** ?
+
+```text
+  n =   30 : demi-largeur ≈ ±0.48 R ; P(mesurer une expectancy < 0) ≈ 18.7 %
+  n =   60 : demi-largeur ≈ ±0.34 R ; P(mesurer une expectancy < 0) ≈ 11.1 %
+  n =  100 : demi-largeur ≈ ±0.27 R ; P(mesurer une expectancy < 0) ≈  6.0 %
+  n =  200 : demi-largeur ≈ ±0.19 R ; P(mesurer une expectancy < 0) ≈  0.7 %
+  n =  400 : demi-largeur ≈ ±0.13 R ; P(mesurer une expectancy < 0) ≈  0.1 %
+```
+
+Lecture. À 30 trades, un bon système affiche une expectancy négative **près d'une fois sur cinq** : le trader qui juge sa fiche sur un mois la jette souvent à tort, ou garde à tort une fiche nulle qui a eu de la chance. À 100 trades, encore 6 % : c'est le seuil où le signe devient probable, pas certain ; c'est le seuil du cours pour « probablement positive ». À 200, moins de 1 % : le signe est établi ; la valeur reste connue à ±0,19R près, ce qui ne suffit pas à comparer deux variantes qui diffèrent de 0,1R (il faut 400 à 800 trades pour cela, d'où le seuil de 300 du cours pour une comparaison grossière et la prudence du chapitre 9). Ces chiffres dépendent du rapport écart-type / expectancy : un système à +0,5R avec le même écart-type est significatif quatre fois plus vite ; un système à +0,1R demande quatre fois plus de trades ; le trader qui connaît ces deux nombres pour sa fiche sait combien de temps il devra tenir avant de savoir.
+
+Un mot sur la **significativité** au sens statistique : dire qu'une expectancy est « significativement positive à 5 % » signifie que l'intervalle à 95 % exclut zéro ; ce n'est pas une garantie (une fois sur vingt, un système nul passe le test), et surtout ce n'est pas la même chose que « suffisante » : une expectancy de +0,05R significative sur 2 000 trades est réelle et ne vaut pas la peine d'être tradée après un mois de coûts un peu plus élevés. On veut les deux : un signe établi **et** une valeur qui laisse de la marge (le chapitre 7 : les coûts doublés ne doivent pas la détruire).
+
+## Deux trades relus à travers le Monte Carlo
+
+Ce ne sont pas des trades nouveaux : ce sont deux moments d'un même journal, relus avec les outils du chapitre.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, setup 1, trade n° 131 du journal"
+  direction="Long"
+  setup="Signal complet, contexte conforme ; pris au 22e trade d'un drawdown de 13R qui dure depuis six semaines ; le Monte Carlo de la fiche (fait sur les 110 premiers trades) donne un DD médian de 11R et un p95 de 19R sur cet horizon"
+  entree="5 384,25"
+  stop="5 376,25 (32 ticks)"
+  objectif="C1 5 396,50 ; C2 5 408,75"
+  r="+2,3R">
+
+Le trade en lui-même est ordinaire : C1 atteint, moitié sortie, solde à C2 en fin d'après-midi. Ce qui compte est qu'il a été **pris**, à taille pleine, au fond d'un drawdown de 13R. Sans le Monte Carlo, ce drawdown était vécu comme un signal d'alarme (« la fiche ne marche plus ») et le trader aurait réduit la taille, sauté des signaux, ou changé un seuil ; les trois manières classiques de rater le rebond. Avec le Monte Carlo, 13R est un drawdown **ordinaire** (au-dessus de la médiane, bien sous le p95) et la conformité était supérieure à 90 % : la règle disait de continuer, à l'identique. Le trade n° 131 et les six suivants ont sorti la courbe du drawdown ; ils n'auraient pas existé sans la distribution.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, setup 1, trade n° 58 du journal d'un autre trader"
+  direction="Short"
+  setup="Signal complet ; pris à taille doublée « parce que la fiche est à +0,6R sur 57 trades et 65 % de réussite » ; aucun intervalle de confiance calculé, aucun Monte Carlo"
+  entree="18 402,00"
+  stop="18 442,00 (160 ticks)"
+  objectif="18 342,00"
+  r="−2R (taille doublée : −1R × 2)">
+
+L'erreur n'est pas le stop, c'est la taille et son motif. À 57 trades, +0,6R avec un écart-type d'environ 1,5R donne un intervalle de ±0,4R : la fiche vaut peut-être +0,2R, peut-être +1,0R ; et un système à +0,6R sur 57 trades avec 65 % de réussite est un tirage **favorable** d'un système probablement plus modeste (le chapitre 2 attend 45 à 55 %). Doubler la taille sur cette base, c'est doubler l'exposition à un drawdown dont on n'a pas la distribution ; le Monte Carlo sur ces 57 trades aurait donné un p90 de l'ordre de 12 à 15R, soit 24 à 30R à taille doublée. Le trade n° 58 a perdu 2R, les huit suivants 6R de plus à taille doublée : la fiche n'était pas mauvaise, elle était **inconnue**, et l'on ne double pas la mise sur une inconnue.
+
+</TradeExample>
+
+:::tip À retenir
+
+- La distribution des résultats d'un système est **asymétrique** : bosse des stops à −1R (souvent la majorité), bosses des gains, queue à droite ; médiane négative, moyenne positive, écart-type de 1,3 à 1,5R (neuf fois la moyenne) ; la moyenne dépend de la queue.
+- **Intervalle de confiance** à 95 % : moyenne ± 1,96 × écart-type / √n (ou bootstrap) ; sur 120 trades à +0,15R, l'intervalle contient zéro : « probablement positive, pas démontrée » ; on ne change pas la taille sur une moyenne.
+- **Monte Carlo** : rééchantillonner les trades observés pour construire des milliers de séquences ; distribution du drawdown, des séries de pertes, probabilité de ruine ; hypothèses : indépendance et représentativité ; il redistribue le risque observé, il n'en invente pas.
+- Le **drawdown historique est un tirage** ; on dimensionne sur le **p90** du Monte Carlo à l'horizon prévu, on suspend au-delà du **p95**, on mesure le risque de ruine comme la part des séquences qui touchent le seuil ; un drawdown ordinaire n'appelle aucune décision.
+- **Taille d'échantillon** : à 30 trades un bon système paraît négatif une fois sur cinq ; 100 pour un signe probable, 200 pour un signe établi, 400 à 800 pour comparer des variantes ; significatif n'est pas suffisant : il faut aussi de la marge.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Un intervalle à la main">
+
+Un journal de 80 trades donne une expectancy de +0,28R et un écart-type de 1,45R.
+
+1. Erreur standard et intervalle de confiance à 95 %.
+2. Peut-on affirmer que le système est positif ?
+3. Combien de trades faudrait-il, à moyenne et écart-type constants, pour que la borne basse dépasse zéro ?
+
+<Solution>
+
+1. Erreur standard = 1,45 / √80 = 1,45 / 8,94 = **0,162R**. Intervalle = 0,28 ± 1,96 × 0,162 = 0,28 ± 0,318 → **[−0,04 ; +0,60]**.
+2. Non : l'intervalle contient zéro (de peu). « Probablement positif, pas démontré. »
+3. On veut 1,96 × 1,45 / √n inférieur à 0,28, soit √n supérieur à 1,96 × 1,45 / 0,28 = 10,15, soit **n supérieur à 103** trades (à 104, la borne basse est juste au-dessus de zéro).
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Dimensionner sur le Monte Carlo">
+
+Le Monte Carlo d'une fiche sur un horizon de 400 trades donne : drawdown médian 14R, p90 23R, p95 27R, p99 36R ; probabilité de toucher −30R : 3 %. Le trader accepte au maximum une baisse de 18 % de son compte sur cet horizon, sauf malchance rare (un cas sur dix).
+
+1. Quel risque par trade (en % du capital) respecte cette contrainte ?
+2. Avec ce risque, quelle baisse correspondrait au p99 ?
+3. Le trader traverse un drawdown de 25R : que dit la règle ?
+
+<Solution>
+
+1. Contrainte : p90 × risque ≤ 18 % → risque ≤ 18 / 23 = **0,78 %** par trade (on arrondit à 0,75 %).
+2. p99 × 0,75 % = 36 × 0,75 = **27 %** de baisse une fois sur cent : le trader doit savoir que c'est possible et décider s'il l'accepte ; sinon 0,5 % (p90 → 11,5 %, p99 → 18 %).
+3. 25R est entre le p90 (23R) et le p95 (27R) : drawdown **sévère mais ordinaire** ; la fiche n'est pas suspendue ; on vérifie la conformité (supérieure à 90 % ?) et le régime, et l'on continue à l'identique. La suspension viendrait au-delà de 27R.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Deux fiches, un choix">
+
+Fiche A : 150 trades, +0,35R, écart-type 1,3R. Fiche B : 40 trades, +0,70R, écart-type 1,6R. Un lecteur veut abandonner A pour B « qui gagne deux fois plus ». Calculez les deux intervalles et donnez un avis.
+
+<Solution>
+
+A : erreur standard 1,3 / √150 = 0,106R ; intervalle **[+0,14 ; +0,56]** : positif, établi. B : 1,6 / √40 = 0,253R ; intervalle **[+0,20 ; +1,20]** : positif aussi, mais très large ; B vaut peut-être +0,2R (moins que A) ou +1,2R. Les deux intervalles se recouvrent largement : **rien ne dit que B est meilleure que A**. Avis : garder A ; continuer à collecter sur B (en simulation ou à petite taille) jusqu'à 100 - 150 trades ; comparer alors. Et se méfier d'un +0,7R sur 40 trades : c'est souvent un tirage favorable (chapitre 6 : à 40 trades, la moyenne bouge de ±0,5R).
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La distribution des résultats d'un système à stop et cibles est :",
+      options: [
+        "Une cloche centrée sur la moyenne",
+        "Asymétrique : une bosse des stops vers −1R (souvent la majorité), des bosses de gains, une queue à droite ; médiane négative, moyenne positive",
+        "Uniforme",
+        "Toujours symétrique",
+      ],
+      answer: 1,
+      explain: "L'écart-type est de l'ordre de neuf fois la moyenne, ce qui rend l'expectancy lente à mesurer.",
+    },
+    {
+      q: "Un intervalle de confiance à 95 % de [−0,09 ; +0,40] sur 120 trades signifie :",
+      options: [
+        "Le système est nul",
+        "Le système est probablement positif mais ce n'est pas démontré : on ne change pas la taille sur cette base",
+        "Le système gagne +0,40R",
+        "Il faut arrêter",
+      ],
+      answer: 1,
+      explain: "L'intervalle contient zéro ; la vraie valeur peut être n'importe où dedans (dans le script, elle vaut +0,21R).",
+    },
+    {
+      q: "Le Monte Carlo par rééchantillonnage :",
+      options: [
+        "Prédit les prochains trades",
+        "Construit des milliers de séquences possibles à partir des trades observés, pour obtenir la distribution du drawdown, des séries et du risque de ruine",
+        "Invente des risques nouveaux",
+        "Remplace le backtest",
+      ],
+      answer: 1,
+      explain: "Il redistribue le risque contenu dans l'échantillon ; il suppose les trades indépendants et l'échantillon représentatif.",
+    },
+    {
+      q: "Le drawdown historique de 6,5R quand le Monte Carlo donne une médiane de 10R et un p90 de 17R :",
+      options: [
+        "Est le pire cas possible",
+        "Est un tirage favorable : le système n'a pas encore montré ce qu'il sait faire de pire ; on dimensionne sur le p90, pas sur l'historique",
+        "Prouve que le système est sûr",
+        "N'a aucun sens",
+      ],
+      answer: 1,
+      explain: "L'historique sert seulement à vérifier qu'il est compatible avec la distribution.",
+    },
+    {
+      q: "Le trader traverse un drawdown situé sous le p90 du Monte Carlo, avec une conformité supérieure à 90 %. Il doit :",
+      options: [
+        "Réduire la taille et changer un seuil",
+        "Continuer à l'identique : le drawdown est ordinaire et n'appelle aucune décision ; la suspension vient au-delà du p95",
+        "Doubler la taille pour se refaire",
+        "Arrêter le setup",
+      ],
+      answer: 1,
+      explain: "C'est ce qui permet de traverser une série sans toucher à la fiche, et de ne pas rater le rebond.",
+    },
+    {
+      q: "À 30 trades, pour un système à +0,2R et 1,4R d'écart-type, la probabilité de mesurer une expectancy négative est d'environ :",
+      options: [
+        "0 %",
+        "Près de 20 % : un bon système paraît perdant une fois sur cinq à cette taille",
+        "50 %",
+        "100 %",
+      ],
+      answer: 1,
+      explain: "D'où les seuils : 100 trades pour un signe probable, 200 pour un signe établi, 400 à 800 pour comparer des variantes.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Tout ce chapitre suppose que la fiche a été testée telle qu'écrite. Or la tentation, devant un échantillon, est de la modifier : un seuil de plus, une fenêtre de moins, jusqu'à ce que le passé soit parfait. Le chapitre suivant traite du sur-ajustement : pourquoi un backtest optimisé ment, comment séparer les données d'apprentissage et de test, la validation walk-forward, les tests de robustesse par perturbation des paramètres, et le nombre de degrés de liberté qu'une fiche peut se permettre.
