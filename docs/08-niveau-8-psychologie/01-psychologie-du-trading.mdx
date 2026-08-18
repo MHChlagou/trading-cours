@@ -1,0 +1,337 @@
+---
+title: "Psychologie du trading"
+description: "Les biais cognitifs qui coûtent le plus cher en euros, la détection précoce du tilt et du revenge trading par des signaux mesurables, les trois saboteurs (peur, avidité, ennui), la discipline construite par le process plutôt que par la volonté, et les protocoles d'urgence à appliquer quand le dérapage a commencé."
+---
+
+# Psychologie du trading
+
+Sept niveaux de méthode ne servent à rien si le trader ne fait pas ce qu'il a écrit. Ce chapitre ne parle pas de motivation ni de pensée positive : il traite les erreurs d'exécution comme des **phénomènes mesurables**, avec des causes identifiables, des signaux d'alerte précoces et des protocoles. Le postulat du niveau 8 est simple : la volonté est une ressource qui s'épuise en séance, le process est une structure qui tient quand la volonté a lâché. On ne devient pas discipliné en le décidant ; on le devient en organisant ses journées pour que la décision difficile ait déjà été prise à froid.
+
+## Les biais cognitifs qui coûtent le plus cher
+
+Il existe des dizaines de biais répertoriés. Cinq suffisent à expliquer la majorité des pertes hors plan, et chacun se traduit en euros.
+
+**L'aversion à la perte réalisée.** Une perte n'existe pas tant qu'elle n'est pas fermée, croit-on. C'est le biais le plus coûteux du trading : il produit le stop élargi, le stop retiré, la position gardée « le temps que ça revienne ». En R, il transforme des −1R en −3R ou −5R ; une seule occurrence par mois suffit à annuler l'expectancy d'un bon setup (le niveau 1 l'a calculé). Sa parade est structurelle, pas mentale : stop dans le marché à l'entrée, en bracket, jamais dans la tête.
+
+**Le biais de confirmation.** Une fois en position, le cerveau collecte les éléments qui confirment la thèse et écarte les autres : on descend d'unité de temps pour trouver un support, on cherche un tweet qui va dans notre sens, on cesse de voir le CHoCH qui vient de se former. La parade est d'écrire l'invalidation **avant** l'entrée (« ce trade est faux si le prix clôture sous X ») : la thèse devient réfutable, et l'invalidation n'a plus à être découverte au moment où elle fait mal.
+
+**L'illusion de contrôle.** Le trader croit que sa surveillance influence le résultat : il regarde chaque tick, sort avant la cible « parce que ça hésite », remet le trade trois minutes plus tard. En pratique, la surveillance continue ne change que les décisions du trader, jamais le marché ; elle les dégrade. La parade : des ordres en place et un écran qu'on ne regarde qu'aux clôtures de bougies de l'unité d'exécution.
+
+**Le biais de récence.** Les trois derniers trades pèsent plus que les cent précédents. Après deux pertes, la taille rétrécit et les signaux sont sautés ; après deux gains, elle grossit. Le niveau 8 y répond par les statistiques du niveau 7 : la série de six pertes est ordinaire, le Monte Carlo l'annonçait ; la taille est calculée, pas ressentie.
+
+**L'attribution asymétrique.** Les gains sont mis sur le compte du talent, les pertes sur celui du marché, du courtier, de la connexion. Elle empêche l'apprentissage, puisqu'il n'y a rien à apprendre d'une malchance. La parade est la colonne « conformité » du journal : un gain hors plan est un problème, une perte conforme n'en est pas un ; c'est cette grille, et non le P&L, qui juge le trade.
+
+<Figure caption="Figure 1 · Les cinq biais les plus coûteux, leur traduction concrète en séance et leur parade structurelle. Aucune parade n'est mentale : chacune est un geste écrit d'avance ou un ordre déjà dans le marché.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Biais cognitifs et parades" xmlns="http://www.w3.org/2000/svg">
+  <text x="150" y="38" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Biais</text>
+  <text x="380" y="38" fontSize="11" fontWeight="600" textAnchor="middle">Ce qu'il produit en séance</text>
+  <text x="610" y="38" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Parade structurelle</text>
+  <line x1="30" y1="48" x2="690" y2="48" className="line" strokeWidth="1" />
+  <text x="35" y="76" fontSize="9" fontWeight="600">Aversion à la perte réalisée</text>
+  <text x="270" y="76" fontSize="9" className="muted">stop élargi, retiré, position gardée</text>
+  <text x="500" y="76" fontSize="9" className="green">stop en bracket à l'entrée, jamais dans la tête</text>
+  <text x="35" y="112" fontSize="9" fontWeight="600">Confirmation</text>
+  <text x="270" y="112" fontSize="9" className="muted">on cherche ce qui rassure, on ne voit plus le CHoCH</text>
+  <text x="500" y="112" fontSize="9" className="green">invalidation écrite avant l'entrée</text>
+  <text x="35" y="148" fontSize="9" fontWeight="600">Illusion de contrôle</text>
+  <text x="270" y="148" fontSize="9" className="muted">sortie avant la cible, re-entrée trois minutes après</text>
+  <text x="500" y="148" fontSize="9" className="green">ordres en place, écran regardé aux clôtures</text>
+  <text x="35" y="184" fontSize="9" fontWeight="600">Récence</text>
+  <text x="270" y="184" fontSize="9" className="muted">taille qui rétrécit ou gonfle selon les 3 derniers trades</text>
+  <text x="500" y="184" fontSize="9" className="green">taille calculée ; Monte Carlo lu (ch. 8 du N7)</text>
+  <text x="35" y="220" fontSize="9" fontWeight="600">Attribution asymétrique</text>
+  <text x="270" y="220" fontSize="9" className="muted">gains = talent, pertes = marché : rien à apprendre</text>
+  <text x="500" y="220" fontSize="9" className="green">colonne conformité : elle juge, pas le P&amp;L</text>
+  <line x1="30" y1="240" x2="690" y2="240" className="line" strokeWidth="1" />
+  <text x="360" y="270" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">une parade qui repose sur « je ferai attention » n'est pas une parade</text>
+</svg>
+</Figure>
+
+## Tilt et revenge trading : détection précoce
+
+Le tilt est un état, pas un trait de caractère : la capacité de décision s'effondre, le besoin de reprendre l'argent perdu prend la place du plan. Le revenge trading en est la forme la plus reconnaissable : après une perte, on entre immédiatement, plus gros, sur un signal plus faible, souvent dans le sens qui aurait « dû » marcher.
+
+Le problème est qu'un trader en tilt ne se sent pas en tilt : il se sent lucide et déterminé. On ne peut donc pas compter sur l'introspection ; il faut des **signaux observables**, qui se lisent sur l'écran et sur le journal :
+
+- **Le délai entre deux trades s'effondre.** Un setup qui produit un signal par heure et deux entrées en cinq minutes : le second n'est pas du setup.
+- **La taille change sans que la formule le dise.** Toute taille non issue du calcul est un signal, à la hausse comme à la baisse.
+- **La qualité déclarée du signal baisse.** Le journal note « complet » habituellement et « limite » ou « proche » depuis deux trades.
+- **Les critères se relâchent dans le langage.** « Ça ressemble », « en gros », « ça devrait » : le vocabulaire du trader en séance est un instrument de mesure.
+- **Le budget quotidien est atteint et l'on cherche une raison de continuer** (« encore un, mais petit »).
+- **Symptômes corporels** : respiration haute, mâchoire serrée, chaleur, besoin de se lever ; ils précèdent souvent la première mauvaise décision de plusieurs minutes.
+- **L'attention se déplace vers le P&L** en euros et non vers le prix ou le plan : compter son argent en séance est le signe le plus fiable.
+
+Trois de ces signaux simultanés valent une pause : c'est un seuil, pas une opinion. Le trader écrit ce seuil dans son plan quand il est calme, et le respecte quand il ne l'est plus, parce que la décision a déjà été prise.
+
+<Figure caption="Figure 2 · La cascade du tilt : un déclencheur (perte, occasion manquée, gain trop rapide), l'écart émotionnel, les signaux observables, puis le trade hors plan et la spirale. On intervient là où c'est encore possible : avant le trade hors plan, sur trois signaux simultanés.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Cascade du tilt et point d'intervention" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="50" width="130" height="60" rx="6" className="box" strokeWidth="1" />
+  <text x="95" y="72" fontSize="10" fontWeight="600" textAnchor="middle">1 · Déclencheur</text>
+  <text x="95" y="90" fontSize="8" textAnchor="middle" className="muted">perte, occasion manquée,</text>
+  <text x="95" y="102" fontSize="8" textAnchor="middle" className="muted">gain trop facile, imprévu</text>
+  <line x1="160" y1="80" x2="185" y2="80" className="line" strokeWidth="1.5" />
+  <rect x="185" y="50" width="130" height="60" rx="6" className="box" strokeWidth="1" />
+  <text x="250" y="72" fontSize="10" fontWeight="600" textAnchor="middle">2 · Écart émotionnel</text>
+  <text x="250" y="90" fontSize="8" textAnchor="middle" className="muted">« il faut que je récupère »</text>
+  <text x="250" y="102" fontSize="8" textAnchor="middle" className="muted">le trader se sent lucide</text>
+  <line x1="315" y1="80" x2="340" y2="80" className="line" strokeWidth="1.5" />
+  <rect x="340" y="40" width="180" height="80" rx="6" className="gold" opacity="0.2" />
+  <rect x="340" y="40" width="180" height="80" rx="6" className="box" strokeWidth="1.5" />
+  <text x="430" y="60" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">3 · Signaux observables</text>
+  <text x="350" y="76" fontSize="8">délai entre trades ↓ · taille hors formule</text>
+  <text x="350" y="90" fontSize="8">signal « limite » · vocabulaire flou</text>
+  <text x="350" y="104" fontSize="8">P&amp;L en euros regardé · corps tendu</text>
+  <line x1="520" y1="80" x2="545" y2="80" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <rect x="545" y="50" width="145" height="60" rx="6" className="box" strokeWidth="1" />
+  <text x="617" y="72" fontSize="10" fontWeight="600" textAnchor="middle" className="red">4 · Trade hors plan</text>
+  <text x="617" y="90" fontSize="8" textAnchor="middle" className="muted">plus gros, signal plus faible,</text>
+  <text x="617" y="102" fontSize="8" textAnchor="middle" className="muted">puis spirale : −4R, −8R</text>
+  <line x1="430" y1="120" x2="430" y2="160" stroke="var(--tm-green)" strokeWidth="2" />
+  <rect x="250" y="160" width="360" height="60" rx="6" className="box" strokeWidth="1.5" />
+  <text x="430" y="182" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Point d'intervention : trois signaux simultanés = pause</text>
+  <text x="430" y="202" fontSize="9" textAnchor="middle" className="muted">seuil écrit à froid, appliqué à chaud, sans discussion en séance</text>
+  <text x="360" y="255" fontSize="10" textAnchor="middle" className="muted">après l'étape 4, il n'y a plus de décision : il y a un protocole d'urgence (plus bas)</text>
+  <text x="360" y="285" fontSize="10" textAnchor="middle" className="red">un trader en tilt ne se sent pas en tilt : il se sent déterminé</text>
+</svg>
+</Figure>
+
+## Peur, avidité, ennui : les trois saboteurs
+
+Ces trois états produisent des erreurs différentes, et il est utile de les distinguer parce que les parades ne sont pas les mêmes.
+
+**La peur** ne fait pas seulement rater des trades : elle produit des erreurs actives. Sortie avant la cible sur une bougie contraire, entrée non prise alors que tous les critères sont là, taille réduite au tiers « pour voir », stop mis trop près pour « risquer moins » (ce qui augmente la probabilité d'être touché et détruit le ratio). Sa source habituelle est un risque **mal calibré** : on a peur parce qu'on risque trop pour son compte ou pour son expérience. La parade principale n'est pas psychologique : c'est diviser la taille par deux jusqu'à ce que l'exécution redevienne mécanique, puis remonter par paliers avec la conformité comme critère (pas le P&L). La seconde parade est la répétition : cinquante exécutions du même setup en simulation rendent le geste ordinaire.
+
+**L'avidité** produit le trade en trop, la taille en trop, la cible déplacée pendant qu'on est dedans, l'ajout hors règles, la session prolongée « puisque ça marche ». Elle vient souvent après une série de gains, quand le trader se sent en avance. Sa parade est le **plafond** : nombre de trades par jour, budget quotidien, heure de fin, taille maximale par setup ; des limites hautes, écrites, aussi contraignantes que les limites basses. Une bonne série ne donne pas droit à plus de risque ; elle donne droit à la même chose.
+
+**L'ennui** est le plus sous-estimé. Les mois sans signal existent (le setup 2 en été, le setup 3 en range) et le trader qui reste devant l'écran finit par trader du bruit. La perte n'est pas dramatique par trade, mais elle est régulière et elle pollue les statistiques des fiches. Ses parades : une liste de travaux à faire pendant l'attente (backtest, revue, préparation des niveaux, lecture du journal), l'autorisation explicite de fermer l'écran quand le bloc 1 dit « rien aujourd'hui », et une règle simple, la plus efficace du chapitre : **le nombre de trades n'est pas un objectif**. Un mois à trois trades conformes est un bon mois.
+
+## La discipline par le process, pas par la volonté
+
+La volonté est un mauvais matériau : elle est abondante le dimanche soir et absente le jeudi à 20 h après deux pertes. Le process est un ensemble de contraintes qui ne demandent pas de volonté au moment où elle manque, parce que la décision a été prise ailleurs, plus tôt, à froid.
+
+Concrètement, un process de trader se compose de :
+
+- **Décisions déplacées dans le temps.** Tout ce qui peut être décidé la veille l'est la veille : réservoirs, régime, calendrier, setups autorisés, budget. En séance, on n'a plus qu'à reconnaître et exécuter.
+- **Décisions déplacées hors de soi.** Le stop est chez le courtier ; les limites de perte quotidienne sont dans la plateforme ; l'alerte de prix remplace la surveillance ; la taille sort d'une formule ou d'une table imprimée, pas d'une estimation.
+- **Des étapes courtes et ordonnées.** Une checklist de six lignes avant chaque entrée, la même chaque fois, cochée. Ce n'est pas de la bureaucratie : c'est ce qui rend l'erreur visible avant qu'elle coûte.
+- **Un environnement qui aide.** Écran sans réseaux sociaux, P&L masqué en séance (on trade en R et en prix, on compte les euros le soir), téléphone hors de portée, une seule plateforme ouverte, heures de séance connues des proches.
+- **Une boucle de retour.** Le journal (chapitre suivant) et la revue hebdomadaire ferment la boucle : sans mesure, un process dérive sans qu'on le sache.
+- **Des règles d'exception écrites.** Que fait-on quand la connexion tombe ? quand un ordre est rejeté ? quand une annonce sort à un moment imprévu ? quand on se réveille en retard et que le setup est déjà en cours ? Écrites, ces situations deviennent des procédures ; non écrites, elles deviennent des improvisations, et l'improvisation est la porte d'entrée du hors-plan.
+
+La conformité, mesurée en pourcentage de trades exécutés selon la fiche, est l'indicateur central du niveau 8. Un trader à 95 % de conformité et +0,2R d'expectancy gagne ; un trader à 60 % de conformité ne sait même pas ce que vaut sa fiche : il trade autre chose que ce qu'il a testé.
+
+<Figure caption="Figure 3 · La discipline comme architecture : décisions déplacées dans le temps (la veille) et hors de soi (courtier, plateforme, formule), étapes courtes cochées, environnement neutre, boucle de retour par le journal, et règles d'exception écrites. La volonté n'intervient qu'une fois : pour construire le process.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Architecture de la discipline" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="360" cy="150" r="52" className="gold" opacity="0.18" />
+  <circle cx="360" cy="150" r="52" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="360" y="146" fontSize="11" fontWeight="600" textAnchor="middle">Exécution</text>
+  <text x="360" y="164" fontSize="9" textAnchor="middle" className="muted">reconnaître, cocher, envoyer</text>
+  <rect x="30" y="40" width="180" height="52" rx="6" className="box" strokeWidth="1" />
+  <text x="120" y="60" fontSize="9" fontWeight="600" textAnchor="middle">Décidé la veille</text>
+  <text x="120" y="76" fontSize="8" textAnchor="middle" className="muted">réservoirs, régime, calendrier,</text>
+  <text x="120" y="87" fontSize="8" textAnchor="middle" className="muted">setups autorisés, budget</text>
+  <line x1="210" y1="80" x2="315" y2="128" className="line" strokeWidth="1" />
+  <rect x="510" y="40" width="180" height="52" rx="6" className="box" strokeWidth="1" />
+  <text x="600" y="60" fontSize="9" fontWeight="600" textAnchor="middle">Décidé hors de soi</text>
+  <text x="600" y="76" fontSize="8" textAnchor="middle" className="muted">stop chez le courtier, limites</text>
+  <text x="600" y="87" fontSize="8" textAnchor="middle" className="muted">plateforme, taille par formule</text>
+  <line x1="510" y1="80" x2="405" y2="128" className="line" strokeWidth="1" />
+  <rect x="30" y="210" width="180" height="52" rx="6" className="box" strokeWidth="1" />
+  <text x="120" y="230" fontSize="9" fontWeight="600" textAnchor="middle">Environnement</text>
+  <text x="120" y="246" fontSize="8" textAnchor="middle" className="muted">P&amp;L masqué, écran neutre,</text>
+  <text x="120" y="257" fontSize="8" textAnchor="middle" className="muted">téléphone loin, horaires connus</text>
+  <line x1="210" y1="222" x2="315" y2="174" className="line" strokeWidth="1" />
+  <rect x="510" y="210" width="180" height="52" rx="6" className="box" strokeWidth="1" />
+  <text x="600" y="230" fontSize="9" fontWeight="600" textAnchor="middle">Boucle de retour</text>
+  <text x="600" y="246" fontSize="8" textAnchor="middle" className="muted">journal, conformité en %,</text>
+  <text x="600" y="257" fontSize="8" textAnchor="middle" className="muted">revue hebdomadaire</text>
+  <line x1="510" y1="222" x2="405" y2="174" className="line" strokeWidth="1" />
+  <rect x="270" y="238" width="180" height="42" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="256" fontSize="9" fontWeight="600" textAnchor="middle">Règles d'exception écrites</text>
+  <text x="360" y="271" fontSize="8" textAnchor="middle" className="muted">connexion, rejet, retard, annonce</text>
+  <text x="360" y="26" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">la volonté ne sert qu'une fois : pour construire le process, à froid</text>
+</svg>
+</Figure>
+
+## Protocoles d'urgence en cas de dérapage
+
+Malgré tout, le dérapage arrive. Il faut des protocoles, courts, écrits, applicables sans réfléchir. Les voici, du plus léger au plus lourd.
+
+**Protocole 1 · Trois signaux (pause de 15 minutes).** Déclencheur : trois signaux de tilt simultanés, ou une envie d'entrer hors setup. Actions : annuler tout ordre en attente ; se lever, sortir de la pièce, boire de l'eau ; écrire trois lignes dans le journal (ce qui vient de se passer, ce que j'ai envie de faire, ce que dit la fiche) ; revenir, relire le bloc 1 du jour. Reprise autorisée si la checklist est cochable telle quelle.
+
+**Protocole 2 · Budget quotidien atteint (arrêt du jour).** Déclencheur : −2R sur la journée, ou deux trades perdants consécutifs hors régime prévu. Actions : fermer les positions selon les fiches (pas au marché en panique si les stops sont en place et les fiches prévoient une gestion), annuler les ordres, **fermer la plateforme**, noter la journée. Aucune reprise le même jour, même « en simulation » (le simulateur nourrit le même besoin).
+
+**Protocole 3 · Trade hors plan exécuté (protocole post-faute).** Déclencheur : un trade pris sans fiche, ou avec une taille non conforme. Actions : le fermer **immédiatement** au marché, quel que soit son signe (un trade hors plan gagnant est plus dangereux qu'un perdant : il enseigne la faute) ; arrêter la journée ; écrire l'analyse le soir : déclencheur, signaux ignorés, coût en R, et la modification de process qui l'aurait empêché. La faute n'est pas la perte ; c'est l'absence de modification après.
+
+**Protocole 4 · Série lourde (réduction et pause structurée).** Déclencheur : drawdown au-delà du 95e percentile du Monte Carlo (niveau 7), ou trois semaines à conformité inférieure à 80 %. Actions : taille divisée par deux ; retour au setup le plus simple uniquement ; deux semaines de revue quotidienne du journal ; remontée par paliers avec la conformité comme seul critère de progression. Si la conformité ne remonte pas, arrêt de deux semaines complètes : ce n'est pas le marché qu'il faut réparer.
+
+**Protocole 5 · Choc extérieur (arrêt immédiat).** Déclencheur : événement personnel important (nouvelle grave, nuit blanche, conflit, maladie), ou état d'esprit qui n'a rien à voir avec le marché. Actions : ne pas ouvrir la plateforme ; le trading est l'activité la plus facile à ne pas faire un jour donné, et la plus coûteuse à faire mal.
+
+Chaque protocole tient sur une carte, affichée près de l'écran, et se relit le dimanche. Leur qualité première n'est pas la finesse : c'est d'être **exécutables par quelqu'un qui ne va pas bien**.
+
+## Deux trades, deux états
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, setup 1"
+  direction="Long"
+  setup="Signal complet à 16 h 12, le lendemain d'une journée arrêtée à −1,9R par les protocoles 1 et 2 ; budget du jour intact, régime tendance normale, réservoir préparé (PDL), S1 à S4 validés, S6 présent"
+  entree="5 318,25"
+  stop="5 309,75 (34 ticks)"
+  objectif="C1 5 331 ; C2 5 344"
+  r="+1,9R">
+
+L'intérêt n'est pas le trade mais la veille : deux pertes conformes, l'envie de « rattraper » à 17 h, trois signaux de tilt (délai raccourci, vocabulaire flou, P&L regardé en euros), protocole 1 appliqué, puis protocole 2 puisque le budget était atteint ; plateforme fermée à 17 h 05. Le lendemain, le trader est frais, le signal est complet, l'exécution est mécanique : C1 puis solde en trailing. Sans les protocoles de la veille, ce trade aurait été pris avec un compte entamé de 3 ou 4R et une taille « corrective ». La psychologie ne se voit pas sur ce trade ; elle se voit sur celui qui n'a pas eu lieu.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, hors setup"
+  direction="Long"
+  setup="Aucun : le trader vient de sortir d'un trade conforme à −1R à 20 h 41 ; il entre à 20 h 44 sur « le rebond qui aurait dû arriver », taille doublée, sans stop défini au départ (mis à la main deux minutes plus tard)"
+  entree="18 190,00"
+  stop="18 150,00 (posé après coup, 160 ticks)"
+  objectif="aucun (« je sors quand je suis à zéro »)"
+  r="−2,2R">
+
+Tous les marqueurs sont là : trois minutes entre deux trades, taille hors formule, absence de cible, objectif exprimé en euros à récupérer, stop posé après l'entrée. Le prix descend jusqu'au stop en dix minutes. Coût du jour : −3,2R au lieu de −1R, soit trois jours de gain moyen effacés par une décision de trois minutes. Ce qui compte est la suite : le trade est classé **hors setup** (il ne pollue pas les statistiques de la fiche), le protocole 3 est appliqué (journée arrêtée, analyse écrite le soir), et une modification de process en sort : la plateforme se verrouille désormais dix minutes après toute perte, par une alarme et une case à cocher. La faute n'a été payée qu'une fois.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Cinq biais expliquent l'essentiel des pertes hors plan : **aversion à la perte réalisée** (stop élargi), **confirmation**, **illusion de contrôle**, **récence**, **attribution asymétrique** ; chaque parade est structurelle (bracket, invalidation écrite, ordres en place, taille calculée, colonne conformité), jamais mentale.
+- Le **tilt** ne se sent pas : il se détecte par des signaux observables (délai entre trades, taille hors formule, qualité de signal en baisse, vocabulaire flou, P&L en euros, corps tendu). **Trois signaux simultanés = pause**, seuil écrit à froid.
+- **Peur** (risque mal calibré : diviser la taille, répéter), **avidité** (plafonds écrits : trades, budget, heure, taille), **ennui** (travaux d'attente, autorisation de fermer l'écran) ; le nombre de trades n'est pas un objectif.
+- La discipline est une **architecture** : décider la veille, décider hors de soi, cocher des étapes courtes, neutraliser l'environnement, fermer la boucle par le journal, écrire les règles d'exception. La **conformité** est l'indicateur central.
+- Cinq **protocoles** écrits, du plus léger au plus lourd : pause de 15 minutes, arrêt du jour au budget, post-faute (fermer le trade hors plan même gagnant), série lourde (taille ÷2, revue, remontée par paliers), choc extérieur (ne pas ouvrir la plateforme).
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Nommer le biais et écrire la parade">
+
+Pour chaque situation, nommez le biais dominant et donnez une parade **structurelle** (un geste, pas une intention).
+
+- (a) Le trader déplace son stop de 8 points « parce que le niveau est un peu plus bas en réalité ».
+- (b) Après C1, il ferme tout au lieu de garder le solde vers C2, « au cas où ».
+- (c) Il descend en M1 pendant une position H1 et sort sur une mèche.
+- (d) Après trois gains, il passe de 2 à 5 contrats sans changer le budget.
+- (e) Il explique ses deux dernières pertes par « un marché truqué » et ne remplit pas son journal.
+
+<Solution>
+
+- **(a)** Aversion à la perte réalisée. Parade : stop envoyé en bracket à l'entrée, et interdiction technique de modification à la baisse (chez certains courtiers, ordre OCO figé ; sinon règle écrite + capture d'écran du bracket au journal).
+- **(b)** Peur (et illusion de contrôle). Parade : ordre limite de C2 **déjà placé** à l'entrée sur la moitié restante ; il n'y a plus de décision à prendre.
+- **(c)** Illusion de contrôle / zoom-in émotionnel. Parade : unité de gestion écrite dans la fiche, graphique M1 fermé pendant la position ; alerte de prix au lieu de surveillance.
+- **(d)** Récence et avidité. Parade : taille issue de la formule (budget ÷ distance × valeur du point) et plafond de taille par setup écrit ; une bonne série ne modifie pas le budget.
+- **(e)** Attribution asymétrique. Parade : journal obligatoire avant fermeture de la plateforme (case « journal rempli » dans le protocole de fin de séance), avec colonne conformité qui juge le trade indépendamment du résultat.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Écrire son protocole de tilt">
+
+Rédigez votre propre protocole 1 en cinq lignes maximum : déclencheurs (au moins trois signaux observables adaptés à votre setup et à vos horaires), actions dans l'ordre, condition de reprise. Puis indiquez où il sera affiché et quand il sera relu.
+
+<Solution>
+
+Pas de corrigé unique ; un exemple conforme : « **Déclencheurs** (2 sur 3 suffisent, hors séance calme) : moins de 20 minutes entre deux entrées ; taille saisie différente de la table imprimée ; je regarde le P&L en euros. **Actions** : 1) annuler les ordres en attente ; 2) quitter la pièce 10 minutes, sans téléphone ; 3) écrire trois lignes au journal ; 4) relire la préparation du matin. **Reprise** : seulement si la checklist d'entrée est cochable ligne à ligne et si le budget du jour reste supérieur à 1R. Affiché sur la carte à gauche de l'écran ; relu le dimanche soir avec la préparation de la semaine. » Ce qu'on vérifie : des déclencheurs mesurables (pas « si je me sens énervé »), des actions ordonnées et physiques, une condition de reprise objective.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le coût d'une faute">
+
+Un trader a une expectancy de +0,25R sur 12 trades par mois. Il commet, en moyenne, une faute par mois : un trade hors plan à taille doublée, dont le résultat moyen est −1,8R (en R de sa taille normale, −3,6R).
+
+1. Résultat mensuel attendu sans faute.
+2. Résultat mensuel attendu avec la faute (le trade hors plan s'ajoute aux 12).
+3. De combien de trades conformes faut-il compenser une faute, et que faut-il en conclure sur la priorité entre « améliorer sa fiche » et « supprimer ses fautes » ?
+
+<Solution>
+
+1. 12 × 0,25 = **+3R** par mois.
+2. +3R − 3,6R = **−0,6R** : le mois est négatif malgré une fiche positive et onze douzièmes d'exécution correcte.
+3. Il faut 3,6 / 0,25 = **14,4 trades conformes** pour compenser une seule faute, soit plus d'un mois de travail. Conclusion : à ce niveau d'expectancy, supprimer une faute par mois vaut mieux que doubler l'expectancy de la fiche (passer de +0,25 à +0,5R rapporterait +3R par mois, à peine plus que le coût de la faute évitée, et c'est infiniment plus difficile). Le niveau 8 est là pour cette raison : la marge la plus accessible n'est pas dans la stratégie, elle est dans l'exécution.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La parade à l'aversion à la perte réalisée (stop élargi) est :",
+      options: [
+        "Se promettre d'être discipliné",
+        "Le stop dans le marché en bracket dès l'entrée, jamais dans la tête, avec interdiction écrite de le déplacer contre soi",
+        "Un stop plus large dès le début",
+        "Trader sans stop",
+      ],
+      answer: 1,
+      explain: "Une parade qui repose sur « je ferai attention » n'est pas une parade.",
+    },
+    {
+      q: "Un trader en tilt :",
+      options: [
+        "Se sent en tilt et peut donc s'arrêter",
+        "Se sent lucide et déterminé : on détecte le tilt par des signaux observables (délai, taille hors formule, qualité du signal, vocabulaire, P&L en euros, corps)",
+        "Est toujours perdant sur le trade suivant",
+        "N'existe pas chez les traders expérimentés",
+      ],
+      answer: 1,
+      explain: "Trois signaux simultanés valent une pause : c'est un seuil écrit à froid, pas une opinion à chaud.",
+    },
+    {
+      q: "La peur en trading vient le plus souvent :",
+      options: [
+        "D'un manque de courage",
+        "D'un risque mal calibré : la parade principale est de diviser la taille jusqu'à ce que l'exécution redevienne mécanique, puis de remonter par paliers selon la conformité",
+        "Du marché",
+        "D'un mauvais setup",
+      ],
+      answer: 1,
+      explain: "La répétition (cinquante exécutions du même setup) rend le geste ordinaire ; le P&L n'est pas le critère de remontée.",
+    },
+    {
+      q: "L'ennui, en trading, se traite par :",
+      options: [
+        "Un setup de plus pour occuper les heures creuses",
+        "Des travaux d'attente (backtest, revue, préparation), l'autorisation de fermer l'écran, et le principe que le nombre de trades n'est pas un objectif",
+        "Des tailles plus petites en continu",
+        "Rien, cela passe",
+      ],
+      answer: 1,
+      explain: "Un mois à trois trades conformes est un bon mois ; trader du bruit pollue les statistiques des fiches.",
+    },
+    {
+      q: "« La discipline par le process » signifie :",
+      options: [
+        "Avoir plus de volonté",
+        "Déplacer les décisions dans le temps (la veille) et hors de soi (courtier, plateforme, formule), cocher des étapes courtes, neutraliser l'environnement, mesurer la conformité, écrire les règles d'exception",
+        "Suivre son intuition avec méthode",
+        "Automatiser tout",
+      ],
+      answer: 1,
+      explain: "La volonté est abondante le dimanche et absente le jeudi soir ; elle ne sert qu'à construire le process.",
+    },
+    {
+      q: "Un trade hors plan qui se termine en gain :",
+      options: [
+        "Est une bonne nouvelle",
+        "Est plus dangereux qu'un perdant : il enseigne la faute ; on le ferme immédiatement, on classe le trade hors setup, on arrête la journée et on modifie le process",
+        "Compte dans les statistiques de la fiche",
+        "Prouve l'intuition du trader",
+      ],
+      answer: 1,
+      explain: "La faute n'est pas la perte, c'est l'absence de modification après ; et une faute peut coûter quatorze trades conformes.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Tous les protocoles de ce chapitre supposent une mesure : conformité, signaux, coût des fautes. Cette mesure est le journal. Le chapitre suivant en donne la structure complète, les captures et annotations, les tags qui rendent l'analyse possible, la revue hebdomadaire pas à pas, et des modèles prêts à copier.
