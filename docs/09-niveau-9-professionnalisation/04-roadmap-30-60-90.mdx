@@ -1,0 +1,353 @@
+---
+title: "Roadmap 30, 60, 90 jours"
+description: "Le chemin d'apprentissage phase par phase : les objectifs des trois premiers mois, le volume de travail hebdomadaire réaliste selon la disponibilité, les critères chiffrés de passage du paper trading au petit réel, les jalons mesurables et points de contrôle, et les erreurs qui font recommencer à zéro."
+---
+
+# Roadmap 30, 60, 90 jours
+
+Les deux études de cas montrent un trader qui exécute une fiche validée avec un playbook à jour. Ce chapitre montre comment on y arrive, en trois phases de trente jours. Deux avertissements avant de commencer. Le premier : **quatre-vingt-dix jours ne font pas un trader rentable** ; ils font un trader qui possède un process complet, un journal, une fiche testée et une exécution mesurée, ce qui est la seule base sur laquelle la rentabilité peut éventuellement se construire ensuite. Le second : cette feuille de route est calibrée pour **dix à quinze heures par semaine** ; si vous en avez cinq, tout se décale d'un facteur deux, et c'est très bien — ce qui compte est l'ordre des étapes, pas leur durée.
+
+Les objectifs sont exprimés en **process**, jamais en euros. Aucun jalon de ce chapitre ne mentionne un gain, et c'est volontaire : à cette échelle de temps, un gain est du bruit (niveau 7, chapitre 8), et se fixer un objectif en euros conduit mécaniquement à forcer.
+
+## Les objectifs de chaque phase
+
+**Phase 1 · Jours 1 à 30 · Construire le cadre.** L'objectif est d'avoir, au trentième jour, un **cadre complet et vide** : un playbook rédigé (chapitre 1), un journal aux trois couches opérationnel, une fiche écrite avec des seuils chiffrés, une routine quotidienne qui tient, et **aucun trade réel**. Le travail est de la lecture appliquée, de l'observation et de l'écriture : préparation quotidienne complète (six étapes) même sans trader, remplissage de la couche 2 tous les jours, repérage des signaux sur graphique en direct sans exécuter. On apprend à **voir** le setup avant d'apprendre à le prendre. Cette phase paraît lente ; elle est celle qui évite de tout recommencer au sixième mois.
+
+**Phase 2 · Jours 31 à 60 · Mesurer.** L'objectif est un **échantillon** : cent occurrences backtestées à la main de la fiche (niveau 7, chapitre 6), puis, si le rythme le permet, un backtest en code (chapitre 7) ; en parallèle, exécution en **simulation** avec la routine complète, journal rempli en séance, débrief tous les jours, revue hebdomadaire tenue. À la fin de la phase 2, le trader connaît trois nombres : l'expectancy backtestée de sa fiche avec son intervalle, sa conformité en simulation, et le p90 du Monte Carlo qui dimensionnera son risque.
+
+**Phase 3 · Jours 61 à 90 · Exécuter petit.** L'objectif est le **passage au réel à taille minimale** (un micro, ou l'équivalent : le plus petit lot possible), avec un seul setup, dans une seule fenêtre. Le but n'est pas de gagner : c'est de constater l'écart entre la simulation et le réel — l'exécution, le slippage, et surtout le comportement du trader quand l'argent est réel. La phase 3 se termine par un bilan de trimestre (niveau 8) et une décision : continuer à taille minimale, revenir en phase 2, ou augmenter légèrement selon des critères écrits.
+
+<Figure caption="Figure 1 · Les trois phases : construire le cadre (playbook, journal, fiche, routine, zéro trade), mesurer (100 occurrences backtestées, simulation avec journal, trois nombres connus), exécuter petit (réel à taille minimale, un setup, une fenêtre). Aucun objectif en euros : à cette échelle, un gain est du bruit.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Les trois phases de la roadmap" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="150" x2="690" y2="150" className="line" strokeWidth="1.5" />
+  <text x="40" y="172" fontSize="9" className="muted">J1</text><text x="245" y="172" fontSize="9" className="muted">J30</text><text x="455" y="172" fontSize="9" className="muted">J60</text><text x="670" y="172" fontSize="9" className="muted">J90</text>
+  <rect x="40" y="60" width="205" height="80" rx="6" className="box" strokeWidth="1.5" />
+  <text x="142" y="82" fontSize="11" fontWeight="600" textAnchor="middle">1 · Construire le cadre</text>
+  <text x="50" y="102" fontSize="9">playbook rédigé · journal 3 couches</text>
+  <text x="50" y="118" fontSize="9">fiche écrite avec seuils · routine tenue</text>
+  <text x="50" y="134" fontSize="9" className="red" fontWeight="600">aucun trade réel · apprendre à voir</text>
+  <rect x="250" y="60" width="205" height="80" rx="6" className="box" strokeWidth="1.5" />
+  <text x="352" y="82" fontSize="11" fontWeight="600" textAnchor="middle">2 · Mesurer</text>
+  <text x="260" y="102" fontSize="9">100 occurrences backtestées à la main</text>
+  <text x="260" y="118" fontSize="9">simulation + journal en séance + revues</text>
+  <text x="260" y="134" fontSize="9" className="gold" fontWeight="600">trois nombres : E ± , conformité, p90</text>
+  <rect x="460" y="60" width="230" height="80" rx="6" className="box" strokeWidth="1.5" />
+  <text x="575" y="82" fontSize="11" fontWeight="600" textAnchor="middle">3 · Exécuter petit</text>
+  <text x="470" y="102" fontSize="9">réel à taille minimale · un setup · une fenêtre</text>
+  <text x="470" y="118" fontSize="9">mesurer l'écart simulation / réel</text>
+  <text x="470" y="134" fontSize="9" className="green" fontWeight="600">bilan de trimestre puis décision écrite</text>
+  <rect x="140" y="196" width="440" height="54" rx="6" className="gold" opacity="0.15" />
+  <text x="360" y="218" fontSize="10" fontWeight="600" textAnchor="middle">Quatre-vingt-dix jours ne font pas un trader rentable</text>
+  <text x="360" y="238" fontSize="9" textAnchor="middle" className="muted">ils font un trader qui possède un process, un journal, une fiche testée et une exécution mesurée</text>
+  <text x="360" y="278" fontSize="10" textAnchor="middle" className="muted">calibré pour 10 à 15 h par semaine ; avec 5 h, tout se décale d'un facteur deux, et c'est très bien</text>
+</svg>
+</Figure>
+
+## Le volume de travail hebdomadaire réaliste
+
+Un plan qui suppose plus de temps qu'on n'en a produit de la culpabilité, puis l'abandon. Voici trois calibrations honnêtes, à choisir selon la vie réelle, pas selon l'ambition.
+
+**Profil A · 5 heures par semaine** (un salarié avec des soirées courtes). Trois séances d'observation ou d'exécution d'une heure, plus deux heures le week-end (revue et travail de fond). Conséquence : la phase 1 dure environ six semaines, la phase 2 environ trois mois (les cent occurrences backtestées demandent à elles seules une vingtaine d'heures), la phase 3 commence vers le sixième mois. C'est un rythme parfaitement valable.
+
+**Profil B · 10 à 15 heures par semaine** (le calibrage du chapitre). Quatre séances de deux heures (préparation, fenêtre, débrief) plus trois à cinq heures le week-end. Les trois phases tiennent en quatre-vingt-dix jours.
+
+**Profil C · 25 heures et plus** (disponibilité importante). Attention : plus de temps n'accélère pas tout. Le backtest et l'étude peuvent doubler ; l'**exécution**, elle, ne s'accélère pas, parce qu'elle est limitée par le nombre de signaux que le marché produit, et parce que la fatigue décisionnelle est réelle. Le risque du profil C est de combler le temps disponible par du sur-trading et par la multiplication des setups : la discipline du profil C consiste à **occuper le temps supplémentaire avec de la recherche, pas avec des trades**.
+
+Dans tous les cas, la répartition idéale du temps sur les trois phases est à peu près : **40 % d'exécution ou d'observation en direct**, 40 % de travail hors marché (backtest, journal, analyse), 20 % de lecture et de révision. Le débutant fait spontanément 90 / 5 / 5, et c'est la première chose à corriger.
+
+Un mot sur la régularité : quatre séances d'une heure valent mieux qu'une séance de quatre heures, pour la même raison qu'un débrief de dix minutes tous les jours vaut mieux qu'une analyse mensuelle. L'apprentissage d'un motif visuel et d'un geste d'exécution se fait par **répétition espacée**, pas par immersion.
+
+## Du paper trading au petit réel : critères de passage
+
+C'est la transition la plus mal gérée du parcours, dans les deux sens : certains restent en simulation deux ans (parce que la simulation ne fait pas mal), d'autres passent au réel au bout d'une semaine (parce que la simulation « ne compte pas »). Les critères doivent être **écrits d'avance et chiffrés**.
+
+**Passage de l'observation à la simulation** (fin de phase 1) : playbook rédigé avec au moins une fiche complète ; journal opérationnel ; vingt préparations complètes faites ; vingt signaux repérés en direct et notés **avant** leur dénouement (c'est le test qui compte : reconnaître le motif à sa naissance, pas après).
+
+**Passage de la simulation au petit réel** (fin de phase 2), les cinq conditions simultanées :
+
+1. **Échantillon backtesté** : au moins 100 occurrences de la fiche, expectancy positive avec son intervalle, et une checklist anti-overfitting passée (niveau 7, chapitre 9).
+2. **Échantillon en simulation** : au moins 30 trades exécutés avec la routine complète.
+3. **Conformité** : au moins 90 % sur ces 30 trades, sans aucun trade « hors setup ».
+4. **Journal** : rempli en séance sur 100 % des jours tradés, et quatre revues hebdomadaires tenues d'affilée.
+5. **Risque dimensionné** : Monte Carlo fait, p90 connu, taille réelle calculée pour que le p90 représente une baisse acceptable et **écrite** (par exemple 15 % du capital alloué).
+
+**La taille de départ en réel** : la plus petite possible, un micro-contrat ou le plus petit lot du courtier, même si le calcul de risque autorise davantage. Objectif : trois mois à cette taille, quelle que soit la performance. La règle est contre-intuitive et pourtant décisive : la taille ne se juge pas sur le résultat, mais sur la **stabilité de la conformité** quand l'argent devient réel. Beaucoup de traders voient leur conformité chuter de 95 % à 70 % au passage au réel ; c'est normal, c'est mesurable, et c'est exactement ce que la petite taille permet de corriger sans dégât.
+
+**Retour en arrière** : si la conformité tombe sous 80 % sur vingt trades réels, retour en simulation pendant deux semaines avec revue quotidienne. Ce retour n'est pas une punition : c'est la même logique que le protocole 4 du niveau 8.
+
+<Figure caption="Figure 2 · Les deux passages et leurs critères chiffrés : observation → simulation (playbook, journal, 20 préparations, 20 signaux repérés avant dénouement) ; simulation → petit réel (100 occurrences backtestées, 30 trades simulés, conformité ≥ 90 %, journal et revues, risque dimensionné par le Monte Carlo). Retour en arrière prévu si la conformité tombe sous 80 %.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Critères de passage entre les phases" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="90" width="150" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="95" y="120" fontSize="11" fontWeight="600" textAnchor="middle">Observation</text>
+  <text x="95" y="140" fontSize="9" textAnchor="middle" className="muted">aucun trade</text>
+  <line x1="170" y1="125" x2="240" y2="125" className="line" strokeWidth="2" />
+  <polygon points="240,125 232,120 232,130" className="line" />
+  <rect x="180" y="30" width="130" height="60" rx="6" className="gold" opacity="0.15" />
+  <text x="245" y="48" fontSize="9" fontWeight="600" textAnchor="middle">Critères</text>
+  <text x="188" y="64" fontSize="8">playbook + 1 fiche · journal prêt</text>
+  <text x="188" y="78" fontSize="8">20 préparations · 20 signaux repérés</text>
+  <rect x="250" y="90" width="150" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="325" y="120" fontSize="11" fontWeight="600" textAnchor="middle">Simulation</text>
+  <text x="325" y="140" fontSize="9" textAnchor="middle" className="muted">routine complète</text>
+  <line x1="400" y1="125" x2="470" y2="125" className="line" strokeWidth="2" />
+  <polygon points="470,125 462,120 462,130" className="line" />
+  <rect x="400" y="20" width="290" height="70" rx="6" className="gold" opacity="0.15" />
+  <text x="545" y="38" fontSize="9" fontWeight="600" textAnchor="middle">Cinq conditions simultanées</text>
+  <text x="408" y="54" fontSize="8">1 · 100 occurrences backtestées, E positive, checklist passée</text>
+  <text x="408" y="68" fontSize="8">2 · 30 trades simulés · 3 · conformité ≥ 90 %, zéro hors setup</text>
+  <text x="408" y="82" fontSize="8">4 · journal en séance 100 %, 4 revues · 5 · p90 connu et taille écrite</text>
+  <rect x="480" y="90" width="210" height="70" rx="6" className="green" opacity="0.15" />
+  <rect x="480" y="90" width="210" height="70" rx="6" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="585" y="118" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Petit réel</text>
+  <text x="585" y="136" fontSize="9" textAnchor="middle" className="muted">plus petite taille possible · trois mois</text>
+  <text x="585" y="150" fontSize="9" textAnchor="middle" className="muted">un setup, une fenêtre</text>
+  <path d="M585,160 C585,205 325,205 325,162" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="5 3" />
+  <polygon points="325,162 320,171 330,171" fill="var(--tm-red)" />
+  <text x="455" y="222" fontSize="9" textAnchor="middle" className="red" fontWeight="600">conformité sous 80 % sur 20 trades réels → retour en simulation deux semaines</text>
+  <text x="360" y="262" fontSize="10" textAnchor="middle" className="muted">la conformité chute souvent de 95 % à 70 % au passage au réel : c'est normal, mesurable,</text>
+  <text x="360" y="280" fontSize="10" textAnchor="middle" className="muted">et c'est précisément ce que la petite taille permet de corriger sans dégât</text>
+</svg>
+</Figure>
+
+## Les jalons mesurables et les points de contrôle
+
+Chaque phase se termine par un point de contrôle formel, avec des cases à cocher. Un jalon non atteint ne signifie pas l'échec : il signifie qu'on prolonge la phase. Passer à la phase suivante sans avoir coché les cases est la manière la plus fiable de devoir tout recommencer.
+
+**Point de contrôle J30.**
+- Playbook rédigé en six parties, quinze à vingt-cinq pages, imprimé.
+- Une fiche complète avec seuils chiffrés, conditions d'invalidité et sept niveaux de préparation définis.
+- Journal aux trois couches, avec listes fermées et modèle de ligne pré-rempli.
+- Vingt préparations complètes réalisées et archivées.
+- Vingt signaux repérés en direct, notés avant leur dénouement, avec capture.
+- Une revue hebdomadaire tenue au moins trois fois sur quatre.
+
+**Point de contrôle J60.**
+- Cent occurrences backtestées à la main, feuille de collecte complète, MFE et MAE renseignés.
+- Expectancy backtestée avec intervalle de confiance, décomposition par régime.
+- Monte Carlo réalisé : p90 et p95 connus, taille réelle calculée en conséquence.
+- Trente trades en simulation avec routine complète.
+- Conformité ≥ 90 % sur ces trente trades ; zéro trade hors setup.
+- Journal rempli en séance sur 100 % des jours ; quatre revues d'affilée.
+
+**Point de contrôle J90.**
+- Vingt à quarante trades réels à taille minimale.
+- Conformité ≥ 85 % (le seuil est plus bas qu'en simulation : c'est réaliste).
+- Écart mesuré entre simulation et réel : slippage moyen, taux d'exécution des limites, signaux manqués.
+- Tableau de bord opérationnel avec ses six blocs.
+- Bilan de trimestre écrit : ce qui a été appris, la décision pour le trimestre suivant, les trois objectifs de process.
+
+Une remarque sur la lecture de ces jalons : **aucun ne parle de résultat**. Un trader qui coche toutes les cases de J90 en ayant perdu 4R a fait un excellent trimestre ; un trader qui a gagné 10R avec une conformité de 60 % a fait un trimestre dangereux, parce qu'il a été payé pour des comportements qui le ruineront plus tard.
+
+## Les erreurs qui font recommencer à zéro
+
+Certaines erreurs coûtent du temps ; celles-ci coûtent **tout le travail accompli**, parce qu'elles détruisent la mesure ou le capital.
+
+**Passer au réel trop tôt, en taille normale.** L'échantillon de simulation n'existe pas, la conformité est inconnue, le p90 non plus. Deux mauvaises semaines suffisent à entamer le capital et, surtout, à installer les comportements du niveau 8 (stops déplacés, revenge trading) qu'il faudra ensuite désapprendre. Coût typique : trois à six mois.
+
+**Changer de fiche tous les quinze jours.** Chaque changement remet l'échantillon à zéro. Au bout de six mois, le trader a « essayé » huit setups et ne connaît l'expectancy d'aucun. C'est l'erreur la plus fréquente et la plus invisible, parce qu'elle donne le sentiment de progresser.
+
+**Ne pas tenir le journal en séance.** Sans lui, ni conformité, ni décomposition, ni MFE : tout le niveau 8 devient inaccessible, et les décisions se prennent sur des impressions. Un mois de journal manquant est un mois d'apprentissage perdu, même si les trades ont été bons.
+
+**Sauter la mesure du risque.** Trader une fiche sans connaître son p90 revient à dimensionner sur le drawdown historique, c'est-à-dire sur un tirage favorable (niveau 7, chapitre 8) ; le jour où le drawdown ordinaire arrive, la taille est deux fois trop grosse et le trader arrête au pire moment.
+
+**Multiplier les sources.** Suivre trois formateurs, deux communautés et un canal de signaux pendant l'apprentissage produit un playbook incohérent et une exécution flottante. Une source principale jusqu'à J90, le reste attend.
+
+**Se fixer un objectif en euros.** « Je veux gagner 500 € ce mois-ci » impose mécaniquement de forcer les jours calmes et de sur-dimensionner les jours moyens. Les objectifs de process ne créent pas cette pression.
+
+**Négliger le cadre de vie.** Commencer un apprentissage exigeant pendant un déménagement, une naissance ou une période professionnelle intense conduit à des séances irrégulières, une conformité basse, et une conclusion fausse (« ça ne marche pas ») alors que seul le moment était mauvais.
+
+Une dernière, plus subtile : **confondre progression et activité**. Lire trois heures par jour, regarder cinquante vidéos, tester dix indicateurs donne le sentiment d'avancer sans produire aucun des trois nombres du J60. Le seul indicateur fiable de progression pendant cette période est le **nombre de cases cochées aux points de contrôle**.
+
+<Figure caption="Figure 3 · Les sept erreurs qui font recommencer à zéro, avec leur coût typique en mois. Toutes détruisent soit la mesure (échantillon, journal, risque), soit le capital, soit les deux ; aucune ne se voit sur le moment, et plusieurs donnent le sentiment de progresser.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Erreurs qui font recommencer à zéro" xmlns="http://www.w3.org/2000/svg">
+  <text x="220" y="38" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Erreur</text>
+  <text x="500" y="38" fontSize="11" fontWeight="600" textAnchor="middle">Ce qu'elle détruit</text>
+  <text x="670" y="38" fontSize="11" fontWeight="600" textAnchor="middle" className="muted">Coût</text>
+  <line x1="30" y1="48" x2="690" y2="48" className="line" strokeWidth="1" />
+  <text x="40" y="72" fontSize="9">Passer au réel trop tôt, taille normale</text>
+  <text x="380" y="72" fontSize="9" className="muted">capital + comportements installés</text>
+  <text x="670" y="72" fontSize="9" textAnchor="middle" className="red">3-6 mois</text>
+  <text x="40" y="102" fontSize="9">Changer de fiche tous les quinze jours</text>
+  <text x="380" y="102" fontSize="9" className="muted">l'échantillon, à chaque fois remis à zéro</text>
+  <text x="670" y="102" fontSize="9" textAnchor="middle" className="red">6 mois</text>
+  <text x="40" y="132" fontSize="9">Ne pas tenir le journal en séance</text>
+  <text x="380" y="132" fontSize="9" className="muted">conformité, décompositions, MFE : tout le N8</text>
+  <text x="670" y="132" fontSize="9" textAnchor="middle" className="red">1 mois / mois</text>
+  <text x="40" y="162" fontSize="9">Sauter la mesure du risque (p90)</text>
+  <text x="380" y="162" fontSize="9" className="muted">le dimensionnement : taille deux fois trop grosse</text>
+  <text x="670" y="162" fontSize="9" textAnchor="middle" className="red">le compte</text>
+  <text x="40" y="192" fontSize="9">Multiplier les sources</text>
+  <text x="380" y="192" fontSize="9" className="muted">la cohérence du playbook et de l'exécution</text>
+  <text x="670" y="192" fontSize="9" textAnchor="middle" className="red">2-4 mois</text>
+  <text x="40" y="222" fontSize="9">Se fixer un objectif en euros</text>
+  <text x="380" y="222" fontSize="9" className="muted">la neutralité : on force les jours calmes</text>
+  <text x="670" y="222" fontSize="9" textAnchor="middle" className="red">variable</text>
+  <text x="40" y="252" fontSize="9">Commencer dans un mauvais moment de vie</text>
+  <text x="380" y="252" fontSize="9" className="muted">la régularité, puis la conclusion (« ça ne marche pas »)</text>
+  <text x="670" y="252" fontSize="9" textAnchor="middle" className="red">tout</text>
+  <line x1="30" y1="266" x2="690" y2="266" className="line" strokeWidth="1" />
+  <text x="360" y="290" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">le seul indicateur fiable de progression : le nombre de cases cochées aux points de contrôle</text>
+</svg>
+</Figure>
+
+## Deux trades du parcours
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, premier trade réel du jour 61, taille minimale"
+  direction="Long"
+  setup="Fin de phase 2 validée : 112 occurrences backtestées (+0,29R, intervalle [+0,03 ; +0,55]), 34 trades en simulation à 94 % de conformité, journal en séance 100 %, quatre revues d'affilée, p90 du Monte Carlo à 16R et taille réelle calculée pour que ce p90 représente 14 % du capital alloué ; signal complet à 16 h 30 sur le PDL préparé"
+  entree="5 288,75"
+  stop="5 280,25 (34 ticks)"
+  objectif="C1 5 301,50 (1,5R) ; C2 5 314,25 (3R)"
+  r="+1,5R">
+
+Un contrat, 42,50 $ de risque, sur un compte de 8 000 $ : 0,53 %, soit la moitié du budget théorique, volontairement. Le trade atteint C1 puis le solde sort au trailing. Le gain en dollars est dérisoire ; ce n'est pas le sujet. Ce qui compte est ce que le trader a mesuré ce jour-là : sa limite a été servie avec un tick de slippage de plus qu'en simulation, il a vérifié son ordre trois fois au lieu d'une, et son rythme cardiaque a rendu la lecture des dix minutes suivantes plus difficile qu'en simulation. Ces trois observations sont notées au journal ; elles sont la vraie production du jour 61.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, trade d'un lecteur passé au réel au jour 12"
+  direction="Long"
+  setup="Aucun des critères de passage : pas de backtest (« j'ai vu le setup marcher trois fois »), pas de simulation, journal inexistant, p90 inconnu, taille calculée sur le drawdown observé de trois jours ; deux contrats sur un compte de 5 000 $"
+  entree="18 320,00"
+  stop="18 270,00 (200 ticks, soit 200 $ : 4 % du compte)"
+  objectif="18 420,00"
+  r="−1R (−200 $, soit −4 % du compte)">
+
+Le trade lui-même est ordinaire, et le setup n'était peut-être pas mauvais. Tout le reste l'est : le risque par trade est de 4 % du compte (cinq fois trop), la taille repose sur un drawdown de trois jours, et surtout aucune mesure n'existe — après ce trade, le lecteur ne saura pas s'il a été malchanceux, mal dimensionné ou hors régime, parce qu'il n'a rien à décomposer. Quatre trades comme celui-ci et le compte est à −16 % ; à ce stade, le trader arrête ou double, et les deux issues coûtent des mois. La correction n'est pas « mieux choisir ses trades » : c'est revenir au jour 1 et cocher les cases dans l'ordre, ce qui prendra deux mois et lui en fera gagner douze.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Trois phases de trente jours : **construire le cadre** (playbook, journal, fiche, routine, zéro trade), **mesurer** (100 occurrences backtestées, 30 trades simulés, trois nombres connus), **exécuter petit** (réel à taille minimale, un setup, une fenêtre) ; quatre-vingt-dix jours ne font pas un trader rentable, ils font un trader **mesurable**.
+- Le volume se calibre sur la **vie réelle** : 5 h par semaine décale tout d'un facteur deux, ce qui est valable ; répartition visée 40 % exécution, 40 % travail hors marché, 20 % lecture ; la régularité bat l'immersion.
+- Les **passages** ont des critères chiffrés et écrits d'avance, dont les cinq conditions simultanées avant le réel (échantillon backtesté, 30 trades simulés, conformité ≥ 90 %, journal et revues, risque dimensionné par le Monte Carlo) ; retour en simulation si la conformité tombe sous 80 %.
+- Les **points de contrôle** J30, J60 et J90 sont des cases à cocher, et **aucune ne parle de résultat** : cocher toutes les cases en ayant perdu 4R est un excellent trimestre ; gagner 10R à 60 % de conformité est un trimestre dangereux.
+- Sept erreurs font recommencer à zéro : réel trop tôt en taille normale, changer de fiche sans arrêt, journal non tenu, risque non mesuré, sources multipliées, objectif en euros, mauvais moment de vie. La progression se mesure en **cases cochées**, pas en heures passées.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Calibrer votre roadmap">
+
+Estimez honnêtement vos heures disponibles par semaine, puis établissez votre calendrier des trois phases avec des dates réelles. Précisez, pour chaque phase, la répartition entre exécution ou observation en direct, travail hors marché et lecture, ainsi que le jour et l'heure fixes de votre revue hebdomadaire.
+
+<Solution>
+
+Pas de corrigé unique. Trois vérifications à faire sur votre plan : (1) la somme des heures est-elle **inférieure** à ce dont vous disposez réellement une semaine ordinaire, imprévus compris ? Si elle est égale, le plan échouera à la première semaine chargée ; (2) la part de travail hors marché atteint-elle 40 % ? Un plan avec 90 % d'écran est un plan de spectateur, pas d'apprenant ; (3) la revue a-t-elle un **jour et une heure fixes** et une durée de 45 minutes ? Un créneau flottant est un créneau qui disparaît. Un plan à 5 heures par semaine avec des dates réalistes vaut infiniment mieux qu'un plan à 15 heures qui suppose une vie que vous n'avez pas.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Décider d'un passage">
+
+Un lecteur veut passer au réel. Son bilan : 140 occurrences backtestées (+0,22R, intervalle [−0,05 ; +0,49]) ; 22 trades en simulation ; conformité 88 % dont un trade hors setup ; journal rempli le soir sur 70 % des jours ; deux revues tenues sur quatre ; Monte Carlo non fait. Que répondez-vous, condition par condition ?
+
+<Solution>
+
+- **Condition 1 (échantillon backtesté)** : 140 occurrences, expectancy positive mais intervalle contenant zéro : c'est acceptable pour un passage à taille minimale **si** la checklist anti-overfitting a été passée (à vérifier) ; on retiendra +0,22R comme hypothèse, pas comme fait.
+- **Condition 2 (30 trades simulés)** : **non remplie** (22).
+- **Condition 3 (conformité ≥ 90 %, zéro hors setup)** : **non remplie** deux fois (88 % et un hors setup).
+- **Condition 4 (journal en séance 100 %, quatre revues)** : **non remplie** (70 % le soir, deux revues).
+- **Condition 5 (risque dimensionné)** : **non remplie** (pas de Monte Carlo, donc p90 inconnu, donc taille indéterminable).
+Réponse : quatre conditions sur cinq manquent ; le passage est reporté d'environ trois à quatre semaines. Le travail est identifié et court : huit trades simulés de plus, journal rempli **en séance** (ligne pré-remplie à l'entrée), deux revues supplémentaires, et un Monte Carlo qui prend une heure. Ce n'est pas un refus : c'est un calendrier.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Reconnaître l'erreur fatale">
+
+Trois lecteurs décrivent leur premier trimestre. Pour chacun, nommez l'erreur principale, son coût probable et la correction.
+
+- (a) « J'ai testé le sweep-FVG deux semaines, puis un setup de VWAP, puis un truc vu sur YouTube ; je cherche encore ce qui me correspond. »
+- (b) « J'ai gagné 12R ce trimestre en simulation, alors je passe à trois contrats en réel le mois prochain. »
+- (c) « Je note mes trades le week-end, j'ai une bonne mémoire ; par contre j'ai lu six livres et suivi quatre formateurs. »
+
+<Solution>
+
+- **(a)** **Changer de fiche sans arrêt** : chaque changement remet l'échantillon à zéro ; au bout du trimestre, aucune expectancy n'est connue. Coût : le trimestre entier. Correction : choisir **une** fiche (celle dont le contexte correspond aux heures disponibles), la figer, et accumuler 100 occurrences avant tout jugement.
+- **(b)** **Passer au réel en taille normale** sur la base d'un résultat de simulation : 12R en simulation ne dit rien (l'intervalle sur un trimestre est très large) et la conformité chute typiquement au passage au réel. Correction : taille minimale pendant trois mois, cinq conditions vérifiées, taille dimensionnée par le p90 du Monte Carlo et non par le résultat.
+- **(c)** Deux erreurs : **journal non tenu en séance** (donc aucune conformité, aucun MFE, aucune décomposition : le niveau 8 est inaccessible) et **sources multipliées** (playbook incohérent). Correction : ligne de journal pré-remplie à l'entrée dès demain, et une seule source principale jusqu'à J90 ; les cinq autres livres attendront, ils ne périment pas.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "L'objectif de la phase 1 (jours 1 à 30) est :",
+      options: [
+        "Faire ses premiers gains",
+        "Avoir un cadre complet et vide : playbook, journal, fiche écrite, routine tenue, et aucun trade réel",
+        "Tester dix setups",
+        "Ouvrir un compte",
+      ],
+      answer: 1,
+      explain: "On apprend à voir le setup avant d'apprendre à le prendre ; cette phase évite de tout recommencer au sixième mois.",
+    },
+    {
+      q: "À la fin de la phase 2, le trader connaît trois nombres :",
+      options: [
+        "Son gain, son taux de réussite, son courtier",
+        "L'expectancy backtestée avec son intervalle, sa conformité en simulation, et le p90 du Monte Carlo",
+        "Son capital, sa taille, son levier",
+        "Le VIX, l'ATR et le spread",
+      ],
+      answer: 1,
+      explain: "Ces trois nombres conditionnent le passage au réel et le dimensionnement.",
+    },
+    {
+      q: "Le passage au petit réel exige :",
+      options: [
+        "Un mois de simulation gagnante",
+        "Cinq conditions simultanées : 100 occurrences backtestées, 30 trades simulés, conformité ≥ 90 % sans hors setup, journal en séance et quatre revues, risque dimensionné par le Monte Carlo",
+        "Un capital minimal de 25 000 $",
+        "L'accord d'un mentor",
+      ],
+      answer: 1,
+      explain: "Écrits d'avance et chiffrés, ces critères évitent les deux erreurs symétriques : rester deux ans en simulation, ou passer au réel en une semaine.",
+    },
+    {
+      q: "La taille de départ en réel est :",
+      options: [
+        "Celle que le calcul de risque autorise",
+        "La plus petite possible pendant trois mois, quelle que soit la performance : c'est la stabilité de la conformité qu'on observe, pas le résultat",
+        "La moitié de la taille cible",
+        "Variable selon la confiance",
+      ],
+      answer: 1,
+      explain: "La conformité chute souvent de 95 % à 70 % au passage au réel ; la petite taille permet de le corriger sans dégât.",
+    },
+    {
+      q: "Un trader coche toutes les cases du point de contrôle J90 mais a perdu 4R. Il a fait :",
+      options: [
+        "Un mauvais trimestre",
+        "Un excellent trimestre : à cette échelle un résultat est du bruit, alors qu'un process complet et mesuré est un actif",
+        "Un trimestre neutre",
+        "Une erreur de fiche",
+      ],
+      answer: 1,
+      explain: "À l'inverse, gagner 10R avec 60 % de conformité est dangereux : le trader a été payé pour des comportements qui le ruineront.",
+    },
+    {
+      q: "L'erreur la plus fréquente et la plus invisible est :",
+      options: [
+        "Trader trop gros",
+        "Changer de fiche tous les quinze jours : chaque changement remet l'échantillon à zéro tout en donnant le sentiment de progresser",
+        "Lire trop de livres",
+        "Choisir le mauvais courtier",
+      ],
+      answer: 1,
+      explain: "Le seul indicateur fiable de progression est le nombre de cases cochées aux points de contrôle.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+La feuille de route suppose des gestes quotidiens répétés à l'identique. Le chapitre suivant les met sur papier : les checklists imprimables de préparation, d'entrée, de gestion et de sortie, de revue hebdomadaire et de reprise après incident, à cocher réellement.
