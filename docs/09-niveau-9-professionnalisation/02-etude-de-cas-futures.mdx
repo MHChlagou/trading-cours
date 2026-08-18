@@ -1,0 +1,334 @@
+---
+title: "Étude de cas 1 : de la macro à l'entrée sur NQ"
+description: "Une séance complète sur le Nasdaq, du contexte macro à la sortie : régime du jour, analyse top-down quotidienne, H4, H1 et M5, construction des scénarios et de la carte de niveaux, exécution et gestion minute par minute, puis débrief chiffré avec les branches alternatives qui auraient pu se produire."
+---
+
+# Étude de cas 1 : de la macro à l'entrée sur NQ
+
+Ce chapitre déroule une séance entière sur les futures Nasdaq, comme elle se serait passée avec le playbook du chapitre précédent : préparation à 15 h 05, exécution, gestion, débrief à 21 h 25. Tous les prix, volumes et horaires sont une **reconstitution pédagogique** : ils sont cohérents entre eux et réalistes pour du MNQ, mais ils ne décrivent pas une séance historique précise. L'intérêt n'est pas le trade, qui est banal ; c'est la **chaîne de décisions** : chaque nombre utilisé en séance a été écrit avant, et chaque étape se rattache à un chapitre du cours.
+
+Le trader : compte de 25 000 $, budget 1 % par trade, fiche « Sweep-FVG » version 3 (état validée, 214 trades backtestés, +0,31R, p90 du Monte Carlo à 18R sur 300 trades), instruments MES et MNQ, fenêtres 15 h 30 - 17 h 30 et 19 h 30 - 21 h 15.
+
+## Le contexte macro et le régime du jour
+
+**Le week-end précédent** (revue hebdomadaire, niveau 8), le trader a noté trois éléments qui vont peser sur la semaine.
+
+- **Taux et dollar** : le rendement du 10 ans américain baisse depuis trois semaines, le dollar est stable ; le contexte est plutôt favorable aux actifs de croissance, donc au Nasdaq plutôt qu'au S&P (niveau 5, intermarket).
+- **Volatilité** : VIX à 14,8, structure en contango normal ; ratio ATR quotidien 5 jours sur 20 jours du NQ = 1,02. La matrice du niveau 5 donne **tendance normale** : les setups de continuation sont autorisés à taille pleine, les rotations aux bornes ne le sont pas.
+- **Calendrier** : le CPI est sorti la veille, conforme aux attentes, ce qui explique une séance précédente sans direction ; aucune annonce de niveau 1 aujourd'hui ; les stocks pétroliers à 16 h 30 sont de niveau 3 pour un trader d'indices, donc sans effet sur les règles.
+
+**Ce matin** (préparation, six étapes du niveau 8, chapitre 4) : sommeil 7 h 15, état normal, créneau libre jusqu'à 18 h et de nouveau à partir de 19 h 30. Régime confirmé sur les données du jour. Verdict écrit : *tendance normale, biais haussier tant que la structure quotidienne tient, setup Sweep-FVG autorisé, taille pleine, deux trades au plus.*
+
+Ce que le contexte macro fait ici, et ne fait pas : il **module** (biais haussier, taille pleine, préférence NQ sur ES) ; il ne déclenche rien. Le trader n'achètera pas parce que les taux baissent ; il achètera si le prix balaie un réservoir préparé et se réaligne.
+
+## L'analyse top-down complète
+
+Quinze minutes de graphiques, du haut vers le bas (niveau 2, chapitre multi-timeframe).
+
+**Quotidien.** Structure haussière nette depuis quatre semaines : suite de plus hauts et de plus bas croissants (HH / HL). La bougie de la veille est une bougie d'indécision (petit corps, longues mèches) à l'intérieur de la précédente : le marché digère le CPI. ATR quotidien : 210 points. Rien de cassé : le biais reste acheteur.
+
+**H4.** Repli en cours depuis deux séances à l'intérieur de la tendance : suite de plus hauts descendants (LH) et de plus bas descendants (LL) internes. Sous le prix, un **FVG H4 non mitigé** entre 18 240 et 18 268, laissé par l'impulsion de la semaine dernière. C'est la zone où le repli aurait « du sens » s'il devait continuer.
+
+**H1.** Le repli a formé une double touche autour de **18 306** (deux plus bas au même niveau : des EQL, niveau 3), sous lesquels dorment des stops. Le dernier plus haut descendant H1 est à 18 372.
+
+**M15 / M5.** Séance de nuit en range étroit : ONH 18 402, ONL 18 330. ATR M15 : 22 points.
+
+La lecture d'ensemble tient en une phrase, écrite dans le plan : *tendance quotidienne haussière, repli H4 en cours, liquidité identifiée sous les EQL H1 de 18 306 et au-dessus de l'ONH ; le scénario principal est une prise de la liquidité basse suivie d'un réalignement.*
+
+<Figure caption="Figure 1 · L'analyse top-down du jour : quotidien haussier (HH / HL, bougie d'indécision la veille), H4 en repli avec un FVG non mitigé sous le prix, H1 avec des EQL à 18 306 (liquidité), nuit en range entre 18 330 et 18 402. Le scénario principal se déduit de l'empilement, pas d'une opinion.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Analyse top-down NQ" xmlns="http://www.w3.org/2000/svg">
+  <text x="115" y="34" fontSize="10" fontWeight="600" textAnchor="middle">Quotidien</text>
+  <line x1="30" y1="290" x2="200" y2="290" className="line" strokeWidth="1" />
+  <polyline points="40,270 60,240 75,255 95,205 110,225 130,175 150,190 170,150 185,165" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="185" y1="150" x2="185" y2="180" className="line" strokeWidth="1.5" /><rect x="180" y="158" width="10" height="14" className="muted" opacity="0.7" />
+  <text x="115" y="64" fontSize="8" textAnchor="middle" className="green">HH / HL · biais acheteur</text>
+  <text x="115" y="78" fontSize="8" textAnchor="middle" className="muted">veille : indécision (CPI)</text>
+  <text x="115" y="92" fontSize="8" textAnchor="middle" className="muted">ATR D = 210 pts</text>
+  <text x="300" y="34" fontSize="10" fontWeight="600" textAnchor="middle">H4</text>
+  <line x1="215" y1="290" x2="385" y2="290" className="line" strokeWidth="1" />
+  <polyline points="225,180 245,150 265,175 285,160 305,195 325,180 345,215 365,205" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="225" y="230" width="160" height="18" className="gold" opacity="0.3" />
+  <text x="305" y="262" fontSize="8" textAnchor="middle" className="gold">FVG H4 non mitigé · 18 240 - 18 268</text>
+  <text x="300" y="72" fontSize="8" textAnchor="middle" className="red">repli : LH / LL internes</text>
+  <text x="485" y="34" fontSize="10" fontWeight="600" textAnchor="middle">H1</text>
+  <line x1="400" y1="290" x2="570" y2="290" className="line" strokeWidth="1" />
+  <polyline points="408,150 425,175 440,160 455,200 470,185 485,220 500,205 515,222 535,200 555,215" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="400" y1="222" x2="570" y2="222" stroke="var(--tm-green)" strokeWidth="1.5" strokeDasharray="4 3" />
+  <text x="485" y="240" fontSize="8" textAnchor="middle" className="green" fontWeight="600">EQL 18 306 : stops dessous</text>
+  <line x1="400" y1="150" x2="480" y2="150" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="405" y="146" fontSize="8" className="muted">LH H1 18 372</text>
+  <text x="640" y="34" fontSize="10" fontWeight="600" textAnchor="middle">Nuit (M15)</text>
+  <line x1="585" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <rect x="590" y="150" width="105" height="70" className="box" strokeWidth="1" opacity="0.7" />
+  <polyline points="592,190 610,170 625,200 640,175 655,205 670,180 690,195" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="642" y="144" fontSize="8" textAnchor="middle" className="red">ONH 18 402</text>
+  <text x="642" y="234" fontSize="8" textAnchor="middle" className="green">ONL 18 330</text>
+  <text x="642" y="252" fontSize="8" textAnchor="middle" className="muted">ATR M15 = 22 pts</text>
+  <text x="360" y="310" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">scénario principal écrit : prise de la liquidité sous 18 306, puis réalignement M5 dans le sens de la tendance quotidienne</text>
+</svg>
+</Figure>
+
+## La construction du scénario et des niveaux
+
+Sept niveaux au maximum (règle du niveau 8), confluences en priorité :
+
+| Niveau | Prix | Nature |
+| --- | --- | --- |
+| PDH | 18 412 | plus haut de la veille |
+| ONH | 18 402 | plus haut de la nuit |
+| VAH | 18 388 | borne haute de la value area |
+| POC | 18 350 | point de contrôle de la veille |
+| ONL | 18 330 | plus bas de la nuit |
+| VAL / EQL H1 | 18 318 / 18 306 | **confluence** : borne basse de la value area et double plus bas H1 |
+| PDL | 18 286 | plus bas de la veille |
+
+Les scénarios, écrits dans le plan avant l'ouverture :
+
+**Scénario A (principal, haussier).** Si le prix balaie la zone 18 306 - 18 318 (les EQL et la VAL) d'au moins un point, clôture au-dessus, et produit un displacement M5 d'au moins 1,5 ATR M15 (33 points) cassant le dernier LH interne, alors achat au bord haut du FVG laissé par le displacement ; stop sous le plus bas du sweep moins 0,5 ATR M15 ; **C1 au premier réservoir donnant au moins 1,5R**, C2 au suivant.
+
+**Scénario B (secondaire, baissier).** Si le prix accepte au-dessus de l'ONH (deux clôtures M15 au-dessus sans displacement, avec volume décroissant) puis casse l'ONH en clôture M5 par le bas, vente vers le POC. Ce scénario est **secondaire** parce qu'il va contre la structure quotidienne : taille aux deux tiers, une seule cible.
+
+**Ce qui ne sera pas tradé** : toute rotation aux bornes (régime tendance : rotation interdite) ; tout sweep de l'ONH suivi d'un displacement haussier (achat en fin de mouvement, hors fiche) ; toute entrée sous le FVG H4 (18 240 - 18 268), qui signalerait un changement de contexte à réévaluer à froid.
+
+Budget du jour : −2R ; deux trades au plus ; heure limite d'entrée 21 h 00 ; fermeture 21 h 15.
+
+<Figure caption="Figure 2 · La carte de la séance : sept niveaux dont une confluence (VAL et EQL H1 à 18 318 - 18 306), le scénario A haussier sur prise de la liquidité basse, le scénario B baissier secondaire sur rejet de l'ONH, et la zone d'abstention sous le FVG H4. La carte est tracée avant l'ouverture et ne change plus.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Carte des niveaux et scénarios du jour" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="60" x2="660" y2="60" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" /><text x="666" y="64" fontSize="9" className="red">PDH 18 412</text>
+  <line x1="60" y1="78" x2="660" y2="78" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="3 3" /><text x="666" y="82" fontSize="9" className="muted">ONH 18 402</text>
+  <line x1="60" y1="100" x2="660" y2="100" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="3 3" /><text x="666" y="104" fontSize="9" className="muted">VAH 18 388</text>
+  <line x1="60" y1="150" x2="660" y2="150" className="line" strokeWidth="1.5" /><text x="666" y="154" fontSize="9" className="muted">POC 18 350</text>
+  <line x1="60" y1="182" x2="660" y2="182" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="666" y="186" fontSize="9" className="muted">ONL 18 330</text>
+  <rect x="60" y="196" width="600" height="18" className="green" opacity="0.22" />
+  <line x1="60" y1="196" x2="660" y2="196" stroke="var(--tm-green)" strokeWidth="1" /><line x1="60" y1="214" x2="660" y2="214" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="666" y="212" fontSize="9" className="green" fontWeight="600">VAL 18 318 / EQL 18 306</text>
+  <text x="70" y="209" fontSize="8" className="green">confluence : zone du scénario A</text>
+  <line x1="60" y1="236" x2="660" y2="236" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="3 3" /><text x="666" y="240" fontSize="9" className="muted">PDL 18 286</text>
+  <rect x="60" y="262" width="600" height="20" className="red" opacity="0.12" /><text x="360" y="276" fontSize="9" textAnchor="middle" className="red">FVG H4 18 240 - 18 268 : sous cette zone, on ne trade plus, on réévalue à froid</text>
+  <path d="M120,205 L150,232 L180,150 L210,120 L240,100" fill="none" stroke="var(--tm-green)" strokeWidth="2.5" />
+  <text x="150" y="252" fontSize="9" className="green" fontWeight="600">A · sweep + displacement + FVG → C1 / C2 au-dessus</text>
+  <path d="M430,78 L455,68 L470,86 L500,120 L530,148" fill="none" stroke="var(--tm-red)" strokeWidth="2" strokeDasharray="4 3" />
+  <text x="470" y="60" fontSize="9" className="red" fontWeight="600">B · acceptation au-dessus de l'ONH puis cassure par le bas → POC (2/3 de taille)</text>
+  <text x="360" y="306" fontSize="10" textAnchor="middle" className="muted">non tradé : rotations (régime tendance) · sweep de l'ONH puis achat · toute entrée sous le FVG H4</text>
+</svg>
+</Figure>
+
+## L'exécution, la gestion, la sortie
+
+**15 h 30.** Ouverture à 18 344, dans la value area de la veille. L'initial balance se construit entre 18 312 et 18 372 ; rien à faire, aucun réservoir préparé n'est touché.
+
+**16 h 20.** Le prix descend vers l'ONL (18 330) et le traverse sans displacement ; le trader n'agit pas : l'ONL seul ne fait pas partie du scénario A, qui vise la confluence VAL / EQL en dessous.
+
+**16 h 45 - 16 h 50.** La bougie M5 de 16 h 45 descend à **18 298**, soit 8 points sous les EQL de 18 306 (largement au-delà du minimum de 1 point sur MNQ), et **clôture à 18 312**, au-dessus de la zone. **S1 validé** ; l'ancre du stop est 18 298. Le footprint montre un volume au bid très supérieur à la moyenne sans progression du prix : **S5 (absorption) présent**.
+
+**16 h 50 - 16 h 55.** La bougie suivante ouvre à 18 312 et monte jusqu'à **18 338**, clôture à **18 330** : fourchette 40 points (18 338 − 18 298 sur la séquence des deux bougies), corps 18 points sur une fourchette de 26 pour cette bougie… le trader applique la règle telle qu'écrite : la séquence de deux bougies consécutives donne une fourchette cumulée de **40 points**, soit **1,8 ATR M15** (≥ 1,5), un corps cumulé de 72 % de la fourchette, et la clôture à 18 330 casse le dernier LH interne M5 situé à 18 322. **S2 validé**. Volume relatif de la bougie de displacement : 1,4 → **S6 présent**.
+
+**Le FVG** laissé par la séquence se situe entre le plus haut de la première bougie (18 308) et le plus bas de la troisième (18 318) : **10 points**, soit 0,45 ATR M15 (≥ 0,4). **S3 validé**.
+
+**Calcul avant tout ordre** (checklist, vingt secondes) : entrée limite au bord haut du FVG plus un tick = **18 318,25** ; stop = 18 298 − 0,5 × 22 = 18 287 → **18 287,00** ; distance **31,25 points** = 62,50 $ par MNQ ; budget 250 $ → **4 MNQ** (250 $, exactement le budget) ; C1 doit donner au moins 1,5R, soit 46,9 points, donc au moins 18 365 : le POC (18 350) est **trop proche** et n'est pas retenu ; **C1 = VAH 18 388** (ratio 2,24) ; **C2 = PDH 18 412** (ratio 3,00). Géométrie validée.
+
+**17 h 02.** Le prix revient dans le FVG et traverse 18 318,25 : **exécution des 4 MNQ**. Bracket en place : stop 18 287, C1 18 388 sur 2 contrats, C2 18 412 sur 2 contrats.
+
+**17 h 30.** Fin de la première fenêtre. La position reste ouverte (la fenêtre limite les **entrées**, pas la gestion) ; le trader s'éloigne de l'écran, alertes posées sur 18 350 et 18 388.
+
+**18 h 10.** C1 atteint : **2 MNQ sortis à 18 388** (+69,75 points chacun). Stop du solde remonté à 18 318,50 (entrée + 1 tick).
+
+**19 h 05.** Un nouveau plus bas croissant M15 s'est formé à 18 372 : trailing structurel, stop remonté à 18 372 − 11 = **18 361**.
+
+**20 h 22.** C2 atteint : **2 MNQ sortis à 18 412**. Position fermée.
+
+**Résultat** : (69,75 × 2 + 93,75 × 2) × 2 $ = **654 $** brut ; coûts environ 5 $ ; **649 $ net** sur 250 $ de risque = **+2,6R**. MFE : le plus haut de la séance (18 421) donne 3,29R ; MAE : 0,39R (le prix est redescendu à 18 306 après l'entrée, sans menacer le stop).
+
+<Figure caption="Figure 3 · La chronologie de la séance : ouverture et initial balance, traversée de l'ONL sans signal, sweep des EQL à 16 h 45 avec absorption, displacement et FVG, entrée en limite à 17 h 02, C1 à 18 h 10 avec breakeven, trailing sous le HL M15 à 19 h 05, C2 à 20 h 22. Les décisions sont toutes antérieures à la séance ; la séance ne fait que les déclencher.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Chronologie de l'exécution" xmlns="http://www.w3.org/2000/svg">
+  <line x1="50" y1="280" x2="690" y2="280" className="line" strokeWidth="1" />
+  <text x="60" y="298" fontSize="8" className="muted">15 h 30</text><text x="200" y="298" fontSize="8" className="muted">16 h 45</text><text x="330" y="298" fontSize="8" className="muted">17 h 02</text><text x="470" y="298" fontSize="8" className="muted">18 h 10</text><text x="610" y="298" fontSize="8" className="muted">20 h 22</text>
+  <line x1="50" y1="70" x2="690" y2="70" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="5 3" /><text x="55" y="66" fontSize="8" className="red">C2 · PDH 18 412</text>
+  <line x1="50" y1="105" x2="690" y2="105" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="3 3" /><text x="55" y="101" fontSize="8" className="red">C1 · VAH 18 388</text>
+  <line x1="50" y1="160" x2="690" y2="160" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="55" y="156" fontSize="8" className="muted">POC 18 350 (écarté : trop proche)</text>
+  <rect x="50" y="196" width="640" height="12" className="gold" opacity="0.3" /><text x="55" y="192" fontSize="8" className="gold">FVG M5 18 308 - 18 318 · entrée 18 318,25</text>
+  <line x1="50" y1="240" x2="690" y2="240" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="3 3" /><text x="55" y="252" fontSize="8" className="green">sweep 18 298</text>
+  <line x1="50" y1="258" x2="690" y2="258" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="600" y="270" fontSize="8" className="red">stop 18 287 (31,25 pts · 4 MNQ · 250 $)</text>
+  <polyline points="60,175 100,160 140,190 170,205 200,238 215,215 230,196 250,205 280,215 310,206 330,202 360,180 400,165 440,130 470,105 500,118 540,112 570,95 610,72 650,66" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <circle cx="200" cy="238" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="188" y="228" fontSize="8" className="green" textAnchor="end">S1 sweep + S5 absorption</text>
+  <circle cx="230" cy="196" r="5" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="240" y="186" fontSize="8" className="gold">S2 displacement 1,8 ATR · S3 FVG 0,45 ATR</text>
+  <circle cx="330" cy="202" r="5" className="gold" /><text x="336" y="222" fontSize="8" className="gold" fontWeight="600">entrée 4 MNQ</text>
+  <circle cx="470" cy="105" r="5" className="green" /><text x="440" y="94" fontSize="8" className="green" fontWeight="600">C1 : 2 sortis, BE + 1 tick</text>
+  <line x1="500" y1="128" x2="600" y2="128" stroke="var(--tm-red)" strokeWidth="1.2" /><text x="505" y="142" fontSize="8" className="red">trailing 18 361 (HL M15)</text>
+  <circle cx="610" cy="72" r="5" className="green" /><text x="620" y="60" fontSize="8" className="green" fontWeight="600">C2 : solde · +2,6R</text>
+</svg>
+</Figure>
+
+## Le débrief chiffré et les alternatives
+
+**Débrief (21 h 25, dix minutes).** Ligne de journal complétée : setup 1 / variante A / régime tendance normale / session ouverture US / n° du jour 1 / qualité **fort** (S5 et S6 présents) / valeurs mesurées (sweep 8 points, displacement 1,8 ATR, FVG 0,45 ATR) / entrée 18 318,25 / stop 18 287 / 4 MNQ / C1 18 388 (2,24R) / C2 18 412 (3,00R) / sorties 18 h 10 et 20 h 22 / raison **C2** / R net **+2,6** / MFE 3,29 / MAE 0,39 / conformité **conforme** / tags d'erreur aucun. Trois captures enregistrées. Trois questions : *ai-je exécuté ce que j'avais écrit ?* oui ; *qu'est-ce qui a failli me faire dévier ?* l'envie d'ajouter au trade vers 19 h (refusée : le pyramidage n'est pas dans cette fiche) ; *qu'est-ce que je referais à l'identique ?* le refus du POC comme C1 malgré la tentation d'une sortie rapide.
+
+**Ce que ce trade ne prouve pas.** Rien. Un trade à +2,6R est un point dans une distribution dont l'écart-type est de 1,4R ; il ne valide ni la fiche, ni le contexte macro, ni la lecture du jour. Le seul enseignement de ce trade isolé est que la **chaîne** a fonctionné : préparation, carte, scénario, checklist, exécution, gestion, journal.
+
+**Les branches alternatives**, qui valent autant que le trade réalisé :
+
+- **Le prix ne revient jamais dans le FVG.** Le mouvement continue sans nous jusqu'au VAH. L'ordre est annulé après 90 minutes (ou à la fermeture de la fenêtre selon la fiche). Résultat : **zéro trade**, aucun regret à avoir : la fiche gagne par les trades qu'elle prend selon ses règles, et une entrée « au marché parce que ça part » est un autre système, non testé.
+- **Le displacement fait 1,3 ATR au lieu de 1,8.** Le signal est **absent** ; le prix va quand même au POC. Le trader note un non-trade « S2 à 1,3 ATR » et regarde le marché monter. C'est le prix des seuils : ils coûtent des occasions et évitent des systèmes non testés.
+- **Le prix traverse le FVG en clôture M5 avant l'exécution.** Le setup est mort (S4), l'ordre est annulé. Si le prix redescend ensuite vers le PDL, aucune nouvelle entrée n'est autorisée sans un nouveau signal complet.
+- **Une annonce imprévue tombe à 20 h.** Protocole du niveau 5 : la position est à +2R environ, donc le stop remonte au minimum à +0,5R et l'on garde. Si elle avait été à +0,4R, la sortie était immédiate.
+- **Le sweep se produit à 20 h 55.** L'heure limite d'entrée (21 h 00) laisse cinq minutes ; si la limite n'est pas servie à 21 h 00, l'ordre est annulé. Un signal parfait hors fenêtre n'est pas un signal.
+- **La structure quotidienne était baissière.** Le scénario A n'aurait pas existé : on n'achète pas le sweep d'un plus bas contre la structure supérieure sans CHoCH H1 confirmé, et dans ce cas la taille est divisée par deux.
+
+Une dernière remarque de méthode : le trader a écarté le POC (18 350) comme C1 parce qu'il donnait 1,02R. Beaucoup de traders auraient pris cette cible « pour sécuriser », transformant un trade à +2,6R en trade à +1R. La règle du ratio minimal n'est pas une coquetterie : elle est ce qui rend l'expectancy positive avec un taux de réussite proche de 50 %.
+
+## Les deux trades de la journée
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MNQ (Nasdaq), fiche Sweep-FVG v3, variante A"
+  direction="Long"
+  setup="Tendance normale, structure quotidienne haussière, repli H4 ; sweep de la confluence VAL / EQL H1 à 16 h 45 (8 points sous 18 306, clôture au-dessus), absorption au footprint, displacement de 1,8 ATR M15 cassant le LH interne, FVG M5 de 10 points (0,45 ATR), volume relatif 1,4"
+  entree="18 318,25 (limite au bord haut du FVG, servie à 17 h 02)"
+  stop="18 287,00 (sweep 18 298 − 0,5 ATR M15 ; 31,25 points ; 4 MNQ, 250 $)"
+  objectif="C1 VAH 18 388 (2,24R, 2 contrats) ; C2 PDH 18 412 (3,00R, 2 contrats) ; POC 18 350 écarté (1,02R, sous le seuil de refus)"
+  r="+2,6R">
+
+Chronologie complète dans le corps du chapitre. Trois points à retenir de la ligne de journal : la qualité « fort » a été saisie **avant** l'exécution (S5 et S6 présents) ; le POC a été **écarté comme cible** par la règle du ratio minimal, ce qui a permis au trade d'aller chercher 3R au lieu de 1R ; et le trailing structurel après C1 n'a jamais été touché, ce qui n'était pas prévisible et ne change rien à la qualité de la décision de le placer.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, branche alternative du scénario B, mal exécutée"
+  direction="Short"
+  setup="Branche alternative : à 20 h 40, le prix revient tester l'ONH par le dessus ; le trader, déjà gagnant de 2,6R sur la journée, décide de « faire le B » alors que ses conditions ne sont pas réunies (une seule clôture M15 au-dessus au lieu de deux, aucun volume décroissant, et surtout le budget de deux trades est certes disponible mais le scénario B allait contre la structure quotidienne dans un contexte devenu haussier depuis l'exécution du scénario A)"
+  entree="18 398,00"
+  stop="18 424,00 (26 points ; 2 MNQ)"
+  objectif="POC 18 350"
+  r="−1,05R">
+
+Ce trade illustre le danger propre aux **bonnes journées**. Le scénario B existait dans le plan, mais ses conditions n'étaient pas réunies, et surtout le contexte avait changé : après un displacement haussier de la journée qui a emporté le VAH et le PDH, la thèse baissière du matin n'avait plus de support. Le prix repart à la hausse et le stop est touché à 20 h 58. Coût : −1,05R, ramenant la journée de +2,6R à **+1,55R**. Le journal le classe **hors plan** (conditions du scénario B non validées) ; la revue du samedi en tire une modification de process : « aucune entrée dans le sens contraire au trade gagnant du jour après 20 h 00, quel que soit le scénario ». C'est une règle étroite, vérifiable, et directement issue d'une faute observée.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le contexte macro **module** (biais, taille, choix d'instrument) et ne **déclenche** jamais : on achète un sweep réaligné, pas une baisse de taux.
+- L'analyse top-down se résume en **une phrase écrite** : tendance quotidienne, état du repli H4, liquidité identifiée, scénario principal ; tout le reste de la préparation en découle.
+- La carte du jour tient en **sept niveaux** avec les confluences en priorité, et les scénarios sont écrits **des deux côtés**, avec ce qui ne sera pas tradé.
+- La **règle du ratio minimal** a fait le trade : le POC à 1,02R a été écarté comme cible, ce qui a permis d'aller chercher C1 à 2,24R et C2 à 3,00R.
+- Les **branches alternatives** (pas d'exécution, displacement insuffisant, FVG traversé, annonce imprévue, signal hors fenêtre) valent autant que le trade réalisé : elles montrent que la fiche est un filtre, et que les occasions manquées sont le prix des seuils.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Refaire les calculs">
+
+À partir des données du chapitre (sweep 18 298, ATR M15 = 22, FVG 18 308 - 18 318, budget 250 $, MNQ à 2 $ le point) :
+
+1. Recalculez l'entrée, le stop et la distance en points.
+2. Vérifiez le nombre de contrats et le risque réel.
+3. Calculez le ratio de chacun des trois candidats de cible : POC 18 350, VAH 18 388, PDH 18 412.
+4. Vérifiez le résultat final en dollars et en R.
+
+<Solution>
+
+1. Entrée = bord haut du FVG + 1 tick = 18 318 + 0,25 = **18 318,25**. Stop = 18 298 − 0,5 × 22 = 18 298 − 11 = **18 287,00**. Distance = 18 318,25 − 18 287 = **31,25 points**.
+2. 31,25 × 2 $ = **62,50 $ par MNQ** ; 250 / 62,50 = **4,0** → 4 MNQ, risque **250 $** (exactement le budget).
+3. POC : (18 350 − 18 318,25) / 31,25 = 31,75 / 31,25 = **1,02R** (refusé) ; VAH : 69,75 / 31,25 = **2,23R** (arrondi 2,24 dans le texte selon l'arrondi retenu) ; PDH : 93,75 / 31,25 = **3,00R**.
+4. Sorties : 2 contrats à +69,75 points et 2 à +93,75 points ; (69,75 × 2 + 93,75 × 2) = 327 points × 2 $ = **654 $** ; coûts ≈ 5 $ → **649 $** ; 649 / 250 = **+2,60R**.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Juger les branches">
+
+Pour chacune de ces variantes de la journée, dites ce que la fiche impose et pourquoi.
+
+- (a) À 16 h 50, le displacement fait 1,45 ATR M15.
+- (b) À 17 h 20, le prix clôture sous 18 308 en M5 avant que la limite soit servie.
+- (c) À 19 h 40, un second signal complet apparaît sur MES, alors que la position MNQ est encore ouverte.
+- (d) À 20 h 58, un signal complet apparaît sur MNQ.
+- (e) La veille au soir, le trader a dormi 5 heures.
+
+<Solution>
+
+- **(a)** Signal **absent** (seuil 1,5 ATR) : non-trade noté avec la valeur mesurée. Il n'y a pas de « presque » ; le trade qui suivrait appartiendrait à un système non testé.
+- **(b)** **S4 violé** : le setup est mort, l'ordre limite est annulé. Aucune nouvelle entrée sans nouveau signal complet.
+- **(c)** Autorisé sur le principe (un seul trade **par instrument**, et le budget de deux trades du jour n'est pas épuisé), à condition de vérifier la **chaleur du portefeuille** : deux positions d'indices dans le même sens sont fortement corrélées, et la règle de risque du playbook plafonne l'exposition simultanée. En pratique, avec 250 $ déjà exposés sur MNQ, la seconde position doit être réduite ou refusée selon le plafond écrit.
+- **(d)** L'heure limite d'entrée est 21 h 00 : l'ordre peut être placé, mais s'il n'est pas servi à 21 h 00 il est annulé, et la position serait de toute façon fermée à 21 h 15. En pratique, un signal à 20 h 58 avec un stop de 30 points n'a aucune chance d'atteindre C1 en dix-sept minutes : le trade est refusé pour géométrie temporelle.
+- **(e)** Règle du niveau 8 : moins de six heures de sommeil → **taille divisée par deux et un seul trade**. Le trade aurait été pris à 2 MNQ, pour +1,3R au lieu de +2,6R. C'est le coût assumé d'une variable sous contrôle.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire le débrief">
+
+Rédigez le débrief de cette journée en dix lignes maximum, en respectant le format du niveau 8 : ligne de journal résumée, trois questions fixes, et la décision éventuelle (en précisant à quelle revue elle appartient).
+
+<Solution>
+
+Exemple conforme : « **Journal** : MNQ, setup 1 / A, tendance normale, ouverture US, trade n° 1, qualité fort, sweep 8 pts, displacement 1,8 ATR, FVG 0,45 ATR ; entrée 18 318,25, stop 18 287, 4 MNQ ; C1 18 388 (2,24R) et C2 18 412 (3,00R) atteints ; +2,6R net ; MFE 3,29 ; MAE 0,39 ; conforme. Trade n° 2 : short 18 398 hors conditions du scénario B, −1,05R, **hors plan**, tag `signal incomplet forcé`. Journée : +1,55R, conformité 1/2. **Ai-je exécuté ce que j'avais écrit ?** Oui pour le premier, non pour le second. **Qu'est-ce qui a failli me faire dévier ?** L'envie d'ajouter vers 19 h (refusée) ; puis l'envie de « faire le B » sur une bonne journée (non refusée : c'est la faute). **Qu'est-ce que je referais à l'identique ?** Écarter le POC comme C1. **Décision** : proposée à la revue hebdomadaire (une seule) : aucune entrée à contre-sens du trade gagnant du jour après 20 h 00 ; indicateur de vérification : nombre de trades de ce type sur quatre semaines, cible 0. » Ce qu'on vérifie : la faute est classée hors plan le jour même, la décision est renvoyée à la revue et non appliquée à chaud, et l'indicateur est chiffré.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Dans cette étude de cas, le contexte macro (taux en baisse, VIX bas) a servi à :",
+      options: [
+        "Déclencher l'achat",
+        "Moduler : biais haussier, taille pleine, préférence NQ sur ES ; le déclencheur reste le sweep réaligné",
+        "Choisir la cible",
+        "Fixer le stop",
+      ],
+      answer: 1,
+      explain: "On n'achète pas parce que les taux baissent ; on achète un réservoir préparé balayé puis réaligné.",
+    },
+    {
+      q: "Le POC de la veille (18 350) a été écarté comme C1 parce que :",
+      options: [
+        "Il était trop loin",
+        "Il ne donnait que 1,02R, sous le seuil de refus de 1,5R : on prend alors le réservoir suivant",
+        "Ce n'est pas un vrai niveau",
+        "Le volume y était faible",
+      ],
+      answer: 1,
+      explain: "C'est cette règle qui a transformé un trade à +1R en trade à +2,6R.",
+    },
+    {
+      q: "La fenêtre 15 h 30 - 17 h 30 s'est refermée alors que la position était ouverte. Le trader :",
+      options: [
+        "Doit fermer la position",
+        "Garde la position : la fenêtre limite les entrées, pas la gestion ; la fermeture est prévue à 21 h 15",
+        "Doit réduire de moitié",
+        "Doit passer au marché suivant",
+      ],
+      answer: 1,
+      explain: "Les règles de session distinguent l'heure limite d'entrée et l'heure de fermeture des positions.",
+    },
+    {
+      q: "Si le prix n'était jamais revenu dans le FVG :",
+      options: [
+        "Il fallait entrer au marché",
+        "Zéro trade, ordre annulé, aucun regret : entrer au marché « parce que ça part » est un autre système, non testé",
+        "Il fallait poursuivre le prix avec un stop plus large",
+        "Il fallait doubler la taille au prochain signal",
+      ],
+      answer: 1,
+      explain: "Les occasions manquées sont le prix des seuils ; c'est ce qui rend l'échantillon interprétable.",
+    },
+    {
+      q: "Le second trade de la journée (short à 18 398) est classé hors plan parce que :",
+      options: [
+        "Il a perdu",
+        "Les conditions écrites du scénario B n'étaient pas réunies, et le contexte de la journée avait changé",
+        "Le trader était fatigué",
+        "MNQ ne se short pas",
+      ],
+      answer: 1,
+      explain: "Le danger des bonnes journées : le gain acquis fait accepter un signal qu'on aurait refusé le matin.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+La seconde étude de cas change d'échelle et de marché : un swing EUR/USD tenu sur plusieurs jours, où le régime, l'intermarket et le positionnement décident du sens, où les niveaux sont hebdomadaires, et où la gestion se fait en révisions successives plutôt qu'en minutes.
