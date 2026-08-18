@@ -1,0 +1,329 @@
+---
+title: "Futures indices : ES et NQ"
+description: "Spécifications des contrats ES, NQ et de leurs micros (ticks, marges, échéances), sessions et heures clés avec les volumes types, la personnalité de l'ES contre celle du NQ, les niveaux qui comptent chaque jour, et une journée type décortiquée de bout en bout."
+---
+
+# Futures indices : ES et NQ
+
+Les cinq niveaux précédents ont construit une méthode ; les cinq chapitres de ce niveau l'appliquent à des marchés précis, en commençant par ceux qui servent d'exemple depuis le début : les futures sur indices américains. L'**ES** (S&P 500) et le **NQ** (Nasdaq 100), avec leurs micros MES et MNQ, sont les instruments les plus liquides et les mieux documentés du cours ; ils ont aussi chacun un caractère. Ce chapitre donne leurs spécifications exactes, leurs heures, leur personnalité, les niveaux à tracer chaque matin, et déroule une journée complète, minute par minute, avec tous les outils des niveaux 2 à 5.
+
+## Spécifications des contrats, ticks et marges
+
+Les deux contrats sont cotés sur le CME (Globex) et partagent la même mécanique.
+
+| | ES | MES | NQ | MNQ |
+| --- | --- | --- | --- | --- |
+| Sous-jacent | S&P 500 | S&P 500 | Nasdaq 100 | Nasdaq 100 |
+| Multiplicateur | 50 $ par point | 5 $ par point | 20 $ par point | 2 $ par point |
+| Tick | 0,25 pt = 12,50 $ | 0,25 pt = 1,25 $ | 0,25 pt = 5 $ | 0,25 pt = 0,50 $ |
+| Valeur notionnelle (indice à 5 300 / 18 500) | ≈ 265 000 $ | ≈ 26 500 $ | ≈ 370 000 $ | ≈ 37 000 $ |
+| Marge initiale de Bourse (ordre de grandeur) | 12 000 à 20 000 $ selon la volatilité | un dixième | 18 000 à 30 000 $ | un dixième |
+| Marge intraday broker (ordre de grandeur) | 500 à 2 000 $ | 50 à 200 $ | 1 000 à 3 000 $ | 100 à 300 $ |
+| Échéances | mars, juin, septembre, décembre (H, M, U, Z) | idem | idem | idem |
+| Commission typique | 1 à 3 $ par côté | 0,30 à 0,80 $ | idem ES | idem MES |
+
+Quatre points à retenir de ce tableau :
+
+**Le micro est le dixième du standard**, au tick près : même prix, même carnet aligné par arbitrage, un dixième du risque. Pour tout compte inférieur à quelques dizaines de milliers de dollars, le micro est le seul instrument raisonnable (niveau 1). Sa liquidité est excellente en séance ; son carnet est moins profond la nuit.
+
+**La marge n'est pas le risque.** La marge intraday d'un MES peut être de 50 $ ; le risque d'un stop de 8 points est de 40 $, celui d'un stop de 40 points de 200 $. La taille se calcule à partir du stop (niveau 1), jamais à partir de la marge disponible. Les marges de nuit (position gardée après la clôture de la séance) sont nettement plus élevées que les marges intraday et se rapprochent de la marge de Bourse : un intraday qui garde une position sans le vouloir peut recevoir un appel de marge.
+
+**Les échéances roulent.** Le contrat le plus échangé (le « front month ») change environ une semaine avant l'expiration trimestrielle (le troisième vendredi de mars, juin, septembre, décembre) ; les plateformes proposent un contrat continu ajusté ; le trader vérifie qu'il trade le bon mois, surtout la semaine du roulement (volume partagé, OI qui migre, niveau 4).
+
+**Le NQ est plus gros et plus nerveux que l'ES**, en dollars comme en points : à volatilité égale en pourcentage, le NQ bouge davantage en points, et son multiplicateur fait qu'un point de NQ vaut 20 $ contre 50 $ pour un point d'ES ; mais le NQ bouge en général 1,3 à 1,8 fois plus en pourcentage. Un stop de 8 points d'ES et un stop de 30 points de NQ sont d'ampleur comparable.
+
+<Figure caption="Figure 1 · Le même mouvement de 1 % sur les deux indices, en points et en dollars par contrat standard et micro. Le NQ fait plus de points et bouge plus en pourcentage ; le multiplicateur compense en partie.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Comparaison d'un mouvement de 1 % sur ES et NQ" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="30" fontSize="13" fontWeight="600" textAnchor="middle">ES à 5 300 · +1 % = +53 points</text>
+  <text x="540" y="30" fontSize="13" fontWeight="600" textAnchor="middle">NQ à 18 500 · +1 % = +185 points</text>
+  <rect x="60" y="60" width="240" height="26" rx="4" className="green" opacity="0.7" /><text x="180" y="78" fontSize="11" textAnchor="middle" fill="#ffffff">ES : 53 × 50 $ = 2 650 $</text>
+  <rect x="60" y="96" width="24" height="26" rx="4" className="green" opacity="0.7" /><text x="95" y="114" fontSize="11">MES : 53 × 5 $ = 265 $</text>
+  <rect x="400" y="60" width="300" height="26" rx="4" className="green" opacity="0.7" /><text x="550" y="78" fontSize="11" textAnchor="middle" fill="#ffffff">NQ : 185 × 20 $ = 3 700 $</text>
+  <rect x="400" y="96" width="30" height="26" rx="4" className="green" opacity="0.7" /><text x="440" y="114" fontSize="11">MNQ : 185 × 2 $ = 370 $</text>
+  <text x="180" y="160" fontSize="11" textAnchor="middle" className="muted">tick 0,25 = 12,50 $ / 1,25 $</text>
+  <text x="540" y="160" fontSize="11" textAnchor="middle" className="muted">tick 0,25 = 5 $ / 0,50 $</text>
+  <text x="360" y="200" fontSize="11" textAnchor="middle">à volatilité égale en %, le NQ bouge en général 1,3 à 1,8 fois plus : un stop de 8 pts d'ES ≈ un stop de 25 à 35 pts de NQ</text>
+  <text x="360" y="230" fontSize="10" textAnchor="middle" className="muted">la marge intraday (50 à 200 $ sur un micro) n'a rien à voir avec le risque : la taille vient du stop (niveau 1)</text>
+</svg>
+</Figure>
+
+## Sessions, heures clés et volumes types
+
+Les futures d'indices cotent presque 23 heures sur 24, du dimanche 18 h (heure de New York, soit 0 h à Paris en été) au vendredi 17 h, avec une pause quotidienne de 17 h à 18 h (23 h à 0 h à Paris). Mais la liquidité n'est pas répartie uniformément ; elle suit trois sessions et quelques heures clés (heures de Paris, été ; retirer une heure en hiver pour les heures américaines).
+
+**Session asiatique (0 h - 8 h).** Volume faible (quelques pourcents du volume quotidien), carnet mince, mouvements souvent en range étroit qui construit la liquidité (EQH / EQL) prise plus tard (niveau 3). Les mouvements de nuit sont fréquemment repris à l'ouverture européenne ou américaine.
+
+**Session européenne (8 h - 15 h 30).** Volume modéré, en hausse à partir de 9 h ; les indices américains suivent en partie les indices européens et les nouvelles macro européennes ; le range asiatique est souvent balayé d'un côté vers 9 h - 10 h. Les données américaines de 14 h 30 (CPI, NFP, claims…) tombent pendant cette session et la bousculent (niveau 5).
+
+**Session américaine (15 h 30 - 22 h), les « regular trading hours » (RTH).** C'est la séance : 70 à 80 % du volume quotidien. Heures clés :
+
+- **15 h 30** : ouverture des actions au comptant ; volume maximal, volatilité maximale, l'initial balance (la première heure, niveau 4) se construit ; le prix teste les niveaux de la nuit et de la veille.
+- **16 h 00** : publications américaines de 10 h (ISM, Michigan, JOLTS) ; second pic.
+- **16 h 30 - 17 h 30** : la fin de l'initial balance ; souvent la première tendance de la journée s'installe ou le range se confirme.
+- **17 h 30 - 19 h 30** : la « pause de midi » américaine : volume plus faible, mouvements plus erratiques, retours vers le POC du jour ; beaucoup d'intraday ne tradent pas ou réduisent.
+- **19 h 30 - 21 h 30** : reprise, second mouvement de la journée, souvent dans le sens du matin ou en retour vers la value area de la veille.
+- **20 h** : les décisions du FOMC les jours de réunion (niveau 5).
+- **21 h 30 - 22 h** : la dernière demi-heure, volume élevé (rééquilibrages, MOC : market on close), mouvements parfois brutaux ; les positions intraday sont fermées avant 21 h 55 par ceux qui ne veulent pas de la marge de nuit.
+- **22 h** : clôture des actions ; les futures continuent jusqu'à 23 h, sur un volume qui s'effondre.
+
+Le volume type d'une séance ordinaire sur l'ES est de l'ordre de 1 à 2 millions de contrats (le MES en fait davantage en nombre, pour un notionnel dix fois moindre par contrat) ; le NQ, quelques centaines de milliers. Le profil horaire du volume (niveau 2) est la référence pour juger si une bougie de 15 h 45 ou de 3 h du matin est ordinaire.
+
+## Personnalité de l'ES contre personnalité du NQ
+
+Les deux indices sont corrélés à 0,85-0,95 (niveau 1), mais ils ne se tradent pas de la même façon.
+
+**L'ES** est large (500 valeurs, tous secteurs), donc plus lent, plus « propre » dans ses structures, plus respectueux des niveaux (value areas, nPOC, EQH), avec des mèches plus courtes et des sweeps plus mesurés. Il est le marché de référence des institutions pour la couverture, ce qui lui donne une profondeur de carnet exceptionnelle et un slippage minimal en séance. C'est l'instrument idéal pour **apprendre** : les séquences du niveau 3 y sont lisibles, l'order flow du niveau 4 y est riche.
+
+**Le NQ** est concentré (100 valeurs, dominé par une poignée de très grosses capitalisations technologiques), donc plus **directionnel** et plus **nerveux** : quand il part, il va plus loin ; ses sweeps sont plus larges ; ses FVG sont plus grands ; il réagit davantage aux taux (les valeurs de croissance sont sensibles au 10 ans, niveau 5) et aux résultats des grandes valeurs technologiques. Il offre plus de points par trade, avec des stops plus larges en points ; le ratio gain / risque est comparable, mais l'expérience est plus violente.
+
+Conséquences pratiques :
+
+- Un **débutant** commence sur MES : structures plus lisibles, slippage moindre, moins de trades « ratés par le bruit ».
+- Un trader qui cherche des **mouvements amples** intraday préfère MNQ, en acceptant des stops de 25 à 40 points en régime normal.
+- **On ne trade pas les deux en même temps dans le même sens** sans compter la corrélation (niveau 1, chapitre 5) : c'est une position doublée.
+- Le **ratio NQ / ES** (niveau 5, tableau de bord) dit si la croissance mène ou si le marché se replie sur la largeur : quand le NQ sous-performe l'ES dans une hausse, la hausse est fragile.
+- Le NQ est **plus sensible aux annonces macro liées aux taux** (CPI, FOMC) ; l'ES l'est un peu moins ; les deux réagissent aux chocs de risque de la même façon.
+
+<Figure caption="Figure 2 · Le même sweep du plus bas de session sur ES et NQ, une matinée ordinaire : le NQ dépasse davantage, réagit plus violemment, laisse un FVG plus large. Même séquence, amplitude différente : les stops et les cibles se calibrent en ATR de chaque instrument, pas en points communs.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Comparaison d'un même sweep sur ES et NQ" xmlns="http://www.w3.org/2000/svg">
+  <text x="180" y="24" fontSize="12" fontWeight="600" textAnchor="middle">ES</text>
+  <line x1="40" y1="180" x2="330" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="46" y="176" fontSize="9" className="green">plus bas de session</text>
+  <polyline points="50,140 80,160 110,150 140,175 165,188 185,172 210,130 240,145 270,120 300,135 325,105" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="210" y="130" width="30" height="12" className="gold" opacity="0.3" /><text x="225" y="126" fontSize="8" textAnchor="middle" className="gold">FVG 3 pts</text>
+  <text x="165" y="205" fontSize="9" textAnchor="middle" className="muted">sweep 2 pts, mèche courte</text>
+  <text x="180" y="260" fontSize="10" textAnchor="middle" className="muted">stop type : 6 à 10 pts · ATR M15 : 4 à 8</text>
+
+  <text x="540" y="24" fontSize="12" fontWeight="600" textAnchor="middle">NQ</text>
+  <line x1="400" y1="180" x2="690" y2="180" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="406" y="176" fontSize="9" className="green">plus bas de session</text>
+  <polyline points="410,130 440,160 470,145 500,180 525,215 545,170 570,95 600,125 630,80 660,105 685,55" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <rect x="570" y="100" width="30" height="24" className="gold" opacity="0.3" /><text x="585" y="96" fontSize="8" textAnchor="middle" className="gold">FVG 15 pts</text>
+  <text x="525" y="235" fontSize="9" textAnchor="middle" className="muted">sweep 12 pts, mèche longue</text>
+  <text x="540" y="260" fontSize="10" textAnchor="middle" className="muted">stop type : 25 à 40 pts · ATR M15 : 15 à 30</text>
+</svg>
+</Figure>
+
+## Les niveaux qui comptent chaque jour
+
+Chaque matin, avant la session européenne ou au plus tard avant 15 h, le trader d'indices trace un jeu de niveaux fixe. Ils viennent des niveaux 2 à 5 ; leur intérêt est d'être les mêmes chaque jour, donc regardés par tout le monde, donc chargés de liquidité.
+
+**Niveaux de la veille (niveau 3 et 4)** : le plus haut et le plus bas de la séance RTH (PDH, PDL), la clôture RTH (le « settlement » officiel du CME est légèrement différent ; la clôture de 22 h est ce que la plupart tracent), le POC, le VAH et le VAL du profil de la veille, les nPOC des dernières séances non retestés.
+
+**Niveaux de la nuit** : le plus haut et le plus bas de la session asiatique et de la session européenne (overnight high / low), qui forment les EQH / EQL que la séance américaine va souvent balayer.
+
+**Niveaux de la semaine et du mois** : le plus haut et le plus bas de la semaine précédente (PWH, PWL), du mois, l'ouverture de la semaine et du mois ; les HVN et LVN du composite (niveau 4).
+
+**Niveaux de structure** : le dernier HL et le dernier HH (ou LH / LL) sur H4 et H1 (niveau 2), les FVG et OB HTF non mitigés (niveau 3), les zones de confluence.
+
+**Niveaux du jour** : à partir de 15 h 30, l'ouverture RTH, l'initial balance (haut et bas de la première heure), le VWAP du jour (le prix moyen pondéré par le volume depuis l'ouverture, une référence institutionnelle : au-dessus, les acheteurs de la séance sont en gain ; le prix y revient souvent) et le POC en formation.
+
+Cela fait beaucoup ; la discipline du niveau 2 s'applique : cinq à sept niveaux sur l'écran d'exécution, hiérarchisés par épaisseur, le reste sur l'écran de contexte. Les niveaux qui coïncident (un PDL sur un VAL et un HL H1) sont ceux qui comptent le plus.
+
+<Figure caption="Figure 3 · L'écran de contexte d'un trader d'ES avant l'ouverture : niveaux de la veille (PDH, PDL, POC, VAH, VAL), de la nuit (ONH, ONL), de la semaine (PWH, PWL), de structure (HL H4, FVG H4), et, à partir de 15 h 30, l'ouverture, l'IB et le VWAP. Sept au plus sur l'écran d'exécution.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Niveaux quotidiens tracés sur l'ES" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="310" x2="700" y2="310" className="line" strokeWidth="1" />
+  <line x1="60" y1="50" x2="700" y2="50" stroke="var(--tm-red)" strokeWidth="1.5" strokeDasharray="6 4" /><text x="690" y="46" fontSize="10" textAnchor="end" className="red" fontWeight="600">PWH 5 342</text>
+  <line x1="60" y1="90" x2="700" y2="90" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="86" fontSize="10" textAnchor="end" className="red">PDH 5 318 · VAH 5 314</text>
+  <line x1="60" y1="130" x2="700" y2="130" className="line" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="126" fontSize="10" textAnchor="end" className="muted">ONH 5 306</text>
+  <line x1="60" y1="160" x2="700" y2="160" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="690" y="156" fontSize="10" textAnchor="end" className="gold" fontWeight="600">POC veille 5 296 · nPOC J−3</text>
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="196" fontSize="10" textAnchor="end" className="muted">ONL 5 284</text>
+  <rect x="60" y="215" width="640" height="18" className="green" opacity="0.15" /><text x="690" y="228" fontSize="10" textAnchor="end" className="green" fontWeight="600">VAL 5 280 · PDL 5 278 · HL H1 : confluence</text>
+  <rect x="60" y="250" width="640" height="16" className="gold" opacity="0.2" /><text x="690" y="262" fontSize="10" textAnchor="end" className="gold">FVG H4 5 262-5 268</text>
+  <line x1="60" y1="290" x2="700" y2="290" stroke="var(--tm-green)" strokeWidth="1.5" strokeDasharray="6 4" /><text x="690" y="286" fontSize="10" textAnchor="end" className="green" fontWeight="600">PWL 5 254 · HL H4</text>
+  <polyline points="70,180 110,170 150,190 190,175 230,195 260,205 300,185 340,165 380,175 420,150 460,140 500,155 540,135 580,120 620,140 660,110" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="120" y="330" fontSize="9" className="muted">nuit</text>
+  <line x1="300" y1="60" x2="300" y2="310" className="line" strokeWidth="1" strokeDasharray="2 3" /><text x="300" y="330" fontSize="9" textAnchor="middle" className="muted">15 h 30 : ouverture RTH, IB, VWAP</text>
+</svg>
+</Figure>
+
+## Une journée type décortiquée de bout en bout
+
+Voici une séance ordinaire sur l'ES, un mardi sans annonce de niveau 1, telle qu'un trader formé aux niveaux 2 à 5 la déroule. Les prix sont indicatifs ; la méthode est le point.
+
+**Dimanche soir / lundi.** Le tableau de bord (niveau 5) : tendance calme, VIX 14, taux stables, DXY en repli doux ; matrice : tendance calme, setups de continuation autorisés, rotation à taille réduite dans les ranges de court terme. COT des fonds sur l'ES à 62 : rien d'extrême. Calendrier de la semaine : CPI mercredi, rien de niveau 1 mardi.
+
+**Mardi, 8 h 30 (préparation, 15 minutes).** Structure D : HH / HL, dernier HL à 5 254 (qui est aussi le PWL et un HL H4 : confluence majeure). Profil de la veille : POC 5 296, VAH 5 314, VAL 5 280, PDH 5 318, PDL 5 278 (VAL et PDL confondus : seconde confluence, avec un HL H1). Nuit : range asiatique 5 284-5 306 (ONL, ONH), qui a construit des EQL vers 5 284-5 286. FVG H4 non mitigé entre 5 262 et 5 268 sous le prix. nPOC de jeudi dernier à 5 296, confondu avec le POC de la veille. Le prix est à 5 292, dans la value area de la veille. Plan écrit : « ouverture probable dans la VA ; scénario A : sweep des EQL de nuit (5 284) puis retour vers le POC / nPOC 5 296 et le VAH 5 314 : achat sur le retour dans la zone du sweep si M5 se réaligne, stop sous 5 278 ; scénario B : acceptation sous le VAL 5 280 avec volume : pas d'achat, on regarde le FVG H4 5 262-5 268 comme cible et zone de rebond ; pas de vente sans CHoCH H1. Budget du jour −2R, deux trades au plus, rien pendant la pause de midi. »
+
+**15 h 30 - 15 h 45.** Ouverture à 5 290, dans la VA. Volume élevé, normal pour l'heure. Le prix descend vers les EQL de nuit ; à 15 h 41, mèche M5 à 5 281 (sweep des EQL et test du VAL / PDL), clôture 5 286. Footprint (niveau 4) : 300 contrats au bid sur 5 281-5 283, prix qui tient : absorption ; DOM de l'ES : iceberg à 5 282. Le trader ne fait rien encore : il attend le displacement.
+
+**15 h 46 - 15 h 55.** Bougie M5 de +9 points, clôture 5 295, delta +260, casse le dernier LH M5 à 5 291 : CHoCH interne, réalignement (niveau 2 et 3) ; FVG M5 entre 5 287 et 5 290. Le scénario A est en cours.
+
+**15 h 58.** Retour dans le FVG M5 ; ordre limite à 5 289,25 (un tick au-dessus du bord bas, où le DOM montre de la liquidité passive), servi à 15 h 59. Stop à 5 279,50 (sous le sweep, sous le VAL / PDL, avec 1,5 point de marge : 39 ticks). Compte 12 000 $, budget 120 $ : 39 ticks × 1,25 $ = 48,75 $ par MES → 2 MES, risque réel 97,50 $. Cible 1 : POC / nPOC 5 296 (moitié de la position, +6,75 points, ratio 0,7 : c'est une prise partielle, pas la cible) ; cible 2 : VAH 5 314 (+24,75 points, ratio 2,5).
+
+**16 h 00 - 16 h 40.** Le prix atteint 5 296 à 16 h 12 ; sortie d'un contrat, stop de l'autre remonté à 5 288 (breakeven plus). L'initial balance se termine à 16 h 30 : bas 5 281, haut 5 299 ; le prix est dans la moitié haute ; le VWAP est à 5 291 et monte : les acheteurs de la séance sont en gain.
+
+**16 h 40 - 17 h 30.** Le prix casse le haut de l'IB à 5 299 sur volume, extension : la journée prend une direction (niveau 4). Il monte vers 5 308, ralentit sous le VAH. Le trader ne fait rien : il gère.
+
+**17 h 30 - 19 h 30 (pause de midi).** Volume en baisse ; le prix revient tester le haut de l'IB à 5 299-5 300 (changement de polarité), le VWAP à 5 294. Le stop est toujours à 5 288 ; aucun nouveau trade, comme prévu.
+
+**19 h 30 - 21 h.** Reprise ; le prix repart vers le VAH ; à 20 h 15, il atteint 5 313,50 ; l'ordre limite de sortie à 5 313,75 est servi (un tick sous le VAH, niveau 4 : on ne cherche pas le dernier tick). Trade complet : +0,7R sur la moitié, +2,5R sur l'autre : environ **+1,6R** sur la position, 156 $ brut. Le trader a pris un trade sur les deux autorisés ; il ne cherche pas le second : le VAH est atteint, la structure H1 est en extension (loin du HL), la matrice dit « continuation sur retour profond », pas d'entrée en extension.
+
+**21 h - 22 h.** Rien ; observation de la dernière demi-heure ; note au journal : setup, contexte, exécution, R, conformité, une ligne sur ce qui aurait pu mieux se passer (l'entrée limite servie au tick, le stop peut-être trop large de 1 point).
+
+**22 h 05.** Journal complété, profil de la séance figé : POC du jour 5 297, VAH 5 312, VAL 5 285 ; niveaux de demain préparés en cinq minutes ; matrice inchangée ; demain, CPI : protocole news.
+
+Ce qui fait cette journée : rien d'exceptionnel ; un plan écrit à 8 h 30, un scénario qui se réalise, une exécution qui suit les niveaux 3 et 4, une gestion sur l'unité de structure, un journal. Sur cent journées, la moitié ne donneront aucun trade conforme ; c'est normal, et c'est ce que le plan est censé produire.
+
+## Deux trades sur l'ES
+
+Reconstitutions pédagogiques : la même ouverture, deux lectures des niveaux.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Sweep des EQL de nuit sur la confluence VAL / PDL / HL H1, absorption au footprint, CHoCH interne M5, entrée au retour dans le FVG M5, cible VAH"
+  entree="5 289,25"
+  stop="5 279,50 (39 ticks)"
+  objectif="5 296 (moitié) puis 5 313,75 (un tick sous le VAH)"
+  r="≈ +1,6R sur la position">
+
+Le trade de la journée type. Ce qui l'a rendu possible : les niveaux tracés à 8 h 30 (la confluence VAL / PDL / HL H1 est la zone où l'on attend le sweep), la patience jusqu'au displacement, l'entrée limite placée avec le DOM, la cible sur un niveau que tout le monde regarde (le VAH), et le refus d'un second trade en extension. Le résultat en R est modeste ; sur cent séances, ce type de trade porte le compte parce qu'il se répète.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ (Nasdaq)"
+  direction="Short"
+  setup="Vente de la cassure du bas de l'initial balance à 16 h 35, sans niveau en dessous, contre la structure H1 haussière, sur le NQ « parce qu'il bouge plus »"
+  entree="18 402,00 (au marché sur la cassure)"
+  stop="18 432,00 (30 pts)"
+  objectif="18 340,00"
+  r="−1R">
+
+Autre séance. Le trader voit le NQ casser le bas de son IB à 16 h 35 et vend au marché : « cassure d'IB, extension baissière ». Il n'a pas tracé les niveaux : 8 points plus bas se trouvaient le VAL de la veille, un nPOC et le HL H1 (confluence) ; la structure H1 était haussière ; la matrice disait « tendance calme, éviter les retournements » ; et le NQ, plus nerveux, a fait un sweep de 15 points sous l'IB avant de se retourner sur la confluence et de monter 90 points. La cassure d'IB est un signal de journée de tendance quand elle se fait **dans le sens de la structure et vers du vide** ; ici, elle se faisait contre la structure et droit sur une confluence. Les niveaux du matin auraient dit non.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **ES / MES** : 50 $ / 5 $ le point, tick 12,50 $ / 1,25 $ ; **NQ / MNQ** : 20 $ / 2 $ le point, tick 5 $ / 0,50 $ ; le micro est le dixième ; la marge n'est pas le risque ; les échéances roulent trimestriellement.
+- Trois **sessions** : Asie (range qui construit la liquidité), Europe (premier balayage), **RTH 15 h 30 - 22 h** avec ses heures clés (ouverture, 16 h, fin d'IB, pause de midi, reprise, dernière demi-heure) ; 70 à 80 % du volume en RTH.
+- **ES** : large, lent, propre, respectueux des niveaux, idéal pour apprendre ; **NQ** : concentré, directionnel, nerveux, sensible aux taux ; les deux ensemble dans le même sens sont une position doublée ; le ratio NQ / ES lit la santé de la hausse.
+- **Niveaux quotidiens** : PDH / PDL / POC / VAH / VAL, ONH / ONL, PWH / PWL, structure H4 / H1, FVG et OB HTF, puis ouverture, IB, VWAP ; sept au plus sur l'écran d'exécution ; les **confluences** comptent le plus.
+- Une **journée type** : plan écrit avant l'ouverture, scénarios sur les niveaux, patience jusqu'à la séquence, exécution niveaux 3 et 4, gestion sur la structure, pas de trade en extension, journal ; la moitié des séances ne donnent rien, c'est normal.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Spécifications et taille">
+
+Compte de 9 000 $, risque 1 %. Vous hésitez entre un long MES avec un stop de 7 points et un long MNQ sur le même setup avec un stop de 28 points.
+
+1. Calculez le risque par contrat et la taille pour chacun.
+2. L'ATR M15 est de 6 points sur l'ES et de 22 sur le NQ : les deux stops sont-ils comparables en ATR ?
+3. Vous voulez prendre les deux. Que dit le niveau 1 sur le risque effectif, et que faites-vous ?
+
+<Solution>
+
+1. Budget 90 $. MES : 7 × 5 = 35 $ par contrat → 90 ÷ 35 = 2,57 → **2 MES**, risque 70 $. MNQ : 28 × 2 = 56 $ par contrat → 90 ÷ 56 = 1,6 → **1 MNQ**, risque 56 $.
+2. MES : 7 ÷ 6 ≈ **1,17 ATR** ; MNQ : 28 ÷ 22 ≈ **1,27 ATR** : comparables, tous deux hors du bruit d'une bougie M15.
+3. ES et NQ sont corrélés à 0,9 : les deux positions font une position quasi doublée (risque effectif ≈ 1,9 fois une seule, niveau 1 chapitre 5). Le heat brut serait 126 $ = 1,4 % sur une seule idée. Conforme : n'en prendre qu'une (le MES, plus lisible, ou le MNQ pour l'amplitude), ou réduire les deux à 1 MES + 1 MNQ en comptant le bloc comme une position de 91 $ ≈ 1 %.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Tracer les niveaux du matin">
+
+Données pour demain sur l'ES : séance de la veille : haut 5 322, bas 5 289, clôture 5 315, POC 5 308, VAH 5 318, VAL 5 296 ; nuit en cours : haut 5 320, bas 5 305 ; semaine précédente : haut 5 340, bas 5 250 ; structure H4 : HH / HL, dernier HL à 5 288 ; FVG H4 non mitigé entre 5 270 et 5 278 ; nPOC de lundi à 5 331 non retesté. Le prix à 8 h 30 est à 5 312.
+
+1. Listez les niveaux au-dessus et en dessous du prix, du plus proche au plus lointain, avec leur nature.
+2. Repérez les confluences.
+3. Écrivez deux scénarios pour l'ouverture, avec la zone d'entrée, l'invalidation et la cible de chacun.
+
+<Solution>
+
+1. **Au-dessus** : VAH 5 318 ; ONH 5 320 ; PDH 5 322 ; nPOC 5 331 ; PWH 5 340. **En dessous** : POC 5 308 ; ONL 5 305 ; VAL 5 296 ; PDL 5 289 et HL H4 5 288 ; FVG H4 5 270-5 278 ; PWL 5 250.
+2. **Confluence haute** : VAH / ONH / PDH (5 318-5 322) : un réservoir de stops de vendeurs de nuit et de la veille au même endroit ; **confluence basse** : PDL / HL H4 (5 288-5 289) : l'invalidation de la structure et le plus bas de la veille ; le nPOC 5 331 est une cible isolée au-dessus.
+3. **Scénario A** (sweep haut, retour) : le prix balaie 5 318-5 322 après l'ouverture puis clôture M15 en dessous avec displacement → vente au retour dans la zone laissée, invalidation au-dessus du sweep, cible POC 5 308 puis VAL 5 296. **Scénario B** (acceptation au-dessus) : le prix construit du volume au-dessus de 5 322 dans la première heure → pas de vente ; achat sur le retest de 5 320-5 322 par-dessus (polarité), invalidation sous 5 314, cible nPOC 5 331 puis PWH 5 340. Dans les deux cas : pas de vente sous 5 288 sans CHoCH H4 ; le FVG H4 5 270-5 278 est la zone de rebond profonde si le VAL cède.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Décortiquer une séance">
+
+Choisissez une séance passée sur MES (ou en réplay). Avant de la faire défiler, tracez les niveaux du matin et écrivez deux scénarios. Puis déroulez-la par tranches (15 h 30-16 h 30, 16 h 30-17 h 30, pause, reprise, dernière heure) en notant à chaque tranche : ce que le prix a fait par rapport aux niveaux, quel scénario est en cours, où une entrée conforme aurait été possible, où vous auriez été tenté d'entrer sans conformité.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend : la plupart des séances donnent zéro ou une entrée conforme, souvent dans la première heure ou juste après la fin de l'IB, sur une confluence tracée le matin ; et deux à quatre tentations (cassures au marché, entrées en extension, trades de pause de midi). Compter les deux colonnes sur vingt séances est l'exercice le plus instructif du chapitre : il montre que le plan filtre plus qu'il ne déclenche, et c'est sa fonction.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Un point de MES vaut :",
+      options: [
+        "50 $",
+        "5 $ (tick de 0,25 point = 1,25 $) ; le micro est le dixième du contrat standard",
+        "20 $",
+        "2 $",
+      ],
+      answer: 1,
+      explain: "ES 50 $ / point, MES 5 $ ; NQ 20 $, MNQ 2 $. Même prix, carnet aligné, un dixième du risque.",
+    },
+    {
+      q: "La marge intraday d'un MES est de 50 $. Le risque d'un stop de 8 points est :",
+      options: [
+        "50 $",
+        "40 $ : le risque vient du stop (8 × 5 $), pas de la marge",
+        "8 $",
+        "500 $",
+      ],
+      answer: 1,
+      explain: "La taille se calcule à partir du stop (niveau 1), jamais à partir de la marge disponible ; les marges de nuit sont bien plus élevées.",
+    },
+    {
+      q: "La session RTH sur les futures d'indices (heure de Paris, été) va de :",
+      options: [
+        "8 h à 15 h 30",
+        "15 h 30 à 22 h, avec 70 à 80 % du volume quotidien",
+        "0 h à 8 h",
+        "22 h à 23 h",
+      ],
+      answer: 1,
+      explain: "Ouverture, 16 h, fin d'IB, pause de midi, reprise, dernière demi-heure : chaque tranche a son comportement.",
+    },
+    {
+      q: "Le NQ par rapport à l'ES est :",
+      options: [
+        "Plus lent et plus large",
+        "Plus concentré, plus directionnel et nerveux, plus sensible aux taux ; sweeps et FVG plus larges ; les deux dans le même sens sont une position doublée",
+        "Identique",
+        "Moins liquide la journée",
+      ],
+      answer: 1,
+      explain: "L'ES est idéal pour apprendre (structures propres, slippage minimal) ; le NQ offre plus de points avec des stops plus larges.",
+    },
+    {
+      q: "Les niveaux à tracer chaque matin sont :",
+      options: [
+        "Une moyenne mobile",
+        "PDH / PDL / POC / VAH / VAL, ONH / ONL, PWH / PWL, structure H4 / H1, FVG et OB HTF ; puis ouverture, IB, VWAP ; sept au plus à l'écran, confluences en priorité",
+        "Une quinzaine de lignes",
+        "Aucun",
+      ],
+      answer: 1,
+      explain: "Ils sont les mêmes chaque jour, donc regardés par tous, donc chargés de liquidité. Les confluences comptent le plus.",
+    },
+    {
+      q: "Une cassure du bas de l'initial balance est un signal de journée de tendance :",
+      options: [
+        "Toujours",
+        "Quand elle se fait dans le sens de la structure et vers du vide ; contre la structure et droit sur une confluence, c'est souvent un sweep",
+        "Jamais",
+        "Uniquement sur le NQ",
+      ],
+      answer: 1,
+      explain: "Les niveaux du matin disent s'il y a du vide ou une confluence sous l'IB. La matrice dit si les retournements sont autorisés.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Deux autres marchés centraux du cours : l'or et le pétrole. Le chapitre suivant décrit leurs drivers fondamentaux, les contrats GC et CL et leurs pièges, les stocks EIA, l'OPEP et la géopolitique, les corrélations avec le dollar et les taux réels, et les profils de volatilité qui décident des stops et des tailles.
