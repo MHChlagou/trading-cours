@@ -1,0 +1,323 @@
+---
+title: "Setup avancé 1 : sweep et FVG sur indices"
+description: "Le premier setup complet du cours, en fiche standard : le contexte requis avant même de chercher, le déclencheur critère par critère (sweep, displacement, FVG, structure interne), l'entrée, le stop, les objectifs et leurs variantes, la gestion active, les statistiques attendues et les conditions d'invalidité."
+---
+
+# Setup avancé 1 : sweep et FVG sur indices
+
+Le premier setup complet est celui qui court à travers tout le cours depuis le niveau 3 : la prise de liquidité suivie d'un déséquilibre, sur les futures d'indices, en séance américaine. Il est choisi en premier parce que ses éléments sont les mieux définis (sweep, displacement, FVG au tick près), parce que le marché est le plus liquide, et parce qu'il se répète assez pour être mesuré. Ce chapitre le livre en fiche standard : chaque critère a un seuil, chaque prix a un objet, chaque décision est prise avant. Les seuils proposés sont un point de départ raisonnable ; le backtest des chapitres 6 à 9 les ajustera à votre marché et à votre exécution.
+
+## Le contexte requis avant même de chercher le setup
+
+Ce setup ne se cherche pas toute la journée ni dans tous les régimes ; le bloc 1 le dit.
+
+**Marché et unités.** MES ou MNQ (le standard pour les comptes suffisants) ; contexte quotidien et H4, structure H1, exécution M5 (M1 pour affiner le stop). Le MES d'abord pour l'apprentissage (niveau 6).
+
+**Fenêtre.** Séance américaine : de 15 h 30 à 17 h 30 et de 19 h 30 à 21 h 15 (Paris, été) ; pas de nouvelle entrée pendant la pause de midi ni après 21 h 15 (marge de nuit, dernière demi-heure). Une variante « Londres » (9 h - 11 h 30) sur le sweep du range asiatique existe pour les indices ; elle est moins liquide et se traite comme un setup distinct.
+
+**Régimes autorisés.** Tendance calme, tendance normale, range normal (la rotation aux bornes) ; tendance agitée avec réglages de stress (stops ×2, taille ÷2, cibles réduites) ; **interdit en range de stress**. La matrice du niveau 5 est vérifiée le week-end et le matin.
+
+**Structure HTF.** Pour un achat : structure quotidienne haussière ou en range avec le prix dans la moitié basse ; structure H1 en repli (LH / LL internes) qui arrive sur une zone, ou en range aux bornes ; le sweep attendu est celui d'un réservoir **dans le sens** de la structure quotidienne (on achète le sweep d'un plus bas dans une hausse). Un sweep contre la structure quotidienne (sweep d'un plus haut pour vendre dans une hausse) n'est autorisé qu'avec un CHoCH H1 confirmé (le setup devient alors un retournement, avec un taux de réussite plus faible et une taille réduite de moitié).
+
+**Réservoirs préparés.** Avant l'ouverture, la liste des réservoirs (niveau 3 et 6) : ONL / ONH, PDL / PDH, VAL / VAH et POC de la veille, EQL / EQH visibles en H1, HL / LH H1, FVG et OB HTF non mitigés. Le setup se déclenche sur le sweep de **l'un de ces réservoirs préparés**, jamais d'un niveau trouvé après coup.
+
+**Positionnement et calendrier.** Pas d'entrée dans les 15 minutes qui précèdent une annonce de niveau 1 ni les 20 qui suivent (protocole news) ; les jours de FOMC, aucune entrée après 19 h 45 ; le COT et le VIX sont notés (ils modulent la taille, ils n'interdisent pas).
+
+Le bloc 1 se vérifie en deux minutes à 8 h 30 et en trente secondes à chaque candidat. S'il manque un élément, on ne regarde pas le bloc 2.
+
+<Figure caption="Figure 1 · Le contexte du setup 1 : structure quotidienne dans le sens, structure H1 en repli vers un réservoir préparé, fenêtre RTH hors pause et hors news, régime autorisé. Le sweep attendu est celui du réservoir, dans le sens de la structure supérieure.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Contexte requis pour le setup sweep-FVG" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <polyline points="50,240 100,190 140,215 200,140 250,175 300,110 340,150 380,130 420,175 450,200 480,215 500,208" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" opacity="0.5" />
+  <text x="300" y="98" fontSize="10" textAnchor="middle" fontWeight="600">D : HH / HL, biais achats</text>
+  <polyline points="380,130 395,145 410,138 425,160 440,152 455,178 470,170 485,200 500,208" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="470" y="140" fontSize="9" className="muted">H1 : repli LH / LL</text>
+  <rect x="380" y="200" width="320" height="22" className="green" opacity="0.15" /><line x1="380" y1="222" x2="700" y2="222" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="690" y="238" fontSize="9" textAnchor="end" className="green">réservoir préparé : PDL / VAL / EQL H1 (confluence)</text>
+  <text x="560" y="180" fontSize="9" textAnchor="middle" className="muted">sweep attendu ici, dans le sens de la structure D</text>
+  <rect x="40" y="30" width="660" height="44" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="48" fontSize="10" textAnchor="middle">fenêtre : 15 h 30 - 17 h 30, 19 h 30 - 21 h 15 · régime : tendance calme / normale, range normal · pas de niveau 1 à ±15 / 20 min</text>
+  <text x="360" y="64" fontSize="10" textAnchor="middle" className="muted">bloc 1 vérifié le matin en deux minutes ; à chaque candidat en trente secondes ; s'il manque un élément, on ne regarde pas le signal</text>
+</svg>
+</Figure>
+
+## Le déclencheur précis, critère par critère
+
+Le bloc 2, pour un achat (le short est symétrique). Tous les critères marqués **obligatoire** doivent être présents ; les optionnels modulent.
+
+**S1 · Sweep (obligatoire).** Une bougie M5 (ou M15) dont le plus bas dépasse le réservoir préparé d'au moins **2 ticks** sur MES (0,5 point ; 4 ticks sur MNQ, 1 point) et d'au plus 1,5 ATR M15 (au-delà, c'est une cassure candidate), et qui **clôture au-dessus** du réservoir. Le sweep est daté et son plus bas noté (c'est l'ancre du stop).
+
+**S2 · Displacement (obligatoire).** Dans les **trois bougies M5** qui suivent la clôture du sweep, une bougie (ou une séquence de deux bougies consécutives) haussière dont la fourchette cumulée est d'au moins **1,5 ATR M15**, dont le corps représente au moins **60 %** de la fourchette, et qui **casse en clôture le dernier LH interne M5** formé pendant le repli (le CHoCH interne du niveau 3, le réalignement du niveau 2). Si le displacement ne casse pas de LH interne, le signal est incomplet.
+
+**S3 · FVG (obligatoire).** Le displacement laisse un FVG haussier M5 (définition stricte sur trois bougies, niveau 3) d'au moins **0,4 ATR M15** de hauteur (par exemple 2 points sur MES quand l'ATR M15 est de 5) ; le FVG est daté, ses bornes notées. En l'absence de FVG (displacement continu sans trou), la variante « OB » s'applique : la zone d'entrée est la bougie du sweep (l'OB, niveau 3), avec un stop identique ; on note la variante au journal, car ses statistiques sont différentes.
+
+**S4 · Non-invalidation (obligatoire).** Entre le displacement et l'entrée, le prix ne traverse pas le FVG en clôture M5 et ne repasse pas sous le plus bas du sweep. Sinon, le setup est mort ; on n'entre pas.
+
+**S5 · Flux (optionnel, module la taille).** Sur la bougie de sweep, absorption visible au footprint (delta négatif avec plus bas tenu, déséquilibres vendeurs empilés sans résultat, ou volume au bid ≥ 2 fois la moyenne des bougies M5 de la même heure sans progression) : si présent, taille pleine ; si absent, taille aux deux tiers ; si le footprint montre au contraire une acceptation sous le réservoir (déséquilibres vendeurs qui obtiennent du prix, volume au bid en hausse et prix qui continue), le signal est **refusé** malgré la clôture (le niveau 4 l'emporte).
+
+**S6 · Volume relatif (optionnel, module la taille).** La bougie de displacement a un volume relatif (par rapport à la même heure sur dix jours, niveau 2) d'au moins 1,3 : taille pleine ; sinon deux tiers.
+
+Le signal est **complet** quand S1 à S4 sont présents ; il est **fort** quand S5 et S6 le sont aussi ; il est **absent** sinon. Il n'y a pas de « presque » : un displacement de 1,3 ATR n'est pas un displacement de 1,5 ; on note le candidat manqué au journal (chapitre 6, la feuille de collecte enregistre aussi les non-trades) et l'on attend le suivant.
+
+<Figure caption="Figure 2 · Le déclencheur en quatre critères obligatoires : sweep (S1, ≥ 2 ticks au-delà, clôture au-dessus), displacement (S2, ≥ 1,5 ATR M15, corps ≥ 60 %, casse le LH interne), FVG (S3, ≥ 0,4 ATR M15), non-invalidation (S4). Le flux (S5) et le volume (S6) modulent la taille.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Critères du déclencheur sweep-FVG" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <line x1="60" y1="210" x2="420" y2="210" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="66" y="206" fontSize="9" className="green">réservoir préparé</text>
+  <line x1="60" y1="150" x2="330" y2="150" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="66" y="146" fontSize="9" className="muted">dernier LH interne M5</text>
+  <line x1="120" y1="120" x2="120" y2="180" className="line" strokeWidth="1.5" /><rect x="114" y="130" width="12" height="40" className="red" opacity="0.9" />
+  <line x1="150" y1="150" x2="150" y2="200" className="line" strokeWidth="1.5" /><rect x="144" y="160" width="12" height="32" className="red" opacity="0.9" />
+  <line x1="180" y1="180" x2="180" y2="232" className="line" strokeWidth="1.5" /><rect x="174" y="185" width="12" height="20" className="green" opacity="0.9" />
+  <circle cx="180" cy="232" r="5" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="180" y="256" fontSize="9" textAnchor="middle" className="green" fontWeight="600">S1 sweep : ≥ 2 ticks, clôture au-dessus</text>
+  <line x1="210" y1="90" x2="210" y2="188" className="line" strokeWidth="1.5" /><rect x="204" y="94" width="12" height="88" className="green" opacity="0.9" />
+  <text x="240" y="80" fontSize="9" className="green" fontWeight="600">S2 displacement : ≥ 1,5 ATR, corps ≥ 60 %, casse le LH</text>
+  <line x1="240" y1="70" x2="240" y2="120" className="line" strokeWidth="1.5" /><rect x="234" y="75" width="12" height="40" className="green" opacity="0.9" />
+  <rect x="200" y="120" width="60" height="18" className="gold" opacity="0.35" /><text x="270" y="134" fontSize="9" className="gold" fontWeight="600">S3 FVG ≥ 0,4 ATR</text>
+  <line x1="290" y1="95" x2="290" y2="140" className="line" strokeWidth="1.5" /><rect x="284" y="100" width="12" height="35" className="red" opacity="0.9" />
+  <line x1="320" y1="115" x2="320" y2="150" className="line" strokeWidth="1.5" /><rect x="314" y="118" width="12" height="28" className="red" opacity="0.9" />
+  <circle cx="330" cy="130" r="6" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="345" y="170" fontSize="9" className="gold" fontWeight="600">S4 : pas de traversée du FVG en clôture,</text><text x="345" y="184" fontSize="9" className="gold" fontWeight="600">pas de retour sous le sweep → entrée</text>
+  <rect x="440" y="40" width="260" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="570" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Optionnels : modulent la taille</text>
+  <text x="450" y="82" fontSize="9">S5 flux : absorption sur la bougie de sweep</text>
+  <text x="450" y="98" fontSize="9" className="muted">   présent → taille pleine ; absent → 2/3 ;</text>
+  <text x="450" y="114" fontSize="9" className="red">   acceptation sous le réservoir → refus</text>
+  <text x="450" y="134" fontSize="9">S6 volume relatif du displacement ≥ 1,3</text>
+  <text x="450" y="150" fontSize="9" className="muted">   présent → pleine ; absent → 2/3</text>
+</svg>
+</Figure>
+
+## Entrée, stop, objectifs et variantes
+
+**Entrée (variante A, par défaut).** Ordre limite au **bord haut du FVG M5** (le bord le plus proche du prix) plus un tick, valable jusqu'à l'annulation (section suivante). L'ordre est placé dès que S1 à S4 sont validés, en bracket (niveau 0) avec le stop et les cibles.
+
+**Entrée (variante B, plus profonde).** Ordre limite au **milieu du FVG** (le « consequent encroachment » du niveau 3) : meilleur prix, ratio supérieur, taux d'exécution inférieur. On choisit une variante par fiche et l'on ne change pas en cours de route ; les deux ont des statistiques différentes.
+
+**Entrée (variante C, sur confirmation).** Pas d'ordre limite ; on attend que le prix entre dans le FVG et que le M1 se réaligne (cassure d'un LH interne M1) : entrée à la clôture de cette bougie M1. Moins de faux départs, prix un peu moins bon, davantage de discrétion (le M1 est bruyant) : réservée aux traders qui ont mesuré que leur taux de réussite en est amélioré.
+
+**Stop.** Au **plus bas du sweep moins 0,5 ATR M15**, arrondi au tick inférieur. Raison écrite : si ce prix est retraversé, la prise de liquidité a échoué et l'hypothèse « un acheteur s'est servi » est fausse. Le stop ne se déplace jamais vers le bas ; il ne se déplace vers le haut que selon la gestion (section suivante). Ordre de grandeur : sur MES en régime normal, 6 à 12 points (24 à 48 ticks) ; sur MNQ, 20 à 40 points.
+
+**Taille.** Niveau 1 : budget du jour (1 % du capital) ÷ (distance du stop × valeur du point), arrondi vers le bas ; multiplié par 2/3 si S5 ou S6 manque (par 4/9 si les deux manquent) ; divisé par 2 en tendance agitée. Si le résultat est zéro contrat, le trade ne se prend pas.
+
+**Objectifs.** Toujours des objets, jamais des ratios seuls :
+
+- **C1** : le premier réservoir de liquidité au-dessus dans le sens du trade : le dernier LH H1 du repli, le POC de la veille, l'ONH, selon ce qui est le plus proche au-delà d'un ratio de **1,5** depuis l'entrée. Si le premier objet donne moins de 1,5, on prend le suivant ; s'il n'y en a aucun sous 3 ATR M15, le trade est refusé (géométrie insuffisante).
+- **C2** : le réservoir suivant : PDH, VAH, EQH H1, nPOC ; ratio minimal **3**. S'il n'existe pas sous 5 ATR M15, C2 est fixé au HH H1 précédent.
+- **Ratio de refus** : si C1 n'atteint pas 1,5 avec le stop calculé, le trade n'est pas pris, quelle que soit la qualité du signal.
+
+**Variantes de contexte** (à noter au journal, statistiques séparées) : sweep du range de la nuit (ONL) à l'ouverture ; sweep du PDL / VAL en première heure ; sweep d'un plus bas de séance après la pause de midi ; sweep contre la structure quotidienne avec CHoCH H1 (retournement, taille ÷2).
+
+<Figure caption="Figure 3 · Entrée, stop et objectifs du setup 1 : limite au bord du FVG (variante A) ou au milieu (B), stop sous le sweep − 0,5 ATR M15, C1 au premier réservoir au-delà de 1,5R, C2 au réservoir suivant au-delà de 3R. Si C1 n'atteint pas 1,5R, le trade est refusé.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Entrée, stop et objectifs du setup sweep-FVG" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <line x1="60" y1="60" x2="700" y2="60" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="6 4" /><text x="690" y="56" fontSize="10" textAnchor="end" className="red" fontWeight="600">C2 : PDH / VAH / EQH · ratio ≥ 3</text>
+  <line x1="60" y1="120" x2="700" y2="120" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="116" fontSize="10" textAnchor="end" className="red">C1 : LH H1 / POC / ONH · ratio ≥ 1,5</text>
+  <rect x="60" y="180" width="640" height="22" className="gold" opacity="0.3" /><text x="690" y="176" fontSize="10" textAnchor="end" className="gold" fontWeight="600">FVG M5</text>
+  <line x1="60" y1="181" x2="700" y2="181" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="66" y="176" fontSize="9" className="gold">variante A : bord haut + 1 tick</text>
+  <line x1="60" y1="191" x2="700" y2="191" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="2 2" /><text x="66" y="215" fontSize="9" className="gold">variante B : milieu</text>
+  <line x1="60" y1="250" x2="700" y2="250" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="246" fontSize="9" textAnchor="end" className="green">plus bas du sweep</text>
+  <line x1="60" y1="266" x2="700" y2="266" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="690" y="280" fontSize="10" textAnchor="end" className="red" fontWeight="600">stop : sweep − 0,5 ATR M15 · raison : liquidité non prise</text>
+  <polyline points="80,240 110,250 140,232 170,150 200,110 230,130 260,160 290,180 320,178 350,150 390,118 430,130 470,100 520,80 570,62 610,70" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="290" cy="180" r="5" className="gold" /><text x="290" y="235" fontSize="9" textAnchor="middle" className="gold" fontWeight="600">entrée</text>
+  <text x="380" y="300" fontSize="10" textAnchor="middle" className="muted">taille = budget ÷ (distance × valeur du point), × 2/3 par optionnel manquant, ÷ 2 en tendance agitée ; zéro contrat = pas de trade</text>
+</svg>
+</Figure>
+
+## La gestion active du trade
+
+La gestion est une séquence écrite ; elle ne dépend pas de l'humeur.
+
+1. **Annulation avant entrée.** L'ordre limite est annulé si : 90 minutes se sont écoulées depuis le displacement sans exécution ; le prix a traversé le FVG en clôture M5 ; le prix est repassé sous le plus bas du sweep ; une annonce de niveau 1 tombe dans les 15 minutes ; la fenêtre horaire se ferme ; le régime bascule (VIX + 25 % intraday, courbe VIX qui s'inverse).
+2. **À l'exécution.** Le bracket est en place (stop et C1 / C2 en OCO). On note l'heure, le prix, la variante, S5 et S6, la taille.
+3. **À C1.** Sortie de **50 %** de la position (ou du contrat le plus proche de 50 % ; à 1 contrat, la règle du niveau 1 s'applique : on remonte le stop et on étend, ou l'on sort tout à C1 selon la fiche : ici, à 1 contrat, on garde vers C2 avec le stop remonté). Le stop du solde est remonté au **prix d'entrée plus 1 tick** (breakeven plus). On ne fait rien d'autre.
+4. **Entre C1 et C2.** Aucun déplacement de stop sur des sensations. Une seule règle mécanique : si le prix forme un nouveau HL M15 au-dessus de C1, le stop est remonté sous ce HL moins 0,5 ATR M15 (un trailing structurel, jamais un trailing en points fixes).
+5. **À C2.** Sortie du solde. Trade terminé.
+6. **Sortie sur temps.** Si la position est encore ouverte à 21 h 15 (ou à 17 h 20 pour un trade du matin, au choix de la fiche : les intraday purs sortent avant la pause de midi ; le cours retient 21 h 15 pour laisser la reprise de l'après-midi travailler), sortie au marché, quel que soit le résultat. Pas de position de nuit sur ce setup.
+7. **News pendant le trade.** Protocole du niveau 5 : à −15 minutes d'un niveau 1, si le trade est en gain de plus de 1R, le stop est remonté à +0,5R minimum et l'on garde ; sinon, sortie. Les jours de FOMC, tout est fermé à 19 h 45.
+8. **Second trade.** Un seul trade de ce setup ouvert à la fois par instrument ; un second candidat le même jour est autorisé si le premier est terminé (gain ou perte) et si le budget quotidien (−2R) n'est pas atteint ; pas de troisième.
+
+Ce que la gestion n'autorise pas : déplacer le stop vers le bas, ajouter à une position perdante, sortir avant C1 « parce que ça hésite », rester après 21 h 15 « parce que c'est presque C2 ». Chaque interdiction correspond à une erreur du niveau 1 ; elles sont écrites pour ne pas être discutées en séance.
+
+## Statistiques attendues et conditions d'invalidité
+
+**Attendues (hypothèses avant test, à confronter aux chapitres 6 à 9).** Fréquence : sur MES, 2 à 4 signaux complets par semaine dans la fenêtre, dont 1 à 2 exécutés (le ratio de refus et l'annulation en écartent une partie). Taux de réussite (trades atteignant au moins C1) : de l'ordre de 45 à 55 %. R moyen par trade avec la gestion 50 / 50 : de l'ordre de +0,3 à +0,5R net des coûts (commission et un tick de slippage moyen). Drawdown attendu sur 100 trades : 8 à 12R en médiane, 15 à 20R une fois sur dix (niveau 1). Ces chiffres sont des **hypothèses honnêtes** fondées sur les ordres de grandeur du cours ; ils ne sont ni une promesse ni une statistique établie ; le backtest sur votre marché, votre période et votre exécution est le seul juge.
+
+**Ce qui dégrade les statistiques** (à surveiller dans la décomposition par contexte, niveau 1) : les trades pris en range de stress (interdits), ceux pris sur des sweeps de réservoirs mineurs non préparés, ceux pris hors fenêtre, ceux dont S2 est limite (1,5 ATR tout juste), ceux du vendredi après-midi, ceux avec S5 en refus ignoré.
+
+**Conditions d'invalidité de la stratégie** (la ligne de la fiche) : suspendre et revoir si l'un de ces faits se produit :
+
+- Drawdown supérieur à **1,5 fois** le pire drawdown backtesté (par exemple au-delà de 18R si le backtest a montré 12R) ;
+- Expectancy glissante sur les **50 derniers trades** inférieure à zéro, alors que la conformité au plan est supérieure à 90 % (si la conformité est basse, c'est le trader qui a dérivé, pas la stratégie : niveau 1, chapitre 4) ;
+- Changement de microstructure : ATR M15 moyen divisé par deux ou multiplié par deux sur un mois, changement de règles du marché (heures, ticks), disparition des réservoirs habituels (par exemple si les cassures de nuit cessent d'être reprises pendant deux mois) ;
+- Trois mois consécutifs sans signal complet (la fenêtre ou les seuils ne correspondent plus au marché).
+
+Suspendre ne veut pas dire jeter : la fiche passe en simulation, l'échantillon récent est étudié, une version révisée est éventuellement testée (chapitre 9 : sans sur-optimiser).
+
+## Deux trades du setup 1
+
+Reconstitutions pédagogiques : un signal complet exécuté, un signal incomplet forcé.
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Setup 1, variante A, sweep du PDL / VAL (réservoir préparé, confluence) à 15 h 52 ; S1 : 3 ticks au-delà, clôture au-dessus ; S2 : bougie M5 de 1,8 ATR, corps 71 %, casse le LH interne ; S3 : FVG M5 de 2,5 points (0,5 ATR) ; S4 ok ; S5 : absorption au footprint ; S6 : volume relatif 1,5 ; taille pleine"
+  entree="5 262,50 (limite, bord haut du FVG + 1 tick)"
+  stop="5 254,50 (plus bas du sweep 5 257,00 − 0,5 × 5 = 2,5 → 5 254,50 ; 32 ticks)"
+  objectif="C1 POC de la veille 5 275 (ratio 1,56) ; C2 VAH 5 289 (ratio 3,3)"
+  r="+2,4R (50 % à C1, solde à C2)">
+
+Compte 12 000 $, budget 120 $ ; 32 ticks × 1,25 $ = 40 $ par MES → 3 MES, risque 120 $. Exécution à 16 h 04 ; C1 à 16 h 41 : sortie de 1 MES (le plus proche de 50 % ; le journal note 1/3), stop du solde à 5 262,75 ; HL M15 formé au-dessus de C1 vers 17 h 20 : stop remonté à 5 269 ; C2 atteint à 20 h 05 sur la reprise : sortie des 2 MES restants. Résultat : (12,5 × 1 + 26,5 × 2) × 5 $ = 327,50 $ sur 120 $ de risque : +2,7R brut, +2,4R net des commissions et d'un tick de slippage à l'entrée. Journal : toutes les cases cochées, variante A, PDL / VAL, tendance normale.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MES (S&P 500)"
+  direction="Long"
+  setup="Signal incomplet forcé : sweep d'un creux M5 non préparé (pas dans la liste du matin), displacement de 1,2 ATR (S2 non validé), FVG de 0,25 ATR (S3 non validé), pris « parce que ça ressemble au setup »"
+  entree="5 281,00"
+  stop="5 276,00 (20 ticks)"
+  objectif="5 296,00"
+  r="−1R">
+
+Le trader voit un sweep et un FVG et se dit que c'est « son » setup. Trois critères manquent : le réservoir n'était pas préparé (un creux M5 sans réaction antérieure, pas un PDL, pas un VAL, pas des EQL H1) ; le displacement fait 1,2 ATR (le seuil est 1,5) ; le FVG fait 0,25 ATR (le seuil est 0,4). Il n'y a pas de « presque » : c'était un autre trade, non testé, avec l'expectancy inconnue de tous les « à peu près ». Le prix traverse le FVG et le stop. La perte n'est pas le problème ; le problème est qu'elle ira dans les statistiques d'un setup qui n'a pas été tradé, et les polluera. Le journal doit la classer « hors setup », pas « setup 1 ».
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Contexte** : MES / MNQ, RTH hors pause et news, régimes autorisés (pas de range de stress), structure quotidienne dans le sens et H1 en repli vers un **réservoir préparé** ; sinon on ne cherche pas.
+- **Signal** : S1 sweep (≥ 2 ticks, clôture au-dessus), S2 displacement (≥ 1,5 ATR M15, corps ≥ 60 %, casse le LH interne), S3 FVG (≥ 0,4 ATR M15), S4 non-invalidation ; S5 flux et S6 volume modulent la taille ; **pas de « presque »**.
+- **Exécution** : limite au bord (A) ou au milieu (B) du FVG ; stop sous le sweep − 0,5 ATR M15 avec sa raison ; taille du niveau 1 modulée ; C1 au premier réservoir ≥ 1,5R, C2 au suivant ≥ 3R ; **refus si C1 n'atteint pas 1,5R**.
+- **Gestion** : annulation à 90 min / traversée / news / régime ; 50 % à C1 et BE + 1 tick ; trailing structurel sous les HL M15 ; sortie à 21 h 15 ; protocole news ; un trade à la fois, deux par jour au plus.
+- **Statistiques attendues** (hypothèses : 45-55 %, +0,3 à +0,5R, DD 8-12R) à confronter au backtest ; **invalidité** : DD > 1,5 × backtest, E(50) < 0 avec conformité, changement de microstructure, trois mois sans signal.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Valider un signal">
+
+MES, 16 h 10, ATR M15 = 6 points, réservoir préparé : ONL à 5 244,00. Bougie M5 de 16 h 05 : bas 5 243,25, haut et clôture 5 245,50. Bougie de 16 h 10 : ouverture 5 245,50, haut 5 255,50, bas 5 245,00, clôture 5 254,75 ; le dernier LH interne M5 était à 5 251,00. Bougie de 16 h 15 : bas 5 251,25, haut 5 258,00. Footprint de 16 h 05 : bid 480 × ask 90, plus bas tenu.
+
+1. S1 est-il validé (seuil, clôture) ?
+2. S2 : fourchette en ATR, corps en pourcentage, cassure du LH ?
+3. S3 : bornes du FVG et taille en ATR ; S5 ?
+4. Entrée (variante A), stop, et taille pour un budget de 100 $.
+
+<Solution>
+
+1. **S1 validé** : le bas 5 243,25 dépasse l'ONL de 0,75 point (3 ticks ≥ 2), la clôture 5 245,50 est au-dessus. Ancre du stop : 5 243,25.
+2. **S2** : fourchette 5 255,50 − 5 245,00 = 10,5 points = **1,75 ATR** (≥ 1,5) ; corps 5 254,75 − 5 245,50 = 9,25 points = **88 %** de la fourchette (≥ 60 %) ; clôture 5 254,75 au-dessus du LH 5 251,00 : **casse**. Validé.
+3. **S3** : FVG entre le haut de la bougie 1 (16 h 05 : 5 245,50) et le bas de la bougie 3 (16 h 15 : 5 251,25) → **5 245,50 - 5 251,25**, soit 5,75 points = **0,96 ATR** (≥ 0,4). Validé. **S5** : 480 au bid contre 90 à l'ask, plus bas tenu : absorption → taille pleine.
+4. Entrée variante A : bord haut du FVG + 1 tick = **5 251,50**. Stop : 5 243,25 − 0,5 × 6 = 5 240,25 → **5 240,25** (arrondi au tick, déjà sur un tick) ; distance 11,25 points = **45 ticks** = 56,25 $ par MES. Taille : 100 ÷ 56,25 = 1,78 → **1 MES**, risque 56,25 $. C1 doit être à au moins 1,5 × 11,25 = 16,9 points au-dessus de 5 251,50, soit ≥ 5 268,50 : le premier réservoir au-delà (par exemple le POC de la veille à 5 270) est C1.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Refuser ou moduler">
+
+Cinq candidats du setup 1. Pour chacun : pris à taille pleine, pris à taille réduite (laquelle), ou refusé, et pourquoi.
+
+- (a) Signal complet, S5 présent, S6 absent, régime tendance normale, C1 à 1,7R.
+- (b) Signal complet, S5 et S6 présents, régime range de stress.
+- (c) Signal complet, S5 : le footprint montre des déséquilibres vendeurs qui font baisser le prix sous le réservoir avant la clôture, S6 présent, C1 à 2R.
+- (d) S1, S2, S3 validés, mais le prix a traversé le FVG en clôture M5 avant que l'ordre soit servi.
+- (e) Signal complet, S5 et S6 présents, tendance agitée (VIX 27), C1 à 1,4R.
+
+<Solution>
+
+- **(a)** Pris à **2/3 de taille** (S6 manque). Ratio C1 1,7 ≥ 1,5 : ok.
+- **(b)** **Refusé** : régime interdit, quel que soit le signal.
+- **(c)** **Refusé** : S5 en mode « acceptation sous le réservoir » l'emporte sur la clôture (le niveau 4 dit que la liquidité n'a pas été absorbée mais consommée).
+- **(d)** **Refusé** (S4 : setup mort) ; l'ordre est annulé.
+- **(e)** **Refusé** : C1 à 1,4R n'atteint pas 1,5 (ratio de refus) ; et même à 1,5, la tendance agitée aurait imposé taille ÷2 et stops ×2 (donc un ratio recalculé).
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Votre version de la fiche">
+
+Recopiez la fiche du setup 1 et adaptez-la à votre instrument (MES ou MNQ), à votre fenêtre réelle de disponibilité et à votre variante d'entrée. Ne changez aucun seuil pour l'instant (ils se testent au chapitre 6) ; ajoutez seulement vos contraintes. Puis, sur dix séances passées en réplay, listez tous les candidats (complets, incomplets, refusés) avec le critère qui a tranché.
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on attend après dix séances : entre cinq et quinze candidats, dont deux à six signaux complets, dont un à quatre exécutés après le filtre de ratio et d'annulation ; et pour chaque candidat non pris, le critère précis (S2 à 1,3 ATR, réservoir non préparé, C1 à 1,2R…). Cette liste est la matière première du backtest manuel du chapitre 6 : elle montre déjà que le setup **filtre** plus qu'il ne déclenche, et où se logent les tentations.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le setup 1 se déclenche sur le sweep de :",
+      options: [
+        "N'importe quel creux M5",
+        "Un réservoir préparé le matin (ONL / ONH, PDL / PDH, VAL / VAH, EQL / EQH H1, HL / LH H1, zones HTF), dans le sens de la structure quotidienne",
+        "Une moyenne mobile",
+        "Un niveau trouvé après coup",
+      ],
+      answer: 1,
+      explain: "Le contexte se prépare avant l'ouverture ; un sweep d'un niveau non préparé est un autre trade, non testé.",
+    },
+    {
+      q: "S2 (displacement) exige :",
+      options: [
+        "Une bougie verte",
+        "Une fourchette ≥ 1,5 ATR M15, un corps ≥ 60 %, et la cassure en clôture du dernier LH interne M5, dans les trois bougies après le sweep",
+        "Un volume élevé seulement",
+        "Un FVG",
+      ],
+      answer: 1,
+      explain: "Un displacement de 1,3 ATR n'est pas un displacement de 1,5 ; il n'y a pas de « presque » ; le candidat manqué se note au journal.",
+    },
+    {
+      q: "Le stop du setup 1 est :",
+      options: [
+        "20 ticks sous l'entrée",
+        "Le plus bas du sweep moins 0,5 ATR M15, avec la raison : si ce prix est retraversé, la prise de liquidité a échoué",
+        "Sous le FVG",
+        "Au choix",
+      ],
+      answer: 1,
+      explain: "Le stop est un objet plus une marge en ATR, avec une raison écrite ; il ne se déplace jamais vers le bas.",
+    },
+    {
+      q: "Si le premier réservoir au-dessus donne un ratio de 1,3 avec le stop calculé :",
+      options: [
+        "On prend le trade quand même",
+        "On prend comme C1 le réservoir suivant s'il donne ≥ 1,5 sous 3 ATR M15 ; sinon le trade est refusé",
+        "On rapproche le stop",
+        "On double la taille",
+      ],
+      answer: 1,
+      explain: "La cible est un objet ; le ratio est un filtre d'entrée. Un signal parfait avec une mauvaise géométrie ne se prend pas.",
+    },
+    {
+      q: "S5 (flux) montre une acceptation sous le réservoir (déséquilibres vendeurs qui obtiennent du prix). Le signal est :",
+      options: [
+        "Pris à taille pleine",
+        "Refusé, malgré la clôture au-dessus : le niveau 4 l'emporte",
+        "Pris à 2/3",
+        "Sans changement",
+      ],
+      answer: 1,
+      explain: "S5 module la taille quand il est absent ; il refuse le signal quand il contredit l'hypothèse d'absorption.",
+    },
+    {
+      q: "La stratégie est suspendue si :",
+      options: [
+        "Trois pertes de suite",
+        "Le drawdown dépasse 1,5 fois le pire drawdown backtesté, ou l'expectancy sur 50 trades est négative avec une conformité supérieure à 90 %, ou la microstructure change, ou trois mois sans signal",
+        "Un ami le conseille",
+        "Jamais",
+      ],
+      answer: 1,
+      explain: "Si la conformité est basse, c'est le trader qui a dérivé, pas la stratégie. Suspendre n'est pas jeter : simulation, étude, version révisée sans sur-optimiser.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le second setup change de marché et de logique : l'ouverture de Londres sur le forex, construite autour de la session (niveau 6) plutôt qu'autour d'un réservoir intraday. Le chapitre suivant en donne la logique, la lecture du range asiatique et de la manipulation, les conditions de validation et les filtres, l'exécution et les sorties, et le journal spécifique.
