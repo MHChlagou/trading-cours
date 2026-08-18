@@ -1,0 +1,305 @@
+---
+title: "Sur-optimisation et validation"
+description: "Pourquoi un backtest optimisé ment : les degrés de liberté et le meilleur de k tirages nuls, la séparation in-sample / out-of-sample, le walk-forward en pratique, les tests de robustesse par perturbation des paramètres, des marchés et des périodes, et la checklist anti-overfitting du cours, avec un script qui fabrique un backtest magnifique sur du bruit pur."
+---
+
+# Sur-optimisation et validation
+
+Tout ce que les chapitres 6 à 8 ont mesuré supposait une fiche **testée telle qu'écrite**. Ce chapitre traite de ce qui arrive quand on la modifie en regardant les résultats : un seuil de plus, une fenêtre de moins, un stop ajusté, jusqu'à ce que le passé soit parfait. Cela s'appelle le sur-ajustement (overfitting), et c'est la manière la plus courante de fabriquer un backtest magnifique et une stratégie perdante. Le script [`overfitting_walk_forward.py`](pathname:///code/overfitting_walk_forward.py) le montre sur des données où, par construction, **aucune règle ne peut gagner** : une marche aléatoire ; il y trouve pourtant un système à +0,76R d'expectancy in-sample. Puis il montre comment on le démasque.
+
+## La sur-optimisation et les degrés de liberté
+
+Le mécanisme est simple et il faut le comprendre une fois pour toutes. Un échantillon de trades contient un signal (l'edge, s'il existe) et du **bruit** (les séquences aléatoires que le chapitre 8 a décrites). Quand on essaie plusieurs versions d'une règle et qu'on garde la meilleure, on sélectionne celle qui s'ajuste le mieux **au bruit de cet échantillon**, pas seulement au signal ; et le bruit ne se reproduit pas.
+
+Le script le chiffre sans données de marché, avec une expérience de pensée : on tire k systèmes **nuls** (expectancy zéro, écart-type 1,4R) sur 100 trades chacun, et l'on garde le meilleur.
+
+```text
+  k =     1 : meilleure expectancy trouvée ≈ +0.00 R (vraie valeur : 0)
+  k =     5 : meilleure expectancy trouvée ≈ +0.16 R
+  k =    20 : meilleure expectancy trouvée ≈ +0.26 R
+  k =   140 : meilleure expectancy trouvée ≈ +0.37 R
+  k =  1000 : meilleure expectancy trouvée ≈ +0.45 R
+```
+
+Cent quarante combinaisons (trois paramètres à sept, cinq et quatre valeurs : la grille du script) suffisent pour qu'un système **nul** affiche +0,37R sur 100 trades ; c'est plus que l'expectancy attendue du setup 1. Chaque paramètre ajusté, chaque filtre ajouté, chaque variante essayée est un **degré de liberté** ; leur nombre multiplie les tirages, et le meilleur tirage monte avec leur nombre, sans qu'aucun edge n'existe. Le trader qui a « essayé une dizaine de choses » avant de trouver sa fiche a, sans le savoir, tiré des dizaines de fois ; le trader qui optimise une grille en a tiré des centaines.
+
+Le script le montre ensuite sur des prix : une marche aléatoire de 2 000 jours, une règle de cassure de canal à trois paramètres (longueur du canal, moyenne de filtre, stop en ATR), 140 combinaisons testées sur la première moitié. La meilleure : canal 10 jours, moyenne 50, stop 1 ATR ; **20 trades, +15,2R, expectancy +0,76R**. Un backtest qu'on encadrerait. La médiane des 140 combinaisons est à −1,3R (les coûts) et seulement 34 % sont positives : la « stratégie » n'est pas une propriété du marché, c'est le sommet d'une distribution de bruit.
+
+<Figure caption="Figure 1 · Le meilleur de k tirages nuls : sur 100 trades d'un système à expectancy zéro, la meilleure expectancy trouvée parmi k combinaisons monte avec k (+0,16R à 5, +0,37R à 140, +0,45R à 1 000). Chaque paramètre, filtre ou variante essayé est un degré de liberté ; le backtest optimisé mesure le sommet du bruit, pas le marché.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Meilleur de k systèmes nuls" xmlns="http://www.w3.org/2000/svg">
+  <line x1="80" y1="240" x2="680" y2="240" className="line" strokeWidth="1" />
+  <line x1="80" y1="40" x2="80" y2="240" className="line" strokeWidth="1" />
+  <text x="380" y="275" fontSize="10" textAnchor="middle" className="muted">k combinaisons testées (échelle log)</text>
+  <text x="30" y="150" fontSize="10" className="muted" transform="rotate(-90 30 150)">meilleure expectancy trouvée (R)</text>
+  <line x1="80" y1="240" x2="680" y2="240" stroke="var(--tm-green)" strokeWidth="1.5" strokeDasharray="4 3" /><text x="600" y="255" fontSize="9" className="green">vraie valeur : 0</text>
+  <polyline points="100,240 200,176 300,136 420,92 560,60" fill="none" stroke="var(--tm-red)" strokeWidth="2.5" />
+  <circle cx="100" cy="240" r="4" className="red" /><text x="100" y="230" fontSize="9" textAnchor="middle">k=1</text>
+  <circle cx="200" cy="176" r="4" className="red" /><text x="200" y="166" fontSize="9" textAnchor="middle">k=5 : +0,16</text>
+  <circle cx="300" cy="136" r="4" className="red" /><text x="300" y="126" fontSize="9" textAnchor="middle">k=20 : +0,26</text>
+  <circle cx="420" cy="92" r="5" className="red" /><text x="420" y="82" fontSize="9" textAnchor="middle" fontWeight="600">k=140 : +0,37</text>
+  <circle cx="560" cy="60" r="4" className="red" /><text x="560" y="50" fontSize="9" textAnchor="middle">k=1000 : +0,45</text>
+  <line x1="80" y1="100" x2="680" y2="100" stroke="var(--tm-gold)" strokeWidth="1" strokeDasharray="6 4" /><text x="90" y="96" fontSize="9" className="gold">expectancy attendue du setup 1 (+0,3 à +0,5R)</text>
+  <text x="380" y="215" fontSize="9" textAnchor="middle" className="muted">une grille 7 × 5 × 4 = 140 tirages ; « j'ai essayé une dizaine de choses » = 10 tirages au moins</text>
+</svg>
+</Figure>
+
+## In-sample contre out-of-sample
+
+La parade de base : ne jamais juger une règle sur les données qui ont servi à la choisir. On sépare l'historique en deux : la partie **in-sample** (IS), sur laquelle on a le droit de regarder, d'ajuster, d'optimiser ; et la partie **out-of-sample** (OOS), qu'on ne touche pas, qu'on ne regarde pas, jusqu'au jour où la fiche est figée ; alors, une seule fois, on l'y applique. Le résultat OOS est la seule mesure honnête de ce que la fiche vaut sur des données qu'elle n'a pas vues.
+
+Le script applique le meilleur jeu in-sample (+15,2R, +0,76R par trade) à la seconde moitié : **33 trades, −4,5R, −0,14R par trade**. Le système n'a jamais existé ; il n'y avait que le bruit de la première moitié.
+
+Trois règles pour que la séparation serve à quelque chose. **L'OOS ne se regarde qu'une fois** : si l'on ajuste la fiche après avoir vu l'OOS, l'OOS est devenu de l'IS et il n'y a plus de test ; il faut alors de nouvelles données (attendre) ou une nouvelle période jamais vue. **L'OOS doit être assez grand** pour porter un jugement : au moins 50 à 100 trades (chapitre 8), sinon un OOS positif ne prouve rien de plus qu'un IS positif ; en pratique on réserve un tiers de l'historique. **L'OOS doit être postérieur** à l'IS (on teste sur le futur du point de vue de l'IS), pas tiré au hasard dans l'historique : les régimes se suivent et un OOS entrelacé « fuit » de l'information.
+
+Ce que l'OOS ne fait pas : garantir le futur. Un OOS positif dit que la règle a survécu à une période qu'elle n'a pas vue ; c'est une preuve de plus, pas une certitude ; le régime peut changer après. Mais un OOS négatif est une preuve suffisante pour ne pas trader.
+
+## Le walk-forward en pratique
+
+L'IS / OOS unique a un défaut : il n'y a qu'un test, et un seul OOS peut être chanceux ou malchanceux. Le **walk-forward** multiplie les tests. On avance par fenêtres : on optimise (ou l'on fige) la fiche sur les 500 premiers jours, on l'applique sur les 250 suivants (OOS n° 1) ; on décale de 250 jours, on ré-optimise sur les 500 précédents, on applique aux 250 suivants (OOS n° 2) ; et ainsi de suite jusqu'au bout. Puis on **concatène** tous les OOS : c'est la performance qu'aurait obtenue un trader qui aurait ré-optimisé sa fiche à chaque pas, en n'utilisant jamais que le passé.
+
+```python
+def walk_forward(df, train=500, test=250):
+    oos, start = [], 0
+    while start + train + test <= len(df):
+        tr = df.iloc[start : start + train]                    # période d'optimisation
+        te = df.iloc[start + train : start + train + test]     # période de test, jamais vue
+        best = grid_search(tr).sort_values("total", ascending=False).iloc[0]
+        oos.append(backtest_rule(te, int(best.n_channel), int(best.m_filter), float(best.k_stop)))
+        start += test
+    return np.concatenate(oos)
+```
+
+Sur la marche aléatoire, six fenêtres : chaque IS est beau (+4,8 à +24,4R), et les OOS donnent −1,0, +8,5, −4,9, −6,0, −10,2, −12,2R ; concaténés, **47 trades, −25,8R**. Une fenêtre sur six est positive : c'est le hasard qui l'a fait ; le trader qui n'aurait vu que celle-là aurait cru tenir quelque chose. La séquence entière dit la vérité : les paramètres changent d'une fenêtre à l'autre (30/200/3, puis 20/20/1, puis 15/50/1…), ce qui est en soi un symptôme : une règle qui décrit un vrai comportement garde des paramètres **stables** ; une règle qui court après le bruit en change à chaque pas.
+
+Trois lectures du walk-forward sur une vraie fiche : le rapport **OOS / IS** (si l'expectancy OOS vaut au moins la moitié de l'IS, la règle tient ; si elle vaut un dixième, elle est ajustée) ; la **stabilité des paramètres** d'une fenêtre à l'autre ; et la **régularité** des OOS (une concaténation faite d'une fenêtre géniale et de cinq nulles est un accident).
+
+<Figure caption="Figure 2 · Le walk-forward : fenêtres glissantes d'optimisation (IS, 500 jours) suivies de test (OOS, 250 jours) ; on concatène les OOS. Sur la marche aléatoire du script : IS +4,8 à +24,4R par fenêtre, OOS −25,8R au total sur 47 trades, paramètres instables. Lectures : rapport OOS / IS, stabilité des paramètres, régularité des OOS.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Walk-forward" xmlns="http://www.w3.org/2000/svg">
+  <text x="60" y="36" fontSize="10" fontWeight="600">temps →</text>
+  <rect x="60" y="50" width="200" height="18" className="box" strokeWidth="1" opacity="0.8" /><text x="160" y="63" fontSize="9" textAnchor="middle" className="muted">IS 1 (500 j)</text>
+  <rect x="260" y="50" width="100" height="18" className="gold" opacity="0.6" /><text x="310" y="63" fontSize="9" textAnchor="middle" fontWeight="600">OOS 1</text>
+  <rect x="160" y="78" width="200" height="18" className="box" strokeWidth="1" opacity="0.8" /><text x="260" y="91" fontSize="9" textAnchor="middle" className="muted">IS 2</text>
+  <rect x="360" y="78" width="100" height="18" className="gold" opacity="0.6" /><text x="410" y="91" fontSize="9" textAnchor="middle" fontWeight="600">OOS 2</text>
+  <rect x="260" y="106" width="200" height="18" className="box" strokeWidth="1" opacity="0.8" /><text x="360" y="119" fontSize="9" textAnchor="middle" className="muted">IS 3</text>
+  <rect x="460" y="106" width="100" height="18" className="gold" opacity="0.6" /><text x="510" y="119" fontSize="9" textAnchor="middle" fontWeight="600">OOS 3</text>
+  <rect x="360" y="134" width="200" height="18" className="box" strokeWidth="1" opacity="0.8" /><text x="460" y="147" fontSize="9" textAnchor="middle" className="muted">IS 4</text>
+  <rect x="560" y="134" width="100" height="18" className="gold" opacity="0.6" /><text x="610" y="147" fontSize="9" textAnchor="middle" fontWeight="600">OOS 4</text>
+  <text x="680" y="100" fontSize="9" className="muted">…</text>
+  <line x1="60" y1="170" x2="680" y2="170" className="line" strokeWidth="1" />
+  <text x="60" y="192" fontSize="10" fontWeight="600">Sur la marche aléatoire :</text>
+  <text x="60" y="212" fontSize="9">IS par fenêtre : <tspan className="green" fontWeight="600">+4,8 … +24,4R</tspan> ; OOS : <tspan className="red" fontWeight="600">−1,0 / +8,5 / −4,9 / −6,0 / −10,2 / −12,2R</tspan></text>
+  <text x="60" y="230" fontSize="9">concaténation OOS : <tspan className="red" fontWeight="600">47 trades, −25,8R</tspan> ; paramètres : (30, 200, 3) → (20, 20, 1) → (15, 50, 1) → (10, 50, 1) → (10, 20, 1) : instables</text>
+  <text x="60" y="262" fontSize="10" fontWeight="600" className="gold">Trois lectures sur une vraie fiche :</text>
+  <text x="60" y="282" fontSize="9" className="muted">OOS / IS ≥ 0,5 : la règle tient · paramètres stables d'une fenêtre à l'autre · OOS réguliers, pas un accident heureux</text>
+  <text x="60" y="302" fontSize="9" className="muted">une fenêtre OOS positive sur six est du hasard ; la séquence entière dit la vérité</text>
+</svg>
+</Figure>
+
+## Tests de robustesse : paramètres, marchés, périodes
+
+Un vrai comportement de marché est **grossier** : il ne dépend pas d'un seuil au tick près. C'est le fondement des tests de robustesse ; ils cherchent à savoir si le résultat tient quand on secoue la fiche.
+
+**Perturbation des paramètres.** On regarde la surface des résultats **autour** du jeu retenu : si le displacement à 1,5 ATR donne +0,4R, que donnent 1,3 et 1,7 ? Si le stop à 0,5 ATR donne +0,4R, que donnent 0,3 et 0,7 ? Un vrai comportement donne un **plateau** : des résultats voisins, un peu moins bons de part et d'autre ; un artefact donne un **pic** : le jeu retenu est bon, ses voisins sont médiocres ou négatifs. Le script imprime cette surface pour la marche aléatoire (canal × stop) : le meilleur est dans un **coin de la grille** (canal 10, stop 1,0 : les plus petites valeurs testées), avec une décroissance rapide autour ; c'est un second symptôme : quand l'optimum est au bord, on n'a pas trouvé un plateau, on a trouvé la direction d'un extrême, et l'on serait tenté d'étendre la grille, c'est-à-dire d'ajouter des tirages. Règle pratique : on retient un jeu de paramètres **au milieu d'un plateau**, jamais le sommet d'un pic, même si le sommet est meilleur ; et l'on arrondit (1,5 ATR, pas 1,47).
+
+**Changement de marché.** Un setup fondé sur un comportement (le sweep repris, l'ouverture de Londres) doit se retrouver, affaibli mais présent, sur des marchés voisins : le setup 1 sur MNQ s'il est bon sur MES, sur le DAX en séance européenne ; le setup 2 sur GBP/USD s'il est bon sur EUR/USD. Un setup qui ne fonctionne que sur un seul instrument est suspect : ou bien il exploite une microstructure propre à ce marché (possible, mais fragile), ou bien il est ajusté au bruit de cet historique.
+
+**Changement de période.** Découper l'échantillon en années ou en régimes (chapitre 6) et vérifier que le résultat n'est pas porté par une seule sous-période ; une fiche à +0,4R sur cinq ans dont +1,2R viennent d'une année et zéro des quatre autres a une expectancy de 2020, pas une expectancy. On regarde aussi le comportement **avant** la période d'où vient l'idée : si le sweep-FVG a été conçu en regardant 2022-2023, que donne-t-il en 2018-2019 ?
+
+**Perturbation de l'exécution.** Décaler l'entrée d'un tick, ajouter un tick de slippage, retirer les cinq meilleurs trades, doubler les coûts (chapitre 7) : un edge réel survit à ces frottements ; un artefact s'effondre.
+
+Aucun de ces tests ne prouve l'edge ; chacun peut le réfuter. C'est la logique du chapitre : on ne cherche pas à confirmer sa fiche, on cherche à la casser ; ce qui résiste se trade.
+
+<Figure caption="Figure 3 · Plateau contre pic. À gauche, un vrai comportement : les résultats sont bons sur une plage de valeurs voisines et l'on retient le milieu du plateau, arrondi. À droite, un artefact : le jeu retenu est le seul bon, ses voisins sont médiocres, l'optimum est souvent au bord de la grille. Les autres tests : marchés voisins, sous-périodes, perturbation de l'exécution.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Plateau contre pic" xmlns="http://www.w3.org/2000/svg">
+  <text x="190" y="36" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Plateau : un vrai comportement</text>
+  <line x1="50" y1="220" x2="330" y2="220" className="line" strokeWidth="1" />
+  <text x="190" y="240" fontSize="9" textAnchor="middle" className="muted">paramètre (ex. displacement en ATR)</text>
+  <text x="80" y="256" fontSize="8" textAnchor="middle" className="muted">1,1</text><text x="135" y="256" fontSize="8" textAnchor="middle" className="muted">1,3</text><text x="190" y="256" fontSize="8" textAnchor="middle" className="muted">1,5</text><text x="245" y="256" fontSize="8" textAnchor="middle" className="muted">1,7</text><text x="300" y="256" fontSize="8" textAnchor="middle" className="muted">1,9</text>
+  <rect x="65" y="150" width="30" height="70" className="green" opacity="0.4" /><rect x="120" y="120" width="30" height="100" className="green" opacity="0.6" /><rect x="175" y="110" width="30" height="110" className="green" opacity="0.8" /><rect x="230" y="118" width="30" height="102" className="green" opacity="0.6" /><rect x="285" y="145" width="30" height="75" className="green" opacity="0.4" />
+  <text x="190" y="100" fontSize="9" textAnchor="middle" className="green" fontWeight="600">retenir le milieu, arrondi (1,5)</text>
+  <text x="190" y="275" fontSize="9" textAnchor="middle" className="muted">voisins un peu moins bons ; le résultat ne dépend pas du tick</text>
+  <text x="530" y="36" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Pic : un artefact</text>
+  <line x1="390" y1="220" x2="670" y2="220" className="line" strokeWidth="1" />
+  <text x="530" y="240" fontSize="9" textAnchor="middle" className="muted">paramètre</text>
+  <rect x="405" y="212" width="30" height="8" className="red" opacity="0.4" /><rect x="460" y="230" width="30" height="0" className="red" opacity="0.4" /><rect x="460" y="205" width="30" height="15" className="red" opacity="0.4" /><rect x="515" y="90" width="30" height="130" className="red" opacity="0.9" /><rect x="570" y="215" width="30" height="5" className="red" opacity="0.4" /><rect x="625" y="200" width="30" height="20" className="red" opacity="0.4" />
+  <text x="530" y="80" fontSize="9" textAnchor="middle" className="red" fontWeight="600">le seul bon ; ses voisins sont nuls</text>
+  <text x="530" y="275" fontSize="9" textAnchor="middle" className="muted">souvent au bord de la grille ; ne se trade pas, même « meilleur »</text>
+</svg>
+</Figure>
+
+## La checklist anti-overfitting du cours
+
+À passer avant de déclarer une fiche « validée » ; une réponse négative à une ligne marquée d'un astérisque renvoie la fiche en test.
+
+1. \* La fiche a été **écrite avant** le test, avec ses seuils, et testée telle quelle (chapitre 6) ; les idées survenues pendant le test ont été notées à part.
+2. \* Le nombre de versions essayées est **compté** et écrit dans la fiche (« version 3 ; deux variantes de stop et une de cible essayées ») ; au-delà d'une dizaine, l'OOS doit être d'autant plus grand.
+3. \* Les seuils sont **grossiers** (ATR à un chiffre après la virgule, ticks entiers, minutes rondes) et au **milieu d'un plateau**, pas au sommet d'un pic ni au bord de la grille.
+4. \* Il existe un **OOS postérieur**, d'au moins 50 à 100 trades, regardé une seule fois après que la fiche a été figée, et son expectancy vaut au moins la **moitié** de l'IS.
+5. Un **walk-forward** (si les données le permettent) montre des paramètres stables et des OOS réguliers.
+6. Le résultat tient sur un **marché voisin** (affaibli, mais du même signe) et sur **chaque sous-période** majeure (aucune année ne porte tout).
+7. Le résultat survit à **coûts × 2**, à un tick de slippage supplémentaire, au retrait des cinq meilleurs trades.
+8. Le nombre de **filtres** du bloc 1 est justifié par un comportement de marché nommé (« pas en range de stress parce que les sweeps ne sont pas repris »), pas par l'élimination de pertes vues après coup ; chaque filtre ajouté après le test compte comme une version.
+9. Les **non-trades** ont été enregistrés et le taux de refus est raisonnable (un setup qui refuse 90 % de ses signaux par des filtres empilés est probablement ajusté).
+10. La fiche a passé une phase de **simulation ou de petite taille** (30 trades au moins) après validation, et le réel est du même ordre que le backtest.
+
+Ce que la checklist n'empêche pas : le marché peut changer, et une fiche honnêtement validée peut cesser de fonctionner ; c'est ce que les conditions d'invalidité (chapitre 2) et le Monte Carlo (chapitre 8) surveillent. Ce qu'elle empêche : trader une fiche qui n'a jamais fonctionné ailleurs que dans le bruit d'un échantillon.
+
+## Deux trades, deux fiches
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, setup 1, version 2 de la fiche (validée)"
+  direction="Long"
+  setup="Fiche écrite avant test ; seuils 2 ticks / 1,5 ATR / 0,4 ATR / 0,5 ATR ; IS 2019-2022 : 210 trades, +0,38R ; OOS 2023 : 68 trades, +0,26R (rapport 0,68) ; plateau vérifié sur le displacement (1,3 → +0,31, 1,5 → +0,38, 1,7 → +0,35) ; tient sur MNQ (+0,22R) ; survit à coûts × 2 (+0,29R) ; deux versions essayées (la v1 avait C1 à 2R, abandonnée sur le MFE, pas sur le résultat)"
+  entree="5 244,50"
+  stop="5 236,50 (32 ticks)"
+  objectif="C1 5 256,50 (1,5R) ; C2 5 268,50 (3R)"
+  r="+1,8R (moitié à C1, solde en trailing sorti à 5 262)">
+
+Le trade est banal ; c'est la fiche qui est intéressante. Elle a un OOS regardé une fois, un rapport OOS / IS de 0,68, un plateau, un marché voisin, une survie aux coûts, et un compte des versions honnête (deux). Le trader **sait** ce que vaut sa fiche : +0,25 à +0,35R, avec un Monte Carlo à p90 de 20R sur 500 trades. Cette connaissance est ce qui lui permet de prendre ce trade à taille pleine un jour où les trois précédents ont perdu, et de le gérer sans discuter le trailing.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, « setup 1 amélioré », version 11 de la fiche d'un autre trader"
+  direction="Long"
+  setup="Fiche modifiée dix fois en regardant les résultats : displacement à 1,42 ATR, FVG à 0,37 ATR, stop à 0,55 ATR, fenêtre 15 h 47 - 17 h 12, filtre « pas le mercredi », filtre « VIX inférieur à 17,3 » : IS 2022-2023 : +0,91R sur 84 trades ; aucun OOS (« toutes les données ont servi à améliorer ») ; le trade est le n° 12 en réel"
+  entree="18 655,00"
+  stop="18 620,00 (140 ticks)"
+  objectif="18 707,50"
+  r="−1R (11e perte en 12 trades réels)">
+
+Rien dans le trade n'est faux ; tout dans la fiche l'est. Six seuils non ronds (1,42 ; 0,37 ; 15 h 47 ; 17,3) : le signe d'un ajustement au tick près, donc au bruit. Onze versions : au moins onze tirages, plus les filtres, sur 84 trades ; le chapitre dit qu'un système nul en tire +0,3 à +0,4R, et l'IS affiche +0,91R : c'est le pic, pas un plateau. Pas d'OOS : impossible de savoir. Deux filtres (« pas le mercredi », « VIX inférieur à 17,3 ») sans comportement de marché nommé : ils éliminent des pertes vues après coup. Le réel fait le travail que l'OOS aurait fait gratuitement : onze pertes sur douze. La fiche n'est pas « cassée » ; elle n'a jamais existé.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le sur-ajustement, c'est **sélectionner le bruit** : le meilleur de k systèmes nuls affiche +0,37R sur 100 trades pour k = 140 ; chaque paramètre, filtre ou variante essayé est un degré de liberté ; le script trouve +0,76R in-sample sur une marche aléatoire.
+- **In-sample / out-of-sample** : on n'a le droit de regarder que l'IS ; l'OOS est postérieur, assez grand (50 à 100 trades), regardé **une seule fois** après que la fiche est figée ; un OOS négatif suffit à ne pas trader.
+- **Walk-forward** : fenêtres glissantes d'optimisation et de test, OOS concaténés ; on lit le rapport OOS / IS (≥ 0,5), la stabilité des paramètres, la régularité des OOS ; sur le bruit : IS beaux, OOS −25,8R, paramètres instables.
+- **Robustesse** : plateau (retenir le milieu, arrondir) contre pic (ne pas trader, surtout au bord de la grille) ; marchés voisins, sous-périodes, coûts × 2, un tick de slippage, moins les cinq meilleurs ; on cherche à casser la fiche, pas à la confirmer.
+- **Checklist** : fiche écrite avant, versions comptées, seuils grossiers au milieu d'un plateau, OOS postérieur regardé une fois avec rapport ≥ 0,5, walk-forward, marché voisin et sous-périodes, survie aux frottements, filtres justifiés par un comportement nommé, non-trades enregistrés, simulation avant le réel.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Compter les degrés de liberté">
+
+Un trader raconte : « J'ai testé mon setup avec un stop à 0,3, 0,5 et 0,7 ATR ; avec C1 à 1,5 et 2R ; j'ai ajouté un filtre de volume parce que ça enlevait des pertes, puis un filtre d'heure ; et j'ai gardé la meilleure combinaison : +0,55R sur 90 trades. » Combien de combinaisons au moins ; que vaut le +0,55R d'après le tableau du chapitre ; que faire ?
+
+<Solution>
+
+Stops × cibles = 3 × 2 = 6 combinaisons ; chaque filtre (avec / sans) double : 6 × 2 × 2 = **24 combinaisons** au moins (et les seuils des filtres, s'ils ont été ajustés, en ajoutent). Le tableau donne, pour k = 20 systèmes nuls sur 100 trades, une meilleure expectancy d'environ **+0,26R** ; sur 90 trades un peu plus. Le +0,55R n'est donc pas nul avec certitude, mais une bonne part peut être du bruit sélectionné (l'écart au bruit est +0,3R, avec une incertitude de ±0,3R à 90 trades). Que faire : figer la combinaison retenue, la tester sur une période **postérieure** jamais vue (au moins 60 trades), et vérifier que les deux filtres correspondent à un comportement de marché nommé (le filtre de volume est défendable ; « ça enlevait des pertes » n'est pas une raison) ; si l'OOS donne au moins +0,25R, la fiche passe ; sinon, elle retourne en test avec les seuils du cours.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire un walk-forward">
+
+Un walk-forward sur cinq fenêtres donne : IS +0,42 / +0,38 / +0,45 / +0,40 / +0,44R ; OOS +0,25 / +0,31 / −0,05 / +0,22 / +0,28R ; paramètres retenus : (1,5 ; 0,5) ; (1,5 ; 0,5) ; (1,7 ; 0,5) ; (1,5 ; 0,7) ; (1,5 ; 0,5). Verdict ?
+
+<Solution>
+
+Rapport OOS / IS : moyenne OOS ≈ +0,20R pour IS ≈ +0,42R, soit **0,48** : à la limite du seuil de 0,5 ; quatre OOS sur cinq positifs et du même ordre, une fenêtre légèrement négative (ordinaire au vu du chapitre 8) : **régularité correcte**. Paramètres **stables** (le displacement à 1,5 dans quatre fenêtres sur cinq, le stop à 0,5 dans quatre sur cinq, avec des voisins immédiats sinon : c'est un plateau, pas un pic). Verdict : la fiche décrit probablement un vrai comportement, avec une expectancy réelle autour de +0,2R (l'OOS, pas l'IS) ; on la trade avec cette valeur-là dans le Monte Carlo, pas avec +0,42R.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Une surface de paramètres">
+
+Autour d'un jeu retenu (displacement 1,5 ATR, stop 0,5 ATR), la surface d'expectancy IS est :
+
+```text
+              stop 0,3   0,5   0,7
+disp 1,3       +0,05   +0,28  +0,24
+disp 1,5       +0,10   +0,41  +0,30
+disp 1,7       +0,08   +0,33  +0,29
+```
+
+Plateau ou pic ? Quel jeu retenir, et quelle expectancy annoncer ?
+
+<Solution>
+
+Sur l'axe du displacement (colonne stop 0,5) : +0,28 / +0,41 / +0,33 : voisins bons, un léger sommet à 1,5 : **plateau**. Sur l'axe du stop : 0,3 ATR est nettement moins bon partout (+0,05 à +0,10 : le stop est trop serré, les mèches le touchent), 0,5 et 0,7 sont proches : plateau entre 0,5 et 0,7, falaise à 0,3. Jeu à retenir : **1,5 / 0,5** ou 1,5 / 0,7 (le milieu du plateau ; on peut préférer 0,6 arrondi si la fiche l'accepte, mais 0,5 est déjà rond) ; expectancy à annoncer : pas le sommet (+0,41) mais la **moyenne du voisinage**, autour de **+0,30R** ; puis l'OOS tranchera.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le meilleur de 140 systèmes nuls sur 100 trades affiche une expectancy d'environ :",
+      options: [
+        "0R, puisqu'ils sont nuls",
+        "+0,37R : la sélection du meilleur tirage fabrique de l'expectancy à partir de bruit",
+        "−0,5R",
+        "+2R",
+      ],
+      answer: 1,
+      explain: "Chaque paramètre, filtre ou variante essayé est un degré de liberté ; le meilleur résultat monte avec leur nombre.",
+    },
+    {
+      q: "L'out-of-sample doit être :",
+      options: [
+        "Tiré au hasard dans l'historique et regardé souvent",
+        "Postérieur à l'IS, assez grand (50 à 100 trades), et regardé une seule fois après que la fiche est figée",
+        "Le même que l'IS",
+        "Facultatif",
+      ],
+      answer: 1,
+      explain: "Si l'on ajuste après avoir vu l'OOS, il devient de l'IS et il n'y a plus de test.",
+    },
+    {
+      q: "Dans le walk-forward du script sur une marche aléatoire :",
+      options: [
+        "Les OOS confirment les IS",
+        "Chaque IS est beau, les OOS concaténés sont nuls ou négatifs, et les paramètres changent à chaque fenêtre : la signature du bruit ajusté",
+        "Le système gagne",
+        "Rien ne se passe",
+      ],
+      answer: 1,
+      explain: "Une fenêtre OOS positive sur six est du hasard ; la séquence entière dit la vérité.",
+    },
+    {
+      q: "Un jeu de paramètres dont les voisins sont médiocres et qui se trouve au bord de la grille est :",
+      options: [
+        "Le meilleur, à trader",
+        "Un pic, probablement un artefact ; on retient un jeu au milieu d'un plateau, arrondi, même s'il est un peu moins bon",
+        "À étendre en agrandissant la grille",
+        "Une preuve d'edge",
+      ],
+      answer: 1,
+      explain: "Un vrai comportement de marché est grossier : il ne dépend pas d'un seuil au tick près.",
+    },
+    {
+      q: "Un filtre ajouté « parce qu'il enlevait des pertes » :",
+      options: [
+        "Améliore la fiche",
+        "Est un degré de liberté de plus, ajusté après coup ; il n'est acceptable que s'il correspond à un comportement de marché nommé, et il compte comme une version",
+        "Est obligatoire",
+        "N'a pas d'importance",
+      ],
+      answer: 1,
+      explain: "Le trade perdant du chapitre en avait deux ; onze versions, six seuils non ronds, pas d'OOS : la fiche n'avait jamais existé.",
+    },
+    {
+      q: "L'objectif des tests de robustesse est de :",
+      options: [
+        "Confirmer que la fiche marche",
+        "Essayer de casser la fiche (paramètres, marchés, périodes, exécution) ; ce qui résiste se trade",
+        "Améliorer l'expectancy",
+        "Choisir le meilleur marché",
+      ],
+      answer: 1,
+      explain: "Aucun test ne prouve l'edge ; chacun peut le réfuter.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le dernier chapitre du niveau élargit le cadre : automatiser une stratégie validée (architecture minimale, exécution, surveillance et garde-fous), organiser une recherche quantitative au quotidien, et faire la part, sans enthousiasme ni mépris, de ce que l'intelligence artificielle apporte réellement à un trader et de ce qu'elle ne fera pas à sa place.
