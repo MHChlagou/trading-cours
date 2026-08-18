@@ -1,0 +1,326 @@
+---
+title: "Le journal de trading professionnel"
+description: "La structure d'un journal réellement utile en trois couches (ligne de trade, contexte du jour, revue), les captures et annotations qui rendent un trade relisible six mois plus tard, un système de tags exploitable, la revue hebdomadaire en sept étapes chronométrées, et des modèles de colonnes prêts à copier."
+---
+
+# Le journal de trading professionnel
+
+Le journal est l'instrument de mesure du trader. Sans lui, la conformité du chapitre précédent est une impression, l'expectancy du niveau 7 est un souvenir, et les fuites du chapitre suivant sont invisibles. La plupart des journaux échouent pour deux raisons opposées : trop maigres (date, instrument, P&L : rien à analyser), ou trop lourds (quarante colonnes et trois paragraphes de ressenti par trade : abandonnés en trois semaines). Un journal utile est celui qu'on **remplit tous les jours pendant des années** et dont on peut **tirer des chiffres**. Ce chapitre en donne la structure, le vocabulaire et la routine.
+
+## La structure d'un journal réellement utile
+
+Un journal professionnel a trois couches, qui ne se remplissent pas au même moment ni au même rythme.
+
+**Couche 1 · La ligne de trade** (remplie en séance, à l'entrée puis à la sortie). Des champs courts, presque tous numériques ou catégoriels, saisis en moins d'une minute par trade. C'est la couche qui produit les statistiques : elle doit être **complète et homogène**, sans texte libre. C'est la feuille de collecte du niveau 7, augmentée des colonnes de comportement.
+
+**Couche 2 · Le contexte du jour** (rempli avant l'ouverture, complété à la clôture). Une ligne par jour, même les jours sans trade : régime, structure, réservoirs préparés, calendrier, état du trader (sommeil, disponibilité, événements personnels), setups autorisés, budget, puis en fin de journée le nombre de signaux vus, exécutés, refusés, le R du jour, la conformité, les protocoles déclenchés. Cette couche est celle qui permet, six mois plus tard, de comprendre **pourquoi** une série de pertes a eu lieu.
+
+**Couche 3 · La revue** (hebdomadaire, mensuelle, trimestrielle). Du texte, mais structuré par des questions fixes, avec les chiffres des couches 1 et 2 en face. C'est là que les décisions se prennent : modifier le process (pas la fiche), passer une fiche en pause, ajuster la taille, changer une routine.
+
+Trois principes gouvernent l'ensemble.
+
+- **Séparer les faits et l'interprétation.** Les colonnes de la couche 1 sont des faits (heures, prix, valeurs mesurées, oui/non) ; les interprétations vont en couche 3. Un journal où « le marché était nerveux » remplace « ATR M15 = 9, ratio ATR 5/20 = 1,7 » ne sert à rien.
+- **Rien de rétrospectif.** Une ligne se remplit au moment où l'information existe : le stop et la cible **avant** l'exécution, la qualité du signal **avant** de connaître le résultat. C'est la même exigence que le protocole bar par bar du niveau 7, appliquée au réel ; sans elle, la mémoire réécrit tout dans le sens du résultat.
+- **Immuabilité.** On ne supprime ni ne réécrit une ligne. Une erreur de saisie se corrige dans une colonne « correction » datée. Un journal qu'on nettoie est un journal qui mentira exactement là où il faudrait qu'il soit précis.
+
+Le support importe peu (tableur, base de données, application dédiée) à trois conditions : export possible (CSV), colonnes catégorielles en listes fermées, et sauvegarde. Un tableur suffit pour des années.
+
+<Figure caption="Figure 1 · Les trois couches du journal : la ligne de trade (en séance, faits numériques, statistiques), le contexte du jour (une ligne par jour même sans trade, explique les séries), la revue (questions fixes, chiffres en face, décisions de process). Faits et interprétations séparés, rien de rétrospectif, aucune ligne effacée.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Les trois couches du journal" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="40" width="640" height="62" rx="6" className="box" strokeWidth="1.5" />
+  <text x="55" y="62" fontSize="11" fontWeight="600" className="gold">Couche 1 · Ligne de trade</text>
+  <text x="250" y="62" fontSize="9" className="muted">en séance · moins d'une minute · faits numériques et catégoriels, aucun texte libre</text>
+  <text x="55" y="82" fontSize="9">identification · contexte · signal mesuré · exécution · résultat (R net, MFE, MAE) · conformité</text>
+  <text x="55" y="96" fontSize="9" className="gold">→ produit les statistiques (niveau 7) et la conformité (chapitre 1)</text>
+  <rect x="40" y="115" width="640" height="62" rx="6" className="box" strokeWidth="1.5" />
+  <text x="55" y="137" fontSize="11" fontWeight="600" className="gold">Couche 2 · Contexte du jour</text>
+  <text x="250" y="137" fontSize="9" className="muted">avant l'ouverture et à la clôture · une ligne par jour, même sans trade</text>
+  <text x="55" y="157" fontSize="9">régime · structure · réservoirs · calendrier · état du trader · budget · signaux vus / pris / refusés · protocoles</text>
+  <text x="55" y="171" fontSize="9" className="gold">→ explique les séries de pertes six mois plus tard</text>
+  <rect x="40" y="190" width="640" height="62" rx="6" className="box" strokeWidth="1.5" />
+  <text x="55" y="212" fontSize="11" fontWeight="600" className="gold">Couche 3 · Revue</text>
+  <text x="250" y="212" fontSize="9" className="muted">hebdomadaire, mensuelle, trimestrielle · questions fixes, chiffres en face</text>
+  <text x="55" y="232" fontSize="9">ce qui a été respecté · ce qui a coûté · une modification de process · une seule décision par revue</text>
+  <text x="55" y="246" fontSize="9" className="gold">→ modifie le process, rarement la fiche (et jamais sans le niveau 7)</text>
+  <text x="360" y="280" fontSize="10" textAnchor="middle" className="red">rien de rétrospectif · faits et interprétations séparés · aucune ligne effacée (colonne « correction » datée)</text>
+</svg>
+</Figure>
+
+## Captures, annotations et contexte de chaque trade
+
+Les chiffres ne remplacent pas l'image : six mois plus tard, une ligne de tableur ne permet pas de revoir ce que le trader a vu. La capture d'écran est donc obligatoire, et elle a un format.
+
+**Trois captures par trade, pas plus.** (1) L'unité de **contexte** (H1 ou H4 selon la fiche) au moment de l'entrée, avec les réservoirs tracés ; (2) l'unité d'**exécution** (M5) au moment de l'entrée, avec le sweep, le displacement, le FVG et le stop visibles ; (3) le **résultat** : la même unité d'exécution après la sortie, avec l'entrée, les sorties partielles et le stop final. Les captures 1 et 2 sont prises **avant** l'exécution ou juste après, jamais reconstituées le soir : une capture prise le soir montre ce que le trader sait maintenant, pas ce qu'il voyait.
+
+**Cinq annotations maximum**, toujours les mêmes : le réservoir visé, la bougie de sweep, la bougie de displacement, la zone d'entrée, le stop. On n'annote pas ce qu'on a compris après ; on annote la structure de la décision. Les couleurs suivent la convention du cours : vert et rouge réservés aux zones et au P&L, or ou neutre pour le reste.
+
+**Le contexte en une phrase factuelle** dans la ligne : « sweep du PDL sur confluence VAL, displacement 1,8 ATR, S5 absorption confirmée ». Pas « belle configuration », pas « j'y croyais ».
+
+**Nommage des fichiers** : `AAAA-MM-JJ_instrument_setup_numéro_contexte|exec|resultat.png`. C'est fastidieux une fois, précieux mille fois : la capture se retrouve par recherche, et les captures d'un tag donné se rassemblent en une minute pour la revue.
+
+**Ce que la capture sert à faire** (et rien d'autre) : reconnaître le motif plus vite (la répétition visuelle est ce qui rend le setup familier), vérifier après coup que le critère était bien présent (le trader se surprend à voir un displacement qui n'en était pas un), et constituer un album par tag (les vingt derniers « stoppés sans MFE » côte à côte disent souvent quelque chose de très clair sur le placement de l'entrée).
+
+## Tags et catégories pour l'analyse future
+
+Les tags sont ce qui transforme un journal en instrument d'analyse. Trois règles : **listes fermées** (jamais de tag libre : « nerveux », « bizarre » et « choppy » désigneront la même chose et rien ne sera comptable), **une seule dimension par colonne**, **peu de valeurs par dimension** (trois à six, sinon les sous-groupes n'ont jamais assez de trades).
+
+Les dimensions utiles, avec leurs valeurs :
+
+- **Setup** : setup 1 / setup 2 / setup 3 / hors setup. La valeur « hors setup » est la plus importante du journal : elle isole les fautes pour qu'elles ne polluent pas les statistiques des fiches.
+- **Variante** : A / B / C, ou T1 / T2 / T3 selon la fiche.
+- **Régime** : tendance calme / tendance normale / tendance agitée / range normal / range de stress.
+- **Session** : Londres / ouverture US / après-midi US / clôture US / autre.
+- **Qualité du signal** : fort / complet / limite (les optionnels et les seuils tout juste atteints).
+- **Raison de sortie** : C2 / C1 puis trailing / breakeven / stop / sortie sur temps / news / manuelle hors règle.
+- **Conformité** : conforme / écart mineur / hors plan. Un « écart mineur » (entrée un tick plus loin, sortie une bougie plus tôt) reste conforme statistiquement mais se compte ; « hors plan » exclut le trade des statistiques de la fiche.
+- **État du trader** (couche 2, reporté sur la ligne) : normal / fatigué / pressé / perturbé.
+- **Tags d'erreur** (zéro ou plusieurs, liste fermée d'une dizaine) : stop déplacé, taille hors formule, signal incomplet forcé, hors fenêtre, hors régime, cible modifiée, re-entrée immédiate, surveillance excessive, journal non rempli le jour même.
+
+Une dernière colonne, discrète et redoutablement utile : **numéro de trade dans la journée** (1, 2, 3+). Beaucoup de traders découvrent que leur troisième trade quotidien a une expectancy négative sur cent occurrences ; la conclusion (« deux trades par jour au plus ») est une décision de process, et elle vaut souvent plus qu'une amélioration de fiche.
+
+<Figure caption="Figure 2 · Le système de tags : des listes fermées, une dimension par colonne, trois à six valeurs par dimension. Les croisements deviennent alors comptables (setup × régime, qualité × raison de sortie, numéro du jour × R net), et les tags d'erreur isolent le hors-plan pour qu'il ne pollue pas les statistiques des fiches.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Système de tags du journal" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="40" width="200" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="130" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Dimensions de fiche</text>
+  <text x="40" y="80" fontSize="9">setup : 1 / 2 / 3 / <tspan className="red" fontWeight="600">hors setup</tspan></text>
+  <text x="40" y="97" fontSize="9">variante : A / B / C</text>
+  <text x="40" y="114" fontSize="9">qualité : fort / complet / limite</text>
+  <text x="40" y="131" fontSize="9">sortie : C2 / C1+trailing / BE /</text>
+  <text x="40" y="145" fontSize="9">stop / temps / news / manuelle</text>
+  <rect x="255" y="40" width="200" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="355" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Dimensions de contexte</text>
+  <text x="265" y="80" fontSize="9">régime : 5 valeurs (matrice N5)</text>
+  <text x="265" y="97" fontSize="9">session : Londres / ouv. US /</text>
+  <text x="265" y="111" fontSize="9">après-midi / clôture / autre</text>
+  <text x="265" y="131" fontSize="9">numéro du jour : 1 / 2 / 3+</text>
+  <text x="265" y="148" fontSize="9">état : normal / fatigué / pressé /</text>
+  <rect x="480" y="40" width="200" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="580" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Conformité et erreurs</text>
+  <text x="490" y="80" fontSize="9">conforme / écart mineur / hors plan</text>
+  <text x="490" y="100" fontSize="9" className="red">stop déplacé · taille hors formule</text>
+  <text x="490" y="114" fontSize="9" className="red">signal forcé · hors fenêtre</text>
+  <text x="490" y="128" fontSize="9" className="red">hors régime · cible modifiée</text>
+  <text x="490" y="142" fontSize="9" className="red">re-entrée immédiate · surveillance</text>
+  <text x="360" y="188" fontSize="11" fontWeight="600" textAnchor="middle" className="gold">Croisements comptables (chapitre suivant)</text>
+  <rect x="60" y="200" width="180" height="46" rx="6" className="gold" opacity="0.15" />
+  <text x="150" y="220" fontSize="9" textAnchor="middle">setup × régime</text>
+  <text x="150" y="236" fontSize="8" textAnchor="middle" className="muted">« hors régime » explique les séries</text>
+  <rect x="270" y="200" width="180" height="46" rx="6" className="gold" opacity="0.15" />
+  <text x="360" y="220" fontSize="9" textAnchor="middle">qualité × raison de sortie</text>
+  <text x="360" y="236" fontSize="8" textAnchor="middle" className="muted">les « limite » finissent-ils au stop ?</text>
+  <rect x="480" y="200" width="180" height="46" rx="6" className="gold" opacity="0.15" />
+  <text x="570" y="220" fontSize="9" textAnchor="middle">numéro du jour × R net</text>
+  <text x="570" y="236" fontSize="8" textAnchor="middle" className="muted">le 3e trade est souvent négatif</text>
+  <text x="360" y="280" fontSize="10" textAnchor="middle" className="red">jamais de tag libre : trois mots pour la même chose et rien n'est comptable</text>
+  <text x="360" y="302" fontSize="10" textAnchor="middle" className="muted">trois à six valeurs par dimension, sinon les sous-groupes n'atteignent jamais un n exploitable</text>
+</svg>
+</Figure>
+
+## La revue hebdomadaire pas à pas
+
+Elle se fait à jour fixe, hors séance (samedi matin par exemple), en **quarante-cinq minutes chronométrées**, dans cet ordre. Le chronomètre n'est pas un gadget : une revue qui dure deux heures ne se fait pas trois semaines de suite.
+
+1. **Chiffres (5 min).** Nombre de trades, R net de la semaine, conformité en pourcentage, nombre de trades hors plan, position du drawdown courant dans la distribution Monte Carlo (niveau 7). On lit, on ne commente pas encore.
+2. **Conformité d'abord, résultat ensuite (10 min).** Lister les trades non conformes et les écarts mineurs. Pour chacun : déclencheur, signaux ignorés, coût en R. C'est la partie la plus rentable de la semaine ; elle passe avant l'analyse des gains et des pertes.
+3. **Les trades conformes perdants (5 min).** Vérification rapide : le contexte était-il celui de la fiche ? Si oui, rien à faire, ce sont des pertes normales. C'est le point que beaucoup de traders n'arrivent pas à écrire : « rien à faire ».
+4. **Les non-trades (5 min).** Signaux vus et refusés : le critère qui a tranché était-il le bon ? Y a-t-il des signaux **manqués par inattention** (pas par refus) ? Un signal manqué par inattention est un problème de routine, pas de fiche.
+5. **Captures (10 min).** Rouvrir les trois à cinq captures les plus instructives de la semaine, y compris celles des non-trades ; regrouper avec l'album du même tag. Objectif : reconnaissance du motif, pas jugement.
+6. **Une seule décision (5 min).** La règle du chapitre : **une** modification par revue, portant sur le **process** (une case de checklist, une limite, un horaire, une capture à ajouter, un tag à créer). Les modifications de fiche ne se décident pas en revue hebdomadaire ; elles vont au carnet d'idées et passent par le protocole du niveau 7.
+7. **Préparation de la semaine (5 min).** Régimes attendus, calendrier des annonces, setups autorisés, budget, contraintes personnelles (voyages, nuits courtes) ; écrire d'avance les jours où l'on ne tradera pas.
+
+**Revue mensuelle** (une heure, en plus) : statistiques par setup et par tag avec les n, mise à jour du Monte Carlo, conditions d'invalidité des fiches, courbe d'équité en R, décision éventuelle de taille. **Revue trimestrielle** (deux heures) : sélection de setups (niveau 7), objectifs de process du trimestre, état du carnet d'idées, et une question franche : est-ce que ce que je fais est soutenable dans ma vie telle qu'elle est ?
+
+## Modèles de journal fournis avec le cours
+
+Voici les colonnes à recopier telles quelles dans un tableur. Elles sont volontairement peu nombreuses ; chaque colonne supplémentaire doit gagner sa place.
+
+**Feuille « Trades » (couche 1)** : `n° | date | heure entrée | instrument | setup | variante | régime | session | n° du jour | qualité signal | valeurs mesurées | entrée | stop | distance (ticks) | taille | coefficient | C1 | C2 | ratio C1 | heure sortie 1 | prix sortie 1 | heure sortie finale | prix sortie finale | raison de sortie | R brut | coûts | R net | MFE (R) | MAE (R) | durée | conformité | tags d'erreur | état du trader | capture (nom de fichier) | note factuelle (une phrase)`.
+
+**Feuille « Jours » (couche 2)** : `date | régime | structure D | structure H1 | réservoirs préparés | calendrier (niveau 1) | sommeil | disponibilité | événements | setups autorisés | budget du jour | signaux vus | signaux pris | signaux refusés | motifs de refus | R du jour | conformité du jour | protocoles déclenchés | note du jour (une phrase)`.
+
+**Feuille « Non-trades »** (si l'on préfère la séparer) : `date | heure | instrument | setup | critère qui a tranché | valeur mesurée | commentaire (dix mots)`.
+
+**Feuille « Revues » (couche 3)** : `semaine | trades | R net | conformité % | hors plan | DD courant / p90 | écarts constatés | trades conformes perdants (nb) | signaux manqués | décision unique de process | préparation semaine suivante`.
+
+**Feuille « Fiches »** : une ligne par fiche avec son état (validée / en test / en pause), sa version, son échantillon, son expectancy mesurée et son intervalle, son p90 Monte Carlo, ses conditions d'invalidité et la date de la dernière revue.
+
+Deux détails d'ergonomie qui décident de la survie du journal : des **listes déroulantes** sur toutes les colonnes catégorielles (saisie en deux clics, données propres) et un **modèle de ligne** pré-rempli au moment de l'entrée (les colonnes stop, C1, C2, taille, qualité sont saisies avant l'exécution : c'est aussi une checklist déguisée). Un journal bien construit fait gagner du temps en séance au lieu d'en coûter : il oblige à écrire ce que la fiche demande de décider.
+
+<Figure caption="Figure 3 · La revue hebdomadaire en sept étapes chronométrées (45 minutes) : chiffres, conformité, pertes conformes, non-trades, captures, une seule décision de process, préparation. Les modifications de fiche n'y entrent pas : elles passent par le carnet d'idées et la validation du niveau 7.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Revue hebdomadaire en sept étapes" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="150" x2="660" y2="150" className="line" strokeWidth="1.5" />
+  <circle cx="90" cy="150" r="16" className="gold" opacity="0.3" /><circle cx="90" cy="150" r="16" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="90" y="155" fontSize="10" textAnchor="middle" fontWeight="600">1</text>
+  <text x="90" y="120" fontSize="9" textAnchor="middle">Chiffres</text><text x="90" y="108" fontSize="8" textAnchor="middle" className="muted">5 min</text>
+  <circle cx="185" cy="150" r="16" className="gold" opacity="0.5" /><circle cx="185" cy="150" r="16" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="185" y="155" fontSize="10" textAnchor="middle" fontWeight="600">2</text>
+  <text x="185" y="190" fontSize="9" textAnchor="middle" fontWeight="600">Conformité</text><text x="185" y="203" fontSize="8" textAnchor="middle" className="muted">10 min · le plus rentable</text>
+  <circle cx="280" cy="150" r="16" className="gold" opacity="0.3" /><circle cx="280" cy="150" r="16" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="280" y="155" fontSize="10" textAnchor="middle" fontWeight="600">3</text>
+  <text x="280" y="120" fontSize="9" textAnchor="middle">Pertes conformes</text><text x="280" y="108" fontSize="8" textAnchor="middle" className="muted">5 min · « rien à faire »</text>
+  <circle cx="375" cy="150" r="16" className="gold" opacity="0.3" /><circle cx="375" cy="150" r="16" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="375" y="155" fontSize="10" textAnchor="middle" fontWeight="600">4</text>
+  <text x="375" y="190" fontSize="9" textAnchor="middle">Non-trades</text><text x="375" y="203" fontSize="8" textAnchor="middle" className="muted">5 min · manqués ≠ refusés</text>
+  <circle cx="470" cy="150" r="16" className="gold" opacity="0.3" /><circle cx="470" cy="150" r="16" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="470" y="155" fontSize="10" textAnchor="middle" fontWeight="600">5</text>
+  <text x="470" y="120" fontSize="9" textAnchor="middle">Captures</text><text x="470" y="108" fontSize="8" textAnchor="middle" className="muted">10 min · albums par tag</text>
+  <circle cx="565" cy="150" r="16" className="green" opacity="0.4" /><circle cx="565" cy="150" r="16" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="565" y="155" fontSize="10" textAnchor="middle" fontWeight="600">6</text>
+  <text x="565" y="190" fontSize="9" textAnchor="middle" fontWeight="600" className="green">Une décision</text><text x="565" y="203" fontSize="8" textAnchor="middle" className="muted">5 min · process seulement</text>
+  <circle cx="645" cy="150" r="16" className="gold" opacity="0.3" /><circle cx="645" cy="150" r="16" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" /><text x="645" y="155" fontSize="10" textAnchor="middle" fontWeight="600">7</text>
+  <text x="645" y="120" fontSize="9" textAnchor="middle">Préparation</text><text x="645" y="108" fontSize="8" textAnchor="middle" className="muted">5 min</text>
+  <text x="360" y="245" fontSize="10" textAnchor="middle" className="muted">45 minutes chronométrées : une revue de deux heures ne se fait pas trois semaines de suite</text>
+  <text x="360" y="268" fontSize="10" textAnchor="middle" className="red">aucune modification de fiche en revue hebdomadaire : carnet d'idées, puis validation (niveau 7)</text>
+</svg>
+</Figure>
+
+## Deux trades vus par le journal
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, setup 1, variante A"
+  direction="Long"
+  setup="Ligne de journal remplie avant l'exécution : setup 1 / A / régime tendance normale / session ouverture US / n° du jour 1 / qualité « fort » (S5 et S6 présents) / valeurs : sweep 3 ticks, displacement 1,8 ATR, FVG 0,52 ATR"
+  entree="5 402,75"
+  stop="5 394,25 (34 ticks)"
+  objectif="C1 5 415,50 (1,5R) ; C2 5 428,25 (3R)"
+  r="+2,1R">
+
+Ce que la ligne apporte, au-delà du R : la qualité « fort » a été saisie **avant** de connaître le résultat, ce qui rend le croisement « qualité × R net » exploitable ; les trois captures sont nommées `2026-03-17_MES_setup1_014_contexte|exec|resultat.png` ; la raison de sortie est « C2 » ; conformité « conforme » ; tags d'erreur : aucun ; note factuelle : « sweep du PDL sur confluence VAL, absorption au footprint ». Trois mois plus tard, ce trade servira deux fois : dans le sous-groupe « fort » (dont l'expectancy sera comparée aux « complet » et aux « limite ») et dans l'album visuel du setup 1, où le lecteur verra que les displacements de 1,8 ATR ressemblent tous à celui-là.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, setup 1, variante A"
+  direction="Short"
+  setup="Trade pris correctement (signal complet, régime autorisé) mais ligne de journal remplie le soir, de mémoire ; la qualité a été notée « limite » après coup, le MFE estimé à l'œil, la capture reconstituée à 22 h avec le graphique complet visible"
+  entree="18 744,00"
+  stop="18 776,00 (128 ticks)"
+  objectif="C1 18 696,00"
+  r="−1,05R">
+
+Le trade est conforme ; c'est **le journal** qui est faux, et c'est un problème plus grave qu'une perte. Trois défauts : la qualité notée après coup est contaminée par le résultat (le trader note « limite » parce que ça a perdu, ce qui rendra le sous-groupe « limite » artificiellement mauvais et le sous-groupe « complet » artificiellement bon) ; le MFE estimé de mémoire est inutilisable pour juger le placement des cibles ; la capture reconstituée montre la suite du marché et n'apprendra jamais à reconnaître le motif en direct. Correctifs décidés à la revue (une seule décision, portant sur le process) : la ligne de trade est désormais pré-remplie **à l'entrée** avec un modèle, et la case « journal rempli en séance » est ajoutée au protocole de fin de séance ; les lignes remplies après coup sont marquées `retro=oui` et exclues des croisements de qualité.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Trois couches : **ligne de trade** (en séance, faits, moins d'une minute), **contexte du jour** (une ligne par jour, même sans trade), **revue** (questions fixes, chiffres en face). Faits et interprétations séparés, **rien de rétrospectif**, aucune ligne effacée.
+- **Trois captures** par trade (contexte, exécution, résultat), prises au moment de la décision, cinq annotations toujours identiques, nommage systématique ; les albums par tag valent plus que les commentaires.
+- **Tags en listes fermées**, une dimension par colonne, trois à six valeurs : setup (avec « hors setup »), variante, régime, session, qualité, raison de sortie, conformité, état, tags d'erreur, **numéro du trade dans la journée**.
+- **Revue hebdomadaire en 45 minutes chronométrées** : chiffres, conformité d'abord, pertes conformes (« rien à faire »), non-trades, captures, **une seule décision de process**, préparation ; les fiches ne se modifient jamais là.
+- Les **modèles de colonnes** du chapitre se recopient tels quels ; listes déroulantes et ligne pré-remplie à l'entrée font que le journal fait gagner du temps en séance au lieu d'en coûter.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Corriger un journal">
+
+Voici trois lignes de journal d'un lecteur. Pour chacune, dites ce qui ne va pas et proposez la correction.
+
+- (a) `12/03 | MES | long | +2,3R | « très beau trade, j'ai bien senti le marché » `
+- (b) `13/03 | MNQ | short | −1R | contexte : choppy | qualité : moyenne | capture : non`
+- (c) `14/03 | MES | long | +0,4R | setup 1 | conformité : conforme | note : « stop élargi de 4 points mais ça a fini par revenir »`
+
+<Solution>
+
+- **(a)** Aucun fait exploitable : pas de setup, pas de régime, pas de prix, pas de raison de sortie, et une interprétation en couche 1. Correction : setup / variante / régime / session / qualité saisis avant, prix d'entrée, stop, cibles, raison de sortie, R net, MFE, MAE ; l'appréciation, si elle a un intérêt, va en revue (couche 3).
+- **(b)** « choppy » et « moyenne » sont des tags libres, non comptables ; pas de capture. Correction : régime pris dans la liste fermée (par exemple « range normal » avec le ratio ATR 5/20 en valeur mesurée), qualité dans fort / complet / limite, et les trois captures obligatoires.
+- **(c)** La conformité est **fausse** : un stop élargi est un tag d'erreur et la ligne doit être `conformité : hors plan` avec le tag `stop déplacé` ; le résultat positif ne change rien (un hors-plan gagnant est plus dangereux qu'un perdant). Correction : reclasser (dans une colonne « correction » datée, sans réécrire l'original), exclure le trade des statistiques du setup 1, et appliquer le protocole post-faute.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Construire un croisement">
+
+Vous disposez de 180 lignes correctement taguées. Proposez trois croisements à calculer en priorité, dites ce que chacun pourrait révéler, et indiquez le n minimal en dessous duquel vous ne conclurez pas.
+
+<Solution>
+
+Trois croisements utiles : **setup × régime** (révèle les trades pris hors régime, cause la plus fréquente des séries de pertes : niveau 7, chapitre 5) ; **qualité du signal × R net** (les « limite » ont-ils une expectancy nettement plus faible ? si oui, resserrer les seuils est une piste à tester, pas à appliquer) ; **numéro du trade dans la journée × R net** (le troisième trade est-il négatif ? décision de process immédiate, sans passer par la validation d'une fiche). On peut ajouter **conformité × R net** pour chiffrer le coût des fautes. Seuil de conclusion : pas d'interprétation sous **30 trades** par sous-groupe, et même à 30 on parle d'« indice à confirmer » (l'incertitude est de ±0,5R : niveau 7, chapitre 8) ; en dessous de 15, on ne calcule même pas la moyenne, on lit les lignes une par une.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Votre revue, chronométrée">
+
+Faites la revue de votre dernière semaine en suivant les sept étapes, chronomètre en main. Notez le temps réellement passé à chaque étape et la décision unique retenue. Puis répondez : quelle étape avez-vous eu envie de sauter, et pourquoi ?
+
+<Solution>
+
+Pas de corrigé unique. Ce qu'on observe presque toujours : l'étape 2 (conformité) est celle qu'on veut sauter, parce qu'elle est désagréable ; l'étape 3 (pertes conformes) est celle qu'on veut allonger, parce qu'on cherche une cause là où il n'y en a pas ; l'étape 6 (une seule décision) est celle qu'on veut multiplier, ce qui produit une refonte hebdomadaire du process et donc aucune stabilité. Un bon signe : la revue tient dans le temps imparti et la décision unique est petite, concrète, vérifiable la semaine suivante (« ajouter la case régime en tête de checklist » plutôt que « être plus discipliné »).
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La couche 1 du journal (ligne de trade) doit contenir :",
+      options: [
+        "Le ressenti détaillé du trader",
+        "Des faits courts, numériques ou catégoriels, saisis en moins d'une minute, dont le stop, les cibles et la qualité du signal notés AVANT l'exécution",
+        "Uniquement le P&L",
+        "Une analyse rédigée le soir",
+      ],
+      answer: 1,
+      explain: "Les interprétations vont en couche 3 ; rien de rétrospectif, sinon la mémoire réécrit tout dans le sens du résultat.",
+    },
+    {
+      q: "La couche 2 (contexte du jour) se remplit :",
+      options: [
+        "Seulement les jours où l'on trade",
+        "Tous les jours, même sans trade : c'est elle qui expliquera une série de pertes six mois plus tard",
+        "Une fois par semaine",
+        "Jamais",
+      ],
+      answer: 1,
+      explain: "Régime, structure, réservoirs, calendrier, état du trader, signaux vus / pris / refusés, protocoles déclenchés.",
+    },
+    {
+      q: "Une capture d'écran reconstituée le soir :",
+      options: [
+        "Vaut mieux que rien",
+        "Montre ce que le trader sait maintenant, pas ce qu'il voyait : elle n'apprend pas à reconnaître le motif en direct",
+        "Est la norme",
+        "Remplace les annotations",
+      ],
+      answer: 1,
+      explain: "Trois captures (contexte, exécution, résultat) prises au moment de la décision, cinq annotations toujours identiques.",
+    },
+    {
+      q: "Les tags doivent être :",
+      options: [
+        "Libres, pour décrire finement chaque trade",
+        "En listes fermées, une dimension par colonne, trois à six valeurs : sinon rien n'est comptable et aucun sous-groupe n'atteint un n exploitable",
+        "Nombreux et détaillés",
+        "Facultatifs",
+      ],
+      answer: 1,
+      explain: "La valeur « hors setup » est la plus importante : elle empêche les fautes de polluer les statistiques des fiches.",
+    },
+    {
+      q: "Dans la revue hebdomadaire, l'ordre correct commence par :",
+      options: [
+        "Les gains, pour se motiver",
+        "Les chiffres, puis la conformité (avant toute analyse de gains ou de pertes)",
+        "Les modifications de fiche",
+        "Les captures",
+      ],
+      answer: 1,
+      explain: "La conformité est la partie la plus rentable de la semaine ; les pertes conformes se soldent souvent par « rien à faire ».",
+    },
+    {
+      q: "Une revue hebdomadaire doit aboutir à :",
+      options: [
+        "Plusieurs modifications de fiche",
+        "Une seule décision, portant sur le process, vérifiable la semaine suivante ; les idées de fiche vont au carnet et passent par la validation du niveau 7",
+        "Aucune décision",
+        "Un changement de setup",
+      ],
+      answer: 1,
+      explain: "Multiplier les décisions produit une refonte hebdomadaire du process, donc aucune stabilité.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le journal accumule les faits ; il reste à les faire parler. Le chapitre suivant construit le tableau de bord : métriques par setup, par session et par contexte, lecture de la courbe d'équité en R, identification de ses heures et de ses jours profitables, détection des fuites (où part le R perdu) et assemblage d'un tableau de bord personnel qui tient sur un écran.
