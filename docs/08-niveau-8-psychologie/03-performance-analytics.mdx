@@ -1,0 +1,362 @@
+---
+title: "Performance analytics"
+description: "Faire parler le journal : les métriques par setup, par session et par contexte avec leur n et leur incertitude, la lecture d'une courbe d'équité en R, la recherche honnête de ses heures et de ses jours profitables, la détection des fuites (où part le R perdu) et l'assemblage d'un tableau de bord personnel qui tient sur un écran."
+---
+
+# Performance analytics
+
+Le journal accumule des faits ; l'analyse les transforme en décisions. Ce chapitre est celui où le trader découvre, presque toujours avec surprise, que son problème n'est pas là où il le croyait : la fiche va bien, c'est le troisième trade de la journée qui coûte ; la session du matin est rentable, celle du soir mange le résultat ; le drawdown ne vient pas d'une série de pertes mais de quatre trades hors plan. Tout le chapitre repose sur une discipline importée du niveau 7 : **aucun chiffre sans son n et son incertitude**, et aucune décision de fiche prise sur une décomposition ; les décompositions décident du **process**, et alimentent le carnet d'idées pour le reste.
+
+Un exemple chiffré cohérent servira de fil : six mois de journal, **142 trades**, **+18,4R** net.
+
+## Les métriques par setup, par session, par contexte
+
+La première décomposition n'est pas par setup : elle est par **conformité**. Séparer ce qui a été tradé selon les fiches de ce qui ne l'a pas été change tout, parce que ce sont deux populations sans rapport.
+
+| Population | n | R total | R moyen |
+| --- | --- | --- | --- |
+| Conformes · setup 1 | 67 | +32,7R | +0,49R |
+| Conformes · setup 2 | 41 | +4,9R | +0,12R |
+| Conformes · setup 3 | 9 | +5,0R | +0,56R |
+| **Sous-total conformes** | **117** | **+42,6R** | **+0,36R** |
+| Hors plan · setup 1 en régime interdit | 11 | −6,2R | −0,56R |
+| Hors plan · aucun setup | 14 | −18,0R | −1,29R |
+| **Sous-total hors plan** | **25** | **−24,2R** | **−0,97R** |
+| **Total** | **142** | **+18,4R** | **+0,13R** |
+
+Lecture. La conformité est de 117 / 142 = **82 %**. Les fiches font ce qu'elles ont promis (le setup 1 est même au-dessus de son attendu, avec une incertitude de ±0,18R sur 67 trades) ; le résultat global, lui, est médiocre parce que 25 trades hors plan ont coûté 24,2R. Sans eux, le semestre valait **+42,6R** au lieu de +18,4R : plus du double. C'est le chiffre qui doit rester à l'écran.
+
+Les autres décompositions se lisent **à l'intérieur des conformes** uniquement, sinon les fautes contaminent tout :
+
+- **Par setup** : ci-dessus. Le setup 2 à +0,12R sur 41 trades (incertitude ±0,23R) n'est pas démontré positif ; il n'est pas non plus démontré nul. Décision : le garder, continuer à collecter, ne pas augmenter sa taille (niveau 7).
+- **Par session** : Londres (setup 2) 41 trades, +4,9R ; ouverture US 44 trades, **+25,7R** (+0,58R) ; reprise US 23 trades, +7,0R (+0,30R) ; swings hors session 9 trades, +5,0R. La somme fait bien +42,6R.
+- **Par régime** (matrice du niveau 5) : c'est la décomposition qui révèle les setups tradés hors de leur terrain. Ici les 11 trades de setup 1 en range de stress sont déjà comptés en hors plan, ce qui est la bonne classification : un régime interdit rend le trade non conforme, même si le signal était parfait.
+- **Par qualité du signal** : fort / complet / limite. À surveiller de près : si les « limite » ont une expectancy nettement plus faible, c'est un candidat de resserrement de seuil, à tester dans le cadre du niveau 7, jamais à appliquer directement.
+- **Par variante** (A / B / C), par instrument, par numéro du trade dans la journée.
+
+Pour chaque cellule, trois colonnes obligatoires : **n**, **R moyen**, **incertitude** (écart-type / racine de n). Une cellule à moins de 30 trades est un indice ; sous 15, on lit les lignes une par une et l'on ne calcule pas de moyenne.
+
+<Figure caption="Figure 1 · L'arbre de décomposition : d'abord conformes contre hors plan (deux populations sans rapport), puis, à l'intérieur des conformes seulement, par setup, session, régime, qualité et numéro du trade. Chaque cellule porte son n et son incertitude ; sous 30 trades, c'est un indice, sous 15, on lit les lignes.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Arbre de décomposition de la performance" xmlns="http://www.w3.org/2000/svg">
+  <rect x="280" y="30" width="160" height="42" rx="6" className="box" strokeWidth="1.5" />
+  <text x="360" y="48" fontSize="10" fontWeight="600" textAnchor="middle">142 trades · +18,4R</text>
+  <text x="360" y="64" fontSize="9" textAnchor="middle" className="muted">R moyen +0,13R</text>
+  <line x1="330" y1="72" x2="200" y2="100" className="line" strokeWidth="1.5" />
+  <line x1="390" y1="72" x2="530" y2="100" className="line" strokeWidth="1.5" />
+  <rect x="110" y="100" width="180" height="52" rx="6" className="green" opacity="0.18" />
+  <rect x="110" y="100" width="180" height="52" rx="6" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="200" y="120" fontSize="10" fontWeight="600" textAnchor="middle" className="green">Conformes : 117</text>
+  <text x="200" y="137" fontSize="10" textAnchor="middle" className="green">+42,6R · +0,36R</text>
+  <rect x="440" y="100" width="180" height="52" rx="6" className="red" opacity="0.18" />
+  <rect x="440" y="100" width="180" height="52" rx="6" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="530" y="120" fontSize="10" fontWeight="600" textAnchor="middle" className="red">Hors plan : 25</text>
+  <text x="530" y="137" fontSize="10" textAnchor="middle" className="red">−24,2R · −0,97R</text>
+  <text x="530" y="172" fontSize="9" textAnchor="middle" className="muted">11 setup 1 en régime interdit (−6,2R)</text>
+  <text x="530" y="187" fontSize="9" textAnchor="middle" className="muted">14 sans aucune fiche (−18,0R)</text>
+  <text x="530" y="208" fontSize="9" textAnchor="middle" className="red" fontWeight="600">on ne les analyse pas : on les supprime</text>
+  <line x1="200" y1="152" x2="200" y2="175" className="line" strokeWidth="1.5" />
+  <text x="200" y="192" fontSize="9" textAnchor="middle" fontWeight="600">Décompositions (conformes seulement)</text>
+  <rect x="40" y="202" width="150" height="34" rx="4" className="box" strokeWidth="1" /><text x="115" y="217" fontSize="9" textAnchor="middle">setup : 67 / 41 / 9</text><text x="115" y="230" fontSize="8" textAnchor="middle" className="muted">+0,49 / +0,12 / +0,56R</text>
+  <rect x="200" y="202" width="150" height="34" rx="4" className="box" strokeWidth="1" /><text x="275" y="217" fontSize="9" textAnchor="middle">session : 41 / 44 / 23 / 9</text><text x="275" y="230" fontSize="8" textAnchor="middle" className="muted">ouverture US : +0,58R</text>
+  <rect x="40" y="244" width="150" height="34" rx="4" className="box" strokeWidth="1" /><text x="115" y="259" fontSize="9" textAnchor="middle">qualité : fort / complet / limite</text><text x="115" y="272" fontSize="8" textAnchor="middle" className="muted">candidat de seuil (à tester)</text>
+  <rect x="200" y="244" width="150" height="34" rx="4" className="box" strokeWidth="1" /><text x="275" y="259" fontSize="9" textAnchor="middle">n° du jour : 1 / 2 / 3+</text><text x="275" y="272" fontSize="8" textAnchor="middle" className="muted">décision de process</text>
+  <text x="360" y="302" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">chaque cellule : n, R moyen, incertitude (écart-type / √n) · sous 30 : indice · sous 15 : on lit les lignes</text>
+</svg>
+</Figure>
+
+## Courbe d'équité en R et sa lecture
+
+La courbe d'équité en R (R cumulés, trade par trade) est le portrait du système. On la trace **en R** et non en euros, pour que les changements de taille ne déforment pas la lecture, et **par trade** et non par date, pour que les périodes sans trade n'étirent pas la courbe.
+
+Quatre formes se lisent immédiatement.
+
+**La pente.** C'est l'expectancy. On la compare à l'attendu de la fiche et à l'intervalle du niveau 7. Une pente qui s'aplatit sur les cinquante derniers trades sans que la conformité ait bougé est un signal à surveiller (pas à agir : cinquante trades sont un échantillon étroit).
+
+**Les creux.** Profondeur (en R) et **durée** (en nombre de trades) : le drawdown a deux dimensions, et la seconde est celle qui casse les traders. On compare la profondeur au p90 du Monte Carlo (niveau 7) : au-dessous, rien à faire ; au-dessus du p95, protocole 4 du chapitre 1.
+
+**Les plateaux.** Une courbe plate n'est pas un problème : c'est ce que produit un mois de range où la fiche dit « rien aujourd'hui ». Un plateau accompagné d'un grand nombre de trades, en revanche, signale du bruit tradé (l'ennui du chapitre 1).
+
+**Les falaises.** Une chute verticale de 3 ou 4R en un ou deux trades ne peut pas venir d'une fiche à stop fixe : c'est mécaniquement un stop déplacé, une taille hors formule ou un trade sans stop. Chaque falaise se pointe et se relie à sa ligne de journal ; c'est le diagnostic le plus rapide qui existe.
+
+Un raffinement très utile : tracer **deux courbes sur le même graphique**, celle de tous les trades et celle des seuls conformes. L'écart entre les deux est le coût du hors-plan, visible d'un coup d'œil, et c'est souvent l'image qui déclenche le changement de comportement là où les chiffres n'y parvenaient pas. Dans notre exemple, la courbe des conformes finit à +42,6R et la courbe totale à +18,4R.
+
+<Figure caption="Figure 2 · Lecture d'une courbe d'équité en R : la pente (expectancy), les creux (profondeur ET durée, comparés au p90 du Monte Carlo), les plateaux (normaux si peu de trades, suspects si nombreux), les falaises (stop déplacé ou taille hors formule : à relier à leur ligne de journal). En or, la courbe des seuls trades conformes ; l'écart avec la courbe totale est le coût du hors-plan.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Lecture d'une courbe d'équité en R" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="250" x2="690" y2="250" className="line" strokeWidth="1" />
+  <line x1="60" y1="40" x2="60" y2="250" className="line" strokeWidth="1" />
+  <text x="375" y="278" fontSize="10" textAnchor="middle" className="muted">trades (1 → 142)</text>
+  <text x="28" y="150" fontSize="10" className="muted" transform="rotate(-90 28 150)">R cumulés</text>
+  <line x1="60" y1="230" x2="690" y2="230" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="64" y="226" fontSize="8" className="muted">0</text>
+  <polyline points="60,230 100,205 140,182 180,190 220,160 260,140 300,148 340,120 380,112 420,118 460,95 500,80 540,86 580,66 620,58 660,48" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <text x="672" y="46" fontSize="9" className="gold" fontWeight="600">+42,6R</text>
+  <text x="470" y="70" fontSize="9" className="gold">conformes seulement</text>
+  <polyline points="60,230 100,208 140,188 180,198 220,172 260,155 300,205 340,195 380,188 420,196 460,178 500,168 540,215 580,200 620,190 660,182" fill="none" stroke="var(--tm-red)" strokeWidth="2" opacity="0.85" />
+  <text x="672" y="180" fontSize="9" className="red" fontWeight="600">+18,4R</text>
+  <text x="150" y="120" fontSize="9" className="muted">pente = expectancy (+0,36R conformes)</text>
+  <line x1="285" y1="150" x2="300" y2="203" stroke="var(--tm-red)" strokeWidth="1" /><text x="310" y="222" fontSize="9" className="red" fontWeight="600">falaise : −4R en 2 trades</text><text x="310" y="235" fontSize="8" className="red">→ stop déplacé (ligne de journal)</text>
+  <line x1="530" y1="168" x2="540" y2="213" stroke="var(--tm-red)" strokeWidth="1" /><text x="548" y="240" fontSize="8" className="red">seconde falaise : taille hors formule</text>
+  <path d="M340,120 L380,112 L420,118" fill="none" stroke="var(--tm-green)" strokeWidth="3" opacity="0.6" /><text x="380" y="100" fontSize="9" className="green">creux ordinaire : 1,5R, 12 trades (sous p90)</text>
+  <text x="600" y="128" fontSize="9" className="muted">plateau : peu de trades = normal ;</text>
+  <text x="600" y="141" fontSize="9" className="muted">beaucoup de trades = bruit tradé</text>
+  <text x="375" y="302" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">en R et par trade (pas en euros, pas par date) · l'écart entre les deux courbes est le coût du hors-plan</text>
+</svg>
+</Figure>
+
+## Trouver ses heures et ses jours profitables
+
+C'est l'analyse la plus demandée et la plus mal faite. Le problème est celui du niveau 7, chapitre 9 : découper l'échantillon en tranches et garder la meilleure, c'est **sélectionner du bruit**. Avec cinq jours de la semaine et quatre plages horaires, on a vingt tranches ; la meilleure de vingt tranches nulles affiche +0,26R sur 100 trades. Il faut donc une méthode.
+
+**Ce qui est solide.** Les découpages **prévus par la fiche** : les fenêtres du bloc 1 existaient avant le test, elles ne sont pas une sélection après coup. Comparer « dans la fenêtre » à « hors fenêtre » est légitime, et le résultat est en général net : dans notre exemple, les trades hors fenêtre sont tous dans la population hors plan.
+
+**Ce qui est solide aussi.** Les découpages liés à un **mécanisme nommé** : l'ouverture américaine et la reprise de l'après-midi sont deux moments différents du marché (niveau 6), avec des liquidités et des comportements différents ; comparer les deux répond à une question posée d'avance. Notre exemple donne +0,58R sur 44 trades à l'ouverture contre +0,30R sur 23 trades à la reprise ; les incertitudes (±0,21R et ±0,29R) se recouvrent : l'écart est **plausible mais non démontré**. Décision honnête : continuer les deux, revoir dans six mois ; ou, si le trader veut réduire son temps d'écran, garder l'ouverture, ce qui est une décision de vie et non une conclusion statistique.
+
+**Ce qui est fragile.** Les jours de la semaine. Avec 117 trades conformes, chaque jour compte environ 23 trades, soit une incertitude de ±0,3R : n'importe quel classement des cinq jours est du bruit. On peut le noter au carnet et attendre 300 trades ; on ne peut pas décider « je ne trade plus le lundi ». Le seul cas où un jour se traite à part est mécanique : les jours de FOMC, de NFP, de rollover, d'expiration (niveaux 5 et 6), et ceux-là étaient déjà dans la fiche.
+
+**Ce qui est solide et souvent ignoré** : les découpages liés au **trader** et non au marché. Le numéro du trade dans la journée, l'état déclaré (normal / fatigué / pressé / perturbé), les jours où le sommeil a été court. Ces variables sont sous le contrôle du trader, ce qui rend la décision immédiate et sans risque de sur-ajustement : si les trades pris en état « fatigué » ont une expectancy nettement plus faible sur 25 occurrences, la décision n'est pas « je change ma fiche », c'est « je ne trade pas fatigué », et elle ne coûte rien si l'analyse se trompe.
+
+La règle du chapitre : **on décide sur les variables qu'on contrôle, on observe celles qu'on ne contrôle pas**.
+
+## Détecter les fuites : où part le R perdu
+
+Une fuite est un endroit du process d'où le R s'échappe régulièrement. On les cherche dans l'ordre de leur coût, et l'on garde à l'esprit qu'un tableau de fuites **n'est pas une partition** : les catégories se recoupent, et il faut le dire, sous peine de compter deux fois le même R.
+
+| Fuite | n | Coût | Nature |
+| --- | --- | --- | --- |
+| Trades hors setup (aucune fiche) | 14 | −18,0R | perte réalisée |
+| Setup 1 pris en régime interdit | 11 | −6,2R | perte réalisée |
+| dont troisième trade de la journée | 9 | −4,8R | **sous-ensemble des deux lignes ci-dessus** |
+| Sorties manuelles avant C1 (C1 atteint ensuite) | 19 | ≈ −11R | manque à gagner estimé |
+| Signaux complets manqués par inattention | 7 | ≈ −2,5R | manque à gagner estimé |
+
+Lecture. Les deux premières lignes sont des **pertes réalisées** : elles s'additionnent (−24,2R) et se retrouvent dans la courbe d'équité. La troisième est un **sous-ensemble** : elle n'ajoute rien au total, elle **explique** : sur les 25 trades hors plan, 9 sont des troisièmes trades de la journée ; la décision de process est immédiate et gratuite (« deux trades par jour au plus »), elle supprime la plus grosse partie de la fuite d'un seul geste.
+
+Les deux dernières lignes sont des **manques à gagner estimés**, calculés à partir du MFE (niveau 7) : 19 trades conformes sortis manuellement avant C1 alors que C1 a été atteint ensuite, à environ 0,6R de manque chacun. Ces chiffres sont des **ordres de grandeur**, pas des R comptables (on ne sait pas ce que la gestion complète aurait donné sur chacun) ; ils servent à hiérarchiser, pas à additionner au P&L. Le contre-exemple à garder en tête : compter comme fuite tout écart entre le résultat obtenu et le meilleur résultat imaginable conduit à croire qu'on perd des dizaines de R par mois, ce qui est démoralisant et faux.
+
+Les fuites classiques, dans l'ordre où on les rencontre : trades hors fiche ; trades hors régime ; troisième trade de la journée ; sorties anticipées par peur ; stops déplacés (rares mais énormes) ; signaux manqués par inattention (défaut de routine) ; trades pris en état dégradé ; frais mal négociés (le seul poste qui se corrige par un courrier au courtier).
+
+Une fuite se traite par une **modification de process unique et vérifiable**, choisie en revue hebdomadaire (chapitre 2) : une case de checklist, une limite dans la plateforme, un horaire, un verrouillage après perte. On la vérifie quatre semaines plus tard sur le même croisement : la fuite a-t-elle diminué ? Si oui, on passe à la suivante. C'est ainsi qu'un trader à +0,13R par trade devient un trader à +0,3R sans toucher à une seule fiche.
+
+## Construire son tableau de bord personnel
+
+Le tableau de bord tient sur **un écran** et se met à jour sans effort (formules dans le tableur, pas de recopie manuelle). Six blocs suffisent.
+
+1. **En-tête · période et volume** : nombre de trades, R net, conformité en pourcentage, nombre de trades hors plan. Quatre nombres.
+2. **Courbe d'équité en R**, deux tracés (tous les trades, conformes seulement), avec la position du drawdown courant et le p90 du Monte Carlo en ligne horizontale.
+3. **Tableau par setup** : n, R moyen, incertitude, R total, taux de C1, MFE ≥ 1,5R, état de la fiche (validée / en test / en pause).
+4. **Tableau des fuites** : les cinq premières lignes du tableau précédent, avec la modification de process en cours et sa date de vérification.
+5. **Deux croisements du moment** : ceux qui portent la décision du trimestre (par exemple session × R et numéro du jour × R), avec leurs n.
+6. **Bloc process** : conformité des quatre dernières semaines, nombre de protocoles déclenchés, nombre de journées de journal manquantes, nombre de revues faites sur les quatre dernières.
+
+Rythme de mise à jour : le **bloc 1 et la courbe** chaque semaine (ils sortent de la revue) ; les **tableaux par setup et par fuite** chaque mois ; les **croisements** chaque trimestre. Un tableau de bord qu'on recalcule tous les jours ne sert qu'à alimenter le biais de récence du chapitre 1 : la performance ne se surveille pas à la journée, elle se pilote à la semaine et se juge au trimestre.
+
+Deux pièges pour finir. Le premier est le **tableau de bord en euros** : il fait varier toutes les métriques quand la taille change, et il fait regarder l'argent au lieu du process ; les euros ont leur place dans le suivi de compte (chapitre 4 et niveau 9), pas dans l'analyse de performance. Le second est le **tableau de bord riche** : trente indicateurs dont aucun ne déclenche jamais une décision. Un bon indicateur est un indicateur **relié à une action** : si vous ne savez pas dire ce que vous feriez selon sa valeur, il n'a pas sa place à l'écran.
+
+<Figure caption="Figure 3 · Le tableau de bord sur un écran : en-tête (4 nombres), courbe d'équité en R à deux tracés avec le p90 Monte Carlo, tableau par setup avec n et incertitude, tableau des fuites avec la modification de process en cours, deux croisements du moment, bloc process. Mise à jour hebdomadaire, mensuelle, trimestrielle selon le bloc.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Tableau de bord personnel" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="660" height="40" rx="6" className="box" strokeWidth="1.5" />
+  <text x="45" y="46" fontSize="9" fontWeight="600">1 · En-tête</text>
+  <text x="140" y="46" fontSize="10" fontWeight="600">142 trades</text>
+  <text x="260" y="46" fontSize="10" fontWeight="600" className="gold">+18,4R</text>
+  <text x="380" y="46" fontSize="10" fontWeight="600">conformité 82 %</text>
+  <text x="540" y="46" fontSize="10" fontWeight="600" className="red">hors plan : 25</text>
+  <text x="45" y="62" fontSize="8" className="muted">hebdomadaire · quatre nombres, rien de plus</text>
+  <rect x="30" y="80" width="330" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="45" y="98" fontSize="9" fontWeight="600">2 · Courbe d'équité en R (hebdomadaire)</text>
+  <line x1="45" y1="180" x2="345" y2="180" className="line" strokeWidth="1" />
+  <polyline points="45,175 85,165 125,152 165,155 205,140 245,128 285,118 325,105" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <polyline points="45,175 85,168 125,158 165,162 205,150 245,168 285,160 325,152" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <line x1="45" y1="190" x2="345" y2="190" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="50" y="187" fontSize="7" className="red">p90 Monte Carlo</text>
+  <rect x="370" y="80" width="320" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="385" y="98" fontSize="9" fontWeight="600">3 · Par setup (mensuel)</text>
+  <text x="385" y="118" fontSize="8" className="muted">setup · n · R moy · ± · total · %C1 · état</text>
+  <text x="385" y="136" fontSize="8">1 · 67 · +0,49 · ±0,18 · +32,7R · 58 % · validée</text>
+  <text x="385" y="152" fontSize="8">2 · 41 · +0,12 · ±0,23 · +4,9R · 61 % · en test</text>
+  <text x="385" y="168" fontSize="8">3 · 9 · +0,56 · ±0,50 · +5,0R · 44 % · en test</text>
+  <text x="385" y="188" fontSize="8" className="gold">aucune moyenne sans n ni incertitude</text>
+  <rect x="30" y="210" width="330" height="100" rx="6" className="box" strokeWidth="1" />
+  <text x="45" y="228" fontSize="9" fontWeight="600" className="red">4 · Fuites (mensuel)</text>
+  <text x="45" y="246" fontSize="8">hors setup · 14 · −18,0R</text>
+  <text x="45" y="261" fontSize="8">setup 1 hors régime · 11 · −6,2R</text>
+  <text x="45" y="276" fontSize="8" className="muted">dont 3e trade du jour · 9 · −4,8R (sous-ensemble)</text>
+  <text x="45" y="294" fontSize="8" className="green">process en cours : 2 trades/jour max · vérif. 15/04</text>
+  <rect x="370" y="210" width="320" height="100" rx="6" className="box" strokeWidth="1" />
+  <text x="385" y="228" fontSize="9" fontWeight="600">5 · Croisements du trimestre · 6 · Process</text>
+  <text x="385" y="248" fontSize="8">session : Londres +0,12 (41) · ouv. US +0,58 (44)</text>
+  <text x="385" y="263" fontSize="8">n° du jour : 1 → +0,42 · 2 → +0,21 · 3+ → −0,53</text>
+  <text x="385" y="282" fontSize="8">conformité 4 sem. : 78 / 85 / 88 / 92 %</text>
+  <text x="385" y="297" fontSize="8">protocoles : 3 · jours de journal manquants : 0</text>
+</svg>
+</Figure>
+
+## Deux trades relus par l'analyse
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, setup 1, ouverture US"
+  direction="Long"
+  setup="Premier trade de la journée, état « normal », régime tendance normale, qualité « fort » ; c'est la cellule la plus rentable du tableau de bord (ouverture US, n° 1, fort) : 44 trades à +0,58R"
+  entree="5 466,25"
+  stop="5 457,75 (34 ticks)"
+  objectif="C1 5 479,00 ; C2 5 491,75"
+  r="+2,4R">
+
+Le trade n'apprend rien de neuf ; c'est sa **cellule** qui compte. L'analyse du semestre a montré que le premier trade de la journée, à l'ouverture américaine, en régime autorisé et avec un signal fort, concentre l'essentiel du R du trader. La décision de process qui en découle n'est pas « prendre plus de risque sur ces trades » (la taille reste celle de la formule), mais **organiser la journée autour d'eux** : être installé et préparé à 15 h 15, ne rien avoir d'autre à faire entre 15 h 30 et 17 h 30, et considérer la fin d'après-midi comme un bonus optionnel. Le tableau de bord ne sert pas à trader plus fort, il sert à trader **là où l'on est bon**.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, setup 1 forcé, reprise du soir"
+  direction="Long"
+  setup="Troisième trade de la journée, 20 h 52, état « fatigué », régime range de stress (interdit par la fiche) ; signal « limite » ; toutes les cases de la cellule la plus coûteuse du tableau de bord"
+  entree="18 906,00"
+  stop="18 866,00 (160 ticks)"
+  objectif="18 966,00"
+  r="−1,05R">
+
+Ce trade appartient à quatre catégories de fuite en même temps : troisième trade du jour, régime interdit, état dégradé, signal limite. Individuellement, chacune de ces variables est difficile à défendre statistiquement sur un échantillon de six mois ; ensemble, elles décrivent 9 des 25 trades hors plan et la moitié du R perdu. C'est le point de méthode du chapitre : on ne cherche pas la variable magique, on cherche la **combinaison qui revient**, et l'on écrit une règle de process qui la rend impossible. Ici, une seule règle en supprime la plus grande part : deux trades par jour au plus, et pas d'entrée après 20 h 45. Vérification prévue quatre semaines plus tard sur le même croisement.
+
+</TradeExample>
+
+:::tip À retenir
+
+- La première décomposition est la **conformité**, pas le setup : conformes et hors plan sont deux populations sans rapport ; dans l'exemple, 117 conformes à +42,6R contre 25 hors plan à −24,2R, pour un total de +18,4R.
+- Toute cellule porte **n, R moyen et incertitude** ; sous 30 trades c'est un indice, sous 15 on lit les lignes ; les décompositions décident du **process**, jamais de la fiche (carnet d'idées puis niveau 7).
+- La **courbe d'équité en R** (par trade, pas en euros, deux tracés dont les conformes) se lit en quatre formes : pente (expectancy), creux (profondeur **et** durée, comparés au p90 Monte Carlo), plateaux (normaux si peu de trades), falaises (stop déplacé ou taille hors formule, à relier à leur ligne de journal).
+- Heures et jours : les découpages **prévus par la fiche** ou liés à un **mécanisme nommé** sont solides ; les jours de la semaine sont du bruit à 23 trades par jour ; on **décide sur les variables qu'on contrôle** (numéro du trade, état, préparation) et l'on observe les autres.
+- Un tableau de **fuites** n'est pas une partition : pertes réalisées additionnables, sous-ensembles explicatifs, manques à gagner estimés en ordre de grandeur ; chaque fuite se traite par **une** modification de process vérifiable quatre semaines plus tard.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Refaire la décomposition">
+
+Un lecteur vous donne : 96 trades, +6,2R au total ; 18 trades tagués « hors plan » totalisant −17,4R ; parmi les conformes, setup A 52 trades et setup B 26 trades ; le setup B totalise +3,4R.
+
+1. R total et R moyen des conformes.
+2. R total et R moyen du setup A.
+3. Que faut-il dire au lecteur en une phrase, et quelle est la première action ?
+
+<Solution>
+
+1. Conformes : 96 − 18 = **78 trades** ; R = 6,2 − (−17,4) = **+23,6R** ; moyenne = 23,6 / 78 = **+0,30R**.
+2. Setup A = 23,6 − 3,4 = **+20,2R** sur 52 trades = **+0,39R** (le setup B est à +3,4 / 26 = +0,13R).
+3. « Tes deux fiches sont positives et ton exécution vaut +0,30R par trade ; 18 trades hors plan t'ont coûté 17,4R, soit près des trois quarts de ce que tes fiches ont produit. » Première action : ouvrir les 18 lignes hors plan, chercher la combinaison qui revient (heure, numéro du trade, état, régime), et écrire **une** règle de process qui la rend impossible. Aucune modification de fiche.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Diagnostiquer une courbe">
+
+Trois courbes d'équité en R, décrites en mots. Pour chacune, le diagnostic le plus probable et la vérification à faire dans le journal.
+
+- (a) Pente régulière et positive sur 120 trades, puis deux chutes verticales de 3,5R et 4R séparées de trois semaines, puis reprise de la pente initiale.
+- (b) Courbe plate pendant 60 trades, avec un nombre de trades très élevé dans la période, puis reprise.
+- (c) Pente positive mais un creux de 9R qui dure 40 trades, alors que le p90 du Monte Carlo est de 12R.
+
+<Solution>
+
+- **(a)** Deux **falaises** : mécaniquement impossibles avec un stop fixe respecté. Vérification : les lignes de journal des trades concernés (tags `stop déplacé`, `taille hors formule`, `hors setup`) et le contexte du jour (état, protocoles). La fiche n'est pas en cause : la pente reprend ensuite à l'identique.
+- **(b)** **Plateau avec beaucoup de trades** : du bruit tradé, typiquement l'ennui d'une période sans signaux (range) où le trader a forcé. Vérification : nombre de signaux complets déclarés dans la couche 2 contre nombre de trades pris ; qualité des signaux (« limite » en excès) ; setups hors sélection.
+- **(c)** Un creux **profond et long, mais sous le p90** : c'est un drawdown ordinaire. Vérification : conformité sur la période (si elle est supérieure à 90 %, il n'y a **rien à faire**, et c'est la réponse attendue) ; régimes traversés. Le piège serait de modifier la fiche ici.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Choisir un découpage défendable">
+
+Parmi ces cinq analyses, dites lesquelles sont défendables et lesquelles relèvent du bruit sélectionné, avec la raison.
+
+- (a) Comparer les trades dans la fenêtre de la fiche et hors fenêtre.
+- (b) Comparer les cinq jours de la semaine sur 117 trades et supprimer le pire.
+- (c) Comparer l'ouverture américaine et la reprise de l'après-midi.
+- (d) Comparer les trades pris en état « fatigué » (25 occurrences) aux autres.
+- (e) Chercher, parmi vingt croisements heure × jour, celui qui a la meilleure expectancy et n'y trader que là.
+
+<Solution>
+
+- **(a) Défendable** : le découpage existait avant le test (bloc 1 de la fiche) ; ce n'est pas une sélection après coup.
+- **(b) Bruit** : 23 trades par jour, incertitude d'environ ±0,3R ; n'importe quel classement est du hasard. À noter au carnet, à revoir vers 300 trades ; sauf mécanisme connu (FOMC, NFP, rollover), déjà prévu par la fiche.
+- **(c) Défendable** : deux moments de marché différents et nommés (niveau 6) ; la question est posée d'avance. Attention toutefois à conclure : si les incertitudes se recouvrent, l'écart est plausible et non démontré.
+- **(d) Défendable et immédiatement actionnable** : c'est une variable **sous le contrôle du trader** ; même si l'analyse se trompe, la décision « je ne trade pas fatigué » ne coûte rien.
+- **(e) Bruit sélectionné**, cas d'école : vingt croisements testés, le meilleur de vingt tranches nulles affiche environ +0,26R sur 100 trades (niveau 7, chapitre 9). Décision interdite.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La première décomposition à faire dans un journal est :",
+      options: [
+        "Par setup",
+        "Par conformité : conformes et hors plan sont deux populations sans rapport, et mélanger les deux fausse toutes les autres analyses",
+        "Par jour de la semaine",
+        "Par instrument",
+      ],
+      answer: 1,
+      explain: "Dans l'exemple du chapitre, les fiches valent +42,6R et les 25 trades hors plan en reprennent 24,2R.",
+    },
+    {
+      q: "Une chute verticale de 4R en un ou deux trades sur la courbe d'équité signifie :",
+      options: [
+        "Que le marché a été violent",
+        "Qu'un stop a été déplacé, ou qu'une taille était hors formule, ou qu'un trade était sans stop : c'est mécaniquement impossible avec une fiche respectée",
+        "Que la fiche est cassée",
+        "Que l'expectancy a changé",
+      ],
+      answer: 1,
+      explain: "Chaque falaise se relie à sa ligne de journal ; c'est le diagnostic le plus rapide qui existe.",
+    },
+    {
+      q: "La courbe d'équité se trace :",
+      options: [
+        "En euros et par date",
+        "En R et par trade, avec un second tracé pour les seuls trades conformes",
+        "En pourcentage du compte, par mois",
+        "Seulement à la fin de l'année",
+      ],
+      answer: 1,
+      explain: "En R, les changements de taille ne déforment pas la lecture ; par trade, les périodes creuses n'étirent pas la courbe ; l'écart entre les deux tracés est le coût du hors-plan.",
+    },
+    {
+      q: "Un creux de 9R alors que le p90 du Monte Carlo est de 12R, avec une conformité de 92 % :",
+      options: [
+        "Impose de réduire la taille et de revoir la fiche",
+        "N'appelle aucune action : c'est un drawdown ordinaire, annoncé par la distribution",
+        "Signifie que la fiche est morte",
+        "Justifie de changer de setup",
+      ],
+      answer: 1,
+      explain: "La suspension vient au-delà du p95 (niveau 7, chapitre 8 et protocole 4 du chapitre 1).",
+    },
+    {
+      q: "Chercher parmi vingt croisements heure × jour celui qui a la meilleure expectancy :",
+      options: [
+        "Est la bonne méthode pour trouver ses heures",
+        "Est du bruit sélectionné : le meilleur de vingt tranches nulles affiche environ +0,26R sur 100 trades",
+        "Est valable si le résultat est net",
+        "Ne coûte rien",
+      ],
+      answer: 1,
+      explain: "Sont défendables : les découpages prévus par la fiche, ceux liés à un mécanisme nommé, et les variables sous le contrôle du trader.",
+    },
+    {
+      q: "Dans un tableau de fuites :",
+      options: [
+        "Toutes les lignes s'additionnent",
+        "Les pertes réalisées s'additionnent, les sous-ensembles expliquent sans s'ajouter, et les manques à gagner (calculés sur le MFE) sont des ordres de grandeur, pas des R comptables",
+        "Seules les pertes comptent",
+        "On additionne aussi le meilleur résultat imaginable",
+      ],
+      answer: 1,
+      explain: "Compter tout écart au meilleur résultat imaginable donne des dizaines de R fictifs et démoralise pour rien.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Reste à faire tenir tout cela dans une journée. Le chapitre suivant décrit la routine : trente minutes de préparation pré-marché, les règles et limites de l'exécution en séance, dix minutes de débrief, l'hygiène de vie qui conditionne la capacité de décision, et les routines hebdomadaire et mensuelle qui bouclent l'ensemble.
