@@ -1,0 +1,398 @@
+---
+title: "Examen final : certification du cours"
+sidebar_label: "Examen final"
+description: "Vingt-cinq questions couvrant les dix niveaux et une étude de cas de synthèse notée sur 30 points : préparer une séance, juger une fiche et son backtest, dimensionner le risque, prescrire les corrections de process. Score de passage : 80 %."
+---
+
+# Examen final : certification du cours
+
+Cet examen valide l'ensemble du cours. Il comporte **25 questions** en cinq blocs couvrant les dix niveaux, puis **une étude de cas de synthèse notée sur 30 points** qui reprend la chaîne complète : préparation, jugement d'une fiche, dimensionnement, exécution, process.
+
+**Score de passage : 80 %**, soit au moins **20 bonnes réponses sur 25** **et** au moins **24 points sur 30** à l'étude de cas.
+
+Un mot avant de commencer. Réussir cet examen ne signifie pas que vous gagnerez de l'argent : cela signifie que vous possédez une méthode complète, que vous savez la mesurer et que vous connaissez ses limites. C'est la seule chose qu'un cours puisse honnêtement transmettre ; le reste s'acquiert en exécutant, en mesurant et en corrigeant, pendant des années.
+
+## Bloc 1 · Fondations et risque (niveaux 0 et 1)
+
+<Quiz
+  title="Bloc 1 · Fondations et risque"
+  questions={[
+    {
+      q: "La marge d'un contrat à terme est :",
+      options: [
+        "Le risque du trade",
+        "Un dépôt de garantie exigé par la chambre de compensation ; le risque est fixé par la distance au stop et la taille",
+        "Le prix du contrat",
+        "Une commission",
+      ],
+      answer: 1,
+      explain: "Confondre marge et risque est l'erreur qui fait sauter les comptes : le risque se calcule, il ne se lit pas sur la plateforme.",
+    },
+    {
+      q: "La taille d'une position se calcule par :",
+      options: [
+        "Un pourcentage du capital investi",
+        "Budget de risque ÷ (distance au stop × valeur du point), arrondi vers le bas",
+        "Le levier maximal autorisé",
+        "L'intuition du trader",
+      ],
+      answer: 1,
+      explain: "Si le résultat est zéro contrat, le trade ne se prend pas : c'est une information, pas un obstacle.",
+    },
+    {
+      q: "Une série de six pertes consécutives pour un système à 45 % de réussite est :",
+      options: [
+        "La preuve que le système est cassé",
+        "Un événement ordinaire, annoncé par la distribution ; on vérifie la conformité et le régime, pas la fiche",
+        "Impossible",
+        "Un signal pour doubler la taille",
+      ],
+      answer: 1,
+      explain: "Le hasard produit des séquences longues ; c'est pourquoi le budget quotidien et les paliers de réduction sont écrits d'avance.",
+    },
+    {
+      q: "L'expectancy d'un système s'exprime :",
+      options: [
+        "En euros par mois",
+        "En R par trade, accompagnée de son échantillon et de son incertitude",
+        "En pourcentage de réussite",
+        "En nombre de trades gagnants",
+      ],
+      answer: 1,
+      explain: "Une moyenne sans n ni intervalle n'est pas une mesure ; c'est une impression.",
+    },
+    {
+      q: "Le stop se place :",
+      options: [
+        "À une distance fixe qui rend le risque acceptable",
+        "Au-delà d'un objet du marché, avec une marge en ATR et une raison écrite ; c'est la taille qui s'ajuste, jamais le stop",
+        "Sous le prix d'entrée, au plus près",
+        "Mentalement, pour ne pas être chassé",
+      ],
+      answer: 1,
+      explain: "Resserrer le stop pour compenser une entrée trop haute est la faute qui revient dans presque toutes les études de cas du cours.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Analyse technique et prix avancé (niveaux 2, 3 et 4)
+
+<Quiz
+  title="Bloc 2 · Prix, structure et flux"
+  questions={[
+    {
+      q: "Un BOS et un CHoCH se distinguent ainsi :",
+      options: [
+        "Ce sont deux noms de la même chose",
+        "Le BOS casse un swing dans le sens de la tendance (continuation) ; le CHoCH casse le dernier point de structure contraire (changement de caractère)",
+        "Le BOS concerne les indices, le CHoCH le forex",
+        "Le CHoCH s'observe seulement en H4",
+      ],
+      answer: 1,
+      explain: "C'est le vocabulaire minimal du niveau 3 ; le reste (FVG, OB, breaker) s'y rattache.",
+    },
+    {
+      q: "Un sweep se distingue d'une cassure par :",
+      options: [
+        "Son volume uniquement",
+        "Le retour du prix : le sweep dépasse le niveau puis clôture du bon côté, la cassure obtient et conserve du prix au-delà",
+        "L'unité de temps",
+        "L'heure de la séance",
+      ],
+      answer: 1,
+      explain: "Le flux (absorption contre acceptation) confirme ou infirme la lecture : c'est le niveau 4.",
+    },
+    {
+      q: "Un FVG (imbalance) est :",
+      options: [
+        "Un écart d'ouverture",
+        "Un trou de trois bougies laissé par un déplacement rapide, où le prix n'a pas échangé des deux côtés",
+        "Une moyenne mobile",
+        "Un niveau psychologique",
+      ],
+      answer: 1,
+      explain: "Il sert de zone d'entrée quand il est mesuré (hauteur en ATR) et daté, jamais dessiné après coup.",
+    },
+    {
+      q: "La value area et le POC servent à :",
+      options: [
+        "Prévoir la direction du jour",
+        "Situer où le marché a accepté d'échanger : les bornes attirent les rotations, l'ouverture hors de la value area change le scénario",
+        "Calculer un stop",
+        "Choisir un instrument",
+      ],
+      answer: 1,
+      explain: "Ce sont des réservoirs et des repères de contexte, pas des signaux.",
+    },
+    {
+      q: "Une divergence de delta au sommet, seule :",
+      options: [
+        "Suffit à vendre",
+        "Ne suffit pas : elle sert de filtre à un signal de structure, car le delta peut diverger longtemps avant que le prix tourne",
+        "Invalide la tendance",
+        "Remplace le volume",
+      ],
+      answer: 1,
+      explain: "Le niveau 4 est un filtre de qualité, pas un déclencheur autonome.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Macro, régimes et marchés (niveaux 5 et 6)
+
+<Quiz
+  title="Bloc 3 · Macro et marchés"
+  questions={[
+    {
+      q: "La matrice des régimes sert à :",
+      options: [
+        "Prévoir la direction",
+        "Décider quels setups sont autorisés, avec quels réglages de stop et de taille, et lesquels sont interdits",
+        "Choisir le courtier",
+        "Fixer les objectifs mensuels",
+      ],
+      answer: 1,
+      explain: "« Ça ne marche plus » signifie presque toujours « hors régime ».",
+    },
+    {
+      q: "Le protocole de news du cours impose :",
+      options: [
+        "De trader l'annonce à la seconde",
+        "Aucune entrée dans les 15 minutes avant et les 20 minutes après une annonce de niveau 1 ; en position, stop remonté si le gain dépasse 1R, sinon sortie",
+        "De fermer la plateforme toute la journée",
+        "D'augmenter la taille pour profiter de la volatilité",
+      ],
+      answer: 1,
+      explain: "Le whipsaw post-annonce exécute les stops des deux côtés sur carnet vide.",
+    },
+    {
+      q: "Le COT (positionnement) :",
+      options: [
+        "Donne le timing d'entrée",
+        "Dit si le mouvement a de la place : un extrême contre le sens envisagé réduit la taille et rapproche la cible",
+        "Remplace la structure",
+        "S'utilise en intraday",
+      ],
+      answer: 1,
+      explain: "Il module, il ne déclenche jamais ; le timing vient de la structure et du déclencheur.",
+    },
+    {
+      q: "Un point de MES vaut 5 $ et un point de MNQ vaut 2 $. Un stop de 40 points sur MNQ avec 3 contrats représente :",
+      options: [
+        "120 $",
+        "240 $",
+        "600 $",
+        "40 $",
+      ],
+      answer: 1,
+      explain: "40 × 2 $ × 3 = 240 $. Connaître les spécifications de son instrument fait partie du bloc 1 de toute fiche.",
+    },
+    {
+      q: "L'ouverture de Londres sur le forex produit fréquemment :",
+      options: [
+        "Une tendance immédiate qu'il faut suivre",
+        "Une sortie du range asiatique qui échoue (manipulation), suivie du réalignement qui donne la vraie direction",
+        "Un range jusqu'à New York",
+        "Une baisse de volatilité",
+      ],
+      answer: 1,
+      explain: "On ne suit jamais la sortie ; on prend son échec, quand le range asiatique est valide.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Stratégie, backtest et validation (niveau 7)
+
+<Quiz
+  title="Bloc 4 · Mesure et validation"
+  questions={[
+    {
+      q: "Une fiche de stratégie sans seuils chiffrés est :",
+      options: [
+        "Suffisante si le trader est expérimenté",
+        "Une intention, pas une fiche : sans seuils, rien n'est testable ni comptable",
+        "Préférable, car plus souple",
+        "Valable en discrétionnaire",
+      ],
+      answer: 1,
+      explain: "Contexte, signal, exécution : chaque critère porte un nombre, et « presque » n'existe pas.",
+    },
+    {
+      q: "Avec un écart-type de 1,5R par trade, distinguer une expectancy de +0,3R de zéro demande environ :",
+      options: [
+        "30 trades",
+        "100 trades (incertitude 1,5 / √n ≈ 0,15R)",
+        "10 trades",
+        "1 000 trades",
+      ],
+      answer: 1,
+      explain: "200 trades pour établir le signe, 400 à 800 pour comparer deux variantes.",
+    },
+    {
+      q: "Le Monte Carlo par rééchantillonnage sert à :",
+      options: [
+        "Prédire les prochains trades",
+        "Obtenir la distribution des drawdowns possibles : on dimensionne sur le p90 et l'on suspend au-delà du p95",
+        "Optimiser les paramètres",
+        "Remplacer le backtest",
+      ],
+      answer: 1,
+      explain: "Le drawdown historique n'est qu'un tirage, souvent favorable.",
+    },
+    {
+      q: "Le meilleur de 140 combinaisons de paramètres testées sur un système nul affiche environ :",
+      options: [
+        "0R",
+        "+0,37R sur 100 trades : la sélection fabrique de l'expectancy à partir du bruit",
+        "−0,3R",
+        "+1R",
+      ],
+      answer: 1,
+      explain: "D'où l'out-of-sample regardé une seule fois, le walk-forward et la préférence pour un plateau plutôt qu'un pic.",
+    },
+    {
+      q: "Dans un backtest event-driven, la règle du doute impose :",
+      options: [
+        "De choisir l'issue favorable",
+        "Le stop avant la cible, la limite servie seulement si le prix la traverse, et le slippage sur les ordres au marché",
+        "D'ignorer la bougie ambiguë",
+        "De consulter l'unité inférieure",
+      ],
+      answer: 1,
+      explain: "L'exécution pessimiste compense l'optimisme que le code et la mémoire rendent faciles.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Process, playbook et carrière (niveaux 8 et 9)
+
+<Quiz
+  title="Bloc 5 · Process et carrière"
+  questions={[
+    {
+      q: "La première décomposition d'un journal est :",
+      options: [
+        "Par setup",
+        "Par conformité : les trades conformes et les trades hors plan sont deux populations sans rapport",
+        "Par instrument",
+        "Par mois",
+      ],
+      answer: 1,
+      explain: "Dans l'exemple du niveau 8, les fiches valaient +42,6R et les 25 trades hors plan en reprenaient 24,2R.",
+    },
+    {
+      q: "Trois signaux de tilt simultanés imposent :",
+      options: [
+        "De réduire la taille",
+        "Une pause immédiate selon un protocole écrit à froid, puis une reprise seulement si la checklist est cochable et le budget disponible",
+        "De changer de marché",
+        "De prendre un dernier trade pour se refaire",
+      ],
+      answer: 1,
+      explain: "Un trader en tilt se sent lucide : on ne compte pas sur l'introspection mais sur des signaux observables.",
+    },
+    {
+      q: "Une revue hebdomadaire doit produire :",
+      options: [
+        "Plusieurs améliorations de fiche",
+        "Une seule décision de process, concrète et vérifiable quatre semaines plus tard",
+        "Un nouveau setup",
+        "Un objectif en euros",
+      ],
+      answer: 1,
+      explain: "Les modifications de fiche passent par le carnet d'idées et la validation du niveau 7 ; trois modifications de playbook par mois au maximum.",
+    },
+    {
+      q: "Le passage de la simulation au petit réel exige, entre autres :",
+      options: [
+        "Un mois gagnant",
+        "Cent occurrences backtestées, trente trades simulés, une conformité d'au moins 90 % sans trade hors setup, un journal tenu en séance et un risque dimensionné par le Monte Carlo",
+        "Un capital de 25 000 $",
+        "L'accord d'un mentor",
+      ],
+      answer: 1,
+      explain: "Puis la plus petite taille possible pendant trois mois : c'est la stabilité de la conformité qu'on observe, pas le résultat.",
+    },
+    {
+      q: "Sur un compte de financement à perte maximale suiveuse, la bonne pratique est :",
+      options: [
+        "Risquer le maximum autorisé pour atteindre l'objectif vite",
+        "Risquer 0,25 à 0,5 % du nominal par trade, parce que la contrainte n'est pas la ruine mais une limite administrative bien plus proche",
+        "Trader sans stop pour éviter les mèches",
+        "Doubler après chaque perte",
+      ],
+      answer: 1,
+      explain: "À 1 % de risque avec une limite suiveuse, la perte du compte sur quelques centaines de trades est très probable, même avec une expectancy positive.",
+    },
+  ]}
+/>
+
+## Étude de cas de synthèse (30 points)
+
+<Exercise n={1} title="Une journée, une fiche, un compte">
+
+Vous reprenez le dossier complet d'un trader. Toutes les données ci-dessous sont cohérentes entre elles.
+
+**Le compte et la fiche.** Capital alloué 20 000 $, budget 1 % par trade. Fiche « Sweep-FVG » version 4 : in-sample 2021-2023, 260 trades, +0,34R (écart-type 1,45R) ; out-of-sample 2024, 71 trades, +0,11R ; surface de paramètres autour du displacement : 1,3 → +0,30 ; 1,5 → +0,34 ; 1,7 → +0,29 ; Monte Carlo sur 300 trades : p90 = 19R, p95 = 25R. Trois versions et deux variantes ont été essayées avant la version 4.
+
+**Le journal des six derniers mois.** 96 trades, +2,1R ; conformes 74 (+21,3R, soit +0,29R) ; hors plan 22 (−19,2R), dont 13 pris hors fenêtre horaire (−12,4R) et 9 en régime interdit (−6,8R) ; conformité 77 % ; préparation complète 58 jours sur 118 ; drawdown maximal observé 16R ; journal rempli en séance 64 % des jours ; deux revues hebdomadaires tenues sur 26.
+
+**La séance du jour.** Régime : ratio ATR 5 j / 20 j = 1,05, VIX 15 → tendance normale. Structure quotidienne haussière, repli H1 en cours. Réservoirs préparés : PDH 5 486, ONH 5 470, VAH 5 452, POC 5 424, ONL 5 402, VAL / EQL H1 5 388 (confluence), PDL 5 372. ATR M15 = 6 points. À 16 h 35, la bougie M5 descend à 5 384,25, clôture à 5 391,50 ; la séquence suivante monte à 5 402,75 avec un corps de 68 % et casse le dernier LH interne à 5 396 ; elle laisse un FVG entre 5 393 et 5 396,50. Le footprint montre une absorption sur la bougie de sweep ; le volume relatif du displacement est de 1,2. Aucune annonce de niveau 1. MES : 5 $ le point, tick 0,25.
+
+**Sa demande.** « L'out-of-sample est faible, je vais resserrer le displacement à 1,7 pour filtrer, et comme j'ai un bon capital je passe à 1,5 % par trade pour rattraper le semestre. »
+
+Répondez en six points.
+
+1. **(5 pts)** Validez ou refusez le signal du jour, critère par critère, avec les valeurs mesurées.
+2. **(5 pts)** Calculez l'entrée, le stop, la taille, puis choisissez C1 et C2 parmi les réservoirs ; concluez sur la géométrie.
+3. **(5 pts)** Jugez la fiche : que dit l'écart in-sample / out-of-sample, la surface de paramètres, le nombre de versions ?
+4. **(5 pts)** Jugez le risque : que dit le drawdown observé par rapport au Monte Carlo, compte tenu de la conformité ? Que répondez-vous sur le passage à 1,5 % ?
+5. **(5 pts)** Diagnostiquez le semestre et donnez la modification de process prioritaire, avec son indicateur de vérification.
+6. **(5 pts)** Rédigez la réponse à sa demande en quatre phrases, dans l'ordre des priorités.
+
+<Solution>
+
+**1. Le signal (5 pts).**
+- **S1 sweep** : le plus bas 5 384,25 passe 3,75 points sous les EQL / VAL de 5 388, soit **15 ticks** (≥ 2 ticks) et bien moins de 1,5 ATR M15 (9 points) ; la clôture 5 391,50 est **au-dessus** du réservoir. **Validé.** Ancre du stop : 5 384,25.
+- **S2 displacement** : fourchette de la séquence 5 402,75 − 5 384,25 = **18,5 points** = **3,1 ATR M15** (≥ 1,5) ; corps 68 % (≥ 60 %) ; clôture au-dessus du dernier LH interne 5 396. **Validé.**
+- **S3 FVG** : 5 396,50 − 5 393 = **3,5 points** = **0,58 ATR M15** (≥ 0,4). **Validé.**
+- **S4** : pas de traversée ni de retour sous le sweep à ce stade. **Validé** (à surveiller jusqu'à l'exécution).
+- **S5 flux** : absorption présente → taille pleine. **S6 volume** : 1,2 < 1,3 → **absent**, coefficient 2/3.
+- Le réservoir est **préparé** (confluence VAL / EQL), le régime est **autorisé**, il n'y a pas d'annonce. Signal **complet**, qualité « complet » (pas « fort » puisque S6 manque). (1 pt par critère principal, 1 pt pour la qualité et le coefficient.)
+
+**2. Les nombres (5 pts).**
+- **Entrée** : bord haut du FVG + 1 tick = **5 396,75**.
+- **Stop** : 5 384,25 − 0,5 × 6 = 5 381,25 → **5 381,25** ; distance **15,5 points = 62 ticks** = 77,50 $ par MES.
+- **Taille** : budget 200 $ ; 200 / 77,50 = 2,58 → 2 MES ; coefficient 2/3 (S6 absent) → 2 × 2/3 = 1,33 → **1 MES** (risque 77,50 $).
+- **Cibles** : le ratio minimal de la fiche est 1,5, soit 23,25 points au-dessus de l'entrée → au moins 5 420. Le **POC 5 424** donne (5 424 − 5 396,75) / 15,5 = **1,76R** : c'est **C1**. Le VAH 5 452 donne **3,56R** : c'est **C2** (l'ONH 5 470 donnerait 4,7R et reste une extension possible selon la fiche).
+- **Géométrie validée** : C1 au-dessus du seuil, C2 au-delà de 3R. (1 pt entrée, 1 pt stop, 1 pt taille avec coefficient, 2 pts cibles et conclusion.)
+
+**3. La fiche (5 pts).** L'in-sample (260 trades, +0,34R) et l'out-of-sample (71 trades, **+0,11R**) donnent un rapport OOS / IS de **0,32**, inférieur au seuil de 0,5 : la fiche est **partiellement ajustée** ; son expectancy réelle est probablement plus proche de +0,1 à +0,2R que de +0,34R. Attention toutefois : sur 71 trades, l'incertitude est d'environ ±0,17R, donc l'OOS n'est pas non plus une mesure précise. La **surface de paramètres** est un **plateau** (+0,30 / +0,34 / +0,29) : c'est un bon signe, le seuil de 1,5 n'est pas un artefact. Trois versions et deux variantes : **peu de degrés de liberté**, ce qui est sain. Conclusion : fiche **utilisable**, mais avec une expectancy attendue revue à la baisse ; c'est cette valeur revue qui doit entrer dans le Monte Carlo et dans le dimensionnement. (2 pts rapport OOS / IS, 1 pt incertitude, 1 pt plateau, 1 pt conclusion.)
+
+**4. Le risque (5 pts).** Le drawdown observé de **16R** est **sous le p90 (19R)** : c'est un drawdown **ordinaire**, qui n'appelle aucune décision sur la fiche. Mais la conformité est de **77 %** : la lecture du drawdown est donc suspendue, car une partie du R perdu vient de trades qui n'appartiennent pas à la fiche. Sur le passage à **1,5 %** : **refus**, pour trois raisons cumulées — la conformité est très en dessous du seuil de 90 % exigé pour toute augmentation ; l'expectancy réelle est probablement plus faible que l'in-sample ; et à 1,5 % par trade, le p90 de 19R représenterait **28,5 %** du capital alloué (et le p95, 37,5 %), ce qui est hors de toute tolérance raisonnable. Au contraire, tant que la conformité n'est pas rétablie, le risque doit rester à 1 %, voire descendre à 0,75 %. (2 pts lecture du drawdown, 1 pt rôle de la conformité, 2 pts refus argumenté avec le calcul.)
+
+**5. Le semestre et la correction prioritaire (5 pts).** Les fiches font leur travail (74 trades conformes à **+0,29R**, cohérent avec l'OOS) ; les **22 trades hors plan** ont coûté **−19,2R**, soit presque dix fois le résultat du semestre : sans eux, le semestre valait **+21,3R** au lieu de +2,1R. La plus grosse fuite est le **hors fenêtre horaire** (13 trades, −12,4R), et sa cause probable est visible dans le bloc process : **préparation complète seulement 58 jours sur 118**, journal rempli en séance 64 % des jours, deux revues sur 26. Modification prioritaire, une seule : **« pas de séance sans préparation complète ; si elle n'est pas terminée quinze minutes avant ma fenêtre, la journée est en observation »**, avec un second effet attendu sur les trades hors régime (la préparation contient la case régime). **Indicateur de vérification** : jours préparés / jours tradés, cible 100 %, relevé chaque semaine en revue, et nombre de trades hors fenêtre sur quatre semaines, cible 0. (2 pts décomposition chiffrée, 1 pt identification de la fuite principale, 2 pts modification unique avec indicateur.)
+
+**6. La réponse en quatre phrases (5 pts).** Exemple attendu, dans l'ordre des priorités :
+1. « Ta fiche n'est pas le problème : tes 74 trades conformes valent +0,29R, ce qui correspond à ton out-of-sample ; ce sont tes 22 trades hors plan qui ont pris 19,2R au semestre. »
+2. « Donc on ne touche ni au seuil de displacement — ta surface montre un plateau, 1,5 n'est pas un artefact, et resserrer à 1,7 se testerait de toute façon sur un échantillon postérieur, pas sur celui-ci — ni à la taille. »
+3. « Le passage à 1,5 % est refusé tant que la conformité n'est pas au-dessus de 90 % sur trois mois : à ce niveau de risque, ton p90 de 19R représenterait près de 30 % du capital alloué. »
+4. « La seule chose qu'on change cette semaine : aucune séance sans préparation complète, vérifiée par le ratio jours préparés / jours tradés, avec un point dans quatre semaines. »
+(1 pt par phrase juste et hiérarchisée, 1 pt pour l'absence de toute promesse ou de modification supplémentaire.)
+
+**Barème** : 30 points, passage à 24. L'esprit : la chaîne complète du cours doit être mobilisée dans le bon ordre — signal mesuré, nombres calculés, fiche jugée sur son OOS, risque dimensionné par la distribution, process corrigé par une seule décision vérifiable — et la demande du trader, qui allait exactement à l'inverse, refusée avec des chiffres plutôt qu'avec des principes.
+
+</Solution>
+</Exercise>
+
+## Et maintenant
+
+Le cours s'arrête ici ; le travail commence. Trois choses à faire dans l'ordre, dès cette semaine.
+
+**Ouvrir le playbook et le remplir.** Les six parties du niveau 9, chapitre 1, avec vos nombres, votre cadre et vos heures. Tant qu'il n'existe pas, tout le reste flotte.
+
+**Lancer la feuille de route.** Trente jours pour construire le cadre, trente pour mesurer, trente pour exécuter petit, avec les points de contrôle à cocher. Si vous disposez de cinq heures par semaine, tout se décale d'un facteur deux, et c'est très bien.
+
+**Tenir le journal dès le premier jour.** Même en observation, même sans trade. C'est le seul instrument qui vous dira, dans six mois, ce qui a marché et pourquoi ; sans lui, vous aurez des souvenirs.
+
+Un dernier mot, dans le ton du chapitre d'avertissement de ce cours : la méthode complète que vous venez de parcourir ne garantit rien. Elle rend vos décisions mesurables, vos pertes explicables et vos progrès attribuables ; c'est beaucoup, et c'est tout. Ce qui distingue les traders qui durent n'est ni le talent ni la stratégie : c'est la régularité avec laquelle ils exécutent des règles qu'ils ont écrites à froid, et l'honnêteté avec laquelle ils mesurent ce qui se passe ensuite.
