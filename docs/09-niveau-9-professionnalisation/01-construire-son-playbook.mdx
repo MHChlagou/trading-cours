@@ -1,0 +1,335 @@
+---
+title: "Construire son Trading Playbook"
+description: "Assembler tout le cours en un seul document de travail : la structure d'un playbook professionnel en six parties, les fiches de setups personnelles, les règles de risque, de session et de news, les critères de revue et de mise à jour, et la discipline qui en fait un document vivant plutôt qu'un trophée."
+---
+
+# Construire son Trading Playbook
+
+Huit niveaux ont produit des fiches, des seuils, des protocoles, des routines et des tableaux de bord. Le playbook est le document unique qui les rassemble : celui qu'on ouvre à 15 h 05 pour préparer la séance, celui qu'on consulte quand une situation imprévue arrive, celui qu'on relit le samedi. Ce n'est ni un résumé du cours ni un manifeste : c'est un **outil de travail**, écrit par le trader, pour lui, et modifié à un rythme lent et contrôlé. S'il fait plus de vingt-cinq pages, il ne sera pas ouvert ; s'il contient des phrases inspirantes, il ne servira à rien ; s'il n'est pas à jour, il sera dangereux, parce qu'on suivra des règles qui ne correspondent plus à ce qu'on fait.
+
+## La structure du playbook professionnel
+
+Six parties, dans cet ordre, parce que c'est l'ordre dans lequel on les consulte.
+
+**Partie 1 · Identité et cadre (1 page).** Qui trade, avec quoi, quand. Capital alloué et capital total (deux nombres différents), courtier, plateforme, instruments, heures réellement disponibles, objectif du trimestre en **process** (jamais en euros), et une phrase sur pourquoi ce cadre est soutenable dans la vie actuelle. C'est la page qui rend toutes les autres cohérentes : un playbook qui suppose six heures d'écran par jour chez un trader qui en a deux est une fiction.
+
+**Partie 2 · Règles de risque (1 à 2 pages).** Le niveau 1 et le niveau 7 réunis : budget par trade en pourcentage, budget quotidien, hebdomadaire, mensuel, paliers de réduction, chaleur maximale du portefeuille, corrélations interdites, règles de pyramidage, taille maximale par setup, et les seuils tirés du Monte Carlo (p90, p95). Cette partie est la seule qui prime sur toutes les autres : en cas de conflit entre une fiche et une règle de risque, la règle de risque gagne.
+
+**Partie 3 · Fiches de setups (2 à 4 pages par fiche, trois fiches au plus).** Le cœur : les fiches complètes du niveau 7, avec leurs statistiques mesurées et leurs conditions d'invalidité. Rien d'autre n'a le droit d'être tradé.
+
+**Partie 4 · Règles de session et de news (1 à 2 pages).** Fenêtres, jours particuliers, protocole d'annonces, rollover, changements d'heure, jours interdits, limites de nombre de trades, heure limite d'entrée et de fermeture.
+
+**Partie 5 · Process et protocoles (2 à 3 pages).** La préparation en six étapes, la checklist d'entrée, la séquence de gestion, le débrief, les cinq protocoles d'urgence du niveau 8, et les règles d'exception (connexion coupée, ordre rejeté, retard, imprévu).
+
+**Partie 6 · Suivi et revue (1 à 2 pages).** Le tableau de bord (quels blocs, quelle fréquence), la revue hebdomadaire en sept étapes, les revues mensuelle, trimestrielle et annuelle, les critères de modification du playbook lui-même, et le journal des versions.
+
+Total visé : **quinze à vingt-cinq pages**. Format : un document unique, imprimable, avec une table des matières et une pagination stable ; une version numérique pour l'édition, une version imprimée pour la séance (les checklists du chapitre 5 en sont l'extrait quotidien).
+
+<Figure caption="Figure 1 · Les six parties du playbook, dans l'ordre de consultation, avec leur volume cible. Les règles de risque priment sur les fiches ; les fiches priment sur l'envie ; le tout tient en quinze à vingt-cinq pages, imprimables.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Structure du playbook en six parties" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="30" width="600" height="34" rx="6" className="box" strokeWidth="1" />
+  <text x="75" y="52" fontSize="10" fontWeight="600">1 · Identité et cadre</text>
+  <text x="300" y="52" fontSize="9" className="muted">capital alloué / total · courtier · instruments · heures réelles · objectif de process</text>
+  <text x="645" y="52" fontSize="9" textAnchor="end" className="muted">1 p.</text>
+  <rect x="60" y="72" width="600" height="42" rx="6" className="red" opacity="0.12" />
+  <rect x="60" y="72" width="600" height="42" rx="6" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="75" y="92" fontSize="10" fontWeight="600" className="red">2 · Règles de risque</text>
+  <text x="300" y="92" fontSize="9" className="muted">budgets, paliers, chaleur, corrélations, pyramidage, p90 / p95 Monte Carlo</text>
+  <text x="645" y="92" fontSize="9" textAnchor="end" className="muted">1-2 p.</text>
+  <text x="75" y="108" fontSize="9" className="red" fontWeight="600">prime sur tout le reste : en cas de conflit, la règle de risque gagne</text>
+  <rect x="60" y="122" width="600" height="52" rx="6" className="gold" opacity="0.15" />
+  <rect x="60" y="122" width="600" height="52" rx="6" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="75" y="142" fontSize="10" fontWeight="600" className="gold">3 · Fiches de setups (trois au plus)</text>
+  <text x="360" y="142" fontSize="9" className="muted">contexte · signal · exécution · statistiques mesurées · invalidité</text>
+  <text x="645" y="142" fontSize="9" textAnchor="end" className="muted">2-4 p. / fiche</text>
+  <text x="75" y="162" fontSize="9" className="gold" fontWeight="600">rien d'autre n'a le droit d'être tradé</text>
+  <rect x="60" y="182" width="600" height="34" rx="6" className="box" strokeWidth="1" />
+  <text x="75" y="204" fontSize="10" fontWeight="600">4 · Session et news</text>
+  <text x="300" y="204" fontSize="9" className="muted">fenêtres · jours particuliers · protocole d'annonces · rollover · limites du jour</text>
+  <text x="645" y="204" fontSize="9" textAnchor="end" className="muted">1-2 p.</text>
+  <rect x="60" y="224" width="600" height="34" rx="6" className="box" strokeWidth="1" />
+  <text x="75" y="246" fontSize="10" fontWeight="600">5 · Process et protocoles</text>
+  <text x="300" y="246" fontSize="9" className="muted">préparation · checklist · gestion · débrief · 5 protocoles · exceptions</text>
+  <text x="645" y="246" fontSize="9" textAnchor="end" className="muted">2-3 p.</text>
+  <rect x="60" y="266" width="600" height="34" rx="6" className="box" strokeWidth="1" />
+  <text x="75" y="288" fontSize="10" fontWeight="600">6 · Suivi et revue</text>
+  <text x="300" y="288" fontSize="9" className="muted">tableau de bord · revues · critères de modification · journal des versions</text>
+  <text x="645" y="288" fontSize="9" textAnchor="end" className="muted">1-2 p.</text>
+</svg>
+</Figure>
+
+## Les fiches de setups personnelles
+
+La partie 3 reprend le format du niveau 7, avec trois ajouts propres au playbook.
+
+**L'en-tête d'état.** Chaque fiche porte, en première ligne : nom, **version**, date de la dernière modification, **état** (validée / en test / en pause), taille d'échantillon, expectancy mesurée avec son intervalle, p90 du Monte Carlo. Un lecteur extérieur doit pouvoir juger la fiche en dix secondes. Une fiche « en test » se trade en simulation ou à taille symbolique ; une fiche « en pause » ne se trade pas du tout, et reste dans le playbook avec la raison de sa mise en pause et la condition de sa réactivation.
+
+**Les exemples visuels.** Deux à quatre captures annotées par fiche : un cas d'école, un cas limite accepté, un cas limite refusé, et si possible un échec typique. Ce sont les images de référence auxquelles on compare en séance ; elles font plus pour la reconnaissance que trois paragraphes de définition.
+
+**Le tableau des variantes.** Si la fiche a des variantes (A / B / C, ou des contextes distincts), un tableau avec, pour chacune : n, expectancy, taux d'atteinte de C1, et la décision en cours (« variante B suspendue faute d'échantillon »). C'est ce qui empêche de mélanger les statistiques de choses différentes.
+
+Trois interdits, hérités des niveaux 7 et 8 : pas plus de **trois fiches actives** ; **aucune modification de seuil** sans le protocole de validation (out-of-sample, robustesse, checklist) ; et aucune fiche sans **conditions d'invalidité** écrites, sinon on ne saura jamais quand s'arrêter.
+
+Le playbook contient aussi, en annexe de la partie 3, la **liste des setups reconnus mais non tradés** (la bibliothèque du niveau 7) avec la mention « vu, hors sélection ». Cette page évite de redécouvrir tous les six mois un setup qu'on avait déjà écarté, et de le trader sur un coup de tête.
+
+## Règles de risque, de session et de news
+
+Ces deux parties sont courtes, impératives et sans nuance. Elles s'écrivent en phrases exécutables, à la deuxième personne ou à l'infinitif, avec des nombres.
+
+**Risque** (extrait typique) : risque par trade 0,75 % du capital alloué ; budget quotidien −2R ; hebdomadaire −4R ; mensuel −8R ; palier de réduction : à −10R de drawdown, taille divisée par deux jusqu'à retour au-dessus de −6R ; chaleur maximale 1,5 % simultané ; jamais deux positions corrélées à plus de 0,7 dans le même sens ; pyramidage seulement selon la fiche 3 ; taille maximale absolue 4 micros par ordre ; p90 du Monte Carlo à 300 trades : 18R, p95 : 24R ; suspension d'une fiche au-delà de son p95 avec conformité supérieure à 90 %.
+
+**Session** : fenêtres 15 h 30 - 17 h 30 et 19 h 30 - 21 h 15 ; heure limite d'entrée 21 h 00 ; fermeture de toute position à 21 h 15 ; deux trades par jour au plus ; un seul trade ouvert par instrument ; pas de séance sans préparation complète ; pas de trade après une nuit de moins de six heures autre que taille divisée par deux et un seul trade ; pas de séance en état perturbé.
+
+**News** : liste des annonces de niveau 1 pour l'instrument ; pas d'entrée dans les 15 minutes avant et les 20 minutes après ; en position à −15 minutes : si gain supérieur à 1R, stop remonté à +0,5R minimum, sinon sortie ; jours de FOMC : fermeture à 19 h 45, aucune entrée après ; jours de rollover et d'expiration : taille réduite ou abstention ; changements d'heure : deux semaines de vérification manuelle des fenêtres.
+
+Deux principes d'écriture. **Chaque règle a un nombre** : « je réduis la taille quand ça va mal » n'est pas une règle, « à −10R, taille ÷ 2 » en est une. Et **chaque règle a une raison en une demi-ligne**, écrite à côté : elle rappelle pourquoi la règle existe le jour où l'on a envie de la contourner (« deux trades par jour : le troisième trade a une expectancy de −0,53R sur 34 occurrences »).
+
+<Figure caption="Figure 2 · La hiérarchie des règles : le risque prime sur les fiches, les fiches priment sur les envies, les protocoles priment sur l'analyse en direct. Chaque règle porte un nombre et une raison en une demi-ligne, qui rappelle pourquoi elle existe le jour où l'on veut la contourner.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Hiérarchie des règles du playbook" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="360,40 620,110 100,110" className="red" opacity="0.25" />
+  <polygon points="360,40 620,110 100,110" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="360" y="92" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Règles de risque</text>
+  <text x="360" y="76" fontSize="9" textAnchor="middle" className="muted">budgets · paliers · chaleur · p95</text>
+  <rect x="100" y="118" width="520" height="52" className="gold" opacity="0.2" />
+  <rect x="100" y="118" width="520" height="52" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" />
+  <text x="360" y="140" fontSize="11" fontWeight="600" textAnchor="middle" className="gold">Fiches de setups (trois au plus)</text>
+  <text x="360" y="158" fontSize="9" textAnchor="middle" className="muted">contexte, signal, exécution : rien d'autre ne se trade</text>
+  <rect x="100" y="178" width="520" height="46" className="box" strokeWidth="1" />
+  <text x="360" y="198" fontSize="10" fontWeight="600" textAnchor="middle">Process et protocoles</text>
+  <text x="360" y="215" fontSize="9" textAnchor="middle" className="muted">préparation · checklist · gestion · débrief · urgences</text>
+  <rect x="100" y="232" width="520" height="36" className="box" strokeWidth="1" opacity="0.7" />
+  <text x="360" y="255" fontSize="10" textAnchor="middle" className="muted">Analyse en direct, opinions, intuitions : dernier rang</text>
+  <text x="360" y="290" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">« deux trades par jour » + la raison : « le troisième a une expectancy de −0,53R sur 34 occurrences »</text>
+</svg>
+</Figure>
+
+## Les critères de revue et de mise à jour
+
+Un playbook se modifie, mais **pas n'importe quand ni n'importe comment**. Trois cadences et trois portes d'entrée.
+
+**Modification de process** (partie 5 et parties 4 en partie) : décidée en **revue hebdomadaire**, une seule à la fois, vérifiable quatre semaines plus tard sur un indicateur précis. C'est le seul changement fréquent, et c'est celui qui produit l'essentiel des progrès du niveau 8.
+
+**Modification de risque** (partie 2) : décidée en **revue mensuelle**, sur la conformité et l'échantillon cumulé, jamais sur le résultat d'un mois. Une augmentation de taille exige trois conditions simultanées : conformité supérieure à 90 % sur trois mois, échantillon suffisant sur la fiche concernée, et drawdown courant sous le p90. Une réduction de taille, elle, peut se décider n'importe quand : réduire est toujours autorisé.
+
+**Modification de fiche** (partie 3) : décidée en **revue trimestrielle**, après passage complet du protocole du niveau 7 (idée au carnet, fiche figée, test in-sample, out-of-sample regardé une seule fois, robustesse, checklist anti-overfitting). Une fiche entre si une autre sort. La version s'incrémente, l'ancienne version reste dans un historique.
+
+**Le journal des versions**, en fin de playbook, tient une ligne par modification : date, partie modifiée, ancien texte, nouveau texte, raison, indicateur de vérification, résultat de la vérification. Cet historique est ce qui distingue un playbook d'une collection de bonnes intentions : au bout d'un an, il montre ce qui a été essayé, ce qui a tenu et ce qui a été abandonné, et il empêche de tourner en rond.
+
+Deux garde-fous simples. **Pas de modification en séance ni le jour même d'une perte** : toute idée attend la revue. Et **pas plus de trois modifications par mois**, toutes parties confondues : au-delà, ce n'est plus un playbook, c'est un chantier, et l'on ne peut plus attribuer un changement de résultat à un changement de règle.
+
+## Un document vivant, pas un trophée
+
+Le playbook échoue de deux façons opposées, et les deux sont fréquentes.
+
+**Le playbook-trophée** : quarante pages soignées, écrites en une fois, jamais rouvertes. Il donne le sentiment d'avoir travaillé, il ne change aucune décision. Les symptômes : des phrases générales (« rester discipliné », « suivre la tendance »), aucune statistique mesurée, aucune date, aucun journal des versions, aucune trace d'usure sur la version imprimée.
+
+**Le playbook-chantier** : réécrit toutes les semaines, avec des règles qui changent au gré des résultats récents. Il donne le sentiment de progresser, il empêche toute mesure : quand tout bouge, rien n'est attribuable. Les symptômes : plusieurs versions par mois, des seuils non ronds qui se déplacent, des fiches qui entrent et sortent sans passer par la validation.
+
+Le playbook utile est **ennuyeux, daté et usé**. Ennuyeux, parce qu'il ne contient que des règles avec des nombres. Daté, parce que chaque page porte une version et chaque fiche un état. Usé, parce qu'il est ouvert tous les jours à la même heure. Un bon test : ouvrez-le à une page au hasard et demandez-vous « qu'est-ce que cette ligne me fait faire différemment demain ? ». Si la réponse est « rien » pour plus d'un tiers des lignes, le playbook est trop long.
+
+Un dernier point, qui relève de la sécurité autant que de la méthode : le playbook contient des informations sur un compte réel. On le sauvegarde (deux copies, dont une hors de l'ordinateur de trading), on n'y écrit **jamais** d'identifiants ni de mots de passe, et l'on garde à l'esprit qu'il constitue, en cas de litige avec un courtier ou de question fiscale, la meilleure trace de ce qui a été fait et pourquoi (les points de vigilance juridiques et fiscaux sont abordés au chapitre 6, et relèvent d'un professionnel local).
+
+<Figure caption="Figure 3 · Deux échecs symétriques : le playbook-trophée (long, général, jamais rouvert) et le playbook-chantier (réécrit chaque semaine, plus rien n'est attribuable). Le playbook utile est ennuyeux, daté et usé, avec un journal des versions et au plus trois modifications par mois.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Playbook trophée, chantier, utile" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="40" width="200" height="180" rx="6" className="box" strokeWidth="1" />
+  <text x="130" y="64" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Trophée</text>
+  <text x="40" y="88" fontSize="9">40 pages soignées</text>
+  <text x="40" y="106" fontSize="9">écrit en une fois</text>
+  <text x="40" y="124" fontSize="9">« rester discipliné »</text>
+  <text x="40" y="142" fontSize="9">aucune statistique</text>
+  <text x="40" y="160" fontSize="9">aucune date</text>
+  <text x="40" y="178" fontSize="9">jamais rouvert</text>
+  <text x="40" y="202" fontSize="9" className="red" fontWeight="600">ne change aucune décision</text>
+  <rect x="260" y="40" width="200" height="180" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="64" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Chantier</text>
+  <text x="270" y="88" fontSize="9">réécrit chaque semaine</text>
+  <text x="270" y="106" fontSize="9">seuils qui se déplacent</text>
+  <text x="270" y="124" fontSize="9">fiches qui entrent et sortent</text>
+  <text x="270" y="142" fontSize="9">plusieurs versions par mois</text>
+  <text x="270" y="160" fontSize="9">règles suivant les résultats</text>
+  <text x="270" y="178" fontSize="9">récents</text>
+  <text x="270" y="202" fontSize="9" className="red" fontWeight="600">plus rien n'est attribuable</text>
+  <rect x="490" y="40" width="200" height="180" rx="6" className="green" opacity="0.15" />
+  <rect x="490" y="40" width="200" height="180" rx="6" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="590" y="64" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Utile</text>
+  <text x="500" y="88" fontSize="9">15 à 25 pages</text>
+  <text x="500" y="106" fontSize="9">des nombres partout</text>
+  <text x="500" y="124" fontSize="9">chaque règle a sa raison</text>
+  <text x="500" y="142" fontSize="9">versions datées, états de fiche</text>
+  <text x="500" y="160" fontSize="9">journal des versions</text>
+  <text x="500" y="178" fontSize="9">3 modifications par mois au plus</text>
+  <text x="500" y="202" fontSize="9" className="green" fontWeight="600">ennuyeux, daté, usé</text>
+  <text x="360" y="252" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">test : ouvrir à une page au hasard et demander « qu'est-ce que cette ligne me fait faire différemment demain ? »</text>
+  <text x="360" y="276" fontSize="10" textAnchor="middle" className="muted">si la réponse est « rien » pour plus d'un tiers des lignes, le playbook est trop long</text>
+</svg>
+</Figure>
+
+## Deux trades, vus depuis le playbook
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, fiche « Sweep-FVG », version 3, état validée"
+  direction="Long"
+  setup="Playbook ouvert à 15 h 05 : partie 2 (budget 0,75 %, drawdown courant −7R, sous le p90 de 18R : taille pleine), partie 4 (aucune annonce de niveau 1, fenêtre normale), partie 3 (fiche Sweep-FVG, cas d'école n° 2 en référence) ; signal complet à 16 h 22 sur le PDL préparé"
+  entree="5 512,00"
+  stop="5 503,50 (34 ticks)"
+  objectif="C1 5 524,75 ; C2 5 537,50"
+  r="+2,2R">
+
+Ce trade illustre le rôle réel du playbook : à aucun moment le trader n'a « décidé » quelque chose en séance. La taille venait de la partie 2 (et le drawdown courant, comparé au p90, autorisait la taille pleine), la fenêtre et l'absence de news de la partie 4, la reconnaissance du motif de la capture de référence de la partie 3, la gestion de la partie 5. Le playbook n'a pas rendu le trade gagnant ; il a rendu le trade **exécutable sans délibération**, ce qui est sa seule fonction.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, setup absent du playbook"
+  direction="Short"
+  setup="Playbook non ouvert ce jour-là ; le trader reconnaît « une configuration qu'il avait vue dans une vidéo » (compression puis cassure), sans fiche, sans statistiques, sans conditions d'invalidité ; taille estimée « à peu près comme d'habitude »"
+  entree="18 640,00"
+  stop="18 682,00 (168 ticks)"
+  objectif="18 560,00"
+  r="−1,05R">
+
+La perte est ordinaire ; la faute est structurelle. Le setup existait dans la bibliothèque du niveau 7 (compression de volatilité) et figurait dans l'annexe du playbook sous la mention « vu, hors sélection » : le trader l'avait déjà examiné et écarté six mois plus tôt, faute de temps pour le tester. Sans cette annexe, il l'aurait redécouvert et retesté ; avec elle, il aurait dû s'abstenir. La décision de revue : la ligne du hors-sélection est déplacée en première page de la partie 3, avec la date à laquelle chaque setup a été écarté et la raison. Le trade est classé hors plan et sort des statistiques.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le playbook est un **outil de travail unique**, de quinze à vingt-cinq pages, imprimable, en six parties : identité et cadre, **règles de risque**, fiches de setups, session et news, process et protocoles, suivi et revue.
+- La hiérarchie est stricte : le **risque prime sur les fiches**, les fiches priment sur l'envie, les protocoles priment sur l'analyse en direct ; chaque règle porte un **nombre** et une **raison en une demi-ligne**.
+- Les fiches portent un **en-tête d'état** (version, date, état, n, expectancy et intervalle, p90), deux à quatre **captures de référence** et un tableau de variantes ; trois fiches actives au maximum, plus une annexe « vu, hors sélection ».
+- Les modifications ont des cadences : **process en revue hebdomadaire** (une seule, vérifiable), **risque en revue mensuelle** (jamais sur un mois de résultat), **fiche en revue trimestrielle** (protocole complet du niveau 7) ; **trois modifications par mois au maximum** et un **journal des versions**.
+- Deux échecs symétriques : le **trophée** (long, général, jamais rouvert) et le **chantier** (réécrit sans cesse, plus rien n'est attribuable). Le bon playbook est **ennuyeux, daté et usé**.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Écrire la partie 1">
+
+Rédigez la partie 1 de votre playbook (identité et cadre) en moins de 150 mots, avec des nombres : capital alloué et capital total, courtier et plateforme, instruments, heures réellement disponibles, objectif de process du trimestre, et une phrase de soutenabilité.
+
+<Solution>
+
+Pas de corrigé unique ; un exemple conforme : « Capital total 40 000 € ; **capital alloué au trading 12 000 €** (le reste n'est pas exposé). Courtier X, plateforme Y, micros CME. Instruments : MES (fiche 1), EUR/USD spot (fiche 2). Heures réelles : 15 h 15 - 17 h 45 du lundi au jeudi ; vendredi non tradé (réunions) ; matinées indisponibles, donc la fiche 2 est en pause jusqu'à changement d'emploi du temps. Objectif du trimestre, en process : conformité supérieure à 90 %, préparation faite 100 % des jours tradés, journal rempli en séance 100 %. Soutenabilité : deux heures et demie par jour, quatre jours par semaine, plus 1 h 30 le samedi ; c'est compatible avec mon travail et ma vie familiale actuelle ; si l'un des deux change, je révise cette page avant toute autre. » Ce qu'on vérifie : deux capitaux distincts, des heures réalistes, un objectif sans euros, une fiche mise en pause parce que le cadre l'impose.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Détecter les fausses règles">
+
+Parmi ces huit lignes de playbook, dites lesquelles sont de vraies règles et réécrivez les autres.
+
+- (a) « Je reste discipliné et je ne force pas les trades. »
+- (b) « Risque par trade : 0,75 % du capital alloué. »
+- (c) « Je réduis la taille quand le marché devient dangereux. »
+- (d) « Deux trades par jour au plus (le troisième a une expectancy de −0,53R sur 34 occurrences). »
+- (e) « Je ne trade pas les jours de FOMC après 19 h 45. »
+- (f) « J'essaie de tenir mes trades plus longtemps. »
+- (g) « À −10R de drawdown : taille ÷ 2 jusqu'au retour au-dessus de −6R. »
+- (h) « Je suis la tendance sur les unités supérieures. »
+
+<Solution>
+
+Vraies règles : **(b), (d), (e), (g)** — un nombre, un déclencheur, une action, et pour (d) la raison chiffrée. À réécrire :
+- **(a)** → « Une case non cochable de la checklist annule le trade ; toute entrée hors des six cases est classée hors plan et arrête la journée. »
+- **(c)** → « Régime en range de stress (ratio ATR 5/20 supérieur à 1,6 ou VIX supérieur à 25) : aucune entrée ; tendance agitée : taille ÷ 2 et stops × 1,5. »
+- **(f)** → « Sortie de 50 % à C1, stop du solde à BE + 1 tick, trailing sous les HL M15 ; aucune sortie manuelle avant C1 sauf protocole news. » (Et si l'idée est de modifier les cibles, elle va au carnet, pas au playbook.)
+- **(h)** → « Achats autorisés seulement si structure quotidienne HH / HL ou range avec prix en moitié basse ; sinon setup refusé. »
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Décider d'une modification">
+
+Trois demandes de modification arrivent la même semaine. Pour chacune, dites si elle est recevable, à quelle revue elle appartient, et ce qu'il faut avant de l'appliquer.
+
+- (a) « Je veux passer de 2 à 3 micros par trade : le mois a été bon (+9R). »
+- (b) « Je veux ajouter une case "régime vérifié" en tête de ma checklist : j'ai pris trois trades hors régime ce mois-ci. »
+- (c) « Je veux passer mon displacement de 1,5 à 1,3 ATR : je rate trop de signaux. »
+
+<Solution>
+
+- **(a) Non recevable en l'état.** Appartient à la **revue mensuelle**. Il faut trois conditions simultanées : conformité supérieure à 90 % sur trois mois, échantillon suffisant sur la fiche, drawdown courant sous le p90 du Monte Carlo. Un bon mois n'est pas un critère (biais de récence, niveau 8) : le résultat d'un mois n'est pas distinguable du bruit.
+- **(b) Recevable.** C'est une modification de **process**, en **revue hebdomadaire**, une seule cette semaine, avec un indicateur de vérification : nombre de trades hors régime au cours des quatre prochaines semaines (cible : 0). C'est le type de changement qui produit l'essentiel des progrès.
+- **(c) Non recevable directement.** C'est une modification de **fiche** : elle appartient à la **revue trimestrielle** et exige le protocole du niveau 7 — idée au carnet, fiche figée avec le nouveau seuil, test in-sample, out-of-sample postérieur regardé une seule fois, surface de paramètres (plateau ou pic ?), checklist anti-overfitting. « Je rate trop de signaux » est un ressenti ; le nombre de signaux manqués et leur devenir se mesurent d'abord dans la colonne des non-trades.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le playbook comporte :",
+      options: [
+        "Autant de pages que nécessaire",
+        "Quinze à vingt-cinq pages en six parties, imprimables, dans l'ordre où on les consulte",
+        "Uniquement les fiches de setups",
+        "Un résumé du cours",
+      ],
+      answer: 1,
+      explain: "Au-delà, il n'est pas ouvert ; il doit tenir sur une table à 15 h 05.",
+    },
+    {
+      q: "En cas de conflit entre une fiche et une règle de risque :",
+      options: [
+        "La fiche gagne, elle est plus précise",
+        "La règle de risque gagne : elle prime sur tout le reste",
+        "On tranche au cas par cas",
+        "On demande un avis",
+      ],
+      answer: 1,
+      explain: "Risque, puis fiches, puis protocoles, puis analyse en direct : la hiérarchie est écrite.",
+    },
+    {
+      q: "Une règle de playbook valable ressemble à :",
+      options: [
+        "« Je reste discipliné »",
+        "« À −10R de drawdown : taille ÷ 2 jusqu'au retour au-dessus de −6R » (un déclencheur, un nombre, une action, une raison)",
+        "« Je suis la tendance »",
+        "« J'essaie de tenir mes trades plus longtemps »",
+      ],
+      answer: 1,
+      explain: "Chaque règle porte un nombre et une raison en une demi-ligne, qui sert le jour où l'on veut la contourner.",
+    },
+    {
+      q: "Une augmentation de taille se décide :",
+      options: [
+        "Après un bon mois",
+        "En revue mensuelle, si trois conditions sont réunies : conformité supérieure à 90 % sur trois mois, échantillon suffisant, drawdown courant sous le p90",
+        "En séance, quand tout va bien",
+        "Chaque trimestre automatiquement",
+      ],
+      answer: 1,
+      explain: "Réduire est toujours autorisé ; augmenter ne l'est que sous conditions.",
+    },
+    {
+      q: "Le journal des versions du playbook sert à :",
+      options: [
+        "Faire joli",
+        "Garder trace de chaque modification (date, ancien texte, nouveau, raison, indicateur, résultat) pour ne pas tourner en rond",
+        "Justifier les pertes",
+        "Remplacer le journal de trading",
+      ],
+      answer: 1,
+      explain: "Avec la limite de trois modifications par mois, il permet d'attribuer un changement de résultat à un changement de règle.",
+    },
+    {
+      q: "Un bon playbook est :",
+      options: [
+        "Long, inspirant et soigné",
+        "Ennuyeux, daté et usé : des règles avec des nombres, des versions et des états, ouvert tous les jours",
+        "Réécrit chaque semaine",
+        "Gardé en tête",
+      ],
+      answer: 1,
+      explain: "Test : à une page au hasard, « qu'est-ce que cette ligne me fait faire différemment demain ? » ; si la réponse est « rien » pour plus d'un tiers des lignes, il est trop long.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le playbook écrit, il reste à le voir fonctionner de bout en bout. Le chapitre suivant déroule une journée complète sur le NQ : contexte macro et régime, analyse top-down, construction du scénario et des niveaux, exécution et gestion, puis débrief chiffré avec les alternatives qui auraient pu se produire.
