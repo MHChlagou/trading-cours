@@ -9,6 +9,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 
 ## A – D
 
+- **0DTE** : option qui expire le jour même (zero days to expiration) ; theta brutal, très sensible au vol crush ; très échangée sur les indices.
 - **Absorption** : volume élevé sur un niveau sans progression du prix : de gros ordres limites absorbent les ordres agressifs adverses.
 - **Accumulation / distribution (Wyckoff)** : range après une baisse (accumulation) ou une hausse (distribution) où les gros opérateurs construisent ou liquident une position ; phases A à E avec événements nommés.
 - **AR (automatic rally / reaction)** : rebond automatique après le climax (SC ou BC), qui définit la borne opposée du range Wyckoff.
@@ -16,6 +17,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **ATR (Average True Range)** : mesure de la volatilité moyenne sur N périodes, utilisée pour dimensionner stops et objectifs.
 - **Averaging down (moyenne à la baisse)** : ajout à une position perdante pour améliorer le prix moyen ; inverse du pyramidage, source de pertes de plusieurs R.
 - **Backwardation / contango (VIX)** : structure à terme des futures VIX : échéances lointaines plus chères que le spot (contango, normal) ou moins chères (backwardation, stress).
+- **Base (crypto)** : écart entre le prix d'un future daté et le spot, annualisé ; positive en contango (levier long dominant), proche de zéro ou négative en peur.
 - **Bid** : meilleur prix auquel les acheteurs acceptent d'acheter. On vend au bid.
 - **Bid × ask (footprint)** : à chaque prix d'une bougie, volume échangé au bid (ventes agressives) et à l'ask (achats agressifs) ; distingue qui a pris l'initiative.
 - **BOS (Break of Structure)** : cassure d'un swing dans le sens de la tendance, signe de continuation.
@@ -23,19 +25,23 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Bracket (ordre)** : ordre d'entrée qui, une fois exécuté, place automatiquement le stop et l'objectif liés en OCO.
 - **Breaker block** : order block traversé en clôture par un displacement qui casse la structure ; au retour du prix, il agit dans le sens inverse (changement de polarité).
 - **Budget de risque** : perte maximale acceptée par trade, par session, par jour ou par semaine, exprimée en R ; un plafond atteint arrête le niveau concerné.
+- **Call / put** : option donnant le droit d'acheter (call) ou de vendre (put) un actif à un strike jusqu'à une échéance ; l'acheteur paie une prime, le vendeur l'encaisse.
 - **Carnet d'ordres (order book)** : ensemble des ordres limites en attente, côté acheteurs (bids) et vendeurs (asks), à partir duquel le prix se forme.
+- **Carte de liquidation** : estimation des prix où se concentrent les seuils de liquidation des positions à levier ; réservoirs de liquidité en dollars propres à la crypto.
 - **Cascade de liquidation** : ventes (ou achats) forcés en chaîne quand les seuils de liquidation regroupés d'un côté chargé sont atteints ; mécanisme du squeeze.
 - **Cause et effet (loi de)** : l'ampleur du mouvement qui suit un range est proportionnelle à la durée et à la largeur du range ; base des projections Wyckoff.
 - **CFD (Contract for Difference)** : contrat de gré à gré avec un broker qui réplique la variation d'un sous-jacent ; coût dominant : spread et financement quotidien.
 - **CFTC / NFA** : régulateur fédéral américain des futures (CFTC) et organisme d'autorégulation des brokers de futures (NFA).
 - **Changement de polarité** : un support cassé devient résistance (et inversement), parce que les participants piégés sortent au retour et les vainqueurs rajoutent.
 - **CHoCH (Change of Character)** : première cassure contre la tendance en cours, indice précoce de retournement.
+- **CL / MCL** : futures NYMEX sur le brut WTI ; CL porte sur 1 000 barils (tick 0,01 $ = 10 $), MCL sur 100 barils (1 $ le tick) ; échéances mensuelles.
 - **Climax** : bougie à volume extrême et grande fourchette en bout de mouvement prolongé, souvent suivie d'un retournement ou d'un range.
 - **Commercials / non-commercials / non-reportables** : les trois catégories du rapport COT legacy : hedgers, grands spéculateurs, petits ; leurs positions nettes se compensent.
 - **Commission** : frais fixe facturé par le broker par ordre, par contrat ou par lot, à l'achat et à la vente.
 - **Composite man** : grille de lecture de Wyckoff : imaginer un opérateur unique, rationnel, contraint par la taille, qui accumule bas et distribue haut.
 - **Confluence** : coïncidence de raisons indépendantes (structure, niveau horizontal, chiffre rond, volume) sur une même zone de prix.
 - **Consensus (macro)** : prévision moyenne des économistes pour une publication ; il est déjà dans le prix, seule la surprise (écart au consensus) fait bouger.
+- **Contango / backwardation (pétrole)** : structure à terme des futures de brut : échéances lointaines plus chères (sur-approvisionnement, stockage) ou moins chères (tension immédiate).
 - **Contraction / expansion** : cycle de la volatilité : bougies qui rétrécissent puis mouvement d'ampleur ; la contraction annonce un mouvement, pas sa direction.
 - **Corrélation** : mesure de −1 à +1 du lien entre les rendements de deux actifs sur une fenêtre donnée ; elle change avec le régime et monte dans les crises.
 - **COT (Commitments of Traders)** : rapport hebdomadaire de la CFTC détaillant le positionnement des grandes catégories d'intervenants sur les futures.
@@ -47,6 +53,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Dealing desk (market maker)** : modèle de broker qui prend l'autre côté des trades de ses clients, en couvrant ou non son risque.
 - **Dealing range** : fourchette entre un swing bas et un swing haut significatifs, partagée en premium (moitié haute) et discount (moitié basse).
 - **Delta (order flow)** : différence entre volumes exécutés à l'achat agressif et à la vente agressive.
+- **Delta, gamma, theta, vega** : sensibilités d'une option : au prix du sous-jacent (delta), à la variation du delta (gamma), au temps (theta), à la volatilité implicite (vega).
 - **Déséquilibre (imbalance)** : à un prix, ratio ≥ 3 entre l'ask et le bid du prix inférieur (déséquilibre acheteur) ou l'inverse (vendeur) ; empilés sans résultat, absorption ; avec résultat, impulsion.
 - **Displacement** : mouvement impulsif et rapide qui casse un niveau avec conviction, laissant souvent des FVG.
 - **Divergence de delta** : prix en nouvel extrême sans que le CVD ne suive (ou delta de la bougie d'extrême contraire) ; indice d'épuisement valable aux extrêmes, pas une entrée.
@@ -63,6 +70,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 ## E – O
 
 - **Effort et résultat (loi de)** : comparaison du volume (effort) au mouvement de prix (résultat) ; un gros effort sans résultat signale une absorption.
+- **EIA (rapport)** : publication hebdomadaire des stocks américains de brut et de produits, le mercredi à 16 h 30 (Paris) ; bouge le brut de 1 à 3 % ; se lit et se protège comme un CPI.
 - **EQH / EQL (equal highs / lows)** : plus hauts ou plus bas égaux à quelques ticks près ; réservoirs de stops majeurs, cibles fréquentes des sweeps.
 - **Equity curve (courbe de capital)** : évolution du capital dans le temps, souvent tracée en R cumulés ; sert de base aux paliers de réduction du risque.
 - **ES / MES** : futures CME sur le S&P 500 ; ES vaut 50 $ le point, MES (micro) 5 $ le point, tick de 0,25.
@@ -78,6 +86,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Futures (contrat à terme)** : contrat standardisé coté en Bourse engageant à acheter ou vendre un actif à une date et un prix fixés ; le trader clôture avant l'échéance.
 - **Futures de Fed funds** : contrats CME cotant le taux directeur moyen attendu par mois (100 − prix) ; donnent la probabilité implicite d'un mouvement à chaque réunion.
 - **FVG (Fair Value Gap)** : déséquilibre laissé par une bougie impulsive, zone où le prix n'a pas été échangé des deux côtés.
+- **Gamma flip** : niveau de prix où l'exposition gamma nette des market makers change de signe ; au-dessus, leur couverture freine le marché ; en dessous, elle l'accélère.
 - **GC / MGC** : futures CME sur l'or ; GC porte sur 100 onces (10 $ le tick de 0,10), MGC sur 10 onces (1 $ le tick).
 - **Grille de réaction** : scénarios écrits avant une publication (au-dessus, conforme, en dessous du consensus) avec la réaction attendue de chaque actif selon la phase.
 - **GTC (good till canceled)** : ordre valable jusqu'à annulation manuelle ; réglage normal d'un stop de protection.
@@ -100,6 +109,8 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Liquidity sweep** : incursion rapide au-delà d'un niveau évident pour déclencher les stops, suivie d'un retour.
 - **Lot (forex)** : unité de taille : lot standard 100 000 unités, mini-lot 10 000, micro-lot 1 000.
 - **LPS / LPSY (last point of support / supply)** : repli sur volume faible après le SOS (ou rebond après le SOW) qui tient au-dessus (ou en dessous) de l'ancien range ; point d'entrée classique de Wyckoff.
+- **Majeures / croisées / exotiques** : paires forex avec le dollar contre une grande devise (majeures), entre deux grandes devises sans dollar (croisées), avec une devise émergente ou peu liquide (exotiques, à éviter).
+- **Marge (Bourse / intraday / de nuit)** : dépôt exigé pour tenir un future ; la marge intraday du broker est très inférieure à la marge de Bourse exigée pour une position gardée la nuit ; la marge n'est pas le risque.
 - **Marge (futures)** : dépôt exigé par la Bourse ou le broker pour tenir un contrat ; source du levier implicite des futures.
 - **Market (ordre au marché)** : ordre exécuté immédiatement au meilleur prix disponible ; garantit l'exécution, pas le prix.
 - **Markup / markdown** : tendance haussière (markup) ou baissière (markdown) qui suit un range d'accumulation ou de distribution.
@@ -117,6 +128,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **OHLC** : open, high, low, close : les quatre prix d'une bougie.
 - **Open Interest (OI)** : nombre de contrats futures ou options ouverts et non clôturés.
 - **Open interest (OI)** : nombre de contrats futures ouverts et non clôturés ; se lit en variation et croisé avec le prix (nouveaux longs, short covering, nouveaux shorts, long liquidation).
+- **OPEP+** : organisation des pays exportateurs de pétrole et ses alliés, qui fixe des quotas de production ; ses réunions et surprises font des gaps et des journées de tendance sur le brut.
 - **Order Block** : dernière bougie contraire avant un mouvement impulsif, zone d'intérêt pour un retour du prix.
 - **OTC (over the counter, gré à gré)** : marché sans Bourse centrale ni carnet unique, comme le forex spot ou les CFD.
 - **OTE (optimal trade entry)** : portion de 62 à 79 % de retracement d'un mouvement (centre 70,5 %), zone privilégiée pour un retour en tendance, en confluence avec un FVG ou un OB.
@@ -127,13 +139,16 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Palier de réduction** : règle écrite d'avance qui divise le risque par trade à partir d'un certain drawdown en R (par exemple 1 % → 0,5 % à −10R).
 - **PDH / PDL, PWH / PWL** : plus haut et plus bas de la veille (previous day) et de la semaine précédente (previous week) ; réservoirs de liquidité par construction.
 - **PDR (pattern day trader)** : règle américaine imposant 25 000 $ de capital pour dépasser trois allers-retours intraday sur cinq jours en actions.
+- **Perpétuel (perpetual swap)** : future crypto sans échéance, aligné sur l'index par le funding ; USDT-margined (P&L en dollars) ou coin-margined (P&L en crypto).
 - **Phases A à E (Wyckoff)** : arrêt de la tendance (A), construction de la cause (B), test final : spring ou UTAD (C), sortie : SOS ou SOW puis LPS ou LPSY (D), tendance (E).
 - **Pip** : plus petite variation usuelle d'une paire forex (0,0001 sur EUR/USD) ; vaut environ 10 $ par lot standard.
+- **Pit (CL)** : séance de criée héritée du brut, 15 h 30 - 20 h 30 (Paris), pendant laquelle le volume est concentré ; settlement à 20 h 30.
 - **POC (Point of Control)** : prix ayant échangé le plus de volume sur un profil donné.
 - **POC (point of control)** : prix ayant échangé le plus de volume sur un profil ; aimant et pivot.
 - **Position sizing** : calcul de la taille de position pour qu'un stop touché coûte exactement le risque décidé.
 - **Power of Three (PO3, AMD)** : forme d'une session en trois temps : accumulation (range), manipulation (sweep contre le biais), distribution (le mouvement) ; ne donne pas la direction.
 - **Premium / discount** : moitié haute et moitié basse d'une dealing range ; dans une structure haussière on achète le discount, dans une structure baissière on vend le premium.
+- **Prix index / prix de marque (crypto)** : moyenne des prix spot de plusieurs plateformes (index) et prix de référence utilisé pour les liquidations (marque, proche de l'index) ; à distinguer du prix du perpétuel.
 - **Profil composite** : profil de volume sur plusieurs séances ou semaines ; donne les HVN, LVN, POC et value area de contexte.
 - **Profil de session / de range** : profil de volume sur une séance (niveaux du lendemain) ou entre deux swings (valeur d'un mouvement).
 - **Profit factor** : gains bruts divisés par pertes brutes d'une série de trades.
@@ -152,6 +167,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Risk of ruin (probabilité de ruine)** : probabilité qu'un système finisse par perdre une fraction définie du capital ; dépend surtout de la fraction risquée par trade.
 - **Risk-on / risk-off** : humeur du marché : recherche du rendement (actions, matières, devises à risque montent) ou fuite du risque (obligations, dollar, yen montent) ; grille rapide qui s'inverse en partie selon le régime.
 - **Risque fixe (en pourcentage)** : règle qui fixe la perte au stop à une fraction constante du capital courant (0,5 à 1 %), taille recalculée à chaque trade.
+- **Roulement (roll)** : passage du contrat future qui expire au suivant ; mensuel sur le brut, bimestriel sur l'or, trimestriel sur les indices ; à faire une semaine avant l'expiration, sur des séries ajustées.
 - **RTH (regular trading hours)** : séance principale d'un marché, par exemple 9 h 30 à 16 h heure de New York pour les indices américains.
 - **Saisonnalité** : régularité calendaire d'un marché ; robuste si cause physique, échantillon long, survie au retrait des extrêmes ; biais de contexte à combiner, jamais tradé seul.
 - **SC / BC (selling / buying climax)** : bougie très large sur volume maximal avec longue mèche, qui arrête la tendance précédente et définit une borne du range Wyckoff.
@@ -159,8 +175,10 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Ségrégation des fonds** : détention des fonds clients sur des comptes séparés de la trésorerie du broker, chez une banque tierce.
 - **Sentiment** : humeur agrégée des participants (enquêtes, put / call, flux, indices composites) ; lecture contrarienne aux extrêmes seulement.
 - **Série de pertes (losing streak)** : suite de pertes consécutives ; statistiquement certaine sur un échantillon long (7 de suite : 7 chances sur 10 sur 100 trades à 40 % de réussite).
+- **Seuil de liquidation** : prix auquel une position à levier est fermée d'office par la plateforme ; approximativement entrée × (1 − 1/levier + marge de maintenance) pour un long.
 - **Short covering / long liquidation** : hausse (ou baisse) produite par le rachat (ou la vente) forcé de positions existantes, OI en baisse ; mouvement fragile, souvent bref.
 - **Silver bullet** : gabarit ICT : FVG formé dans une fenêtre horaire précise, dans le sens du biais, après une prise de liquidité ; cas particulier de la séquence sweep-FVG-retour.
+- **Skew (options)** : asymétrie de la volatilité implicite par strike : sur les indices, les puts OTM sont plus chers que les calls OTM ; il se raidit avec la peur.
 - **Slippage** : écart entre le prix demandé et le prix réellement exécuté.
 - **Smart money** : participants qui exécutent en taille et avec méthode (fonds, banques, market makers) ; se distinguent par la contrainte de taille, pas par la clairvoyance.
 - **SOS / SOW (sign of strength / weakness)** : mouvement large sur volume qui sort du range Wyckoff par le haut (SOS) ou le bas (SOW) ; l'équivalent du displacement.
@@ -172,6 +190,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **ST (secondary test)** : retour vers le climax sur volume plus faible et fourchette plus étroite ; confirme que l'offre (ou la demande) a diminué.
 - **Stop (stop-market)** : ordre déclenché quand le prix touche un niveau, puis exécuté au marché ; sert de protection ou d'entrée sur cassure.
 - **Stop-limit** : ordre stop qui devient un ordre limite au déclenchement ; garantit le prix mais pas la sortie, jamais en protection.
+- **Straddle** : achat simultané d'un call et d'un put au même strike ; son prix approxime le mouvement attendu par le marché d'ici l'échéance.
 - **Structure externe / interne** : structure des swings de l'unité de contexte (externe) et de l'unité d'exécution à l'intérieur d'un mouvement externe (interne) ; un repli est « externe haussier, interne baissier ».
 - **Support** : zone de prix où les acheteurs ont arrêté une baisse par le passé.
 - **Sur-risque** : taille de position telle qu'une série normale de pertes détruit une part irrécupérable du compte.
@@ -180,6 +199,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Swing (high / low)** : point de retournement local, confirmé après coup ; seuls les swings significatifs (unité de structure, réaction nette) définissent la structure.
 - **Tape (time and sales)** : liste des transactions exécutées en temps réel ; se lit aux moments clés avec une question précise, jamais en continu.
 - **Taux de réussite (win rate)** : part des trades gagnants sur une série ; ne dit rien seul, il se combine au ratio gain moyen sur perte moyenne.
+- **Taux réels** : rendement des obligations moins l'inflation anticipée (les TIPS aux États-Unis) ; driver principal de l'or.
 - **Tick** : plus petite variation de prix autorisée sur un contrat ; sa valeur en dollars dépend du contrat.
 - **Tick volume** : nombre de changements de prix pendant une bougie, affiché comme « volume » sur le forex spot ; indicateur d'activité, pas de quantité échangée.
 - **Time in force** : durée de validité d'un ordre : DAY, GTC, GTD, IOC, FOK.
@@ -191,7 +211,9 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Value Area** : zone de prix concentrant environ 70 % du volume d'un profil (bornes VAH et VAL).
 - **Value area (VA), VAH, VAL** : zone contiguë autour du POC contenant environ 70 % du volume ; VAH et VAL sont ses bornes, frontières entre accepté et rejeté.
 - **VIX** : volatilité implicite à 30 jours des options sur le S&P 500 ; thermomètre de régime par son niveau, sa direction et sa structure à terme.
+- **Vol crush** : effondrement de la volatilité implicite juste après une annonce ; fait perdre l'acheteur d'option même quand il a raison sur la direction.
 - **Volume relatif** : volume d'une bougie rapporté au volume moyen des bougies comparables (mêmes heures des jours précédents) ; une valeur ≥ 2 est une anomalie à expliquer.
+- **VWAP** : prix moyen pondéré par le volume depuis l'ouverture de la séance ; référence institutionnelle et niveau intraday vers lequel le prix revient souvent.
 - **Whipsaw (post-annonce)** : aller-retour brutal du prix dans les deux sens sur carnet vide dans les secondes qui suivent une publication ; exécute les stops serrés des deux côtés.
 - **Zone (support / résistance)** : bande de prix, et non ligne, englobant corps et mèches des réactions ; on entre dedans sur signal, on met le stop au-delà, on juge la cassure sur une clôture.
 - **Zoom-in émotionnel / zoom-out justificatif** : descendre d'unité pour surveiller (et sortir sur du bruit) ; monter d'unité pour ne pas avoir tort (et retirer son stop). Deux erreurs multi-timeframe classiques.
