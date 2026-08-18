@@ -1,0 +1,372 @@
+---
+title: "Examen · Niveau 6 · Marchés spécifiques"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider le niveau 6 : futures ES et NQ, or et pétrole, sessions forex, options et grecques, spécificités crypto. Score de passage : 80 %."
+---
+
+# Examen · Niveau 6 · Marchés spécifiques
+
+Cet examen valide les cinq chapitres du niveau 6. Il comporte **25 questions** en cinq blocs (un par marché), puis **une étude de cas notée sur 20 points** qui fait passer le même trader d'un marché à l'autre au cours d'une même journée, avec les réglages propres à chacun.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Le niveau 7 suppose que les spécifications, les heures et les réglages de chaque marché sont connus.
+
+## Bloc 1 · Futures ES et NQ
+
+<Quiz
+  title="Bloc 1 · Indices"
+  questions={[
+    {
+      q: "Un point de MNQ vaut :",
+      options: [
+        "20 $",
+        "2 $ (tick 0,25 = 0,50 $) ; le NQ standard vaut 20 $ le point",
+        "5 $",
+        "50 $",
+      ],
+      answer: 1,
+      explain: "ES 50 $, MES 5 $, NQ 20 $, MNQ 2 $ ; le micro est le dixième ; la marge n'est pas le risque.",
+    },
+    {
+      q: "La session RTH des futures d'indices (Paris, été) :",
+      options: [
+        "0 h - 8 h",
+        "15 h 30 - 22 h, avec 70 à 80 % du volume, l'initial balance, la pause de midi, la reprise et la dernière demi-heure",
+        "8 h - 15 h 30",
+        "22 h - 23 h",
+      ],
+      answer: 1,
+      explain: "L'Asie construit la liquidité, l'Europe balaie, la RTH décide.",
+    },
+    {
+      q: "Le NQ par rapport à l'ES :",
+      options: [
+        "Est plus lent",
+        "Est plus concentré, directionnel et nerveux, plus sensible aux taux ; sweeps et FVG plus larges ; les deux dans le même sens sont une position doublée",
+        "Est identique",
+        "N'a pas de micro",
+      ],
+      answer: 1,
+      explain: "L'ES est idéal pour apprendre ; le NQ offre plus de points avec des stops plus larges ; le ratio NQ / ES lit la santé de la hausse.",
+    },
+    {
+      q: "Les niveaux du matin sur l'ES comprennent :",
+      options: [
+        "Une seule moyenne mobile",
+        "PDH / PDL / POC / VAH / VAL, ONH / ONL, PWH / PWL, structure H4 / H1, FVG et OB HTF, puis ouverture, IB, VWAP ; sept au plus, confluences en priorité",
+        "Quinze lignes",
+        "Aucun",
+      ],
+      answer: 1,
+      explain: "Ils sont les mêmes chaque jour, donc regardés par tous, donc chargés de liquidité.",
+    },
+    {
+      q: "Une cassure du bas de l'IB contre la structure H1, droit sur une confluence PDL / VAL / HL :",
+      options: [
+        "Est un signal de journée de tendance baissière",
+        "Est souvent un sweep : la cassure d'IB signale une tendance quand elle va dans le sens de la structure et vers du vide",
+        "Se vend au marché",
+        "Est sans importance",
+      ],
+      answer: 1,
+      explain: "Les niveaux du matin auraient dit non ; la matrice de régimes aussi.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Or et pétrole
+
+<Quiz
+  title="Bloc 2 · Métal et énergie"
+  questions={[
+    {
+      q: "Le driver principal de l'or est :",
+      options: [
+        "La bijouterie",
+        "Les taux réels, puis le dollar et les achats des banques centrales",
+        "Le pétrole",
+        "Les stocks EIA",
+      ],
+      answer: 1,
+      explain: "L'or ne rapporte rien ; son coût d'opportunité est le rendement réel. La corrélation s'affaiblit quand un flux domine.",
+    },
+    {
+      q: "Le contrat CL :",
+      options: [
+        "Expire trimestriellement",
+        "A une échéance mensuelle ; rouler une semaine avant ; lire les niveaux sur une série ajustée",
+        "N'expire jamais",
+        "Se règle en or",
+      ],
+      answer: 1,
+      explain: "Le spread calendaire entre échéances peut atteindre des dizaines de cents ; garder le contrat expirant est un piège.",
+    },
+    {
+      q: "Le rapport EIA :",
+      options: [
+        "Tombe le lundi matin",
+        "Publie les stocks américains le mercredi à 16 h 30 (Paris) et bouge le brut de 1 à 3 % ; se lit et se protège comme un CPI",
+        "Concerne l'or",
+        "Est sans effet",
+      ],
+      answer: 1,
+      explain: "Consensus, surprise, second chiffre (produits raffinés, Cushing) ; protocole news.",
+    },
+    {
+      q: "Le pétrole comparé à l'or, en volatilité :",
+      options: [
+        "Est moins volatil",
+        "Est deux à trois fois plus volatil en pourcentage, avec des mèches plus longues et des gaps ; on y trade plus petit et plus large",
+        "Est identique",
+        "Est nul la nuit",
+      ],
+      answer: 1,
+      explain: "ATR quotidien 2 à 5 % contre 0,7 à 1,7 % ; le swing sur MCL est hors de portée des petits comptes à 1 %.",
+    },
+    {
+      q: "Un titre géopolitique fait bondir le brut de 4 %. Vous :",
+      options: [
+        "Achetez le pic",
+        "Distinguez le titre (le pic) de l'effet sur les barils (la tendance) ; attendez stocks, structure à terme, OPEP ; ne courez pas après",
+        "Vendez au marché",
+        "Doublez",
+      ],
+      answer: 1,
+      explain: "La prime de risque monte et retombe en jours si l'offre physique n'est pas affectée.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Forex
+
+<Quiz
+  title="Bloc 3 · Sessions et paires"
+  questions={[
+    {
+      q: "L'heure de vérité du forex sur les majeures :",
+      options: [
+        "La session asiatique",
+        "Le chevauchement Londres - New York (14 h - 18 h, Paris) : volume maximal, spreads les plus serrés, données américaines",
+        "La nuit",
+        "Le dimanche soir",
+      ],
+      answer: 1,
+      explain: "L'ouverture de Londres (9 h - 11 h) balaie le range asiatique ; le chevauchement décide.",
+    },
+    {
+      q: "Une cassure du range asiatique pendant la session asiatique :",
+      options: [
+        "Est un signal fort",
+        "Est presque toujours fausse : l'Asie construit la liquidité que Londres et New York prendront",
+        "Se trade au marché",
+        "N'a pas de lien avec l'heure",
+      ],
+      answer: 1,
+      explain: "Asie = range ; Londres = balayage puis direction ; chevauchement = décision ; nuit = vide.",
+    },
+    {
+      q: "Avant de calculer une taille sur USD/JPY ou EUR/GBP :",
+      options: [
+        "On applique 0,10 $ par pip par micro-lot",
+        "On vérifie la valeur du pip, qui dépend de la devise de cotation et du cours",
+        "On double",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Première cause d'erreur de position sizing sur le forex.",
+    },
+    {
+      q: "Le rollover :",
+      options: [
+        "N'existe pas",
+        "Crédite ou débite chaque nuit (23 h) le différentiel de taux, triple le mercredi ; spread écarté autour ; à intégrer aux swings",
+        "Est une commission fixe",
+        "A lieu à midi",
+      ],
+      answer: 1,
+      explain: "Pas de stop serré ni d'entrée autour de 23 h ; un swing contre le différentiel paie chaque nuit.",
+    },
+    {
+      q: "Une stratégie de forex se construit :",
+      options: [
+        "Autour d'une paire à toute heure",
+        "Autour d'une session : disponibilité, paires actives, préparation, séquence attendue, fenêtre bornée, interdictions, mesure",
+        "Autour du rollover",
+        "Autour du spread",
+      ],
+      answer: 1,
+      explain: "La répétition à heure fixe rend l'expectancy mesurable.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Options
+
+<Quiz
+  title="Bloc 4 · Options et grecques"
+  questions={[
+    {
+      q: "L'acheteur d'un call a :",
+      options: [
+        "Une perte illimitée",
+        "Une perte bornée à la prime et un gain ouvert au-dessus du strike plus la prime",
+        "L'obligation d'acheter",
+        "La prime en revenu",
+      ],
+      answer: 1,
+      explain: "Le vendeur a le profil inverse. Prime = valeur intrinsèque + valeur temps.",
+    },
+    {
+      q: "Le delta mesure :",
+      options: [
+        "La fonte du temps",
+        "De combien la prime bouge par point de sous-jacent ; aussi l'équivalent sous-jacent et une probabilité approximative de finir dans la monnaie",
+        "La volatilité",
+        "La courbure",
+      ],
+      answer: 1,
+      explain: "Gamma = courbure (max à la monnaie et près de l'échéance) ; theta = fonte ; vega = sensibilité à la volatilité implicite.",
+    },
+    {
+      q: "La volatilité implicite :",
+      options: [
+        "Est la volatilité passée",
+        "Est cotée par le prix des options : le prix de la peur, mean-reverting, comparée au réalisé, avec un skew ; elle monte avant les annonces et s'effondre après",
+        "Est l'ATR",
+        "Est fixe",
+      ],
+      answer: 1,
+      explain: "Le vol crush explique qu'un acheteur d'option perde en ayant raison sur la direction.",
+    },
+    {
+      q: "En gamma positif, la couverture des market makers :",
+      options: [
+        "Accélère les mouvements",
+        "Freine : marché collant, gros strikes aimants, surtout à l'approche des expirations ; en gamma négatif, elle accélère",
+        "N'a pas d'effet",
+        "Fait monter le VIX",
+      ],
+      answer: 1,
+      explain: "Le gamma flip est une frontière de régime à relier à la matrice du niveau 5.",
+    },
+    {
+      q: "Acheter un call 0DTE 20 points OTM le matin d'un CPI « parce qu'il ne coûte que 6 points » :",
+      options: [
+        "Est à espérance positive",
+        "Expose au vol crush, au theta brutal et à la distance au strike : on peut avoir raison sur la direction et perdre toute la prime",
+        "Équivaut à un long MES",
+        "Est sans risque",
+      ],
+      answer: 1,
+      explain: "La perte bornée est un avantage ; le theta, le vega et la distance au strike en sont le prix.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Crypto
+
+<Quiz
+  title="Bloc 5 · Spécificités crypto"
+  questions={[
+    {
+      q: "La microstructure crypto :",
+      options: [
+        "A un carnet unique",
+        "A plusieurs plateformes et carnets alignés par arbitrage autour d'un index, une régulation inégale, des frais en pourcentage, un marché jamais fermé mais des heures creuses",
+        "N'a pas de levier",
+        "Ferme le week-end",
+      ],
+      answer: 1,
+      explain: "La contrepartie est le risque ; le volume et le profil dépendent de la plateforme.",
+    },
+    {
+      q: "Prix de liquidation approximatif d'un long à 64 000 $ avec un levier 20 (maintenance 0,5 %) :",
+      options: [
+        "57 900 $",
+        "61 100 $ (environ −4,5 %)",
+        "63 800 $",
+        "32 000 $",
+      ],
+      answer: 1,
+      explain: "Entrée × (1 − 1/L + 0,005). Si la liquidation est plus proche que le stop, le levier est trop élevé.",
+    },
+    {
+      q: "Les cartes de liquidation :",
+      options: [
+        "Prédisent le prix",
+        "Estiment où les seuils se concentrent : des réservoirs de liquidité en dollars ; le stop et la liquidation ne doivent jamais y être",
+        "Calculent le funding",
+        "Sont inutiles",
+      ],
+      answer: 1,
+      explain: "Une zone dense sous des EQL est la cible probable du prochain sweep et le départ d'une cascade.",
+    },
+    {
+      q: "Les données on-chain sont :",
+      options: [
+        "Un signal de timing",
+        "Du contexte de positionnement et de flux, jamais du timing ; à combiner ; méfiance envers les indicateurs construits après coup",
+        "Un remplaçant de la structure",
+        "Inutiles",
+      ],
+      answer: 1,
+      explain: "Un flux entrant record dit que le carburant est là, pas quand.",
+    },
+    {
+      q: "Une mèche de 5 % un dimanche à 6 h :",
+      options: [
+        "Est exceptionnelle",
+        "Est la norme des heures creuses : pas d'intraday le week-end, swings dimensionnés pour un gap, levier faible, stop placé",
+        "Est un signal d'achat",
+        "Est impossible",
+      ],
+      answer: 1,
+      explain: "Le stop non placé et le levier élevé transforment une mèche en liquidation.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Un trader, quatre marchés, une journée">
+
+Compte de **10 000 $**, risque 1 % (100 $ par trade), budget quotidien −2R, heat maximal 3 %. Le mercredi : CPI à 14 h 30, EIA à 16 h 30, FOMC à 20 h. Le trader suit MGC, EUR/USD, MES, MCL et un perpétuel BTC.
+
+**8 h 30.** Or : structure D haussière ; taux réels en baisse ; DXY en repli ; ATR M15 de l'or 3,2 $ ; range asiatique de l'or 2 366-2 378 avec EQL à 2 366-2 367. EUR/USD : range asiatique 1,0846-1,0868 ; structure H4 haussière ; spread 0,3 pip. Perpétuel BTC : funding +0,08 % depuis trois jours, OI record, carte de liquidation dense entre 61 000 et 62 500 sous des EQL à 63 000, prix 64 800, structure D étirée.
+
+**9 h 20.** Or : mèche M15 à 2 364,0 sous les EQL, clôture 2 369,5 ; bougie suivante +11 $, FVG M15 2 370-2 374 ; footprint : 600 contrats absorbés au bid sur 2 364-2 365. EUR/USD : mèche à 1,0841 sous le range, clôture 1,0850, displacement à 1,0871, FVG M15 1,0852-1,0858.
+
+**14 h 30.** CPI conforme au consensus (core 0,3 attendu 0,3) ; réaction : whipsaw de 20 points sur l'ES, retour au point de départ en 10 minutes ; taux et DXY inchangés.
+
+**16 h 30.** EIA : stocks +5,1 M contre −1,5 M attendu ; produits raffinés en hausse aussi ; brut : −2,4 % en 8 minutes, FVG M15 laissé entre 78,10 et 78,45 ; ATR M15 du brut ce jour : 0,42 $.
+
+**19 h 45.** Le trader est long MGC depuis 9 h 50 (voir question 1), en gain de 2,2R, stop remonté à +1R.
+
+1. **(3 pts)** Or, 9 h 50 : quel setup, quelle entrée, quel stop (sous le sweep + 0,5 ATR M15), quelle taille sur MGC, quel risque réel ?
+2. **(3 pts)** EUR/USD, 9 h 50 : même séquence ; entrée au bord haut du FVG (1,0856), stop sous le sweep + 5 pips ; taille en micro-lots ; puis : ce trade et le long or peuvent-ils être pris ensemble ? Justifiez avec le heat et la corrélation (or / EUR/USD à +0,45).
+3. **(3 pts)** CPI à 14 h 30 : que dit la grille pour un chiffre conforme, que fait le trader avec ses positions à 14 h 15, et que fait-il du whipsaw ?
+4. **(4 pts)** EIA à 16 h 30 : lecture (surprise, second chiffre, sens), protocole horaire, et, s'il cherche un short MCL au retour dans le FVG à 17 h : entrée 78,40, stop au-dessus du haut du whipsaw à 78,90 (50 ticks) : taille, risque, ratio vers 76,80 (nPOC), et pourquoi le stop ne doit pas être plus serré.
+5. **(4 pts)** BTC : le trader est tenté par un long « la structure est haussière ». Que disent funding, OI, carte de liquidation et EQL ? Quel serait le levier maximal acceptable pour un long avec un stop à 62 500 (3,5 %) et pourquoi ce trade est-il de toute façon écarté ? Que serait un trade cohérent plus tard ?
+6. **(3 pts)** 19 h 45, FOMC dans 15 minutes, long MGC en gain de 2,2R avec stop à +1R : quelles options le protocole autorise-t-il, et laquelle choisir pour un intraday ? Que se passe-t-il à 20 h avec les 3 % de heat si tout est encore ouvert ?
+
+<Solution>
+
+**1. Or (3 pts).** Setup : sweep des EQL asiatiques à l'ouverture de Londres avec absorption au footprint, displacement, FVG M15 : entrée au retour dans le FVG, **2 371,0** (bord bas + 1 $). Stop : sous le sweep 2 364,0 − 0,5 × 3,2 = 2 362,4 → **2 362,5** ; distance 8,5 $ = 85 $ par MGC. Budget 100 $ → **1 MGC**, risque réel **85 $**. Cible : PDH / EQH de la veille (par exemple 2 396, ratio ≈ 2,9).
+
+**2. EUR/USD (3 pts).** Entrée 1,0856, stop 1,0841 − 5 pips = **1,0836** ; distance 20 pips × 0,10 $ = 2 $ par micro-lot → 100 ÷ 2 = 50 → **50 micro-lots** (0,50 lot), risque 100 $. Ensemble : heat brut = 85 + 100 = 185 $ = **1,85 %**, sous le plafond de 3 % ; corrélation or / EUR/USD à +0,45 : lien modéré, risque effectif ≈ √(85² + 100² + 2 × 0,45 × 85 × 100) ≈ 158 $ (1,6 %) ; c'est en partie la même idée (« dollar faible »). Acceptable **avec taille réduite** sur le second (par exemple 30 micro-lots) pour garder le bloc « short dollar » sous 1,5 %, ou en prenant les deux mais en comptant qu'ils forment un thème.
+
+**3. CPI (3 pts).** Grille : conforme → pas de biais macro, lecture technique. À 14 h 15 : positions intraday fermées ou réduites à 1R avec stop élargi ; le long or (en gain) : stop remonté hors de portée du whipsaw ou position réduite ; pas de nouvelle position 14 h 15 - 14 h 50. Le whipsaw de 20 points sur l'ES qui revient à son point de départ : **aucun trade** ; c'est du bruit d'exécution sur carnet vide, sans surprise, donc sans direction ; on note et on attend.
+
+**4. EIA (4 pts).** Surprise **fortement baissière** (+5,1 M contre −1,5 M) et second chiffre cohérent (produits raffinés en hausse : la demande faiblit) : biais baissier brut confirmé par le displacement. Protocole : rien 16 h 15 - 16 h 50, aucun ordre au marché 16 h 30 - 16 h 35, entrée au plus tôt vers 16 h 50 sur le retour dans le FVG. Short MCL : entrée 78,40, stop 78,90 = 50 ticks = **50 $** par MCL → **2 MCL** (100 $) ; cible 76,80 : 160 ticks, ratio **3,2**. Le stop ne doit pas être plus serré parce que l'ATR M15 du brut est de 0,42 $ : un stop de 50 ticks fait à peine 1,2 ATR, et le brut a des mèches ; à 20 ticks (comme sur l'or en pourcentage), il serait dans une demi-bougie.
+
+**5. BTC (4 pts).** Funding +0,08 % depuis trois jours, OI record : le côté long est chargé et à levier ; carte de liquidation dense entre 61 000 et 62 500 juste sous des EQL à 63 000 : le réservoir désigné du prochain sweep et le point de départ d'une cascade ; structure D étirée. Un long avec un stop à 62 500 mettrait le stop **dans la zone dense** : le trade est écarté sur ce seul point, quel que soit le levier. Pour mémoire, un stop à 3,5 % impose un levier tel que la liquidation soit à au moins 7 % : levier ≤ **10** environ (liquidation à −9,5 %), et plutôt 2 à 5. Trade cohérent plus tard : **après** une éventuelle cascade (OI en chute, funding négatif, base à zéro), un long au retour dans la zone laissée par le rebond si la structure D tient, levier faible, hors week-end ; ou un short au retour si la structure casse.
+
+**6. FOMC (3 pts).** Options autorisées : (a) fermer à 19 h 45 et encaisser +2,2R ; (b) réduire à une taille dont le stop élargi vaut 1R (ici la position est déjà à 1 MGC : impossible de réduire, donc fermer ou élargir le stop en acceptant plus de whipsaw sur un gain acquis) ; (c) garder avec le stop à +1R en sachant qu'un whipsaw peut l'exécuter avec slippage. Pour un intraday, le plan dit **fermer** : le gain est acquis, l'événement est en deux temps, le lendemain est plus fiable ; un swing aurait pu couvrir par un put ou garder avec stop élargi. À 20 h, si tout était encore ouvert (or, EUR/USD, MCL), le heat brut approcherait le plafond de 3 % avec trois positions exposées au whipsaw en même temps : c'est exactement ce que le protocole interdit ; le trader ferme l'or, et le short MCL (16 h 50) est déjà à −15 min du FOMC : il le sécurise ou le ferme aussi.
+
+**Barème.** 1 point par élément juste (calcul, règle appliquée, justification). Passage : 16 sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Avec 20 bonnes réponses sur 25 et 16 points sur 20, le niveau 6 est validé. Vous connaissez les spécifications, les heures et les réglages de chaque marché du cours. Le niveau 7 assemble tout : construire une stratégie, trois setups complets, une bibliothèque, le backtesting manuel puis en Python, les statistiques et Monte Carlo, l'overfitting et la validation, l'algorithmique et l'IA.
