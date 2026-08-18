@@ -13,6 +13,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Absorption** : volume élevé sur un niveau sans progression du prix : de gros ordres limites absorbent les ordres agressifs adverses.
 - **Accumulation / distribution (Wyckoff)** : range après une baisse (accumulation) ou une hausse (distribution) où les gros opérateurs construisent ou liquident une position ; phases A à E avec événements nommés.
 - **Album de captures** : ensemble des captures d'écran d'un même tag, regroupées pour la revue ; la répétition visuelle est ce qui rend un setup familier.
+- **Album de pages cochées** : pile des checklists imprimées et remplies d'un trimestre ; la meilleure preuve de régularité qui existe.
 - **AR (automatic rally / reaction)** : rebond automatique après le climax (SC ou BC), qui définit la borne opposée du range Wyckoff.
 - **Ask** : meilleur prix auquel les vendeurs acceptent de vendre. On achète au ask.
 - **ATR (Average True Range)** : mesure de la volatilité moyenne sur N périodes, utilisée pour dimensionner stops et objectifs.
@@ -43,12 +44,14 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **CFD (Contract for Difference)** : contrat de gré à gré avec un broker qui réplique la variation d'un sous-jacent ; coût dominant : spread et financement quotidien.
 - **CFTC / NFA** : régulateur fédéral américain des futures (CFTC) et organisme d'autorégulation des brokers de futures (NFA).
 - **Changement de polarité** : un support cassé devient résistance (et inversement), parce que les participants piégés sortent au retour et les vainqueurs rajoutent.
+- **Checklist d'entrée** : six cases cochées avant chaque ordre (régime, réservoir préparé, critères mesurés, géométrie, taille par formule, budget et chaleur) ; une case non cochable annule le trade.
 - **CHoCH (Change of Character)** : première cassure contre la tendance en cours, indice précoce de retournement.
 - **CL / MCL** : futures NYMEX sur le brut WTI ; CL porte sur 1 000 barils (tick 0,01 $ = 10 $), MCL sur 100 barils (1 $ le tick) ; échéances mensuelles.
 - **Climax** : bougie à volume extrême et grande fourchette en bout de mouvement prolongé, souvent suivie d'un retournement ou d'un range.
 - **Commercials / non-commercials / non-reportables** : les trois catégories du rapport COT legacy : hedgers, grands spéculateurs, petits ; leurs positions nettes se compensent.
 - **Commission** : frais fixe facturé par le broker par ordre, par contrat ou par lot, à l'achat et à la vente.
 - **Composite man** : grille de lecture de Wyckoff : imaginer un opérateur unique, rationnel, contraint par la taille, qui accumule bas et distribue haut.
+- **Compte financé** : compte proposé par une société de financement après un examen payant ; ses règles (objectif, perte maximale statique ou suiveuse, perte quotidienne) décident du risque à prendre, souvent 0,25 à 0,5 % par trade.
 - **Confluence** : coïncidence de raisons indépendantes (structure, niveau horizontal, chiffre rond, volume) sur une même zone de prix.
 - **Conformité** : part des trades exécutés selon la fiche, en pourcentage ; indicateur central du niveau 8, il juge le trade indépendamment de son résultat.
 - **Consensus (macro)** : prévision moyenne des économistes pour une publication ; il est déjà dans le prix, seule la surprise (écart au consensus) fait bouger.
@@ -64,6 +67,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **DAY (durée d'ordre)** : ordre valable jusqu'à la fin de la séance, puis annulé ; dangereux pour un stop gardé la nuit.
 - **Dealing desk (market maker)** : modèle de broker qui prend l'autre côté des trades de ses clients, en couvrant ou non son risque.
 - **Dealing range** : fourchette entre un swing bas et un swing haut significatifs, partagée en premium (moitié haute) et discount (moitié basse).
+- **Débrief de séance** : dix minutes le jour même, plateforme fermée : journal complété, trois questions fixes, puis on arrête.
 - **Débrief post-marché** : dix minutes le jour même, plateforme fermée : compléter le journal, répondre à trois questions fixes, fermer et arrêter.
 - **Degré de liberté** : chaque paramètre, filtre, seuil ou variante essayé avant de retenir une version ; leur nombre gonfle le meilleur résultat trouvé par pur hasard.
 - **Delta (order flow)** : différence entre volumes exécutés à l'achat agressif et à la vente agressive.
@@ -125,6 +129,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Intervalle de confiance** : plage dans laquelle se situe probablement la vraie expectancy, égale à la moyenne mesurée plus ou moins environ deux écarts-types de la moyenne (écart-type / racine de n).
 - **Invalidation** : prix à partir duquel une lecture est fausse, défini par un swing objectif avec une marge contre le bruit ; c'est là que va le stop.
 - **IOC (immediate or cancel)** : ordre exécuté immédiatement pour la part disponible, le reste étant annulé.
+- **Journal des versions** : historique daté des modifications du playbook (partie, ancien texte, nouveau, raison, indicateur, résultat) ; il empêche de tourner en rond.
 - **Judas swing** : sortie du range d'ouverture qui échoue et se retourne, typique de l'ouverture de Londres ; la vraie direction se déclare ensuite.
 - **Kelly (fraction de)** : fraction du capital qui maximise la croissance théorique d'un pari répété, f* = p − (1 − p) ÷ b ; en pratique on en risque une petite fraction.
 - **Kill switch** : moyen d'arrêter un automate et de fermer toutes les positions en une seule action, testé et accessible à distance.
@@ -169,15 +174,19 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 ## P – Z
 
 - **Palier de réduction** : règle écrite d'avance qui divise le risque par trade à partir d'un certain drawdown en R (par exemple 1 % → 0,5 % à −10R).
+- **Palier de taille** : niveau de position dont on ne sort que sur des critères écrits (conformité et capital pour monter, drawdown au-delà du p90 pour redescendre).
 - **PDH / PDL, PWH / PWL** : plus haut et plus bas de la veille (previous day) et de la semaine précédente (previous week) ; réservoirs de liquidité par construction.
 - **PDR (pattern day trader)** : règle américaine imposant 25 000 $ de capital pour dépasser trois allers-retours intraday sur cinq jours en actions.
 - **Perpétuel (perpetual swap)** : future crypto sans échéance, aligné sur l'index par le funding ; USDT-margined (P&L en dollars) ou coin-margined (P&L en crypto).
+- **Perte maximale suiveuse** : limite de perte mesurée depuis le plus haut atteint par le compte, et non depuis le solde initial ; bien plus contraignante qu'une limite statique.
 - **Phases A à E (Wyckoff)** : arrêt de la tendance (A), construction de la cause (B), test final : spring ou UTAD (C), sortie : SOS ou SOW puis LPS ou LPSY (D), tendance (E).
 - **Pip** : plus petite variation usuelle d'une paire forex (0,0001 sur EUR/USD) ; vaut environ 10 $ par lot standard.
 - **Pit (CL)** : séance de criée héritée du brut, 15 h 30 - 20 h 30 (Paris), pendant laquelle le volume est concentré ; settlement à 20 h 30.
 - **Plateau (contre pic)** : zone de valeurs voisines d'un paramètre donnant des résultats comparables ; on retient le milieu du plateau, arrondi, jamais le sommet isolé d'un pic.
+- **Playbook** : document unique de quinze à vingt-cinq pages en six parties (cadre, risque, fiches, session et news, process, suivi) ; le risque y prime sur les fiches, les fiches sur l'envie.
 - **POC (Point of Control)** : prix ayant échangé le plus de volume sur un profil donné.
 - **POC (point of control)** : prix ayant échangé le plus de volume sur un profil ; aimant et pivot.
+- **Point de contrôle** : bilan de fin de phase (J30, J60, J90) sous forme de cases à cocher, dont aucune ne parle de résultat.
 - **Position sizing** : calcul de la taille de position pour qu'un stop touché coûte exactement le risque décidé.
 - **Power of Three (PO3, AMD)** : forme d'une session en trois temps : accumulation (range), manipulation (sweep contre le biais), distribution (le mouvement) ; ne donne pas la direction.
 - **Premium / discount** : moitié haute et moitié basse d'une dealing range ; dans une structure haussière on achète le discount, dans une structure baissière on vend le premium.
@@ -185,8 +194,10 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Profil composite** : profil de volume sur plusieurs séances ou semaines ; donne les HVN, LVN, POC et value area de contexte.
 - **Profil de session / de range** : profil de volume sur une séance (niveaux du lendemain) ou entre deux swings (valeur d'un mouvement).
 - **Profit factor** : gains bruts divisés par pertes brutes d'une série de trades.
+- **Prop firm** : voir compte financé ; son modèle économique repose sur les frais d'examen et sur l'écart entre ce que les traders financés rapportent et ce qu'ils coûtent.
 - **Protocole d'urgence** : procédure écrite à froid et applicable sans réfléchir (pause de quinze minutes, arrêt du jour, post-faute, série lourde, choc extérieur).
 - **Protocole news** : règles écrites autour des annonces : fenêtres interdites, positions fermées ou réduites, aucun ordre au marché à la publication, entrée au plus tôt à +20 min.
+- **Provision d'impôt** : fraction mise de côté à chaque retrait pour ne pas payer l'impôt d'une bonne année avec le capital d'une mauvaise ; le régime applicable se vérifie auprès d'un professionnel local.
 - **Pyramider (pyramiding)** : ajouter à une position gagnante par tranches décroissantes, avec un stop commun remonté avant chaque ajout et un risque total inférieur ou égal à 1R.
 - **QE / QT** : achats (quantitative easing) ou réduction du bilan (quantitative tightening) d'une banque centrale ; injection ou retrait de liquidités, effet sur les taux longs.
 - **R (R-multiple)** : unité de mesure des résultats, égale au risque initial du trade.
@@ -198,6 +209,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **Réconciliation** : comparaison périodique de l'état interne d'un automate (position, ordres) avec celui du courtier ; toute divergence déclenche une halte.
 - **Régime de marché** : état persistant (tendance, range, stress) défini par un faisceau : structure, volatilité, corrélations, sentiment ; change la probabilité de réussite des setups.
 - **Régime de volatilité** : période où l'amplitude des variations reste dans une fourchette donnée (calme, agité) ; les régimes durent puis basculent.
+- **Règle d'exception** : procédure écrite pour les situations imprévues (connexion coupée, ordre rejeté, retard, annonce inattendue) ; non écrite, elle devient une improvisation.
 - **Replay (mode)** : lecture d'un historique bougie par bougie, sans voir la suite, pour appliquer une fiche comme en direct ; base du backtest manuel.
 - **Requote** : refus d'exécution au prix demandé, avec proposition d'un nouveau prix, fréquent chez certains brokers en dealing desk.
 - **Résistance** : zone de prix où les vendeurs ont arrêté une hausse par le passé.
@@ -257,6 +269,7 @@ Définitions courtes et opérationnelles. Chaque terme est approfondi dans son c
 - **UPS (onduleur)** : alimentation de secours qui maintient l'ordinateur et la box quelques minutes lors d'une coupure de courant.
 - **Value Area** : zone de prix concentrant environ 70 % du volume d'un profil (bornes VAH et VAL).
 - **Value area (VA), VAH, VAL** : zone contiguë autour du POC contenant environ 70 % du volume ; VAH et VAL sont ses bornes, frontières entre accepté et rejeté.
+- **Verrouillage après perte** : délai écrit (par exemple trente minutes) pendant lequel aucun nouvel ordre n'est autorisé après un stop ; parade la plus efficace au revenge trading.
 - **VIX** : volatilité implicite à 30 jours des options sur le S&P 500 ; thermomètre de régime par son niveau, sa direction et sa structure à terme.
 - **Vol crush** : effondrement de la volatilité implicite juste après une annonce ; fait perdre l'acheteur d'option même quand il a raison sur la direction.
 - **Volume relatif** : volume d'une bougie rapporté au volume moyen des bougies comparables (mêmes heures des jours précédents) ; une valeur ≥ 2 est une anomalie à expliquer.
