@@ -1,0 +1,369 @@
+---
+title: "Examen · Niveau 7 · Stratégie, backtesting et quant"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider le niveau 7 : construire une fiche, les trois setups et la bibliothèque, backtest manuel et en code, statistiques et Monte Carlo, validation et automatisation. Score de passage : 80 %."
+---
+
+# Examen · Niveau 7 · Stratégie, backtesting et quant
+
+Cet examen valide les dix chapitres du niveau 7. Il comporte **25 questions** en cinq blocs, puis **une étude de cas notée sur 20 points** où il faut juger une fiche et son backtest comme ce niveau l'a appris.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Le niveau 8 suppose que le lecteur sait écrire une fiche, la tester honnêtement et lire ses statistiques.
+
+## Bloc 1 · Construire une stratégie et les trois setups
+
+<Quiz
+  title="Bloc 1 · Fiche et setups"
+  questions={[
+    {
+      q: "Une idée devient une règle testable quand :",
+      options: [
+        "Elle est convaincante",
+        "Chaque critère a un seuil chiffré (ticks, ATR, minutes) et une décision écrite avant, sans « presque »",
+        "Elle vient d'un trader connu",
+        "Elle a gagné une fois",
+      ],
+      answer: 1,
+      explain: "Les trois blocs de la fiche (contexte, signal, exécution) se remplissent avec des nombres, pas des sensations.",
+    },
+    {
+      q: "Dans le setup 1, S2 (displacement) exige :",
+      options: [
+        "Une bougie verte",
+        "Une fourchette ≥ 1,5 ATR M15, un corps ≥ 60 %, la cassure en clôture du dernier LH interne, dans les trois bougies après le sweep",
+        "Un volume seulement",
+        "Le FVG",
+      ],
+      answer: 1,
+      explain: "Un displacement de 1,3 ATR n'est pas un displacement de 1,5 ; le candidat manqué se note au journal.",
+    },
+    {
+      q: "Le setup 2 (ouverture de Londres) se prend :",
+      options: [
+        "Sur la cassure du range asiatique",
+        "Sur l'échec de la sortie du range (manipulation, retour en clôture M5, réalignement), avec sortie sur temps si le milieu n'est pas atteint en 30 minutes",
+        "À 9 h au marché",
+        "Deux fois par matinée",
+      ],
+      answer: 1,
+      explain: "On ne suit jamais la sortie ; une manipulation par matinée ; tout fermé à 12 h 30.",
+    },
+    {
+      q: "Dans le setup 3 (swing macro), un ajout est autorisé si :",
+      options: [
+        "Le trade est en perte",
+        "Gain ≥ 1R, nouveau HL quotidien, et stop global remonté de sorte que le risque total reste sous le budget initial",
+        "Le prix fait un nouveau plus haut",
+        "Le COT le dit",
+      ],
+      answer: 1,
+      explain: "Le pyramidage n'ajoute jamais de risque au-delà du budget de la position entière.",
+    },
+    {
+      q: "Le COT et la saisonnalité, dans le setup 3 :",
+      options: [
+        "Déclenchent l'entrée",
+        "Modulent la taille (facteurs 1 ou 2/3) et rapprochent la cible quand le COT est contre ; ils ne déclenchent jamais",
+        "Remplacent le stop",
+        "Sont ignorés",
+      ],
+      answer: 1,
+      explain: "Le « quand » vient de la structure hebdomadaire, du déclencheur quotidien et du CHoCH H4.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Bibliothèque et backtest manuel
+
+<Quiz
+  title="Bloc 2 · Bibliothèque et replay"
+  questions={[
+    {
+      q: "La bibliothèque de setups se classe par :",
+      options: [
+        "Nom",
+        "Contexte de marché : un setup n'est bon ou mauvais que par rapport à son régime ; trois familles réelles derrière des dizaines de noms",
+        "Popularité",
+        "Taux de réussite annoncé",
+      ],
+      answer: 1,
+      explain: "Sweep-displacement-FVG sur un réservoir, retour à la valeur, continuation sur zone.",
+    },
+    {
+      q: "Pourquoi trois setups ?",
+      options: [
+        "Parce que c'est facile à retenir",
+        "Un seul laisse des mois vides, dix ne se maîtrisent pas ; trois à heures, marchés et régimes différents partagent le budget de risque sans superposer les séries de pertes",
+        "Parce que le courtier l'exige",
+        "Pour trader plus",
+      ],
+      answer: 1,
+      explain: "Ignorer le reste est actif : « vu, hors sélection ».",
+    },
+    {
+      q: "Dans le protocole bar par bar, en cas de doute (stop et cible dans la même bougie, limite juste touchée) :",
+      options: [
+        "On prend la version favorable",
+        "On prend la version défavorable : stop d'abord, limite non servie si seulement touchée",
+        "On regarde le M1 après coup",
+        "On tire au sort",
+      ],
+      answer: 1,
+      explain: "L'exécution conservatrice compense l'optimisme structurel du backtest manuel.",
+    },
+    {
+      q: "Avec un écart-type de 1,5R par trade, l'incertitude sur l'expectancy à 100 trades est d'environ :",
+      options: [
+        "0,015R",
+        "0,15R : 100 trades distinguent +0,3R de zéro, 30 ne le font pas",
+        "1,5R",
+        "0,5R",
+      ],
+      answer: 1,
+      explain: "L'incertitude décroît en 1 / √n ; 300 trades pour comparer deux variantes.",
+    },
+    {
+      q: "Le MFE enregistré à chaque ligne sert à :",
+      options: [
+        "Calculer les commissions",
+        "Savoir jusqu'où les trades vont dans le bon sens, donc si les cibles sont bien placées (le MAE renseigne le stop)",
+        "Choisir le marché",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "La distribution du MFE se compare au taux d'atteinte de C1 et C2 ; toute modification se teste ensuite, sur un autre échantillon.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Backtest en Python
+
+<Quiz
+  title="Bloc 3 · Code"
+  questions={[
+    {
+      q: "Face à une bougie manquante dans un fichier OHLC :",
+      options: [
+        "On l'interpole",
+        "On la compte et on ne la comble pas ; on supprime les bougies incohérentes et aberrantes, on ne les corrige pas ; on fixe fuseau et séance d'abord",
+        "On recopie la précédente",
+        "On arrête",
+      ],
+      answer: 1,
+      explain: "Remplir invente des prix que le marché n'a pas faits ; au-delà de quelques pour cent retirés, on change de source.",
+    },
+    {
+      q: "Le .shift(1) du backtest vectorisé évite :",
+      options: [
+        "Les coûts",
+        "Le look-ahead : la position décidée sur la clôture de t s'applique au rendement de t + 1",
+        "Le drawdown",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Sans lui, on trade avec un prix qu'on ne connaît pas encore et les résultats deviennent miraculeux.",
+    },
+    {
+      q: "Pour mesurer une fiche (limite, stop, C1 / C2, breakeven, sortie sur temps), il faut :",
+      options: [
+        "Un backtest vectorisé",
+        "Un backtest event-driven, bougie par bougie avec un état : le protocole du chapitre 6 exécuté par une machine",
+        "Un tableur",
+        "Une régression",
+      ],
+      answer: 1,
+      explain: "Le vectorisé ignore le chemin du prix dans la bougie ; il sert à explorer, pas à mesurer.",
+    },
+    {
+      q: "Le test « doubler les coûts » :",
+      options: [
+        "Sert à choisir un courtier",
+        "Dit si la stratégie vit de son edge ou d'un tarif : si l'expectancy s'effondre, elle ne survivra pas au réel",
+        "Calcule l'impôt",
+        "Est inutile",
+      ],
+      answer: 1,
+      explain: "Avec « retirer les cinq meilleurs trades », c'est l'un des deux tests d'honnêteté rapides.",
+    },
+    {
+      q: "Le résultat du script du cours (+0,39R sur 43 trades synthétiques) :",
+      options: [
+        "Prouve que le setup 1 gagne",
+        "Est reproductible mais non prédictif : données construites avec les comportements cherchés, n trop petit ; c'est la méthode qui compte",
+        "Se trade tel quel",
+        "Est faux",
+      ],
+      answer: 1,
+      explain: "Le backtest mesure une règle sur un passé donné ; il ne prouve rien sur le futur.",
+    },
+  ]}
+/>
+
+## Bloc 4 · Statistiques et Monte Carlo
+
+<Quiz
+  title="Bloc 4 · Statistiques"
+  questions={[
+    {
+      q: "La distribution des résultats d'un système à stop et cibles :",
+      options: [
+        "Est une cloche",
+        "Est asymétrique : bosse des stops vers −1R, bosses des gains, queue à droite ; médiane négative, moyenne positive, écart-type environ neuf fois la moyenne",
+        "Est uniforme",
+        "Est symétrique",
+      ],
+      answer: 1,
+      explain: "C'est ce rapport qui rend l'expectancy si lente à mesurer.",
+    },
+    {
+      q: "Un intervalle de confiance à 95 % de [−0,09 ; +0,40] sur 120 trades signifie :",
+      options: [
+        "Le système est nul",
+        "Probablement positif, pas démontré ; on ne change pas la taille sur cette base",
+        "Le système gagne +0,40R",
+        "Il faut arrêter",
+      ],
+      answer: 1,
+      explain: "L'intervalle contient zéro ; la vraie valeur peut être n'importe où dedans.",
+    },
+    {
+      q: "Le Monte Carlo par rééchantillonnage :",
+      options: [
+        "Prédit les prochains trades",
+        "Construit des milliers de séquences possibles à partir des trades observés : distribution du drawdown, des séries, du risque de ruine ; il redistribue le risque observé, il n'en invente pas",
+        "Remplace le backtest",
+        "Invente des régimes",
+      ],
+      answer: 1,
+      explain: "Hypothèses : trades indépendants (le réel a des régimes : marge) et échantillon représentatif.",
+    },
+    {
+      q: "Le drawdown historique de 6,5R quand le Monte Carlo donne médiane 10R et p90 17R :",
+      options: [
+        "Est le pire cas",
+        "Est un tirage favorable ; on dimensionne sur le p90 de l'horizon prévu, on suspend au-delà du p95",
+        "Prouve la sûreté du système",
+        "N'a pas de sens",
+      ],
+      answer: 1,
+      explain: "Le système n'a pas encore montré ce qu'il sait faire de pire ; il le montrera ; on le sait d'avance.",
+    },
+    {
+      q: "À 30 trades, un système à +0,2R et 1,4R d'écart-type paraît perdant :",
+      options: [
+        "Jamais",
+        "Près d'une fois sur cinq ; d'où 100 trades pour un signe probable, 200 pour un signe établi, 400 à 800 pour comparer des variantes",
+        "Une fois sur deux",
+        "Toujours",
+      ],
+      answer: 1,
+      explain: "Significatif n'est pas suffisant : il faut aussi de la marge après coûts.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Validation et automatisation
+
+<Quiz
+  title="Bloc 5 · Validation, algo, IA"
+  questions={[
+    {
+      q: "Le meilleur de 140 systèmes nuls sur 100 trades affiche environ :",
+      options: [
+        "0R",
+        "+0,37R : la sélection du meilleur tirage fabrique de l'expectancy à partir de bruit ; chaque paramètre ou filtre essayé est un degré de liberté",
+        "−0,5R",
+        "+2R",
+      ],
+      answer: 1,
+      explain: "Le script trouve +0,76R in-sample sur une marche aléatoire ; l'OOS donne −0,14R.",
+    },
+    {
+      q: "L'out-of-sample doit être :",
+      options: [
+        "Tiré au hasard et regardé souvent",
+        "Postérieur à l'IS, assez grand (50 à 100 trades), regardé une seule fois après que la fiche est figée ; rapport OOS / IS ≥ 0,5",
+        "Identique à l'IS",
+        "Facultatif",
+      ],
+      answer: 1,
+      explain: "Si l'on ajuste après avoir vu l'OOS, il devient de l'IS et il n'y a plus de test.",
+    },
+    {
+      q: "Un jeu de paramètres bon mais dont les voisins sont médiocres, au bord de la grille :",
+      options: [
+        "Est le meilleur, à trader",
+        "Est un pic, probablement un artefact ; on retient le milieu d'un plateau, arrondi",
+        "Justifie d'agrandir la grille",
+        "Prouve l'edge",
+      ],
+      answer: 1,
+      explain: "Un vrai comportement de marché est grossier : il ne dépend pas d'un seuil au tick près.",
+    },
+    {
+      q: "Les limites qui comptent pour un automate (taille max, perte du jour) doivent vivre :",
+      options: [
+        "Dans le code seulement",
+        "En dur chez le courtier, hors de l'automate ; avec kill switch, réconciliation, heartbeat, montée en charge paper → micro → taille de fiche",
+        "Dans un fichier texte",
+        "Nulle part",
+      ],
+      answer: 1,
+      explain: "La ceinture de sécurité sert le jour où le code se trompe.",
+    },
+    {
+      q: "L'IA appliquée aux prix pour « prédire la prochaine bougie » :",
+      options: [
+        "Est l'usage le plus solide",
+        "Est l'usage le plus fragile : des milliers de degrés de liberté sur du bruit ; les usages qui tiennent sont encadrés (régime, filtre de contexte, anomalies) et soumis à toute la checklist du chapitre 9",
+        "Remplace la validation",
+        "Trouve l'edge",
+      ],
+      answer: 1,
+      explain: "Elle écrit et relit du code, structure fiche et journal, analyse en hypothèses ; elle ne porte ni la validation, ni la discipline, ni la perte.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Juger une fiche et son backtest">
+
+Un trader vous soumet sa fiche « Sweep VWAP » sur MNQ et son dossier de validation. Éléments fournis :
+
+- **Fiche** : long sur sweep d'un plus bas de séance sous le VWAP, displacement ≥ 1,35 ATR M15, FVG ≥ 0,32 ATR, entrée au milieu du FVG, stop sous le sweep − 0,45 ATR, C1 à 1,8R, C2 à 3,6R, fenêtre 15 h 38 - 17 h 20, filtres : pas le lundi, VIX inférieur à 19,4, volume relatif ≥ 1,15. Version 9 de la fiche.
+- **Backtest** (event-driven, coûts inclus) : 2022-2024, **96 trades**, expectancy **+0,62R**, écart-type 1,5R, taux de réussite 52 %, drawdown historique 5R, plus longue série 4.
+- **Validation** : « J'ai utilisé toutes les données pour améliorer la fiche ; pas d'OOS séparé, mais le résultat est stable sur les trois années (+0,55, +0,70, +0,60). » Surface de paramètres autour du displacement : 1,2 → +0,15 ; 1,35 → +0,62 ; 1,5 → +0,20.
+- **Demande** : « Je passe à 4 MNQ dès lundi ; d'après le drawdown de 5R, un compte de 12 000 $ suffit largement. »
+
+Répondez en six points, chacun noté :
+
+1. (3 pts) Que disent les seuils de la fiche et le numéro de version ?
+2. (3 pts) L'expectancy de +0,62R sur 96 trades : intervalle de confiance à 95 %, et ce qu'on peut affirmer.
+3. (3 pts) La validation proposée est-elle recevable ? Pourquoi, et que manque-t-il ?
+4. (3 pts) La surface de paramètres : plateau ou pic ? Conséquence.
+5. (4 pts) Le dimensionnement : que vaut le drawdown historique de 5R, quel Monte Carlo demander, et que penser de « 4 MNQ sur 12 000 $ » (stop moyen 35 points, 2 $ le point sur MNQ) ?
+6. (4 pts) Votre recommandation, en trois étapes concrètes et datées.
+
+<Solution>
+
+**1. Seuils et version (3 pts).** Six seuils non ronds (1,35 ; 0,32 ; 0,45 ; 15 h 38 ; 19,4 ; 1,15) : le signe d'un ajustement au tick, donc au bruit ; trois filtres dont deux sans comportement de marché nommé (« pas le lundi », « VIX inférieur à 19,4 » : un seuil trouvé) ; **version 9** : au moins neuf tirages, plus les filtres et leurs seuils : plusieurs dizaines de degrés de liberté. Le chapitre 9 dit qu'à ce niveau un système nul affiche +0,3 à +0,4R sur 100 trades. (1 pt seuils, 1 pt filtres, 1 pt degrés de liberté.)
+
+**2. Intervalle (3 pts).** Erreur standard = 1,5 / √96 = 1,5 / 9,8 = **0,153R** ; intervalle = 0,62 ± 1,96 × 0,153 = **[+0,32 ; +0,92]**. Pris seul, l'intervalle exclut zéro ; mais il mesure une fiche **sélectionnée** sur ces mêmes données : le +0,62 est un sommet, et l'écart au bruit attendu (+0,3 à +0,4R) est de l'ordre de l'incertitude. On peut affirmer : « expectancy in-sample élevée, dont une part inconnue est du bruit sélectionné ». (1 pt calcul, 1 pt intervalle, 1 pt lecture.)
+
+**3. Validation (3 pts).** **Non recevable** : « toutes les données pour améliorer » signifie qu'il n'y a **aucun OOS** ; la stabilité par année n'est pas un OOS (les trois années ont servi à choisir les seuils : elles sont toutes de l'IS, et une fiche ajustée sur trois ans est stable sur ces trois ans par construction). Il manque : un OOS postérieur jamais vu (au moins 50 trades : attendre, ou tester sur une période antérieure à 2022 jamais regardée), un walk-forward, un test sur un marché voisin (MES), les tests d'exécution (coûts × 2, moins les cinq meilleurs). (1 pt non recevable, 1 pt pourquoi, 1 pt ce qui manque.)
+
+**4. Surface (3 pts).** 1,2 → +0,15 ; **1,35 → +0,62** ; 1,5 → +0,20 : le jeu retenu est le seul bon, ses voisins immédiats sont trois à quatre fois moins bons : **un pic**, pas un plateau. Conséquence : le seuil 1,35 est un artefact ; un vrai comportement donnerait +0,4 / +0,5 / +0,4 ; il faut retenir un seuil rond (1,5) et annoncer la moyenne du voisinage (autour de +0,3R), puis tester. (1 pt pic, 1 pt raison, 1 pt conséquence.)
+
+**5. Dimensionnement (4 pts).** Le drawdown historique de 5R sur 96 trades est **un tirage** (et un tirage in-sample d'une fiche ajustée : encore plus flatteur) ; on demande un Monte Carlo sur les 96 trades à horizon 300 à 500 trades, dont on lit le **p90** et le p95 : avec un écart-type de 1,5R et une expectancy réelle plus proche de +0,3R, l'ordre de grandeur est 15 à 20R en médiane et 25 à 30R au p90. Taille : 4 MNQ × 35 points × 2 $ = **280 $ de risque par trade** = **2,3 %** de 12 000 $ ; à p90 25R, c'est **−58 %** du compte une fois sur dix ; c'est le chemin de la ruine. Avec 1 % (120 $), 1 MNQ au plus avec un stop de 35 points (70 $), et le p90 vaut −25 % ; encore beaucoup ; le budget doit être 0,5 à 0,75 % ou le compte plus grand. (1 pt tirage, 1 pt MC et p90, 1 pt calcul du risque, 1 pt conclusion.)
+
+**6. Recommandation (4 pts).** (a) **Cette semaine** : figer une version 10 **simplifiée** (seuils ronds : 1,5 / 0,4 / 0,5 ATR ; C1 1,5R ; fenêtre 15 h 30 - 17 h 30 ; retirer « pas le lundi » ; garder le régime sous forme de matrice, pas de VIX à 19,4 ; volume relatif ≥ 1,2 si un comportement le justifie) et l'écrire avant tout test. (b) **Le mois prochain** : la tester sur une période antérieure jamais regardée (2019-2021) comme OOS unique, exiger un rapport OOS / IS ≥ 0,5 et un test sur MES ; walk-forward si les données le permettent ; Monte Carlo sur l'OOS. (c) **Ensuite seulement** : simulation ou 1 MNQ pendant 30 trades avec risque de 0,5 %, comparaison au backtest, puis taille selon le p90 du Monte Carlo ; « 4 MNQ dès lundi » est refusé. (1 pt par étape, 1 pt pour le refus motivé.)
+
+**Barème** : 20 points ; passage à 16. L'esprit de la correction : la fiche n'est pas « mauvaise », elle est **inconnue** ; tout ce que le niveau 7 a appris sert à la rendre connaissable avant d'y mettre de l'argent.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Le niveau 8 quitte les chiffres pour le trader lui-même : la psychologie de l'exécution, les routines, la gestion d'une carrière de trading et la construction d'un compte sur la durée. Tout ce que le niveau 7 a mesuré ne vaut que si l'on est capable de l'exécuter, jour après jour, sans y toucher.
