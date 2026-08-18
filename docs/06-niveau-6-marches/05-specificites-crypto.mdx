@@ -1,0 +1,302 @@
+---
+title: "Spécificités crypto"
+description: "La microstructure des exchanges crypto, les perpétuels, le funding et les bases, les liquidations en cascade et leurs signatures, les données on-chain utiles au trader, et les risques propres à ce marché : plateformes, week-ends, manipulation."
+---
+
+# Spécificités crypto
+
+La crypto est le marché le plus jeune du cours et celui où le plus de particuliers commencent, souvent sans savoir que sa mécanique diffère de celle des futures régulés. Tout ce qui précède s'y applique (structure, séquences, order flow, risque), mais avec des particularités qui changent les réglages : des plateformes multiples et non centralisées, des perpétuels avec funding, des liquidations mécaniques qui produisent des cascades, des données publiques que les autres marchés n'ont pas (la chaîne), et des risques de contrepartie qui n'existent pas sur le CME. Ce chapitre décrit ces spécificités et dit, pour chacune, ce qu'elles changent à la pratique.
+
+## La microstructure des exchanges crypto
+
+Le bitcoin, l'ether et les autres actifs se négocient sur des dizaines de plateformes (exchanges) : centralisées (Binance, Coinbase, Kraken, OKX, Bybit…) et décentralisées (des protocoles sur la chaîne). Contrairement à l'ES, il n'y a **pas de carnet unique** : chaque plateforme a son carnet, son prix, son volume ; les prix sont alignés par l'arbitrage à quelques dollars près, mais pas identiques, et ils divergent dans les moments de stress.
+
+Conséquences :
+
+- **Le volume et le profil dépendent de la plateforme** (niveau 2 et 4) ; on lit le volume agrégé (des fournisseurs le calculent) pour le contexte, et le carnet de la plateforme où l'on exécute pour l'exécution.
+- **La liquidité varie beaucoup** d'une plateforme à l'autre et d'une paire à l'autre : le bitcoin contre le stablecoin USDT sur la plus grosse plateforme a un carnet profond ; un jeton de second rang contre l'euro sur une petite plateforme est un carnet mince où quelques milliers de dollars font bouger le prix.
+- **Deux marchés coexistent** : le **spot** (on achète et on détient l'actif) et les **dérivés** (perpétuels et futures datés, section suivante), ces derniers représentant l'essentiel du volume ; le prix du spot est la référence (l'« index ») sur laquelle les dérivés se calent.
+- **Les paires** : contre le dollar via un stablecoin (BTC/USDT, BTC/USDC), contre le dollar réel sur certaines plateformes régulées, contre l'euro, ou entre cryptos (ETH/BTC). Le stablecoin ajoute un risque de contrepartie propre (sa parité avec le dollar dépend de son émetteur).
+- **La régulation est inégale** : certaines plateformes sont enregistrées dans des juridictions sérieuses avec ségrégation des fonds ; d'autres non ; certaines ont fait faillite avec les fonds des clients. Le niveau 0 (choisir son broker) s'applique avec une exigence supplémentaire : la contrepartie **est** le risque.
+- **Les frais** sont en pourcentage du notionnel (typiquement 0,02 à 0,10 % par côté sur les dérivés selon le statut « maker » ou « taker », davantage sur le spot des petites plateformes) : sur un swing de 4 000 $ de notionnel, 0,05 % par côté fait 4 $ aller-retour, plus le funding ; à intégrer à l'expectancy (niveau 1).
+
+Enfin, le marché ne ferme **jamais** : 24 h sur 24, 7 jours sur 7, sans pause. C'est un avantage apparent (on peut toujours trader) et un piège réel (on ne devrait pas toujours trader) : les heures actives suivent malgré tout les sessions traditionnelles (Europe et surtout États-Unis, avec un pic à l'ouverture de New York), et les week-ends et nuits asiatiques sont des heures creuses où le carnet s'amincit et où les mouvements erratiques dominent.
+
+<Figure caption="Figure 1 · La microstructure crypto : plusieurs plateformes, chacune avec son carnet, alignées par arbitrage autour d'un prix index ; le spot en référence, les dérivés (perpétuels) en volume dominant ; pas de fermeture, mais des heures creuses réelles.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Microstructure des marchés crypto" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="360" cy="130" r="48" className="gold" opacity="0.9" /><text x="360" y="126" fontSize="12" fontWeight="700" textAnchor="middle" fill="#141414">Prix index</text><text x="360" y="142" fontSize="9" textAnchor="middle" fill="#141414">moyenne des spots</text>
+  <rect x="40" y="40" width="130" height="50" rx="6" className="box" strokeWidth="1" /><text x="105" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Plateforme A</text><text x="105" y="76" fontSize="9" textAnchor="middle" className="muted">carnet, prix, volume</text>
+  <rect x="40" y="200" width="130" height="50" rx="6" className="box" strokeWidth="1" /><text x="105" y="220" fontSize="10" fontWeight="600" textAnchor="middle">Plateforme B</text><text x="105" y="236" fontSize="9" textAnchor="middle" className="muted">carnet, prix, volume</text>
+  <rect x="550" y="40" width="130" height="50" rx="6" className="box" strokeWidth="1" /><text x="615" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Plateforme C</text><text x="615" y="76" fontSize="9" textAnchor="middle" className="muted">carnet, prix, volume</text>
+  <rect x="550" y="200" width="130" height="50" rx="6" className="box" strokeWidth="1" /><text x="615" y="220" fontSize="10" fontWeight="600" textAnchor="middle">Décentralisée</text><text x="615" y="236" fontSize="9" textAnchor="middle" className="muted">sur la chaîne</text>
+  <line x1="170" y1="65" x2="315" y2="115" className="line" strokeWidth="1" strokeDasharray="4 3" /><line x1="170" y1="225" x2="315" y2="150" className="line" strokeWidth="1" strokeDasharray="4 3" /><line x1="550" y1="65" x2="405" y2="115" className="line" strokeWidth="1" strokeDasharray="4 3" /><line x1="550" y1="225" x2="405" y2="150" className="line" strokeWidth="1" strokeDasharray="4 3" />
+  <text x="240" y="100" fontSize="9" className="muted">arbitrage</text>
+  <rect x="270" y="215" width="180" height="40" rx="6" className="gold" opacity="0.25" /><text x="360" y="232" fontSize="10" fontWeight="600" textAnchor="middle">Perpétuels et futures</text><text x="360" y="246" fontSize="9" textAnchor="middle" className="muted">l'essentiel du volume, calés sur l'index</text>
+  <line x1="360" y1="178" x2="360" y2="215" className="line" strokeWidth="1.5" />
+  <text x="360" y="285" fontSize="10" textAnchor="middle" className="muted">24 h / 24, 7 j / 7 · pic à l'ouverture de New York · week-ends et nuits asiatiques creux</text>
+</svg>
+</Figure>
+
+## Perpetuals, funding et bases
+
+Le niveau 4 (chapitre 5) a introduit les perpétuels et le funding ; voici le complément propre au marché.
+
+**Les perpétuels** sont des futures sans échéance, réglés en stablecoin (les « USDT-margined », le plus courant : le notionnel et le P&L sont en dollars) ou dans la crypto elle-même (les « coin-margined » : le P&L est en bitcoin, ce qui ajoute une convexité que le débutant ne maîtrise pas). Ils permettent le levier (de 1 à 100 et plus selon les plateformes ; le levier disponible n'est pas le levier à utiliser, niveau 0) et la vente à découvert simple.
+
+**Le funding** aligne le perpétuel sur l'index : toutes les 8 heures (parfois 1 heure), les longs paient les shorts si le perpétuel cote au-dessus de l'index (funding positif), l'inverse sinon. Taux neutre autour de 0,01 % par 8 h ; élevé au-delà de 0,05 % ; extrême au-delà de 0,1 %. Il se lit comme un thermomètre de positionnement (niveau 4) et se paie comme un coût (niveau 1) : à 0,05 % par 8 h sur 4 000 $, 6 $ par jour.
+
+**Les futures datés** existent aussi (échéances trimestrielles sur les grandes plateformes et sur le CME) ; leur prix par rapport au spot est la **base** : positive en général (le future cote au-dessus du spot, contango, parce que le marché est structurellement long et paie pour le levier), négative en stress. La base annualisée est un thermomètre complémentaire du funding : une base de 2 % à 90 jours équivaut à environ 8 % annualisés ; au-delà de 15-20 % annualisés, le marché est en euphorie de levier ; proche de zéro ou négative, en peur.
+
+**Le lien entre les trois** (spot, perpétuel, future daté) est arbitré par des acteurs qui achètent le spot et vendent le dérivé pour encaisser le funding ou la base (le « cash and carry ») ; ce sont eux qui ramènent les écarts. Quand ils se retirent (stress, faillite d'une plateforme), les écarts explosent et les prix se désalignent : c'est un signe de dysfonctionnement à surveiller.
+
+Ce que cela change à la pratique : sur un perpétuel, le trader lit **trois prix** (l'index, le prix du perpétuel, le prix de marque utilisé pour les liquidations, en général proche de l'index) et sait lequel déclenche son stop et sa liquidation ; il compte le funding dans son expectancy et le lit comme positionnement ; il regarde la base des futures datés comme thermomètre.
+
+## Les liquidations en cascade et leurs signatures
+
+Le niveau 4 a expliqué le mécanisme du squeeze ; en crypto, il est **mécanique et visible**, parce que les liquidations sont exécutées par les plateformes elles-mêmes à des seuils calculables, et que plusieurs services les agrègent en temps réel.
+
+**Le seuil de liquidation.** Une position à levier a un prix de liquidation : celui auquel la marge restante ne couvre plus la marge de maintenance ; la plateforme ferme alors la position au marché (avec parfois une pénalité). En première approximation, pour un long en marge isolée avec un levier L et une marge de maintenance de 0,5 %, le prix de liquidation est environ l'entrée × (1 − 1/L + 0,005) : un long à 64 000 $ avec un levier 10 est liquidé vers 57 900 $ (−9,5 %) ; avec un levier 20, vers 61 100 $ (−4,5 %) ; avec un levier 50, vers 62 700 $ (−2 %). Les cartes de liquidation publiées par des services de données estiment, à partir des positions ouvertes et des leviers usuels, où ces seuils se concentrent : ce sont des réservoirs de liquidité au sens du niveau 3, avec l'avantage d'être **estimés en dollars**.
+
+**La cascade.** Quand le prix atteint une zone dense de seuils, les liquidations vendent au marché, le prix baisse, atteint les seuils suivants, et ainsi de suite ; l'OI s'effondre, le funding s'inverse, le volume explose ; le prix rebondit souvent aussi vite une fois les seuils épuisés, parce que la baisse n'avait pas de vendeur de conviction. Les cascades de plusieurs milliards de dollars de liquidations en quelques heures se sont produites à plusieurs reprises depuis 2020, dans les deux sens.
+
+**Les signatures**, sur le graphique et les données :
+
+- **Avant** : funding élevé et persistant, OI record, base élevée, seuils de liquidation regroupés juste au-delà d'un niveau évident (des EQL sous un support), sentiment euphorique (niveau 5).
+- **Pendant** : bougies de 3 à 10 % en minutes, mèches immenses, volume plusieurs fois la normale, liquidations agrégées qui explosent, spread qui s'écarte, prix des plateformes qui divergent, OI qui chute de 10 à 30 %.
+- **Après** : funding neutre ou négatif, OI bas, base proche de zéro, volume climax ; souvent un rebond violent, puis une stabilisation ; la structure HTF décide de la suite (niveau 3 et 4).
+
+Ce que cela change à la pratique (le niveau 4 l'a dit, à répéter parce que c'est là que les comptes crypto meurent) : **ne jamais avoir son stop, ni a fortiori son seuil de liquidation, dans une zone dense de liquidations** ; ne pas courir après une cascade ; chercher l'entrée après, dans le sens de la structure ; et utiliser un levier tel que la liquidation soit **hors de portée** de tout mouvement raisonnable (le stop doit être touché bien avant la liquidation ; si le seuil de liquidation est plus proche que le stop structurel, le levier est trop élevé).
+
+<Figure caption="Figure 2 · Anatomie d'une cascade de liquidations sur BTC : seuils regroupés sous les EQL (carte de liquidation), funding élevé et OI record avant ; bougies immenses, OI qui s'effondre, funding qui s'inverse pendant ; rebond puis stabilisation après. Le stop et la liquidation ne doivent jamais être dans la zone dense.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Cascade de liquidations et signatures" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="200" x2="700" y2="200" className="line" strokeWidth="1" />
+  <text x="50" y="50" fontSize="10" textAnchor="end" className="muted">prix</text>
+  <polyline points="70,120 120,110 170,105 220,112 270,100 320,108 350,105 370,120 385,150 395,175 402,190 410,196 425,185 450,160 490,150 540,145 600,140 690,135" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="60" y1="118" x2="380" y2="118" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="66" y="114" fontSize="9" className="green">EQL 64 000</text>
+  <rect x="60" y="150" width="640" height="46" className="red" opacity="0.1" /><text x="66" y="188" fontSize="9" className="red">zone dense de seuils de liquidation (carte) : 61 000 - 58 000</text>
+  <text x="200" y="80" fontSize="9" textAnchor="middle" className="muted">funding +0,09 % · OI record · base élevée</text>
+  <text x="400" y="220" fontSize="9" textAnchor="middle" className="red" fontWeight="600">cascade : −11 % en 2 h, OI −25 %</text>
+  <text x="600" y="120" fontSize="9" textAnchor="middle" className="muted">funding −0,02 % · OI bas · rebond puis structure</text>
+  <line x1="60" y1="310" x2="700" y2="310" className="line" strokeWidth="1" />
+  <text x="50" y="270" fontSize="10" textAnchor="end" className="muted">liquidations</text>
+  <rect x="100" y="304" width="20" height="6" className="red" opacity="0.5" /><rect x="180" y="302" width="20" height="8" className="red" opacity="0.5" /><rect x="260" y="305" width="20" height="5" className="red" opacity="0.5" /><rect x="340" y="298" width="20" height="12" className="red" opacity="0.6" /><rect x="380" y="270" width="20" height="40" className="red" opacity="0.8" /><rect x="400" y="245" width="20" height="65" className="red" opacity="0.9" /><rect x="420" y="285" width="20" height="25" className="red" opacity="0.7" /><rect x="480" y="304" width="20" height="6" className="red" opacity="0.5" /><rect x="580" y="306" width="20" height="4" className="red" opacity="0.5" />
+  <text x="410" y="240" fontSize="9" textAnchor="middle" className="red">×20 la normale</text>
+</svg>
+</Figure>
+
+## Données on-chain utiles au trader
+
+La crypto a une particularité qu'aucun autre marché n'a : une partie de son activité est **publique sur la chaîne** (la blockchain). Chaque transfert de bitcoin ou d'ether entre adresses est visible ; des services agrègent ces données en indicateurs. La plupart sont du bruit pour un trader ; quelques-uns sont utiles comme contexte.
+
+- **Les flux vers et depuis les plateformes.** Des entrées massives de bitcoins sur les plateformes (les détenteurs déposent pour vendre) précèdent souvent des ventes ; des sorties massives (retraits vers des portefeuilles privés, pour détenir) sont lues comme une réduction de l'offre disponible. C'est un indicateur de positionnement de flux, à l'horizon de jours à semaines ; il est bruité (les plateformes déplacent aussi leurs propres fonds).
+- **Les réserves des plateformes** : le stock total détenu sur les plateformes ; en baisse tendancielle depuis des années (les détenteurs de long terme retirent), avec des remontées avant les ventes.
+- **Les mouvements de gros porteurs** (les « baleines ») et des adresses anciennes : des bitcoins qui n'avaient pas bougé depuis des années et se déplacent vers une plateforme sont un signal de vente potentielle ; les services d'alerte les publient.
+- **Le comportement des détenteurs de long terme** : des métriques mesurent si les bitcoins qui bougent sont détenus depuis longtemps (distribution des anciens, souvent près des sommets) ou depuis peu (capitulation des récents, souvent près des creux) ; elles donnent une lecture de cycle à l'horizon de mois, du même ordre que le COT (niveau 5) pour les futures.
+- **Les stablecoins** : leur encours total et leurs entrées sur les plateformes mesurent la « poudre sèche » (des dollars prêts à acheter) ; une hausse de l'encours précède souvent les phases haussières.
+- **Les frais et l'activité du réseau** : indicateurs d'usage, plus lents, utiles pour le contexte de long terme.
+
+Ce que le trader en fait : **du contexte, jamais du timing**. Un flux entrant record sur les plateformes ne dit pas quand la vente aura lieu ; il dit que le carburant est là, comme un OI record. On le combine à la structure, au funding, à la base et au sentiment ; on ne trade pas dessus seul. Et l'on garde une méfiance de méthode : beaucoup d'indicateurs on-chain sont construits après coup pour « expliquer » les cycles passés (le niveau 5 sur les saisonnalités et le niveau 7 sur l'overfitting s'appliquent).
+
+## Les risques propres : plateformes, week-ends, manipulation
+
+Trois familles de risques que les futures régulés n'ont pas, ou pas au même degré.
+
+**Le risque de plateforme.** La contrepartie de vos positions et le dépositaire de vos fonds sont la même entité, souvent peu ou pas régulée, parfois insolvable sans que rien ne le montre. Des plateformes majeures ont fait faillite en emportant les fonds des clients ; d'autres ont gelé les retraits pendant des semaines ; d'autres ont subi des piratages. Règles : ne garder sur une plateforme que le capital de trading (le reste en garde propre, hors plateforme, si l'on détient de la crypto à long terme) ; répartir entre deux plateformes sérieuses ; vérifier la régulation et la ségrégation autant que possible (niveau 0) ; retirer régulièrement les gains ; considérer qu'une plateforme qui gèle les retraits « temporairement » ne les rouvrira peut-être pas.
+
+**Le risque des heures creuses et des week-ends.** Le marché ne ferme pas, mais la liquidité oui : les nuits asiatiques (pour un Européen) et surtout les week-ends ont des carnets minces, des spreads plus larges, des mouvements erratiques et des cascades de liquidation plus fréquentes (moins de contrepartie pour absorber). Une part disproportionnée des mèches de 5 % en une bougie se produit le dimanche. Règles : pas de trade intraday le week-end (le niveau 0 le disait déjà pour les micro-comptes) ; les swings gardés sur le week-end ont un stop et un levier qui supportent une mèche de 5 à 10 % ; pas de stop serré la nuit.
+
+**Le risque de manipulation.** Le marché est jeune, fragmenté, moins surveillé : le spoofing (niveau 4) y est plus courant que sur le CME ; les « pumps » coordonnés sur des petits jetons, le wash trading (du volume fictif) sur certaines plateformes, les mèches provoquées sur des carnets minces pour déclencher des liquidations existent ; et l'information (annonces de cotation, tweets, rumeurs) circule sans les garde-fous des marchés régulés. Règles : trader les actifs les plus liquides (bitcoin, ether) sur les plateformes les plus profondes ; se méfier des volumes non vérifiables ; ne pas trader les annonces et les rumeurs (protocole news, niveau 5, en plus strict) ; considérer les petits jetons comme un autre métier, hors du cadre de ce cours.
+
+À ces trois familles s'ajoutent des risques techniques (pannes de plateforme pendant les pics de volatilité, précisément quand on a besoin de sortir ; le plan de secours du niveau 0 s'applique avec la nuance qu'il n'y a pas de desk à appeler) et le risque de stablecoin (la parité d'un stablecoin peut casser).
+
+Le résumé honnête : la crypto **se trade avec la même méthode** que le reste du cours, en ajoutant le funding et la base au tableau de bord, les cartes de liquidation aux réservoirs de liquidité, quelques données on-chain au contexte ; et avec des **réglages plus prudents** : levier faible (le stop structurel touché bien avant la liquidation), taille réduite pour les swings de week-end, deux plateformes, capital de trading seul sur les plateformes, pas d'heures creuses.
+
+<Figure caption="Figure 3 · Les réglages propres à la crypto, en plus de la méthode commune : le levier fixé pour que la liquidation soit hors de portée, la taille de swing dimensionnée pour un gap de week-end, le capital réparti et retiré, les heures creuses évitées.">
+<svg className="tm-svg" viewBox="0 0 720 280" role="img" aria-label="Réglages propres au trading crypto" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="330" height="100" rx="8" className="box" strokeWidth="1.5" />
+  <text x="185" y="52" fontSize="12" fontWeight="600" textAnchor="middle">Levier et liquidation</text>
+  <text x="185" y="76" fontSize="10" textAnchor="middle" className="muted">le stop structurel doit être touché bien avant la liquidation</text>
+  <text x="185" y="94" fontSize="10" textAnchor="middle" className="mono">levier 10 : liquidation à −9,5 % · levier 20 : −4,5 %</text>
+  <text x="185" y="114" fontSize="10" textAnchor="middle" className="red">si la liquidation est plus proche que le stop : levier trop élevé</text>
+  <rect x="370" y="30" width="330" height="100" rx="8" className="box" strokeWidth="1.5" />
+  <text x="535" y="52" fontSize="12" fontWeight="600" textAnchor="middle">Week-ends et heures creuses</text>
+  <text x="535" y="76" fontSize="10" textAnchor="middle" className="muted">carnets minces, mèches de 5 à 10 %, cascades</text>
+  <text x="535" y="94" fontSize="10" textAnchor="middle" className="mono">pas d'intraday le week-end · swing : taille pour un gap</text>
+  <text x="535" y="114" fontSize="10" textAnchor="middle" className="red">pas de stop serré la nuit</text>
+  <rect x="20" y="150" width="330" height="100" rx="8" className="box" strokeWidth="1.5" />
+  <text x="185" y="172" fontSize="12" fontWeight="600" textAnchor="middle">Plateformes</text>
+  <text x="185" y="196" fontSize="10" textAnchor="middle" className="muted">la contrepartie est le risque</text>
+  <text x="185" y="214" fontSize="10" textAnchor="middle" className="mono">deux plateformes sérieuses · capital de trading seul · retraits réguliers</text>
+  <text x="185" y="234" fontSize="10" textAnchor="middle" className="red">un gel « temporaire » des retraits est un signal de sortie</text>
+  <rect x="370" y="150" width="330" height="100" rx="8" className="box" strokeWidth="1.5" />
+  <text x="535" y="172" fontSize="12" fontWeight="600" textAnchor="middle">Tableau de bord ajouté</text>
+  <text x="535" y="196" fontSize="10" textAnchor="middle" className="muted">funding, base, OI, cartes de liquidation, flux on-chain</text>
+  <text x="535" y="214" fontSize="10" textAnchor="middle" className="mono">contexte et positionnement, jamais timing</text>
+  <text x="535" y="234" fontSize="10" textAnchor="middle" className="red">bitcoin et ether sur carnets profonds ; petits jetons : autre métier</text>
+</svg>
+</Figure>
+
+## Deux trades sur BTC
+
+Reconstitutions pédagogiques : le même mouvement, deux réglages.
+
+<TradeExample
+  resultat="gain"
+  instrument="BTC/USDT perpétuel"
+  direction="Long"
+  setup="Après une cascade de liquidations (funding passé de +0,08 % à −0,02 %, OI −22 %, base revenue à zéro), structure D haussière intacte au-dessus du dernier HL ; entrée au retour dans le FVG H4 du rebond, un mardi à 15 h (heure active) ; levier 2, liquidation hors de portée"
+  entree="61 400"
+  stop="59 600 (2,9 %, sous le point bas de la cascade + marge)"
+  objectif="66 800 (EQH et nPOC d'avant la cascade)"
+  r="+3R">
+
+Compte de 6 000 $, budget 60 $ : taille 60 ÷ 1 800 = 0,033 BTC (notionnel ≈ 2 050 $) ; avec un levier 2, la marge engagée est de 1 025 $ et le seuil de liquidation vers 31 000 $ : hors de portée de tout mouvement raisonnable ; le stop à 59 600 sera touché bien avant. Funding négatif : la position reçoit un peu. Heure active, plateforme profonde, actif le plus liquide. Le trade a duré quatre jours, avec un week-end au milieu : la taille (0,033 BTC, 34 % du compte en notionnel) supportait un gap de 10 % (−205 $, environ 3,4R, douloureux mais non ruineux ; le trader avait noté ce risque et l'avait accepté parce que la structure et le positionnement étaient favorables). Cible atteinte le vendredi.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="BTC/USDT perpétuel"
+  direction="Long"
+  setup="Achat le samedi soir sur un rebond, levier 25, stop « mental » sous le plus bas de la journée, seuil de liquidation à −3,5 %"
+  entree="63 200"
+  stop="62 000 prévu (1,9 %) mais non placé ; liquidation à 61 000"
+  objectif="66 000"
+  r="−100 % de la marge engagée : liquidation dans une mèche de dimanche matin">
+
+Même compte, quinze jours plus tôt. Le trader achète un samedi soir, avec un levier 25 (marge 500 $ pour un notionnel de 12 500 $, soit deux fois le compte), stop mental. Dimanche à 6 h du matin, sur un carnet vide, une mèche de 4 % en dix minutes traverse son stop mental (jamais placé), atteint son seuil de liquidation à 61 000, et le prix revient à 63 000 en une heure. Il a perdu 500 $ (8,3 % du compte) sur un mouvement qui, avec un levier 2 et un vrai stop, aurait coûté 1R ou rien. Quatre fautes propres à la crypto : le week-end, le levier qui met la liquidation plus près que le stop, le stop non placé, et la mèche de dimanche matin qu'il aurait dû considérer comme la norme.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Microstructure** : plusieurs plateformes et carnets alignés par arbitrage autour d'un index, spot en référence, dérivés en volume ; frais en pourcentage ; jamais fermé, mais des heures creuses réelles.
+- **Perpétuels** (USDT ou coin-margined, levier), **funding** (thermomètre et coût), **futures datés** et **base** (thermomètre complémentaire) ; trois prix à lire (index, perpétuel, marque).
+- **Liquidations** : seuils calculables (levier 10 : −9,5 % ; levier 20 : −4,5 %), cartes de liquidation = réservoirs de liquidité en dollars ; signatures avant / pendant / après ; le stop et la liquidation ne sont jamais dans la zone dense.
+- **On-chain** : flux vers les plateformes, réserves, baleines, détenteurs de long terme, stablecoins ; du **contexte, jamais du timing** ; méfiance envers les indicateurs construits après coup.
+- **Risques propres** : plateforme (la contrepartie est le risque : deux plateformes, capital de trading seul, retraits), week-ends et nuits (mèches, cascades), manipulation (actifs liquides seulement, pas de rumeurs) ; **réglages plus prudents** : levier faible, taille de swing pour un gap, heures creuses évitées.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Levier, stop et liquidation">
+
+Compte de 5 000 $, risque 1 %. Long BTC à 60 000 $ avec un stop structurel à 58 200 $ (3 %). Marge de maintenance 0,5 %.
+
+1. Calculez la taille en BTC et le notionnel.
+2. Avec un levier 5, puis 20, puis 40, estimez le prix de liquidation. Lesquels sont acceptables ?
+3. Quelle règle en découle pour choisir le levier ?
+
+<Solution>
+
+1. Budget 50 $ ; distance 1 800 $ ; taille = 50 ÷ 1 800 ≈ **0,028 BTC** ; notionnel ≈ **1 670 $** (un tiers du compte).
+2. Levier 5 : liquidation ≈ 60 000 × (1 − 0,20 + 0,005) = **48 300 $** (−19,5 %) : très loin sous le stop. Levier 20 : ≈ 60 000 × (1 − 0,05 + 0,005) = **57 300 $** (−4,5 %) : sous le stop de 1,5 % seulement, une mèche de week-end peut l'atteindre si le stop n'est pas exécuté proprement. Levier 40 : ≈ 60 000 × (1 − 0,025 + 0,005) = **58 800 $** (−2 %) : **au-dessus du stop** : la liquidation frappe avant le stop ; inacceptable.
+3. Le levier se choisit **après** la taille (qui vient du stop, niveau 1) et il doit laisser la liquidation **loin en dessous du stop** (au moins deux fois la distance du stop, plus en week-end). Ici, un levier de 2 à 5 suffit largement pour un notionnel de 1 670 $ ; le levier élevé n'apporte rien au trade et ajoute le risque de liquidation.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Lire le positionnement crypto">
+
+Données du jour : funding BTC +0,07 % par 8 h depuis quatre jours ; OI des perpétuels au plus haut de six mois ; base des futures à 3 mois : 5 % (soit environ 20 % annualisés) ; flux entrants record sur les plateformes depuis 48 h ; carte de liquidation : forte concentration de seuils longs entre 66 000 et 67 500 ; prix à 69 200 au-dessus d'EQL à 68 000 ; structure D haussière étirée.
+
+1. Que dit chaque donnée, et vers quoi convergent-elles ?
+2. Où est le danger précis pour un long, et quelle conduite le niveau 4 et ce chapitre imposent-ils ?
+3. Que serait un trade cohérent après un éventuel événement ?
+
+<Solution>
+
+1. Funding élevé et persistant : longs chargés et à levier ; OI record : carburant ; base à 20 % annualisés : euphorie de levier ; flux entrants record : des détenteurs déposent pour vendre (offre à venir) ; carte de liquidation : une zone dense juste sous les EQL. Convergence : **fragilité haussière maximale**, avec le réservoir de liquidité (EQL puis seuils) désigné.
+2. Danger : un long avec un stop entre 66 000 et 68 000, ou a fortiori un seuil de liquidation dans cette zone : il fait partie de la cascade. Conduite : pas de nouveau long ; longs existants avec stop hors de la zone dense (au-dessus de 68 000 pour sortir avant, ou bien en dessous de 66 000 avec taille réduite pour survivre au sweep), levier faible ; ne pas vendre non plus « parce que c'est extrême » sans structure (niveau 5, COT : l'extrême n'est pas une date) ; attendre.
+3. Après une cascade qui prendrait les EQL et la zone dense (OI en chute, funding inversé, base à zéro), un **long au retour dans la zone laissée par le rebond**, dans le sens de la structure D si elle tient, levier faible, hors week-end ; ou, si la structure D casse (CHoCH), un short au retour, avec les mêmes précautions.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le plan crypto">
+
+Rédigez sur une demi-page les règles propres à la crypto que vous ajoutez à votre plan général : plateformes (nombre, répartition, retraits), actifs autorisés, heures et jours autorisés, levier maximal et règle stop / liquidation, taille de swing de week-end, ce que vous lisez chaque matin (funding, base, OI, carte de liquidation, flux), et ce que vous ne tradez jamais (rumeurs, petits jetons, cascades en cours).
+
+<Solution>
+
+Pas de corrigé unique ; les sections « Risques propres » et la figure 3 donnent le gabarit. Ce qu'on attend : des règles chiffrées (« levier ≤ 3 », « liquidation à au moins deux fois la distance du stop », « swing de week-end : notionnel ≤ 25 % du compte », « pas d'intraday du vendredi 20 h au lundi 8 h »), une liste courte d'actifs (bitcoin, ether), deux plateformes nommées avec la répartition, et une ligne de lecture matinale (funding, base, OI, carte, flux, en cinq minutes). Le reste du plan (structure, séquences, risque, journal) est celui du cours.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La microstructure crypto se distingue des futures régulés par :",
+      options: [
+        "Un carnet unique centralisé",
+        "Plusieurs plateformes et carnets alignés par arbitrage autour d'un index, une régulation inégale, des frais en pourcentage, un marché jamais fermé",
+        "L'absence de levier",
+        "Des heures fixes",
+      ],
+      answer: 1,
+      explain: "Le volume et le profil dépendent de la plateforme ; la contrepartie est le risque ; les week-ends et nuits sont des heures creuses réelles.",
+    },
+    {
+      q: "Le prix de liquidation approximatif d'un long à 64 000 $ avec un levier 20 (maintenance 0,5 %) est :",
+      options: [
+        "57 900 $",
+        "61 100 $ (environ −4,5 %)",
+        "63 800 $",
+        "32 000 $",
+      ],
+      answer: 1,
+      explain: "Entrée × (1 − 1/L + 0,005). Le stop structurel doit être touché bien avant ; si la liquidation est plus proche que le stop, le levier est trop élevé.",
+    },
+    {
+      q: "Les cartes de liquidation servent à :",
+      options: [
+        "Prédire le prix",
+        "Estimer où les seuils de liquidation se concentrent : des réservoirs de liquidité en dollars, à ne jamais avoir dans la zone de son stop ni de sa liquidation",
+        "Calculer le funding",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Une zone dense sous des EQL est la cible probable du prochain sweep et le point de départ d'une cascade.",
+    },
+    {
+      q: "Les données on-chain sont, pour le trader :",
+      options: [
+        "Un signal de timing précis",
+        "Du contexte de positionnement et de flux (entrées sur les plateformes, baleines, détenteurs de long terme, stablecoins), jamais du timing ; à combiner, avec méfiance envers les indicateurs construits après coup",
+        "Inutiles",
+        "Un remplaçant de la structure",
+      ],
+      answer: 1,
+      explain: "Un flux entrant record dit que le carburant est là, comme un OI record ; il ne dit pas quand.",
+    },
+    {
+      q: "Une mèche de 5 % un dimanche à 6 h du matin est :",
+      options: [
+        "Exceptionnelle",
+        "La norme des heures creuses : carnets minces, cascades plus fréquentes ; d'où pas d'intraday le week-end et des swings dimensionnés pour un gap, avec un levier faible",
+        "Un signal d'achat",
+        "Impossible",
+      ],
+      answer: 1,
+      explain: "Une part disproportionnée des mèches violentes se produit le week-end. Le stop non placé et le levier élevé transforment une mèche en liquidation.",
+    },
+    {
+      q: "Le risque de plateforme se gère par :",
+      options: [
+        "Le choix de la plateforme au levier le plus élevé",
+        "Deux plateformes sérieuses, le capital de trading seul sur les plateformes, des retraits réguliers, et la lecture d'un gel « temporaire » des retraits comme signal de sortie",
+        "Un seul compte pour simplifier",
+        "Rien : les plateformes sont sûres",
+      ],
+      answer: 1,
+      explain: "La contrepartie de vos positions et le dépositaire de vos fonds sont la même entité, souvent peu régulée. Le niveau 0 s'applique avec une exigence supplémentaire.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 6 est complet : ES et NQ, or et pétrole, sessions forex, options et grecques, crypto. L'examen du niveau vérifie que les spécificités de chaque marché sont acquises et que la méthode commune s'y adapte. Puis vient le niveau 7 : construire une stratégie, trois setups complets, une bibliothèque, le backtesting manuel puis en Python, les statistiques et Monte Carlo, l'overfitting et la validation, l'algorithmique et l'IA.
