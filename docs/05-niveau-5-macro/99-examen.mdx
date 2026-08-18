@@ -1,0 +1,366 @@
+---
+title: "Examen · Niveau 5 · Macro et fondamental"
+sidebar_label: "Examen du niveau"
+description: "Vingt-cinq questions corrigées et une étude de cas notée pour valider le niveau 5 : cycle et données macro, banques centrales et taux, intermarket, calendrier et news, COT et saisonnalité, sentiment et régimes. Score de passage : 80 %."
+---
+
+# Examen · Niveau 5 · Macro et fondamental
+
+Cet examen valide les sept chapitres du niveau 5. Il comporte **25 questions** en cinq blocs, puis **une étude de cas notée sur 20 points** : une semaine complète à préparer, du dimanche soir au vendredi, avec le tableau de bord, le calendrier, le COT, la matrice de régimes et une décision de banque centrale au milieu.
+
+**Score de passage : 80 %**, soit au moins 20 bonnes réponses sur 25 **et** au moins 16 points sur 20 à l'étude de cas. Le niveau 5 est le contexte de tout ce qui suit ; le niveau 6 suppose la grille de lecture acquise.
+
+## Bloc 1 · Cycle, données, banques centrales
+
+<Quiz
+  title="Bloc 1 · Macro et politique monétaire"
+  questions={[
+    {
+      q: "Le cycle économique se lit avec :",
+      options: [
+        "Le prix des actions",
+        "Deux variables, croissance et inflation, dont la combinaison définit quatre phases aux actifs favoris différents ; les marchés basculent avant l'économie",
+        "Le taux de change seul",
+        "Le volume",
+      ],
+      answer: 1,
+      explain: "Reprise, expansion, surchauffe / ralentissement, récession ; le trader travaille avec une hypothèse de phase qu'il révise avec les données.",
+    },
+    {
+      q: "Ce qui fait bouger le marché à une publication est :",
+      options: [
+        "Le chiffre par rapport au mois précédent",
+        "La surprise par rapport au consensus (et le second chiffre, et les révisions), lue dans le contexte de la phase",
+        "Le titre de presse",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Le consensus est déjà dans le prix. La surprise se traduit d'abord en taux anticipés, puis se propage au dollar, aux obligations, aux actions, à l'or.",
+    },
+    {
+      q: "Lors d'une décision de banque centrale, ce qui surprend le plus souvent est :",
+      options: [
+        "Le chiffre du taux",
+        "La guidance : le ton du communiqué, la conférence, le dot plot, par rapport à ce que les futures de taux cotaient",
+        "L'heure",
+        "Le lieu",
+      ],
+      answer: 1,
+      explain: "La décision est presque toujours dans le prix. Les actifs réagissent à l'écart entre l'annoncé et l'anticipé.",
+    },
+    {
+      q: "Un future de Fed funds cote 94,91 avec un taux effectif à 5,33 %. Le marché intègre :",
+      options: [
+        "Une hausse",
+        "Un taux attendu de 5,09 %, soit 24 pb de baisse : environ 96 % de probabilité d'une baisse de 25 pb",
+        "Rien",
+        "Deux baisses certaines",
+      ],
+      answer: 1,
+      explain: "100 − prix = taux attendu ; l'écart avec le taux actuel divisé par 25 pb donne la probabilité implicite.",
+    },
+    {
+      q: "Une courbe des taux inversée (2 ans au-dessus du 10 ans) signale :",
+      options: [
+        "Une expansion",
+        "Que le marché anticipe des baisses de taux futures, donc un ralentissement ; signal de contexte, pas de timing",
+        "Une hausse des actions imminente",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Elle a précédé la plupart des récessions américaines sans en donner la date. Le bull steepening est souvent le moment où le ralentissement se matérialise.",
+    },
+  ]}
+/>
+
+## Bloc 2 · Intermarket
+
+<Quiz
+  title="Bloc 2 · Carré directeur, corrélations, DXY"
+  questions={[
+    {
+      q: "Une hausse des taux américains a typiquement pour effet :",
+      options: [
+        "Dollar en baisse, or en hausse",
+        "Dollar en hausse, actions de croissance sous pression, or et matières premières en baisse par le dollar",
+        "Tout monte",
+        "Aucun",
+      ],
+      answer: 1,
+      explain: "Le carré directeur : taux → dollar → matières premières ; les actions arbitrent croissance contre taux.",
+    },
+    {
+      q: "La corrélation actions / obligations :",
+      options: [
+        "Est toujours négative",
+        "Dépend du régime : négative quand le risque dominant est la croissance, positive quand c'est l'inflation ; sa rupture est une information",
+        "Est toujours positive",
+        "N'existe pas",
+      ],
+      answer: 1,
+      explain: "On mesure (60 jours glissants), on ne suppose pas. En régime d'inflation, il n'y a plus de refuge dans le carré.",
+    },
+    {
+      q: "Le DXY monte alors que les taux américains baissent :",
+      options: [
+        "Resserrement classique",
+        "Fuite vers la sécurité (risk-off) : le dollar monte comme refuge",
+        "Appétit pour le risque",
+        "Erreur",
+      ],
+      answer: 1,
+      explain: "DXY et taux ensemble = resserrement ; DXY ↑ taux ↓ = refuge ; DXY ↓ taux ↑ = appétit pour le risque.",
+    },
+    {
+      q: "AUD/JPY sert de baromètre parce que :",
+      options: [
+        "C'est la paire la plus liquide",
+        "C'est une devise à risque contre une devise refuge : sa tendance dit l'humeur risk-on / risk-off, souvent avant les indices",
+        "L'Australie exporte de l'or",
+        "Le yen est stable",
+      ],
+      answer: 1,
+      explain: "Avec les petites capitalisations et le crédit à haut rendement, c'est un avertisseur de rotation.",
+    },
+    {
+      q: "Le tableau de bord intermarket sert à :",
+      options: [
+        "Trouver l'entrée",
+        "Donner l'environnement, la cohérence, le régime et parfois un avertissement ; en conflit avec la structure, il filtre ou réduit la taille",
+        "Remplacer la structure",
+        "Prédire à trois mois",
+      ],
+      answer: 1,
+      explain: "La macro filtre, la structure décide. Le conflit se note au journal.",
+    },
+  ]}
+/>
+
+## Bloc 3 · Calendrier et news
+
+<Quiz
+  title="Bloc 3 · Hiérarchie, anatomie, protocole"
+  questions={[
+    {
+      q: "La hiérarchie des publications :",
+      options: [
+        "Est fixe",
+        "Suit la préoccupation de la banque centrale et le marché tradé ; la surprise fait l'importance",
+        "Ne compte pas",
+        "Est la même pour tous",
+      ],
+      answer: 1,
+      explain: "CPI, NFP, FOMC, PCE structurent la séance ; une donnée de niveau 2 très loin du consensus déplace plus qu'une donnée de niveau 1 conforme.",
+    },
+    {
+      q: "La signature du FOMC est :",
+      options: [
+        "Un choc net qui tient",
+        "Un événement en deux temps (communiqué, conférence) dont le second contredit souvent le premier ; le lendemain est plus fiable",
+        "Un mouvement à 14 h 30",
+        "Sans volatilité",
+      ],
+      answer: 1,
+      explain: "Le soir : sweeps sur carnet mince ; le trade éventuel se prend le lendemain.",
+    },
+    {
+      q: "Le whipsaw post-annonce :",
+      options: [
+        "N'existe pas",
+        "Balaie souvent les deux côtés du range pré-annonce sur carnet vide, exécutant les stops serrés dans les deux sens, avant que la direction ne s'installe",
+        "Est le meilleur moment pour entrer",
+        "Dure toute la journée",
+      ],
+      answer: 1,
+      explain: "L'entrée cohérente est sur le retour dans les zones laissées, 20 à 40 minutes après, dans le sens confirmé par les taux.",
+    },
+    {
+      q: "Une position intraday ouverte à −15 minutes d'un CPI :",
+      options: [
+        "Se garde si le setup est bon",
+        "Se ferme, ou se réduit à une taille dont le stop élargi vaut 1R (choix écrit dans le plan)",
+        "Se double",
+        "Se garde avec un stop plus serré",
+      ],
+      answer: 1,
+      explain: "Le pire slippage raisonnable d'un stop serré dans le whipsaw fait 3 à 4R.",
+    },
+    {
+      q: "L'incohérence en matière de news est :",
+      options: [
+        "Se protéger",
+        "Garder un stop serré à travers une annonce de niveau 1, ou entrer au marché à la seconde de la publication",
+        "Trader le retour à +20 minutes",
+        "Écrire une grille",
+      ],
+      answer: 1,
+      explain: "C'est ne choisir ni la protection ni le trade de news, et payer les inconvénients des deux.",
+    },
+  ]}
+/>
+
+## Bloc 4 · COT et saisonnalité
+
+<Quiz
+  title="Bloc 4 · Positionnement et calendrier annuel"
+  questions={[
+    {
+      q: "Les commercials sur les matières premières sont :",
+      options: [
+        "Des spéculateurs suiveurs",
+        "Des hedgers, structurellement net short, contrariens, qui ont raison aux extrêmes",
+        "Des particuliers",
+        "Des banques centrales",
+      ],
+      answer: 1,
+      explain: "Les fonds sont en face, avec la tendance, raison au milieu et tort aux retournements.",
+    },
+    {
+      q: "Index COT : net actuel −77 000, minimum −110 000, maximum −38 000 sur 26 semaines :",
+      options: [
+        "0",
+        "46",
+        "100",
+        "77",
+      ],
+      answer: 1,
+      explain: "(−77 000 + 110 000) ÷ 72 000 × 100 ≈ 46 : médian, pas d'information.",
+    },
+    {
+      q: "Les fonds sont net long record (index 96). La conduite correcte :",
+      options: [
+        "Vendre",
+        "Noter la fragilité, cesser de chercher des achats de swing, attendre un sweep suivi d'un CHoCH quotidien et un début de dénouement dans le COT",
+        "Acheter davantage",
+        "Ignorer",
+      ],
+      answer: 1,
+      explain: "L'extrême est une condition, pas une date : le COT donne le carburant, la structure l'allumage.",
+    },
+    {
+      q: "Une saisonnalité est robuste si :",
+      options: [
+        "Un site la publie",
+        "Elle a une cause physique, un échantillon de 20 ans ou plus, et survit au retrait des années extrêmes",
+        "Elle a marché trois fois",
+        "Elle est visible sur la carte de l'année dernière",
+      ],
+      answer: 1,
+      explain: "Grains et énergie d'abord, métaux ensuite, actions et devises peu ; une fenêtre se décrit par taux, médiane, pire cas, nombre d'années, cause.",
+    },
+    {
+      q: "« Hausse 7 années sur 10 » :",
+      options: [
+        "Est une preuve",
+        "A environ 17 % de chances sous le pur hasard : pas une preuve ; 15 / 20 (2 %) commence à l'être",
+        "Vaut 15 / 20",
+        "Est significatif",
+      ],
+      answer: 1,
+      explain: "La taille d'échantillon fait la preuve ; tester la fenêtre que la cause prédit, pas toutes les fenêtres.",
+    },
+  ]}
+/>
+
+## Bloc 5 · Sentiment et régimes
+
+<Quiz
+  title="Bloc 5 · Thermomètres et matrice"
+  questions={[
+    {
+      q: "Les indicateurs de sentiment se lisent :",
+      options: [
+        "Dans le sens de la foule",
+        "De façon contrarienne aux extrêmes ; entre les extrêmes ils ne disent rien ; ils suivent le prix",
+        "Comme des signaux d'entrée",
+        "Jamais",
+      ],
+      answer: 1,
+      explain: "Les extrêmes de panique coïncident souvent avec les creux ; l'euphorie peut durer.",
+    },
+    {
+      q: "Un VIX à 25 correspond à un mouvement quotidien attendu d'environ :",
+      options: [
+        "0,25 %",
+        "1,6 % (25 ÷ racine de 252)",
+        "25 %",
+        "5 %",
+      ],
+      answer: 1,
+      explain: "Le VIX est une volatilité annualisée implicite à 30 jours, ramenée au jour en divisant par la racine du nombre de séances.",
+    },
+    {
+      q: "Une courbe VIX en backwardation :",
+      options: [
+        "Signale un marché calme",
+        "Signale que la peur est maintenant : marqueur net de régime de stress",
+        "Prédit une hausse",
+        "N'existe pas",
+      ],
+      answer: 1,
+      explain: "En temps normal la courbe est en contango. Le passage en backwardation change la case de la matrice.",
+    },
+    {
+      q: "Le régime se détecte :",
+      options: [
+        "Avec le VIX seul",
+        "Avec un faisceau concordant : structure, volatilité implicite et réalisée, corrélations, sentiment et positionnement",
+        "Avec une moyenne mobile",
+        "Avec le COT seul",
+      ],
+      answer: 1,
+      explain: "Quand les mesures divergent, on est en transition ; la prudence s'impose.",
+    },
+    {
+      q: "En case « range de stress », la matrice recommande :",
+      options: [
+        "Le pyramidage",
+        "L'abstention, ou taille ÷3, stops ×3, cibles très courtes, en attendant un régime lisible",
+        "Les cassures au marché",
+        "Les cibles lointaines",
+      ],
+      answer: 1,
+      explain: "C'est le régime le plus coûteux ; le changement de régime coûte à ceux qui ne le voient pas.",
+    },
+  ]}
+/>
+
+## Étude de cas notée (20 points)
+
+<Exercise n={1} title="Une semaine à préparer, du dimanche au vendredi">
+
+Vous tradez MES et MGC en intraday et en swing court, compte de **15 000 $**, risque 1 %.
+
+**Dimanche soir, tableau de bord.** 10 ans US à 4,35 %, en baisse de 15 pb sur la semaine ; 2 ans à 4,60 % (−25 pb) ; spread 2-10 à −0,25 %, en repentification depuis un mois par les taux courts. Futures de Fed funds : baisse de 25 pb à la réunion de mercredi cotée à 92 % ; 2,4 baisses intégrées d'ici la fin de l'année ; le dernier dot plot en montrait 2. DXY en baisse (structure D baissière, LL cette semaine). ES en HH / HL sur le D, VIX à 14, courbe VIX en contango. Or en HH / HL sur le D. AUD/JPY en hausse. Corrélation glissante ES / obligations : −0,4 ; or / DXY : −0,7. COT : index des fonds sur l'or à 91, sur l'ES à 60. Saisonnalité de l'or : fenêtre historiquement favorable en cours (14 / 20, médiane +4 %). AAII : 55 % de haussiers.
+
+**Calendrier.** Mercredi 14 h 30 : CPI (consensus +0,2 % m/m, core +0,3 %) ; mercredi 20 h : FOMC avec projections ; vendredi 14 h 30 : NFP (consensus +160 000).
+
+1. **(3 pts)** Situez la phase du cycle et le régime (case de la matrice) pour l'ES et pour l'or, avec le faisceau qui les justifie.
+2. **(3 pts)** Lisez le tableau intermarket : la hausse de l'ES et celle de l'or sont-elles cohérentes avec le reste ? Quel est le moteur commun ?
+3. **(4 pts)** Écrivez la grille de réaction du CPI de mercredi (trois cas) pour l'ES, le DXY et l'or, en tenant compte de la phase, et le protocole horaire de la journée (CPI à 14 h 30 puis FOMC à 20 h).
+4. **(4 pts)** Le FOMC livre la baisse de 25 pb, et le dot plot passe à 3 baisses cette année ; la conférence est prudente sur l'inflation. Le marché cotait 2,4 baisses. Quelle est la surprise nette, et quelles réactions attendez-vous à 20 h, à 20 h 45 et le lendemain ? Que faites-vous jeudi ?
+5. **(3 pts)** L'or : la structure D est haussière, la saisonnalité favorable, le DXY baisse… mais l'index COT des fonds est à 91. Comment combinez-vous ces quatre informations, et quelle conduite de swing en découle ?
+6. **(3 pts)** Vendredi, NFP à +40 000 avec chômage à 4,3 % (attendu 4,0). Le VIX passe de 14 à 22 dans l'heure, AUD/JPY perd 1,2 %, l'ES casse son dernier HL H4. Que devient la case de la matrice, et quels réglages appliquez-vous pour le reste de la séance ?
+
+<Solution>
+
+**1. Phase et régime (3 pts).** Phase : **fin de ralentissement, entrée en assouplissement** : la Fed s'apprête à baisser, la courbe se repentifie par les taux courts (bull steepening), les taux baissent : le marché anticipe la fin du cycle de resserrement. Régime ES : structure en tendance (HH / HL), VIX 14 en contango, corrélations stables : **tendance calme**. Régime or : tendance (HH / HL), volatilité normale : **tendance normale à calme**. Sentiment un peu élevé (55 %) sans extrême.
+
+**2. Cohérence (3 pts).** Cohérente : taux en baisse, DXY en baisse, AUD/JPY en hausse (risk-on), ES en hausse, or en hausse : le carré est aligné. Corrélation ES / obligations négative (−0,4) : régime « croissance » où la baisse des taux soutient les actions ; or / DXY à −0,7 : le lien habituel est actif. **Moteur commun : la baisse des taux anticipée** (et du dollar qui en découle), qui porte à la fois les actions de croissance et l'or (taux réels en baisse, dollar faible).
+
+**3. Grille CPI et protocole (4 pts).** Phase : la Fed s'apprête à baisser ; le marché est sensible à tout ce qui remettrait la baisse en cause. **CPI au-dessus (core ≥ 0,4)** : surprise hawkish → futures de taux retirent des baisses, DXY ↑, ES ↓ (surtout NQ), or ↓ ; biais baissier ES et or pour l'après-midi. **Conforme (core 0,3)** : pas de biais macro, lecture technique. **En dessous (core ≤ 0,2)** : surprise dovish → taux ↓, DXY ↓, ES ↑, or ↑ ; biais haussier. Protocole : aucune nouvelle position 14 h 15-14 h 50, positions intraday fermées à 14 h 15, aucun ordre au marché 14 h 30-14 h 35, entrée possible à partir de 14 h 50 sur séquence complète dans le sens confirmé par les futures de taux ; puis, journée de FOMC : aucune position nouvelle après 19 h 45, positions fermées ou réduites à 1R avec stop élargi ; trade éventuel jeudi.
+
+**4. FOMC (4 pts).** Décision : conforme (92 % cotés) : rien. Dot plot à 3 baisses contre 2,4 cotées : **surprise dovish** sur la trajectoire (le marché doit ajouter environ 0,6 baisse). Conférence prudente : nuance hawkish qui atténue. À 20 h : réaction 1 dovish (taux ↓, DXY ↓, ES et or ↑) ; à 20 h 45 : la conférence prudente peut inverser une partie du mouvement (sweeps dans les deux sens sur carnet mince) ; le lendemain : la tendance digérée, probablement dovish nette (le dot plot pèse plus que le ton) : DXY en baisse, or et ES soutenus, cohérent avec le tableau de bord. Jeudi : lecture du matin (futures de taux, DXY), puis recherche d'un long sur MGC ou MES au retour dans les zones laissées par le displacement du soir, dans le sens confirmé, avec structure et flux ; pas de trade s'il n'y a pas de zone.
+
+**5. L'or et le COT (3 pts).** Structure D haussière + saisonnalité favorable + DXY en baisse (corrélation active) : trois raisons de contexte haussier ; index COT des fonds à 91 : la hausse est **chargée**, la saisonnalité est probablement déjà dans le prix en partie. Combinaison : contexte haussier « **déjà consommé** » (tableau du chapitre 6). Conduite : on ne cherche pas de nouveaux longs de swing agressifs ; les longs existants gardent un stop structurel hors des zones de liquidation et une taille prudente ; cibles courtes ; on surveille le premier sweep des plus hauts suivi d'un CHoCH quotidien et un COT montrant le début du dénouement des fonds. En intraday, les longs de continuation restent possibles avec ces précautions.
+
+**6. Vendredi (3 pts).** NFP très faible et chômage en hausse : surprise dovish sur les taux mais **peur de récession** : « bad news is bad news » ; VIX de 14 à 22, AUD/JPY en baisse (risk-off), CHoCH H4 sur l'ES : le faisceau bascule. Case : de « tendance calme » à **transition vers range ou tendance agitée** (volatilité passée en zone élevée, structure H4 cassée) ; pas encore le stress complet (VIX sous 25, courbe à vérifier) mais un changement de case. Réglages : stops multipliés (l'ATR M15 a probablement doublé), taille divisée par deux, budget quotidien réduit, aucun long de continuation sur l'ES tant que la structure H4 n'est pas réalignée, cibles courtes ; sur l'or, prudence aussi (le risk-off avec baisse des taux est ambigu pour l'or : refuge d'un côté, liquidations de l'autre). Et surtout : matrice à revérifier lundi ; le changement de régime coûte à ceux qui ne le voient pas.
+
+**Barème.** 1 point par élément juste (phase, case, cohérence, ligne de grille, réaction, conduite). Passage : 16 sur 20.
+
+</Solution>
+</Exercise>
+
+## Et ensuite
+
+Avec 20 bonnes réponses sur 25 et 16 points sur 20, le niveau 5 est validé. Vous savez situer un marché dans son cycle, lire une banque centrale, un tableau intermarket, un calendrier, un COT, une saisonnalité et un régime. Le niveau 6 descend dans chaque marché : les futures ES et NQ, l'or et le pétrole, les sessions forex, les options et leurs grecques, les spécificités de la crypto.
