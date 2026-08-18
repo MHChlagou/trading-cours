@@ -1,0 +1,324 @@
+---
+title: "Étude de cas 2 : swing EUR/USD complet"
+description: "Un swing de trois semaines sur EUR/USD, de la décision du week-end à la sortie : régime, intermarket et positionnement COT, niveaux hebdomadaires retenus, déclencheur quotidien et entrée sur CHoCH H4, gestion en révisions successives avec un ajout conforme, puis les leçons et les variantes du scénario."
+---
+
+# Étude de cas 2 : swing EUR/USD complet
+
+La première étude de cas tenait dans une séance. Celle-ci tient dans trois semaines. Le changement d'échelle change tout : le déclencheur ne s'observe plus en bougies M5 mais en clôtures quotidiennes et H4, la gestion se fait en **révisions hebdomadaires** et non en minutes, et le facteur décisif n'est pas la lecture du prix mais le **moteur macro** qui l'entraîne. Comme au chapitre précédent, tous les prix et horaires sont une **reconstitution pédagogique** cohérente, pas une séance historique.
+
+Le trader : compte de 30 000 $, budget 1 % par swing (position entière, ajouts compris), fiche « Swing macro FX » version 2 (état validée, adaptation de la fiche du niveau 7 chapitre 4 à l'EUR/USD), instruments spot en mini-lots (1 $ par pip), horizon de deux à six semaines, révision chaque week-end.
+
+## Régime, intermarket et positionnement
+
+**Le week-end de la décision** (une heure, bloc 1 de la fiche, niveau 7).
+
+**Le moteur.** Sur EUR/USD, le moteur retenu par la fiche est l'**écart de taux à deux ans** entre les États-Unis et l'Allemagne, complété par la direction du dollar (DXY). Depuis quatre semaines, cet écart s'élargit en faveur du dollar : les données américaines sont restées solides pendant que l'inflation de la zone euro décélérait, et le marché a repoussé les baisses de taux attendues aux États-Unis tout en les avançant en Europe. Le DXY monte régulièrement, sans accélération. **Moteur orienté, en faveur du dollar** : le verdict de la semaine est **ventes autorisées** sur EUR/USD.
+
+**Le régime.** Ratio ATR quotidien 5 jours sur 20 jours : 1,08 ; VIX à 16 ; pas de stress. **Tendance normale** : les swings sont autorisés à taille pleine, la matrice du niveau 5 ne réduit rien.
+
+**Le positionnement.** Le COT montre les grands spéculateurs nets **acheteurs d'euro** au 78e percentile sur trois ans : un positionnement long important, mais pas encore extrême (le seuil de la fiche est 85). Lecture : il reste du carburant à la baisse (des acheteurs à liquider) et le facteur COT est **neutre**, donc **1**.
+
+**La saisonnalité** du mois considéré est sans direction marquée sur cette paire : facteur **1**.
+
+**Le calendrier.** Une réunion de la BCE dans dix jours, un CPI américain dans trois jours (niveau 1 tous les deux) ; la fiche autorise à traverser les annonces avec un stop large et une taille calculée, mais interdit d'**ouvrir** un swing dans les trois jours qui précèdent une réunion de banque centrale. Le CPI américain de mercredi n'est pas une réunion : l'ouverture reste possible avant, ce qui sera à surveiller.
+
+**Coefficient de taille** : régime 1 × COT 1 × saison 1 = **1**, taille pleine.
+
+<Figure caption="Figure 1 · Le bloc 1 du swing, rempli le week-end : moteur (écart de taux à deux ans qui s'élargit en faveur du dollar, DXY en hausse régulière), régime (tendance normale), positionnement COT (78e percentile, non extrême : facteur 1), saisonnalité neutre, calendrier. Verdict en un mot : ventes autorisées, coefficient 1.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Bloc 1 du swing EUR/USD" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="200" height="120" rx="6" className="box" strokeWidth="1.5" />
+  <text x="130" y="50" fontSize="10" fontWeight="600" textAnchor="middle">Moteur</text>
+  <line x1="45" y1="120" x2="215" y2="120" className="line" strokeWidth="1" />
+  <polyline points="50,110 80,102 110,95 140,84 170,78 205,68" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="130" y="136" fontSize="8" textAnchor="middle" className="muted">écart de taux 2 ans US − DE ↑</text>
+  <text x="130" y="148" fontSize="8" textAnchor="middle" className="muted">DXY ↑ régulier · 4 semaines</text>
+  <rect x="245" y="30" width="200" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="345" y="50" fontSize="10" fontWeight="600" textAnchor="middle">Régime et positionnement</text>
+  <text x="255" y="72" fontSize="9">ATR 5 j / 20 j = 1,08 · VIX 16</text>
+  <text x="255" y="88" fontSize="9" className="green">tendance normale : taille pleine</text>
+  <text x="255" y="110" fontSize="9">COT : spéculateurs longs euro</text>
+  <text x="255" y="126" fontSize="9">78e percentile (seuil 85)</text>
+  <text x="255" y="142" fontSize="9" className="muted">non extrême → facteur 1</text>
+  <rect x="460" y="30" width="230" height="120" rx="6" className="box" strokeWidth="1" />
+  <text x="575" y="50" fontSize="10" fontWeight="600" textAnchor="middle">Saison et calendrier</text>
+  <text x="470" y="72" fontSize="9">saisonnalité sans direction → facteur 1</text>
+  <text x="470" y="94" fontSize="9">CPI US dans 3 jours (niveau 1)</text>
+  <text x="470" y="110" fontSize="9">BCE dans 10 jours (niveau 1)</text>
+  <text x="470" y="132" fontSize="9" className="red">interdit d'ouvrir à moins de 3 jours</text>
+  <text x="470" y="146" fontSize="9" className="red">d'une réunion de banque centrale</text>
+  <line x1="360" y1="150" x2="360" y2="185" className="line" strokeWidth="1.5" />
+  <rect x="180" y="190" width="360" height="60" rx="6" className="red" opacity="0.15" />
+  <rect x="180" y="190" width="360" height="60" rx="6" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="360" y="214" fontSize="12" fontWeight="600" textAnchor="middle" className="red">Verdict : ventes autorisées</text>
+  <text x="360" y="236" fontSize="10" textAnchor="middle" className="muted">coefficient de taille = 1 × 1 × 1 = 1 (pleine)</text>
+  <text x="360" y="282" fontSize="10" textAnchor="middle" className="muted">le verdict ne se rediscute pas en semaine, sauf choc qui renverse le moteur</text>
+  <text x="360" y="302" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">il autorise un sens ; il ne dit pas quand entrer</text>
+</svg>
+</Figure>
+
+## Les niveaux hebdomadaires retenus
+
+Le swing ne se prépare pas avec les niveaux de la veille mais avec ceux de la **semaine et du mois**. Cinq suffisent.
+
+| Niveau | Prix | Nature |
+| --- | --- | --- |
+| Zone d'invalidation | 1,0980 - 1,1015 | FVG hebdomadaire non mitigé au-dessus : au-delà, la thèse baissière est fausse |
+| Sommet de la structure | 1,0955 | plus haut de la semaine précédente (PWH) |
+| **Zone d'entrée** | **1,0910 - 1,0938** | breaker quotidien laissé par le CHoCH baissier de la semaine dernière |
+| Milieu du range mensuel | 1,0860 | zone d'hésitation attendue |
+| **C1** | 1,0790 | plus bas de la semaine précédente : premier réservoir |
+| **C2** | 1,0705 | plus bas mensuel et zone hebdomadaire |
+
+La structure : sur le graphique **hebdomadaire**, EUR/USD forme des plus hauts descendants depuis six semaines ; sur le **quotidien**, un CHoCH baissier a été validé il y a cinq jours (clôture sous le dernier plus bas croissant à 1,0902), ce qui a laissé un **breaker** entre 1,0910 et 1,0938. La structure hebdomadaire est donc dans le sens du verdict, et le déclencheur attendu est le **T2** de la fiche du niveau 7 : le premier repli sur la zone du réalignement.
+
+ATR quotidien : **62 pips**. C'est le nombre qui dimensionnera le stop et le trailing.
+
+## Le déclencheur et l'entrée
+
+**Jour 1 (lundi).** Le prix remonte lentement vers la zone d'entrée. Rien à faire : la fiche demande un **CHoCH H4** à l'intérieur de la zone, pas une simple touche.
+
+**Jour 2 (mardi).** Le prix entre dans la zone et monte jusqu'à **1,0948**, à trois pips sous le PWH. Le trader ne fait toujours rien, et c'est le moment le plus difficile de tout le swing : la tentation d'anticiper l'entrée « avant que ça parte » est maximale quand le prix est au meilleur endroit. La fiche l'interdit ; la branche alternative de la fin du chapitre montre ce qu'elle aurait coûté.
+
+**Jour 2, 18 h (clôture H4).** Le prix casse en clôture H4 le dernier plus bas interne H4 (1,0925) et clôture à **1,0921** : **CHoCH H4 validé dans la zone**. Le déclencheur est présent.
+
+**Calcul avant tout ordre.**
+
+- **Entrée** : 1,0921 (au marché à la clôture H4, variante A de la fiche).
+- **Stop** : au-dessus de l'extrême du mouvement dans la zone (1,0948) plus 0,5 ATR quotidien (31 pips) = **1,0979**. Ce prix est aussi le bas de la zone d'invalidation hebdomadaire : les deux raisonnements convergent, ce qui est bon signe. Distance : **58 pips**.
+- **Taille** : budget 300 $ ; 58 $ par mini-lot ; 300 / 58 = 5,17 → **5 mini-lots** (risque 290 $), coefficient 1.
+- **Géométrie** : C1 à 1,0790 = 131 pips = **2,26R** (seuil de la fiche : 2) ; C2 à 1,0705 = 216 pips = **3,72R**. Validé.
+- **Ce qui invaliderait la thèse**, écrit dans le journal : une clôture quotidienne au-dessus de 1,0980 ; un renversement du moteur (écart de taux qui se resserre nettement, ou BCE plus restrictive qu'attendu) ; une clôture hebdomadaire au-dessus du dernier plus haut descendant.
+
+L'ordre est envoyé avec son stop. Aucune cible n'est placée en dur pour C2 (la fiche prévoit un trailing), mais une alerte est posée sur C1.
+
+<Figure caption="Figure 2 · La carte hebdomadaire et le déclencheur : structure hebdomadaire en plus hauts descendants, CHoCH quotidien validé cinq jours plus tôt laissant un breaker entre 1,0910 et 1,0938, repli dans la zone au jour 2, CHoCH H4 à 1,0921 : entrée. Stop au-dessus de l'extrême + 0,5 ATR quotidien, à l'entrée de la zone d'invalidation hebdomadaire.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Carte hebdomadaire et déclencheur du swing" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="40" width="600" height="26" className="red" opacity="0.12" />
+  <text x="666" y="56" fontSize="9" className="red">1,0980 - 1,1015 · invalidation (FVG hebdo)</text>
+  <line x1="60" y1="70" x2="660" y2="70" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="666" y="74" fontSize="9" className="red" fontWeight="600">stop 1,0979</text>
+  <line x1="60" y1="86" x2="660" y2="86" className="line" strokeWidth="1" strokeDasharray="4 3" /><text x="666" y="90" fontSize="9" className="muted">PWH 1,0955</text>
+  <rect x="60" y="100" width="600" height="28" className="gold" opacity="0.28" />
+  <text x="666" y="118" fontSize="9" className="gold" fontWeight="600">zone d'entrée 1,0910 - 1,0938 (breaker D)</text>
+  <line x1="60" y1="176" x2="660" y2="176" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="666" y="180" fontSize="9" className="muted">milieu 1,0860</text>
+  <line x1="60" y1="228" x2="660" y2="228" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="666" y="232" fontSize="9" className="green" fontWeight="600">C1 1,0790 (2,26R)</text>
+  <line x1="60" y1="278" x2="660" y2="278" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="6 4" /><text x="666" y="282" fontSize="9" className="green" fontWeight="600">C2 1,0705 (3,72R)</text>
+  <polyline points="70,150 100,120 130,140 160,105 190,130 220,96 250,112 280,92 310,108" fill="none" stroke="var(--tm-gold)" strokeWidth="2" opacity="0.55" />
+  <text x="120" y="90" fontSize="9" className="muted">hebdo : plus hauts descendants (6 semaines)</text>
+  <polyline points="310,108 330,132 350,120 370,155 390,142 410,120 430,104 450,96 465,112" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <text x="352" y="172" fontSize="9" className="muted">CHoCH quotidien il y a 5 jours → breaker</text>
+  <circle cx="450" cy="96" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="458" y="90" fontSize="9" className="red">extrême du repli 1,0948</text>
+  <circle cx="465" cy="112" r="5" className="gold" /><text x="474" y="130" fontSize="9" className="gold" fontWeight="600">CHoCH H4 à 1,0921 : entrée (5 mini-lots, 290 $)</text>
+  <polyline points="465,112 500,140 530,168 560,200 590,222 620,250 650,272" fill="none" stroke="var(--tm-green)" strokeWidth="2" strokeDasharray="5 3" />
+  <text x="300" y="306" fontSize="10" textAnchor="middle" className="muted">le prix touche la zone au jour 2 sans signal : la tentation d'anticiper est maximale quand le prix est au meilleur endroit</text>
+</svg>
+</Figure>
+
+## La gestion sur plusieurs jours
+
+**Jour 5 (vendredi de la première semaine).** Le prix est à 1,0863, soit un gain latent de 58 pips = **1R**. Un nouveau plus haut descendant quotidien s'est formé à **1,0900**. Les trois conditions d'ajout de la fiche sont réunies : gain d'au moins 1R, nouveau point de structure, et **risque total sous le budget** si le stop global est remonté. Le trader ajoute **2 mini-lots à 1,0868** et descend le stop global à **1,0931** (le LH quotidien 1,0900 plus 0,5 ATR).
+
+Vérification du risque total, faite avant l'ajout : les 5 lots initiaux, du prix d'entrée 1,0921 au nouveau stop 1,0931, représentent −10 pips × 5 = **−50 $** ; les 2 lots ajoutés à 1,0868, jusqu'à 1,0931, représentent −63 pips × 2 = **−126 $** ; total **−176 $**, inférieur au budget de 300 $. L'ajout est conforme.
+
+**Révision du week-end 1** : moteur inchangé (écart de taux toujours en expansion, DXY en hausse), structure hebdomadaire intacte, COT stable, CPI américain passé sans surprise. Mot de la semaine : **garder**.
+
+**Jour 7.** **C1 atteint** à 1,0790. Sortie du tiers de la position, arrondi à **2 mini-lots** (+131 pips chacun, soit **+262 $**). Le stop du solde (5 lots) descend au-dessus du dernier LH quotidien 1,0845, plus 31 pips : **1,0876**.
+
+**Jour 10.** Réunion de la BCE. Le journal du week-end avait écrit la phrase de décision : *« si la BCE est plus restrictive qu'attendu et que l'écart de taux se resserre, le moteur devient neutre : sortir la moitié du solde et serrer »*. La BCE est conforme aux attentes ; le prix bouge de 40 pips dans les deux sens sans casser de structure. Aucune action : la décision de mercredi était une lecture, pas une improvisation.
+
+**Révision du week-end 2** : moteur toujours orienté, mais le DXY commence à plafonner ; structure intacte ; le COT est passé au 62e percentile (les longs euro se liquident, comme prévu). Mot de la semaine : **garder sans ajouter**.
+
+**Jour 12.** Nouveau LH quotidien à 1,0800 : trailing, stop à **1,0831**.
+
+**Jour 15.** **C2 atteint** à 1,0705. Sortie du solde : 3 lots de la position initiale (+216 pips chacun) et 2 lots de l'ajout (+163 pips chacun).
+
+**Résultat.** Sorties : 2 × 131 = 262 pips ; 3 × 216 = 648 pips ; 2 × 163 = 326 pips ; total **1 236 pips-lots**, soit **1 236 $**. Coûts : environ 10 $ de spread et commissions sur sept lots ; le portage (swap) d'une position vendeuse sur EUR/USD est légèrement positif dans ce contexte de taux, de l'ordre de +12 $ sur quinze jours, ce qui compense les frais. **Net : environ 1 238 $** pour un risque initial de 290 $, soit **+4,3R**. Durée : quinze jours de calendrier, trois révisions, quatre décisions au total.
+
+<Figure caption="Figure 3 · La gestion sur quinze jours : entrée au jour 2, ajout conforme au jour 5 (gain ≥ 1R, nouveau LH quotidien, risque total recalculé à −176 $ sous le budget de 300 $), C1 au jour 7 avec sortie du tiers, révisions hebdomadaires en un mot, trailing structurel sous chaque nouveau LH, C2 au jour 15. Quatre décisions en trois semaines.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Gestion du swing sur quinze jours" xmlns="http://www.w3.org/2000/svg">
+  <line x1="50" y1="285" x2="690" y2="285" className="line" strokeWidth="1" />
+  <text x="70" y="302" fontSize="8" className="muted">J1</text><text x="190" y="302" fontSize="8" className="muted">J5</text><text x="290" y="302" fontSize="8" className="muted">J7</text><text x="430" y="302" fontSize="8" className="muted">J10 · BCE</text><text x="560" y="302" fontSize="8" className="muted">J12</text><text x="655" y="302" fontSize="8" className="muted">J15</text>
+  <line x1="50" y1="50" x2="690" y2="50" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="55" y="46" fontSize="8" className="red">stop initial 1,0979</text>
+  <line x1="50" y1="96" x2="200" y2="96" stroke="var(--tm-red)" strokeWidth="1.2" strokeDasharray="4 3" /><line x1="200" y1="118" x2="300" y2="118" stroke="var(--tm-red)" strokeWidth="1.2" /><text x="205" y="112" fontSize="8" className="red">stop global 1,0931 (après ajout)</text>
+  <line x1="300" y1="150" x2="560" y2="150" stroke="var(--tm-red)" strokeWidth="1.2" /><text x="305" y="144" fontSize="8" className="red">1,0876</text>
+  <line x1="560" y1="196" x2="690" y2="196" stroke="var(--tm-red)" strokeWidth="1.2" /><text x="565" y="190" fontSize="8" className="red">1,0831</text>
+  <line x1="50" y1="228" x2="690" y2="228" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="55" y="224" fontSize="8" className="green">C1 1,0790</text>
+  <line x1="50" y1="266" x2="690" y2="266" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="6 4" /><text x="55" y="262" fontSize="8" className="green">C2 1,0705</text>
+  <polyline points="70,105 100,88 130,96 160,130 190,158 220,140 250,175 290,228 320,210 350,196 390,205 430,190 470,215 500,232 530,222 560,240 600,252 640,262 665,266" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <circle cx="130" cy="96" r="5" className="gold" /><text x="118" y="86" fontSize="8" className="gold" textAnchor="end" fontWeight="600">entrée 5 lots</text>
+  <circle cx="190" cy="158" r="5" className="gold" /><text x="198" y="172" fontSize="8" className="gold" fontWeight="600">ajout 2 lots · risque total −176 $</text>
+  <circle cx="290" cy="228" r="5" className="green" /><text x="298" y="248" fontSize="8" className="green" fontWeight="600">C1 : 2 lots sortis (+262 $)</text>
+  <circle cx="665" cy="266" r="5" className="green" /><text x="655" y="256" fontSize="8" className="green" textAnchor="end" fontWeight="600">C2 : solde (+974 $) · +4,3R</text>
+  <rect x="150" y="30" width="90" height="16" className="box" strokeWidth="1" /><text x="195" y="42" fontSize="8" textAnchor="middle">révision 1 : garder</text>
+  <rect x="420" y="30" width="140" height="16" className="box" strokeWidth="1" /><text x="490" y="42" fontSize="8" textAnchor="middle">révision 2 : garder sans ajouter</text>
+  <text x="430" y="80" fontSize="8" className="muted">BCE conforme : aucune action (la décision était écrite le week-end)</text>
+</svg>
+</Figure>
+
+## Les leçons et les variantes du scénario
+
+**Quatre décisions en trois semaines.** Entrer, ajouter, sortir un tiers, sortir le reste. Tout le reste du temps a été passé à ne rien faire, à l'exception de trois révisions d'une heure. C'est la nature du swing, et c'est ce qui le rend compatible avec un emploi du temps chargé — et incompatible avec le besoin d'action quotidienne.
+
+**Le moteur a fait le trade, la structure a donné le timing.** Sans le verdict du week-end, le CHoCH H4 du jour 2 n'aurait été qu'un signal parmi d'autres, dans les deux sens. Sans le CHoCH H4, le verdict macro aurait produit une entrée à n'importe quel prix, avec un stop arbitraire. Les deux sont nécessaires ; aucun ne suffit.
+
+**Les variantes**, qui composent la vraie distribution des résultats de cette fiche :
+
+- **Entrée anticipée.** Le trader entre au milieu de la zone au jour 2 sans attendre le CHoCH H4, à 1,0930, avec un stop serré à 1,0958 (28 pips) pour « garder le même risque en euros ». Le prix monte à **1,0962** avant de se retourner : stop touché, **−1R**, puis le mouvement se déroule sans lui. C'est le trade perdant ci-dessous, et c'est la faute la plus fréquente sur cette fiche.
+- **Pas d'ajout.** Le trader ne prend pas l'ajout du jour 5 (par prudence, ou parce que le prix ne repasse pas au bon endroit). Résultat : 2 lots à C1 et 3 lots à C2 → (2 × 131) + (3 × 216) = 910 $, soit **+3,1R** au lieu de +4,3R. La différence est réelle mais le trade reste très bon : le pyramidage améliore, il ne fait pas le résultat.
+- **BCE plus restrictive qu'attendu.** Le moteur devient neutre au jour 10, alors que la position est à environ +2R latents. Application de la phrase écrite : sortie de la moitié du solde à environ 1,0800 et trailing serré sur le reste, qui aurait probablement été sorti autour de 1,0830 : résultat de l'ordre de **+2,5R** au lieu de +4,3R. Moins bon, mais décidé d'avance et sans stress.
+- **Retournement du moteur en cours de route.** Une donnée américaine très faible resserre l'écart de taux au jour 8 : le verdict passe à « aucun swing », la position est fermée lundi à l'ouverture, à peu près à l'endroit où elle se trouve, gain ou perte. C'est la règle du niveau 7 et elle prime sur le trailing.
+- **Le prix ne revient jamais dans la zone.** Le repli s'arrête à 1,0898 et le marché repart à la baisse sans nous. **Zéro trade.** Un swing manqué est le résultat le plus fréquent de cette fiche : elle produit six à dix signaux exécutés par an.
+
+**Ce que le trade ne prouve pas.** Un swing à +4,3R ne dit rien de l'expectancy de la fiche : avec un taux de réussite attendu autour de 40 % et une distribution très asymétrique, il faut des années pour la mesurer, ce qui est précisément pourquoi le niveau 7 imposait un backtest historique plutôt qu'une collecte en direct.
+
+## Les deux trades de l'étude de cas
+
+<TradeExample
+  resultat="gain"
+  instrument="EUR/USD spot (mini-lots, 1 $ par pip)"
+  direction="Short"
+  setup="Verdict « ventes autorisées » (écart de taux 2 ans en expansion, DXY en hausse, tendance normale, COT 78e percentile non extrême, saison neutre : coefficient 1) ; structure hebdomadaire en plus hauts descendants, CHoCH quotidien il y a cinq jours ; T2 : premier repli sur le breaker 1,0910 - 1,0938 ; CHoCH H4 dans la zone au jour 2"
+  entree="1,0921 (5 mini-lots) ; ajout de 2 mini-lots à 1,0868 au jour 5"
+  stop="Initial 1,0979 (extrême 1,0948 + 0,5 ATR D de 31 pips ; 58 pips, 290 $) ; après ajout 1,0931 (risque total −176 $) ; puis 1,0876, puis 1,0831"
+  objectif="C1 1,0790 (plus bas de la semaine précédente, 2,26R) : sortie de 2 lots ; C2 1,0705 (plus bas mensuel, 3,72R) : solde"
+  r="+4,3R">
+
+Détail du résultat : 2 lots à +131 pips (262 $), 3 lots à +216 pips (648 $), 2 lots à +163 pips (326 $) = 1 236 $ ; coûts d'environ 10 $ compensés par un portage légèrement positif (+12 $) ; net environ 1 238 $ pour 290 $ de risque initial, soit **+4,3R** en quinze jours. Trois révisions hebdomadaires (« garder », « garder sans ajouter ») et une phrase écrite d'avance pour la BCE ont suffi à traverser une réunion de banque centrale sans improviser. Le point de méthode : le stop initial coïncidait avec l'entrée de la zone d'invalidation hebdomadaire ; quand la lecture technique et la lecture macro donnent le même prix, la conviction n'augmente pas, mais la **qualité du stop**, si.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="EUR/USD spot (variante : entrée anticipée)"
+  direction="Short"
+  setup="Même contexte, même zone, mais entrée au milieu du breaker au jour 2 sans attendre le CHoCH H4 : « le prix est au meilleur endroit, autant prendre le meilleur prix » ; pour conserver le même risque en dollars, le stop est resserré juste au-dessus du sommet du moment (1,0958) au lieu d'être placé au-delà de l'extrême du repli plus 0,5 ATR"
+  entree="1,0930 (5 mini-lots)"
+  stop="1,0958 (28 pips, 140 $)"
+  objectif="C1 1,0790"
+  r="−1R">
+
+Le prix monte à **1,0962** dans les heures qui suivent, avant de se retourner exactement là où la fiche attendait son CHoCH H4. Le stop est touché : −140 $, soit −1R du risque pris. Puis le mouvement de 200 pips se déroule sans lui, ce qui est la partie la plus coûteuse psychologiquement (chapitre 1 du niveau 8 : c'est ce trade qui produit la re-entrée impulsive au pire prix). Deux fautes, et une seule vraie leçon. Les fautes : entrer sans le déclencheur écrit, et **resserrer le stop pour compenser une entrée plus haute** — le stop est un objet du marché plus une marge en ATR, jamais une variable d'ajustement du risque en dollars (si le risque est trop élevé, c'est la **taille** qui baisse, pas le stop qui remonte). La leçon : dans une fiche de swing, attendre le déclencheur coûte quelques pips d'entrée et **achète le droit d'avoir un stop au bon endroit**.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Sur un swing, le **moteur macro** (ici l'écart de taux à deux ans et le dollar) donne le **sens** et le verdict de la semaine ; la structure hebdomadaire et le **CHoCH H4** donnent le **timing** ; aucun des deux ne suffit seul.
+- Le **positionnement COT** et la saisonnalité **modulent** la taille et rapprochent la cible quand ils sont contre ; ici, coefficient 1 et taille pleine.
+- Cinq niveaux hebdomadaires suffisent : zone d'invalidation, sommet de structure, **zone d'entrée** (breaker du réalignement), C1 (plus bas de la semaine précédente), C2 (plus bas mensuel) ; le stop se place au-delà de l'extrême **plus 0,5 ATR quotidien**.
+- Le **pyramidage** exige les trois conditions vérifiées avant l'ordre : gain ≥ 1R, nouveau point de structure, et **risque total recalculé** sous le budget (ici −176 $ pour un budget de 300 $) ; il améliore le résultat, il ne le fait pas.
+- Quinze jours, **quatre décisions**, trois révisions en un mot, et une phrase écrite d'avance pour la réunion de banque centrale : la gestion d'un swing est un calendrier, pas une surveillance.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Vérifier l'ajout">
+
+Au jour 5, la position est de 5 mini-lots entrés à 1,0921, stop 1,0979, budget 300 $. Le prix est à 1,0863, le nouveau LH quotidien est à 1,0900, l'ATR quotidien est de 62 pips.
+
+1. Où va le stop global si l'ajout est fait ?
+2. Quel est le risque total avec 2 mini-lots ajoutés à 1,0868 ?
+3. L'ajout est-il conforme ? Que se serait-il passé avec 4 lots ajoutés ?
+
+<Solution>
+
+1. Stop global = LH 1,0900 + 0,5 × 62 pips = 1,0900 + 31 pips = **1,0931**.
+2. Position initiale : 5 lots de 1,0921 à 1,0931 = −10 pips × 5 = **−50 $** ; ajout : 2 lots de 1,0868 à 1,0931 = −63 pips × 2 = **−126 $** ; total **−176 $**.
+3. **Conforme** : gain latent 58 pips × 5 = 290 $ (soit 1,0R), nouveau LH quotidien, risque total 176 $ inférieur au budget de 300 $, et la taille de l'ajout (2) ne dépasse pas la moitié de la position initiale (2,5). Avec **4 lots** ajoutés : −50 $ + 4 × 63 = −302 $, soit **au-dessus du budget** de 300 $, et la taille dépasserait la moitié de la position initiale : **non conforme**, deux fois.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Recalculer les variantes">
+
+Reprenez le trade et calculez le résultat en R des variantes suivantes (risque initial 290 $).
+
+- (a) Sans ajout : 2 lots à C1, 3 lots à C2.
+- (b) Avec ajout mais sortie de la totalité à C1.
+- (c) Avec ajout, sortie d'un tiers à C1, puis stop suiveur touché à 1,0831 pour le solde.
+
+<Solution>
+
+- **(a)** (2 × 131) + (3 × 216) = 262 + 648 = **910 $** ; 910 / 290 = **+3,1R**.
+- **(b)** 5 lots initiaux à +131 pips = 655 $ ; 2 lots ajoutés (entrés à 1,0868) à +78 pips = 156 $ ; total **811 $** = **+2,8R**. Sortir tout à C1 coûte 1,5R par rapport au trade réel : c'est le prix de la sécurité, à connaître avant de le payer.
+- **(c)** 2 lots à C1 = 262 $ ; solde 5 lots sortis à 1,0831 : 3 lots initiaux à +90 pips = 270 $, 2 lots ajoutés à +37 pips = 74 $ ; total **606 $** = **+2,1R**. Cette variante est le résultat le plus fréquent d'un trailing structurel : on rend une partie du mouvement, et l'on reste largement positif.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Écrire la phrase de la BCE">
+
+Rédigez, comme le trader l'a fait le week-end précédent, la ou les phrases à écrire dans le journal avant une réunion de banque centrale, pour que la décision du jour J soit une lecture et non une improvisation. Couvrez au moins trois issues.
+
+<Solution>
+
+Exemple conforme : « **BCE mercredi 14 h 15 (décision) et 14 h 45 (conférence).** (1) Si la BCE est **conforme aux attentes** (pas de changement de ton sur le calendrier des baisses) : aucune action, le moteur reste orienté, je garde. (2) Si la BCE est **plus restrictive qu'attendu** (report des baisses, ton ferme sur l'inflation) et que l'écart de taux à deux ans se resserre de plus de 10 points de base sur la journée : le moteur devient neutre → je sors la moitié du solde à l'ouverture de jeudi et je serre le trailing au dernier LH quotidien sans marge. (3) Si la BCE est **plus accommodante qu'attendu** : le moteur se renforce → je garde, je n'ajoute pas (l'ajout demande un nouveau LH quotidien, pas une nouvelle). (4) Dans tous les cas : aucune décision pendant les trente minutes qui suivent 14 h 15, et aucune modification du stop à la hausse. » Ce qu'on vérifie : des issues distinctes, un critère observable pour chacune (points de base, ton), une action précise, et une règle de temporisation qui empêche de décider dans le bruit de l'annonce.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Dans ce swing, qu'est-ce qui a donné le sens, et qu'est-ce qui a donné le timing ?",
+      options: [
+        "Le graphique a donné les deux",
+        "Le moteur macro (écart de taux, dollar) a donné le sens ; la structure hebdomadaire et le CHoCH H4 ont donné le timing",
+        "Le COT a donné les deux",
+        "La saisonnalité",
+      ],
+      answer: 1,
+      explain: "Aucun des deux ne suffit : le moteur seul produit une entrée à n'importe quel prix, le graphique seul produit des signaux dans les deux sens.",
+    },
+    {
+      q: "Le stop initial a été placé :",
+      options: [
+        "À 20 pips, pour risquer peu",
+        "Au-delà de l'extrême du repli plus 0,5 ATR quotidien (1,0979), ce qui coïncidait avec la zone d'invalidation hebdomadaire",
+        "Au milieu de la zone d'entrée",
+        "Sous le prix d'entrée",
+      ],
+      answer: 1,
+      explain: "Quand la lecture technique et la lecture macro donnent le même prix, la qualité du stop augmente ; la conviction, elle, ne change rien.",
+    },
+    {
+      q: "L'ajout du jour 5 était conforme parce que :",
+      options: [
+        "Le prix montait",
+        "Gain latent ≥ 1R, nouveau LH quotidien, et risque total recalculé (−176 $) inférieur au budget de 300 $, avec une taille d'ajout sous la moitié de la position initiale",
+        "Le trader se sentait confiant",
+        "Le COT s'était amélioré",
+      ],
+      answer: 1,
+      explain: "Le pyramidage n'ajoute jamais de risque au-delà du budget de la position entière.",
+    },
+    {
+      q: "La décision du jour de la BCE a été facile parce que :",
+      options: [
+        "L'annonce était sans importance",
+        "Les issues et leurs actions avaient été écrites le week-end précédent : mercredi était une lecture, pas une improvisation",
+        "Le trader avait fermé sa position avant",
+        "Le stop était très large",
+      ],
+      answer: 1,
+      explain: "La fiche interdit d'ouvrir un swing à moins de trois jours d'une réunion, mais autorise à en traverser une avec un plan écrit.",
+    },
+    {
+      q: "Dans la variante perdante, la faute principale est :",
+      options: [
+        "D'avoir vendu l'euro",
+        "D'être entré sans le déclencheur écrit, puis d'avoir resserré le stop pour compenser une entrée plus haute : c'est la taille qui s'ajuste, jamais le stop",
+        "D'avoir choisi une cible trop lointaine",
+        "D'avoir tradé le forex",
+      ],
+      answer: 1,
+      explain: "Attendre le déclencheur coûte quelques pips d'entrée et achète le droit d'avoir un stop au bon endroit.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Les deux études de cas montrent le résultat d'un apprentissage ; le chapitre suivant en donne le chemin : une feuille de route à 30, 60 et 90 jours, avec les objectifs de chaque phase, le volume de travail hebdomadaire réaliste, les critères de passage du paper trading au petit réel, les jalons mesurables et les erreurs qui font recommencer à zéro.
