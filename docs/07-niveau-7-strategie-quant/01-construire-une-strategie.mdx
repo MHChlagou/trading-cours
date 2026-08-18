@@ -1,0 +1,348 @@
+---
+title: "Construire une stratégie"
+description: "Passer de l'idée floue à la règle testable, structurer une stratégie en trois blocs (contexte, signal, exécution), écrire des critères d'entrée, de sortie et de gestion, remplir la fiche de stratégie standard du cours, et éviter les erreurs de conception les plus fréquentes."
+---
+
+# Construire une stratégie
+
+Six niveaux ont donné des outils : le risque, la structure, les séquences, le flux, le contexte, les marchés. Le niveau 7 les assemble en **stratégies** : des ensembles de règles écrites, complètes, testables, qui disent quoi faire et quoi ne pas faire, avant que le marché ne bouge. Ce premier chapitre est la méthode de construction : comment transformer une intuition (« les sweeps de session marchent bien ») en une règle qu'un autre pourrait appliquer et qu'un tableur pourrait compter ; comment organiser cette règle en trois blocs ; comment écrire chaque critère ; comment remplir la fiche standard qui servira à tous les setups suivants ; et quelles erreurs de conception vident les comptes avant même le premier trade.
+
+## De l'idée floue à la règle testable
+
+Presque toutes les stratégies commencent par une observation : « quand le prix balaie le range asiatique et revient, il repart souvent dans l'autre sens ». C'est une **idée**. Elle n'est pas fausse ; elle n'est pas encore utilisable, parce que trois personnes qui l'appliqueraient prendraient trois trades différents. La transformer en **règle testable** demande de répondre à des questions précises, dans l'ordre :
+
+1. **Sur quel marché, quelle unité de temps, quelle session ?** « Le prix » n'existe pas ; EUR/USD en M15 entre 9 h et 11 h 30 existe.
+2. **Qu'est-ce qui déclenche exactement ?** « Balaie » veut dire quoi : de combien de pips au-delà de la borne, sur quelle bougie, avec quelle clôture ? Le niveau 3 a donné les définitions (sweep = dépassement en mèche, clôture du bon côté, sur l'unité qui définit le niveau) ; la règle les reprend au tick près.
+3. **Qu'est-ce qui confirme ?** Un displacement de combien d'ATR, un FVG de quelle taille minimale, un CHoCH interne sur quelle unité ?
+4. **Où entre-t-on, où est le stop, où est la cible ?** Des prix définis par des objets (le bord du FVG, la mèche du sweep plus 0,5 ATR M15, la borne opposée du range), pas par des sensations.
+5. **Dans quel contexte le setup est-il autorisé, et dans lequel est-il interdit ?** Régime (niveau 5), structure HTF (niveau 2), heure, annonces.
+6. **Comment gère-t-on le trade une fois ouvert ?** Sorties partielles, déplacement du stop, sortie sur temps, tout à l'avance.
+7. **Que mesure-t-on ?** Les champs du journal qui permettront de calculer l'expectancy par contexte (niveau 1).
+
+Le test de la règle testable : **deux personnes formées, avec le même graphique et la même règle, prennent le même trade au même prix, ou aucune des deux ne le prend.** Tant que ce n'est pas vrai, il reste de la discrétion non écrite dans la règle, et cette discrétion est ce qui rendra les statistiques inutilisables (on ne saura pas ce qu'on a testé) et le trading incohérent (on fera un peu différent chaque fois).
+
+Une nuance : le trading discrétionnaire existe et n'est pas condamné par ce cours ; mais **la discrétion se cantonne à des endroits nommés** (« la qualité du displacement est jugée par le trader selon les critères A, B, C ») et se mesure (le journal note le jugement) ; elle ne se répand pas partout.
+
+<Figure caption="Figure 1 · De l'idée à la règle : chaque flou est remplacé par un critère nommé, avec un objet du cours (sweep, FVG, ATR, régime) et un seuil. Le test final : deux traders, même graphique, même trade.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Transformation d'une idée floue en règle testable" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="300" height="260" rx="8" className="red" opacity="0.06" />
+  <text x="170" y="54" fontSize="12" fontWeight="600" textAnchor="middle" className="red">L'idée floue</text>
+  <text x="30" y="84" fontSize="10">« Quand le prix balaie le range</text>
+  <text x="30" y="100" fontSize="10">asiatique et revient, il repart</text>
+  <text x="30" y="116" fontSize="10">souvent dans l'autre sens. »</text>
+  <text x="30" y="150" fontSize="9" className="muted">le prix ? quel marché, quelle UT ?</text>
+  <text x="30" y="166" fontSize="9" className="muted">balaie ? de combien, quelle clôture ?</text>
+  <text x="30" y="182" fontSize="9" className="muted">revient ? où exactement ?</text>
+  <text x="30" y="198" fontSize="9" className="muted">repart ? jusqu'où, avec quel stop ?</text>
+  <text x="30" y="214" fontSize="9" className="muted">souvent ? dans quel contexte ?</text>
+  <text x="170" y="270" fontSize="10" textAnchor="middle" className="red">trois traders, trois trades</text>
+  <polygon points="345,160 330,150 330,170" className="gold" />
+  <rect x="360" y="30" width="340" height="260" rx="8" className="green" opacity="0.06" />
+  <text x="530" y="54" fontSize="12" fontWeight="600" textAnchor="middle" className="green">La règle testable</text>
+  <text x="370" y="80" fontSize="9">EUR/USD, M15, 9 h - 11 h 30 (Paris), lun-jeu hors niveau 1</text>
+  <text x="370" y="98" fontSize="9">Range asiatique 1 h - 9 h : haut / bas ; ≥ 15 pips de large</text>
+  <text x="370" y="116" fontSize="9">Sweep : mèche ≥ 3 pips au-delà d'une borne, clôture M15 dedans</text>
+  <text x="370" y="134" fontSize="9">Displacement : bougie M15 ≥ 1,5 ATR M15 dans le sens opposé,</text>
+  <text x="370" y="150" fontSize="9">   corps ≥ 60 %, laissant un FVG M15 ≥ 4 pips</text>
+  <text x="370" y="168" fontSize="9">Entrée : limite au bord du FVG côté prix ; stop : mèche du sweep</text>
+  <text x="370" y="184" fontSize="9">   − 0,5 ATR M15 ; cible 1 : borne opposée ; cible 2 : PDH / PDL</text>
+  <text x="370" y="202" fontSize="9">Contexte : structure H4 dans le sens ; régime hors « stress »</text>
+  <text x="370" y="220" fontSize="9">Gestion : moitié à cible 1, stop à BE ; sortie 18 h si rien</text>
+  <text x="370" y="238" fontSize="9">Journal : date, borne, taille sweep, ATR, FVG, R, régime</text>
+  <text x="530" y="270" fontSize="10" textAnchor="middle" className="green">deux traders, même trade</text>
+</svg>
+</Figure>
+
+## Contexte, signal, exécution : les trois blocs
+
+Toute stratégie du cours s'organise en trois blocs, dans cet ordre, et chacun répond à une question.
+
+**Bloc 1 · Contexte : est-ce le moment de chercher ?** Il filtre. Il contient : le marché et l'unité de temps ; la fenêtre horaire (killzones, session, niveau 3 et 6) ; le régime autorisé (la case de la matrice, niveau 5) ; la structure HTF requise (le sens, l'état : repli, extension, transition ; niveau 2) ; le positionnement et le calendrier (COT, funding, annonces ; niveaux 4 et 5) ; les niveaux préparés (le range de référence, les zones HTF, niveau 3 et 4). Si le contexte n'est pas réuni, **on ne regarde même pas** le bloc 2. C'est le bloc qui économise le plus de pertes : la majorité des mauvais trades sont de bons signaux dans un mauvais contexte.
+
+**Bloc 2 · Signal : quelque chose s'est-il passé ?** Il déclenche. Il contient : l'événement de liquidité (le sweep, avec sa définition), la réaction (le displacement, avec ses seuils en ATR et en corps), la zone laissée (le FVG ou l'OB, avec sa taille minimale), la structure interne (le CHoCH ou le BOS interne, sur quelle unité), éventuellement le flux (absorption, delta, niveau 4). Chaque élément est un **critère binaire** (présent ou absent, avec un seuil) ou une mesure notée. Le signal est complet quand tous les critères obligatoires sont présents ; il est absent sinon ; il n'y a pas de « presque ».
+
+**Bloc 3 · Exécution : que fait-on précisément ?** Il agit. Il contient : le prix d'entrée (par un objet : bord du FVG, retest, ordre limite ou réalignement M5) ; le stop (par un objet : mèche du sweep, bord de l'OB, plus une marge en ATR) ; la taille (niveau 1 : budget ÷ distance ; arrondi vers le bas) ; les cibles (par des objets : liquidité, nPOC, borne du range ; avec le ratio minimal exigé) ; la gestion (sorties partielles, déplacement du stop, sortie sur temps, règles de news pendant le trade) ; et ce qui **annule** le trade avant l'entrée (le prix ne revient pas dans la zone en X minutes, une annonce arrive, le régime bascule).
+
+Trois raisons de séparer ainsi :
+
+- **On peut tester chaque bloc.** Le backtest (chapitres 6 et 7 de ce niveau) mesure séparément le taux de signaux en contexte valide, le taux de réussite du signal, l'effet de chaque règle d'exécution ; sans séparation, on ne sait pas quoi corriger.
+- **On peut réutiliser.** Le même bloc de contexte sert à plusieurs signaux ; le même bloc d'exécution sert à plusieurs setups ; la bibliothèque (chapitre 5) est construite ainsi.
+- **On sait où est la discrétion.** Si le trader se réserve un jugement (la « qualité » du displacement), il est dans le bloc 2, nommé, et le journal le mesure.
+
+<Figure caption="Figure 2 · Les trois blocs et l'ordre de lecture : le contexte filtre (si non réuni, on ne cherche pas), le signal déclenche (tous les critères ou rien), l'exécution agit (prix, stop, taille, cibles, gestion, annulation). Chaque bloc se teste séparément.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Les trois blocs d'une stratégie" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="40" width="210" height="220" rx="8" className="box" strokeWidth="1.5" />
+  <text x="125" y="64" fontSize="13" fontWeight="600" textAnchor="middle">1 · Contexte</text>
+  <text x="125" y="82" fontSize="10" textAnchor="middle" className="muted">est-ce le moment de chercher ?</text>
+  <text x="30" y="108" fontSize="9">marché, UT, fenêtre horaire</text>
+  <text x="30" y="124" fontSize="9">régime autorisé (matrice)</text>
+  <text x="30" y="140" fontSize="9">structure HTF requise</text>
+  <text x="30" y="156" fontSize="9">positionnement, calendrier</text>
+  <text x="30" y="172" fontSize="9">niveaux préparés</text>
+  <rect x="30" y="200" width="190" height="44" rx="4" className="red" opacity="0.1" />
+  <text x="125" y="218" fontSize="9" textAnchor="middle" className="red">non réuni →</text>
+  <text x="125" y="234" fontSize="9" textAnchor="middle" className="red">on ne regarde pas le bloc 2</text>
+  <polygon points="245,150 232,142 232,158" className="gold" />
+  <rect x="255" y="40" width="210" height="220" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="64" fontSize="13" fontWeight="600" textAnchor="middle">2 · Signal</text>
+  <text x="360" y="82" fontSize="10" textAnchor="middle" className="muted">quelque chose s'est-il passé ?</text>
+  <text x="265" y="108" fontSize="9">sweep (définition, seuil)</text>
+  <text x="265" y="124" fontSize="9">displacement (ATR, corps)</text>
+  <text x="265" y="140" fontSize="9">zone laissée (FVG / OB, taille min)</text>
+  <text x="265" y="156" fontSize="9">structure interne (CHoCH / BOS)</text>
+  <text x="265" y="172" fontSize="9">flux optionnel (delta, absorption)</text>
+  <rect x="265" y="200" width="190" height="44" rx="4" className="gold" opacity="0.15" />
+  <text x="360" y="218" fontSize="9" textAnchor="middle">critères binaires avec seuils :</text>
+  <text x="360" y="234" fontSize="9" textAnchor="middle">tous présents ou rien, pas de « presque »</text>
+  <polygon points="480,150 467,142 467,158" className="gold" />
+  <rect x="490" y="40" width="210" height="220" rx="8" className="gold" opacity="0.9" />
+  <text x="595" y="64" fontSize="13" fontWeight="700" textAnchor="middle" fill="#141414">3 · Exécution</text>
+  <text x="595" y="82" fontSize="10" textAnchor="middle" fill="#141414">que fait-on précisément ?</text>
+  <text x="500" y="108" fontSize="9" fill="#141414">entrée : par un objet</text>
+  <text x="500" y="124" fontSize="9" fill="#141414">stop : objet + marge ATR</text>
+  <text x="500" y="140" fontSize="9" fill="#141414">taille : budget ÷ distance</text>
+  <text x="500" y="156" fontSize="9" fill="#141414">cibles : liquidité, ratio min</text>
+  <text x="500" y="172" fontSize="9" fill="#141414">gestion : partielles, BE, temps</text>
+  <text x="500" y="188" fontSize="9" fill="#141414">annulation : délai, news, régime</text>
+  <text x="595" y="230" fontSize="9" textAnchor="middle" fill="#141414">journal : champs à noter</text>
+  <text x="360" y="285" fontSize="10" textAnchor="middle" className="muted">chaque bloc se teste séparément ; la discrétion, s'il y en a, est nommée et mesurée</text>
+</svg>
+</Figure>
+
+## Critères d'entrée, de sortie et de gestion écrits
+
+Écrire un critère, c'est le rendre **vérifiable après coup sur un graphique figé**. Quelques règles d'écriture qui évitent les critères mous.
+
+**Un critère nomme un objet du cours et un seuil.** « Un sweep net » est mou ; « une mèche d'au moins 3 pips au-delà de la borne du range asiatique, avec une clôture M15 à l'intérieur du range » est écrit. « Un bon displacement » est mou ; « une bougie M15 dont la fourchette est d'au moins 1,5 fois l'ATR M15 (14) et dont le corps représente au moins 60 % de la fourchette, dans le sens opposé au sweep » est écrit. Les seuils sont des choix (1,5 ATR plutôt que 1,2 ou 2) ; le backtest les évaluera ; l'important est qu'ils existent.
+
+**Un critère d'entrée donne un prix.** « Au retour dans le FVG » est mou ; « ordre limite au bord du FVG le plus proche du prix courant, valable jusqu'à la fin de la fenêtre ; ou, en variante B, à la clôture de la première bougie M5 qui casse le dernier LH interne après être entrée dans le FVG » est écrit. Les deux variantes sont légitimes ; on en choisit une par stratégie et l'on note laquelle.
+
+**Un critère de stop donne un prix et une raison.** « Sous le sweep » est presque écrit ; « au plus bas de la mèche du sweep moins 0,5 ATR M15, arrondi au tick ; raison : si ce prix est retraversé, l'hypothèse de prise de liquidité est fausse » est écrit. La raison compte : elle est ce qui interdira de déplacer le stop (niveau 1).
+
+**Un critère de cible donne un objet et un ratio minimal.** « Cible 1 : la borne opposée du range asiatique ; cible 2 : le PDH ou le PDL selon le sens ; le trade n'est pris que si la cible 1 offre un ratio d'au moins 1,5 et la cible 2 d'au moins 3 depuis l'entrée ; sinon, entrée refusée. » Le ratio minimal est un critère d'entrée déguisé : il refuse les trades dont la géométrie est mauvaise.
+
+**Un critère de gestion est une séquence d'instructions.** « À la cible 1, sortir 50 % ; déplacer le stop au prix d'entrée plus 1 pip ; à la cible 2, sortir le solde ; si à 18 h la position est encore ouverte, sortir au marché ; si une annonce de niveau 1 tombe pendant le trade, appliquer le protocole news du plan. » Chaque instruction est exécutable sans jugement.
+
+**Un critère d'annulation dit quand le setup meurt avant l'entrée.** « Si le prix ne revient pas dans le FVG dans les 90 minutes suivant le displacement, annuler l'ordre ; si le prix traverse le FVG en clôture M15 avant d'avoir servi l'ordre, annuler ; si le régime bascule en stress (VIX + 30 % intraday), annuler. »
+
+Le résultat est plus long qu'une idée ; c'est le prix de la testabilité. Une stratégie complète tient sur une à deux pages ; moins, il manque des critères ; beaucoup plus, elle est trop compliquée pour être appliquée (section « Erreurs »).
+
+## La fiche de stratégie standard du cours
+
+Pour que tous les setups (chapitres 2 à 5) se comparent, se testent et se journalisent de la même façon, le cours utilise une fiche unique. La voici, à recopier.
+
+**FICHE DE STRATÉGIE**
+
+- **Nom** : court et descriptif (par exemple « Sweep-FVG session Londres EUR/USD »).
+- **Version et date** : la fiche évolue ; on numérote (v1.0, v1.1) et l'on garde les anciennes.
+- **Marché(s) et unité(s) de temps** : contexte, structure, exécution.
+- **Fenêtre horaire** : début, fin, jours ; exceptions (fériés, semaines de roulement).
+- **Régimes autorisés** : cases de la matrice ; régimes interdits.
+- **Contexte requis** (bloc 1) : liste de critères, chacun binaire ou mesuré.
+- **Signal** (bloc 2) : liste de critères obligatoires avec seuils ; critères optionnels (qui modulent la taille ou la cible, pas l'entrée) ; discrétion nommée s'il y en a.
+- **Exécution** (bloc 3) : entrée (objet, variante), stop (objet, marge, raison), taille (règle du niveau 1), cibles (objets, ratios minimaux), gestion (séquence), annulation (conditions), news pendant le trade.
+- **Statistiques attendues** : ce que l'on croit avant de tester (taux de réussite, R moyen, fréquence par semaine) ; puis ce que le backtest a mesuré (chapitres 6 à 9), avec l'échantillon, la période, l'expectancy, le drawdown, et la date de la mesure.
+- **Conditions d'invalidité de la stratégie** : ce qui, s'il se produit, oblige à la suspendre et à la revoir (par exemple : drawdown supérieur à 1,5 fois le pire drawdown backtesté ; expectancy sur les 50 derniers trades inférieure à zéro ; changement de microstructure du marché).
+- **Journal** : les champs à noter pour chaque trade de cette stratégie (au-delà des champs communs : date, R, conformité), pour permettre la décomposition par contexte.
+- **Historique des versions** : ce qui a changé et pourquoi.
+
+Une fiche remplie est la **définition** de la stratégie : c'est elle que l'on backteste, que l'on applique, que l'on révise. Le journal renvoie à son nom et à sa version. Le niveau 9 en fera le cœur du playbook.
+
+<Figure caption="Figure 3 · La fiche de stratégie standard : une page qui définit, teste et journalise le setup ; les statistiques attendues sont remplies avant le test, les mesurées après ; les conditions d'invalidité disent quand la fiche doit être suspendue.">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Structure de la fiche de stratégie standard" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="20" width="600" height="300" rx="8" className="box" strokeWidth="1.5" />
+  <text x="360" y="44" fontSize="13" fontWeight="700" textAnchor="middle">FICHE DE STRATÉGIE · Sweep-FVG Londres EUR/USD · v1.2</text>
+  <line x1="80" y1="54" x2="640" y2="54" className="line" strokeWidth="1" />
+  <text x="80" y="76" fontSize="10" fontWeight="600">Marché / UT</text><text x="200" y="76" fontSize="10" className="muted">EUR/USD · H4 / M15 / M5</text>
+  <text x="80" y="94" fontSize="10" fontWeight="600">Fenêtre</text><text x="200" y="94" fontSize="10" className="muted">9 h - 11 h 30, lun-jeu, hors niveau 1</text>
+  <text x="80" y="112" fontSize="10" fontWeight="600">Régimes</text><text x="200" y="112" fontSize="10" className="muted">tendance calme / normale, range normal ; interdit : stress</text>
+  <text x="80" y="130" fontSize="10" fontWeight="600">Contexte (bloc 1)</text><text x="200" y="130" fontSize="10" className="muted">H4 dans le sens · range asiatique ≥ 15 pips · DXY cohérent</text>
+  <text x="80" y="148" fontSize="10" fontWeight="600">Signal (bloc 2)</text><text x="200" y="148" fontSize="10" className="muted">sweep ≥ 3 pips + clôture · displacement ≥ 1,5 ATR, corps ≥ 60 % · FVG ≥ 4 pips</text>
+  <text x="80" y="166" fontSize="10" fontWeight="600">Exécution (bloc 3)</text><text x="200" y="166" fontSize="10" className="muted">limite bord du FVG · stop mèche − 0,5 ATR · cibles borne / PDH, ratios 1,5 / 3</text>
+  <text x="80" y="184" fontSize="10" fontWeight="600">Gestion</text><text x="200" y="184" fontSize="10" className="muted">50 % à C1, BE +1 pip, solde à C2, sortie 18 h, protocole news</text>
+  <text x="80" y="202" fontSize="10" fontWeight="600">Annulation</text><text x="200" y="202" fontSize="10" className="muted">pas de retour en 90 min · FVG traversé en clôture · régime → stress</text>
+  <line x1="80" y1="214" x2="640" y2="214" className="line" strokeWidth="1" strokeDasharray="3 3" />
+  <text x="80" y="234" fontSize="10" fontWeight="600" className="gold">Stats attendues</text><text x="200" y="234" fontSize="10" className="muted">avant test : 45 %, +0,3R, 3 / semaine</text>
+  <text x="80" y="252" fontSize="10" fontWeight="600" className="gold">Stats mesurées</text><text x="200" y="252" fontSize="10" className="muted">n = 214 (2 ans), 43 %, +0,34R, DD 11R, mesuré le …</text>
+  <text x="80" y="270" fontSize="10" fontWeight="600" className="red">Invalidité</text><text x="200" y="270" fontSize="10" className="muted">DD supérieur à 17R · E(50) inférieure à 0 · changement de session</text>
+  <text x="80" y="288" fontSize="10" fontWeight="600">Journal</text><text x="200" y="288" fontSize="10" className="muted">borne, taille du sweep en ATR, taille du FVG, régime, heure, R, conformité</text>
+  <text x="80" y="306" fontSize="10" fontWeight="600">Versions</text><text x="200" y="306" fontSize="10" className="muted">v1.1 : seuil displacement 1,2 → 1,5 ATR (backtest) · v1.2 : ajout filtre DXY</text>
+</svg>
+</Figure>
+
+## Erreurs de conception les plus fréquentes
+
+Ces erreurs se voient dès la fiche, avant tout backtest ; les corriger là coûte une heure ; les découvrir en réel coûte des R.
+
+**Le contexte absent.** Une fiche qui commence au signal (« quand il y a un sweep et un FVG… ») sans dire dans quel régime, quelle structure, quelle heure. Le setup se déclenchera partout, y compris là où il n'a aucune chance ; l'expectancy globale sera diluée (niveau 1, sur-trading) et le backtest dira « ça ne marche pas » alors que le signal est bon dans un contexte précis. Remède : le bloc 1 avant tout.
+
+**La discrétion partout.** « Si le sweep est propre », « si le displacement est convaincant », « si le contexte est favorable » : autant de mots qui cachent trois stratégies différentes selon l'humeur. Remède : chaque mot flou devient un critère avec un seuil, ou une discrétion nommée et mesurée.
+
+**Trop de critères.** Douze conditions obligatoires : le setup se produit deux fois par an ; on ne peut ni le tester ni en vivre ; et chaque critère supplémentaire est un degré de liberté d'overfitting (chapitre 9). Remède : trois à cinq critères de contexte, trois à cinq de signal, le reste en optionnel (module la taille) ou supprimé.
+
+**Le stop défini par le montant.** « Stop à 20 pips » sans objet : le stop est parfois dans le bruit, parfois trop loin ; il n'a pas de raison, donc il sera déplacé. Remède : le stop est un objet plus une marge en ATR ; le montant vient de la taille (niveau 1).
+
+**La cible définie par le ratio seul.** « Cible à 3R » : elle tombe au milieu de nulle part, parfois juste sous un HVN ou un PDH que le prix touche sans le dépasser. Remède : la cible est un objet (liquidité, nPOC, borne) ; le ratio est un **filtre** d'entrée (on ne prend le trade que si l'objet donne au moins tel ratio).
+
+**Pas de règle d'annulation ni de sortie sur temps.** Un ordre limite oublié dans un FVG mort ; une position gardée jusqu'à la nuit parce que la fiche ne disait pas quand sortir. Remède : chaque setup a une durée de vie de l'ordre et une heure limite de gestion.
+
+**Les news ignorées.** Une fiche qui ne dit rien des annonces produira des trades ouverts à 14 h 25. Remède : le protocole news du niveau 5 est incorporé par référence dans chaque fiche.
+
+**Les statistiques attendues copiées.** « Ce setup a 70 % de réussite » lu quelque part et écrit dans la fiche : c'est une croyance sans méthode (niveau 2, pièges des patterns). Remède : les statistiques attendues sont une hypothèse honnête, à comparer au backtest ; celles d'un tiers ne s'appliquent ni à votre marché ni à votre exécution.
+
+**La stratégie qui change à chaque perte.** Trois pertes, un critère modifié ; trois autres, un autre : au bout d'un mois, la fiche n'a plus rien de commun avec l'originale et aucun échantillon n'a été constitué. Remède : la fiche est versionnée ; une version se teste sur un échantillon défini (chapitre 6 : la taille minimale) avant d'être révisée ; les révisions sont datées et justifiées.
+
+**L'absence de condition d'invalidité.** Une stratégie qui a cessé de fonctionner continue d'être tradée parce que rien ne dit quand s'arrêter. Remède : la ligne « invalidité » de la fiche, chiffrée (drawdown, expectancy glissante), décidée à froid.
+
+## Deux trades sous l'angle de la fiche
+
+Reconstitutions pédagogiques : la même idée, avec et sans fiche.
+
+<TradeExample
+  resultat="gain"
+  instrument="EUR/USD (micro-lots)"
+  direction="Long"
+  setup="Fiche « Sweep-FVG Londres EUR/USD v1.2 » : contexte réuni (H4 haussier, range asiatique 22 pips, régime tendance normale, DXY en repli, pas de niveau 1) ; signal complet (sweep de 4 pips avec clôture, displacement 1,7 ATR corps 68 %, FVG 6 pips) ; exécution selon la fiche"
+  entree="1,0854 (limite au bord du FVG)"
+  stop="1,0838 (mèche du sweep 1,0842 − 0,5 ATR M15 de 8 pips = 4 pips ; 16 pips)"
+  objectif="C1 1,0879 (retest du haut du range, ratio 1,56) · C2 PDH 1,0902 (ratio 3)"
+  r="+2,3R (50 % à C1, solde à C2)">
+
+Le trade s'est pris tout seul, au sens où la fiche l'avait déjà pris : le contexte a été vérifié en deux minutes à 8 h 45, le signal s'est déclenché à 9 h 25 et chaque critère a été coché, l'ordre limite a été placé avec son stop et ses cibles, la gestion a suivi la séquence. Un détail montre l'intérêt de la fiche : la borne opposée du range donnait un ratio de 1,4, sous le seuil de 1,5 ; la fiche prévoit dans ce cas de prendre comme C1 le premier niveau au-delà qui satisfait le seuil (ici le retest du haut du range confondu avec un niveau de la veille) ; sans cette règle écrite, le trader aurait hésité en direct. Journal : borne basse, sweep 0,5 ATR, FVG 6 pips, tendance normale, 9 h 25, +2,3R, conforme.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="EUR/USD (micro-lots)"
+  direction="Long"
+  setup="La même « idée » sans fiche : « le prix a balayé le range asiatique et revient, j'achète » ; un vendredi de NFP, H4 en transition, displacement de 0,9 ATR sans FVG, entrée au marché « avant que ça parte »"
+  entree="1,0861 (au marché, servi à 1,0862)"
+  stop="1,0845 (16 pips « comme d'habitude »)"
+  objectif="1,0900"
+  r="−1R, puis −1R deux jours plus tard sur une variante">
+
+Même trader, deux semaines plus tôt, avant d'avoir écrit la fiche. L'idée est là ; les critères ne le sont pas. Vendredi de NFP (le contexte aurait dit non : niveau 1 à 14 h 30 et H4 en transition) ; « displacement » de 0,9 ATR sans FVG (le signal aurait dit non) ; entrée au marché avant tout retour (l'exécution aurait dit non) ; stop à 16 pips parce que c'est le chiffre habituel, sans objet. Le trade perd ; deux jours plus tard, une autre variante de la même idée floue perd aussi ; le trader conclut que « le setup ne marche pas ». Il n'a jamais tradé un setup ; il a tradé une idée, trois fois différemment. La fiche est ce qui permet de savoir ce qui a été testé, donc ce qui marche.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Une **idée** devient une **règle testable** quand chaque flou est remplacé par un objet du cours et un seuil ; le test : deux traders, même graphique, même trade. La discrétion se cantonne à des endroits nommés et mesurés.
+- **Trois blocs** dans l'ordre : **contexte** (filtre : si non réuni, on ne cherche pas), **signal** (déclenche : tous les critères ou rien), **exécution** (agit : entrée, stop, taille, cibles, gestion, annulation). Chacun se teste séparément.
+- Un critère **nomme un objet et un seuil**, donne un **prix**, une **raison** pour le stop, un **objet et un ratio minimal** pour la cible, une **séquence** pour la gestion, des **conditions** pour l'annulation.
+- La **fiche standard** (nom, version, marché, fenêtre, régimes, contexte, signal, exécution, statistiques attendues puis mesurées, invalidité, journal, versions) définit la stratégie ; c'est elle qu'on teste, applique et révise.
+- Erreurs de conception : contexte absent, discrétion partout, trop de critères, stop par montant, cible par ratio seul, pas d'annulation, news ignorées, statistiques copiées, stratégie qui change à chaque perte, pas d'invalidité.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Rendre testable">
+
+Voici une idée : « Sur le NQ, quand le prix revient sur le VWAP en tendance, ça repart souvent. » Écrivez-la en règle testable : marché et unités, fenêtre, contexte (au moins trois critères), signal (au moins trois critères avec seuils), exécution (entrée, stop, cibles avec ratios, gestion, annulation).
+
+<Solution>
+
+Une réponse acceptable : « MNQ, contexte H1, exécution M5, RTH 16 h - 21 h (hors 17 h 30 - 19 h 30 et hors niveau 1). **Contexte** : structure H1 en HH / HL (ou LH / LL) avec le dernier BOS datant de moins de 3 heures ; régime tendance calme ou normale ; VWAP du jour dans le sens (prix au-dessus pour un long depuis au moins 45 minutes) ; pas d'annonce de niveau 1 dans les 30 minutes. **Signal** : retour du prix à moins de 0,3 ATR M5 du VWAP ; bougie M5 qui touche ou traverse le VWAP en mèche et clôture du bon côté ; réalignement M5 (cassure du dernier LH interne M5) dans les 3 bougies suivantes ; volume de la bougie de touche ≥ 1,2 fois la moyenne horaire (optionnel, module la taille). **Exécution** : entrée à la clôture de la bougie de réalignement ; stop sous la mèche de touche − 0,5 ATR M5, raison : si le VWAP est traversé en clôture, la thèse est fausse ; cible 1 : le dernier HH H1 (ratio ≥ 1,5 exigé) ; cible 2 : le PDH ou le nPOC suivant (ratio ≥ 2,5) ; 50 % à C1, stop à BE ; sortie 21 h 30 si ouvert ; annulation si le VWAP est traversé en clôture M5 avant le réalignement ou après 20 minutes sans réalignement. » Toute réponse avec des objets, des seuils et des prix a les points.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Repérer les erreurs de conception">
+
+Voici une fiche résumée : « Achat sur support quand le RSI est bas et que ça a l'air de rebondir ; stop 15 points ; cible 3R ; je garde tant que ça monte ; si ça perd trois fois je change le RSI. Taux de réussite attendu 75 % (vu sur une vidéo). » Listez les erreurs de conception et proposez la correction de chacune.
+
+<Solution>
+
+1. **Contexte absent** : quel marché, quelle UT, quelle heure, quel régime, quelle structure HTF ? → bloc 1 complet. 2. **Discrétion partout** : « support », « bas », « a l'air de rebondir » → support défini (zone HTF, niveau 2 / 4), seuil de RSI ou, mieux, un signal de structure (réalignement) avec seuils. 3. **Stop par montant** : 15 points sans objet → objet (sous le swing / la zone) + marge ATR. 4. **Cible par ratio seul** : 3R au milieu de rien → cible par objet (liquidité, nPOC), ratio comme filtre. 5. **Gestion floue** : « tant que ça monte » → séquence écrite (partielles, BE, sortie sur temps). 6. **Stratégie qui change à chaque perte** : « si ça perd trois fois je change » → versionnage, échantillon minimal avant révision. 7. **Statistiques copiées** : 75 % vu sur une vidéo → hypothèse honnête, backtest sur son marché. 8. **Pas d'annulation, pas de news, pas d'invalidité** → ajouter les trois lignes.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Remplir la fiche standard">
+
+Prenez le setup que vous tradez ou envisagez le plus et remplissez la fiche standard du cours, ligne par ligne, sur une à deux pages. Laissez « statistiques mesurées » vide (elle se remplira aux chapitres 6 à 9), mais écrivez « statistiques attendues » honnêtement. Faites relire la fiche par quelqu'un qui connaît le cours : peut-il, avec un graphique de la semaine dernière, dire quels trades la fiche aurait pris ?
+
+<Solution>
+
+Pas de corrigé unique. Le test de relecture est le juge : si le relecteur hésite (« ça dépend de ce que tu appelles… »), le critère concerné est mou et se réécrit. La plupart des premières fiches font apparaître deux ou trois zones de discrétion non nommée et l'absence de règle d'annulation ; c'est normal, et c'est ce que l'exercice sert à trouver avant le backtest.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Une règle est testable quand :",
+      options: [
+        "Elle est courte",
+        "Deux traders formés, avec le même graphique et la même règle, prennent le même trade au même prix, ou aucun des deux",
+        "Elle a marché la semaine dernière",
+        "Elle utilise un indicateur",
+      ],
+      answer: 1,
+      explain: "Tant que ce n'est pas vrai, il reste de la discrétion non écrite ; les statistiques seront inutilisables et le trading incohérent.",
+    },
+    {
+      q: "Les trois blocs d'une stratégie sont :",
+      options: [
+        "Entrée, stop, cible",
+        "Contexte (filtre), signal (déclenche), exécution (agit), dans cet ordre, chacun testable séparément",
+        "Achat, vente, attente",
+        "Marché, heure, taille",
+      ],
+      answer: 1,
+      explain: "Si le contexte n'est pas réuni, on ne regarde pas le signal ; la majorité des mauvais trades sont de bons signaux dans un mauvais contexte.",
+    },
+    {
+      q: "Un critère bien écrit :",
+      options: [
+        "Dit « un sweep propre »",
+        "Nomme un objet du cours et un seuil, donne un prix pour l'entrée, un objet, une marge et une raison pour le stop, un objet et un ratio minimal pour la cible",
+        "Est le plus court possible",
+        "Laisse la place au jugement",
+      ],
+      answer: 1,
+      explain: "La discrétion, s'il y en a, est nommée et mesurée au journal ; elle ne se répand pas partout.",
+    },
+    {
+      q: "Le ratio gain / risque minimal dans une fiche sert :",
+      options: [
+        "À placer la cible",
+        "De filtre d'entrée : la cible est un objet (liquidité, nPOC) ; on ne prend le trade que si cet objet offre au moins le ratio",
+        "À calculer la taille",
+        "À rien",
+      ],
+      answer: 1,
+      explain: "Une cible définie par le ratio seul tombe au milieu de nulle part ; une cible par objet avec un ratio-filtre refuse les mauvaises géométries.",
+    },
+    {
+      q: "La fiche de stratégie standard contient, entre autres :",
+      options: [
+        "Uniquement l'entrée et le stop",
+        "Nom et version, marché, fenêtre, régimes, contexte, signal, exécution, statistiques attendues puis mesurées, conditions d'invalidité, champs de journal, historique des versions",
+        "Une capture d'écran",
+        "Le taux de réussite d'un tiers",
+      ],
+      answer: 1,
+      explain: "La fiche définit la stratégie : c'est elle qu'on teste, applique et révise ; le journal renvoie à son nom et à sa version.",
+    },
+    {
+      q: "Modifier un critère de la stratégie après trois pertes :",
+      options: [
+        "Est une bonne adaptation",
+        "Est l'erreur qui empêche de constituer un échantillon : la fiche se versionne et une version se teste sur un échantillon défini avant révision",
+        "Est obligatoire",
+        "N'a pas de conséquence",
+      ],
+      answer: 1,
+      explain: "Au bout d'un mois, la fiche n'a plus rien de commun avec l'originale et rien n'a été testé. Les révisions sont datées et justifiées.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+La méthode est posée ; place aux setups complets. Le chapitre suivant construit le premier, fiche standard à l'appui : le sweep et FVG sur indices, avec le contexte requis, le déclencheur critère par critère, l'entrée, le stop, les objectifs et leurs variantes, la gestion active, les statistiques attendues et les conditions d'invalidité.
