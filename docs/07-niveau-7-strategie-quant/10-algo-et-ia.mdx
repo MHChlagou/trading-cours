@@ -1,0 +1,377 @@
+---
+title: "Trading algorithmique et IA : ce qui marche vraiment"
+description: "Automatiser une stratégie validée avec une architecture minimale (données, signal, risque, exécution, journal), les garde-fous d'exécution et de surveillance sans lesquels un algorithme est un danger, la routine de recherche quantitative au quotidien, les usages réalistes de l'intelligence artificielle pour un trader, et ce qu'elle ne fera pas à sa place."
+---
+
+# Trading algorithmique et IA : ce qui marche vraiment
+
+Le niveau 7 a construit une fiche, l'a mesurée, l'a validée. Deux questions se posent alors, que le lecteur entend partout : faut-il l'automatiser, et l'intelligence artificielle peut-elle faire mieux ? Ce chapitre y répond sans enthousiasme ni mépris. L'automatisation est une affaire d'**exécution** : elle ne crée pas d'edge, elle applique une fiche sans fatigue ni émotion, au prix de garde-fous que ce chapitre décrit. L'IA est une affaire d'**outillage** : elle accélère la recherche, la relecture et le code ; elle ne remplace ni la fiche, ni la validation, ni le jugement sur le régime ; et là où l'on attend d'elle qu'elle « prédise le marché », elle échoue pour les raisons mêmes que le chapitre 9 a exposées.
+
+## Automatiser une stratégie : architecture minimale
+
+On n'automatise que ce qui est **validé** (chapitre 9) et **entièrement mécanique** (chapitre 1 : critères chiffrés, pas de « presque »). Le setup 1 dans sa version stricte l'est ; le setup 3, avec sa lecture macro du week-end, ne l'est qu'à moitié (le déclencheur H4 s'automatise, le verdict macro reste humain). L'architecture minimale d'un automate de trading tient en cinq briques, qui sont exactement les blocs de la fiche plus le journal.
+
+1. **Données** : un flux de bougies (ou de ticks) propre, horodaté dans le bon fuseau, avec détection des trous et des retards ; si le flux s'arrête, l'automate doit **le savoir** et cesser d'agir.
+2. **Signal** : la fonction qui, à chaque bougie close, répond « signal complet / incomplet / absent » et produit entrée, stop, cibles ; c'est le moteur event-driven du chapitre 7, en direct au lieu d'en replay ; le même code, si possible littéralement le même (un backtest et un automate qui utilisent deux codes différents finissent toujours par diverger).
+3. **Risque** : la brique qui calcule la taille (budget, coefficients), vérifie les limites (budget quotidien, nombre de positions, chaleur, marge) et peut **refuser** un ordre que le signal demande.
+4. **Exécution** : l'envoi des ordres au courtier (bracket : entrée, stop, cibles en OCO), le suivi de leur état (en attente, servi, partiellement servi, rejeté), la gestion (annulation à 90 minutes, breakeven, trailing, sortie sur temps).
+5. **Journal** : chaque décision (signal vu, refusé, ordre envoyé, servi, modifié, sorti), horodatée, avec les valeurs mesurées ; c'est la feuille de collecte du chapitre 6, écrite par la machine ; c'est aussi la seule preuve de ce que l'automate a fait quand quelque chose tourne mal.
+
+En pseudo-code, la boucle principale se lit :
+
+```python
+# boucle principale d'un automate minimal (pseudo-code, une bougie à la fois)
+for bar in data.stream(timeframe="5min"):          # 1. données : bougies closes, horodatées
+    if data.is_stale(max_delay_s=20):                # flux en retard ou coupé
+        risk.halt("données obsolètes"); continue     #    -> on n'agit pas, on alerte
+    journal.log_bar(bar)
+
+    sig = strategy.evaluate(bar)                      # 2. signal : complet / incomplet / absent
+    journal.log_signal(sig)                           #    (même code que le backtest)
+
+    if sig.complete and not broker.has_position():
+        order = risk.size_and_check(sig)              # 3. risque : taille, budget du jour, chaleur,
+        if order is None:                             #    marge ; peut refuser
+            journal.log_refusal(sig, risk.reason); continue
+        broker.send_bracket(order)                    # 4. exécution : entrée + stop + cibles (OCO)
+        journal.log_order(order)
+
+    broker.manage_open(bar, rules=strategy.management) # annulation, breakeven, trailing, temps
+    watchdog.heartbeat()                              # 5. surveillance : « je suis vivant »
+```
+
+Ce que cette architecture n'a pas : d'apprentissage en cours de route (l'automate applique la fiche figée ; toute modification passe par le chapitre 9), d'optimisation en direct, de « mode agressif ». Elle est ennuyeuse ; c'est sa qualité.
+
+<Figure caption="Figure 1 · Architecture minimale d'un automate : données (avec détection de trous et de retards), signal (le même code que le backtest), risque (taille, limites, droit de refus), exécution (bracket OCO, suivi d'état, gestion), journal (chaque décision horodatée) ; au-dessus, la surveillance et les garde-fous. Rien n'apprend en cours de route.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Architecture minimale d'un automate" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="90" width="110" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="85" y="115" fontSize="10" fontWeight="600" textAnchor="middle">1 · Données</text>
+  <text x="85" y="132" fontSize="8" textAnchor="middle" className="muted">bougies closes, fuseau</text>
+  <text x="85" y="146" fontSize="8" textAnchor="middle" className="muted">trous, retards → halte</text>
+  <line x1="140" y1="125" x2="165" y2="125" className="line" strokeWidth="1.5" />
+  <rect x="165" y="90" width="110" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="220" y="115" fontSize="10" fontWeight="600" textAnchor="middle">2 · Signal</text>
+  <text x="220" y="132" fontSize="8" textAnchor="middle" className="muted">complet / incomplet / absent</text>
+  <text x="220" y="146" fontSize="8" textAnchor="middle" className="gold">même code que le backtest</text>
+  <line x1="275" y1="125" x2="300" y2="125" className="line" strokeWidth="1.5" />
+  <rect x="300" y="90" width="110" height="70" rx="6" className="box" strokeWidth="1.5" />
+  <text x="355" y="115" fontSize="10" fontWeight="600" textAnchor="middle">3 · Risque</text>
+  <text x="355" y="132" fontSize="8" textAnchor="middle" className="muted">taille, budget, chaleur, marge</text>
+  <text x="355" y="146" fontSize="8" textAnchor="middle" className="red" fontWeight="600">peut refuser</text>
+  <line x1="410" y1="125" x2="435" y2="125" className="line" strokeWidth="1.5" />
+  <rect x="435" y="90" width="110" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="490" y="115" fontSize="10" fontWeight="600" textAnchor="middle">4 · Exécution</text>
+  <text x="490" y="132" fontSize="8" textAnchor="middle" className="muted">bracket OCO, états, gestion</text>
+  <text x="490" y="146" fontSize="8" textAnchor="middle" className="muted">annulation, BE, trailing, temps</text>
+  <line x1="545" y1="125" x2="570" y2="125" className="line" strokeWidth="1.5" />
+  <rect x="570" y="90" width="120" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="630" y="115" fontSize="10" fontWeight="600" textAnchor="middle">5 · Journal</text>
+  <text x="630" y="132" fontSize="8" textAnchor="middle" className="muted">chaque décision horodatée</text>
+  <text x="630" y="146" fontSize="8" textAnchor="middle" className="muted">la preuve quand ça tourne mal</text>
+  <rect x="30" y="30" width="660" height="40" rx="6" className="gold" opacity="0.15" />
+  <text x="360" y="55" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Surveillance et garde-fous : heartbeat, kill switch, limites codées côté courtier, alertes, réconciliation</text>
+  <text x="360" y="200" fontSize="10" textAnchor="middle" className="muted">on n'automatise que ce qui est validé et entièrement mécanique ; l'automate n'apprend pas en cours de route</text>
+  <text x="360" y="222" fontSize="10" textAnchor="middle" className="muted">toute modification repasse par le chapitre 9 ; il est ennuyeux, c'est sa qualité</text>
+  <text x="360" y="262" fontSize="9" textAnchor="middle" className="red">deux codes (backtest et automate) finissent toujours par diverger : un seul code, deux modes (replay / direct)</text>
+</svg>
+</Figure>
+
+## Exécution, surveillance et garde-fous
+
+Un automate mal surveillé est plus dangereux qu'un trader fatigué : il fait la même erreur cent fois en une minute. Les garde-fous ne sont pas optionnels ; ils sont la moitié du travail.
+
+**Côté courtier, en dur.** Les limites qui comptent doivent vivre **hors** de l'automate, chez le courtier ou dans la plateforme : taille maximale par ordre, nombre maximal de contrats en position, perte quotidienne maximale (au-delà, le compte passe en clôture seule), interdiction d'ordres au marché au-delà d'une taille. Si le code se trompe (une boucle qui renvoie l'ordre dix fois, une taille calculée avec un mauvais multiplicateur), le courtier refuse. C'est la ceinture de sécurité : elle sert le jour où le reste échoue.
+
+**Kill switch.** Un moyen d'arrêter tout et de fermer toute position en une action (un bouton, une commande, un fichier dont la présence stoppe la boucle), testé régulièrement, accessible depuis un téléphone. Et l'inverse : l'automate doit **s'arrêter seul** quand il ne comprend plus (données obsolètes, ordre dans un état inconnu, écart entre la position qu'il croit avoir et celle que le courtier lui renvoie).
+
+**Réconciliation.** À chaque bougie (ou chaque minute), l'automate compare son état interne (position, ordres en attente) à celui du courtier ; toute différence déclenche une halte et une alerte. Les divergences arrivent : un ordre partiellement servi, une déconnexion pendant l'envoi, un stop exécuté que l'automate n'a pas vu.
+
+**Heartbeat et alertes.** L'automate émet un signe de vie périodique ; un processus indépendant (ou un service externe) alerte si le signe manque. Alertes aussi sur : perte quotidienne à 50 % du budget, ordre rejeté, latence anormale, plus de N ordres en M minutes (le symptôme classique de la boucle folle).
+
+**Fenêtres et calendrier.** L'automate connaît le calendrier de la fiche : il ne trade pas hors fenêtre, il annule devant les annonces de niveau 1, il ferme avant la clôture ; il ne trade pas les jours de rollover (niveau 6) ni pendant les changements d'heure sans vérification humaine ; il ferme tout à 21 h 15 même si la « connexion revient ».
+
+**Mode simulation d'abord.** Tout automate tourne d'abord en **paper** contre le flux réel (pas en replay : le direct a des retards, des rejets, des états partiels que le replay ignore), au moins un mois ; puis à taille minimale (un micro) un mois de plus ; puis à la taille de la fiche. Chaque étape compare le journal de l'automate au backtest : mêmes signaux ? mêmes prix à quelques ticks près ? Un écart systématique (l'automate entre un tick plus mal, ou rate un signal sur cinq) est une information sur l'exécution, à corriger avant d'augmenter la taille.
+
+Enfin, l'automate ne dispense pas du **journal humain** : une ligne par jour (« tourné normalement ; deux signaux, un servi ; alerte de latence à 16 h 02, sans effet »), et la revue hebdomadaire des refus du module de risque, qui sont souvent les décisions les plus intéressantes.
+
+<Figure caption="Figure 2 · Les garde-fous : limites en dur chez le courtier (taille, contrats, perte du jour), kill switch et arrêt autonome sur incompréhension, réconciliation position / ordres à chaque bougie, heartbeat et alertes (perte à 50 % du budget, rejets, latence, boucle folle), calendrier et fenêtres, montée en charge paper → micro → taille de fiche.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Garde-fous d'un automate" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="210" height="110" rx="6" className="box" strokeWidth="1.5" />
+  <text x="135" y="52" fontSize="10" fontWeight="600" textAnchor="middle" className="red">Chez le courtier, en dur</text>
+  <text x="40" y="74" fontSize="9">taille max par ordre</text>
+  <text x="40" y="90" fontSize="9">contrats max en position</text>
+  <text x="40" y="106" fontSize="9">perte du jour max → clôture seule</text>
+  <text x="40" y="122" fontSize="9" className="muted">sert le jour où le code se trompe</text>
+  <rect x="255" y="30" width="210" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="52" fontSize="10" fontWeight="600" textAnchor="middle">Kill switch et arrêt seul</text>
+  <text x="265" y="74" fontSize="9">tout arrêter et fermer en une action</text>
+  <text x="265" y="90" fontSize="9">testé, accessible du téléphone</text>
+  <text x="265" y="106" fontSize="9">halte si : données obsolètes, état</text>
+  <text x="265" y="122" fontSize="9">d'ordre inconnu, position divergente</text>
+  <rect x="480" y="30" width="210" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="585" y="52" fontSize="10" fontWeight="600" textAnchor="middle">Réconciliation</text>
+  <text x="490" y="74" fontSize="9">état interne = état courtier ?</text>
+  <text x="490" y="90" fontSize="9">à chaque bougie / minute</text>
+  <text x="490" y="106" fontSize="9">partiels, déconnexions, stops</text>
+  <text x="490" y="122" fontSize="9">non vus → halte + alerte</text>
+  <rect x="30" y="160" width="210" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="135" y="182" fontSize="10" fontWeight="600" textAnchor="middle">Heartbeat et alertes</text>
+  <text x="40" y="204" fontSize="9">signe de vie surveillé de l'extérieur</text>
+  <text x="40" y="220" fontSize="9">perte à 50 % du budget, rejets,</text>
+  <text x="40" y="236" fontSize="9">latence, N ordres en M minutes</text>
+  <text x="40" y="252" fontSize="9" className="muted">(la boucle folle)</text>
+  <rect x="255" y="160" width="210" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="182" fontSize="10" fontWeight="600" textAnchor="middle">Calendrier et fenêtres</text>
+  <text x="265" y="204" fontSize="9">hors fenêtre : rien ; news : annule</text>
+  <text x="265" y="220" fontSize="9">21 h 15 : ferme, même si « ça revient »</text>
+  <text x="265" y="236" fontSize="9">rollover, changement d'heure :</text>
+  <text x="265" y="252" fontSize="9">vérification humaine</text>
+  <rect x="480" y="160" width="210" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="585" y="182" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Montée en charge</text>
+  <text x="490" y="204" fontSize="9">paper contre flux réel : 1 mois</text>
+  <text x="490" y="220" fontSize="9">un micro : 1 mois</text>
+  <text x="490" y="236" fontSize="9">taille de la fiche ensuite</text>
+  <text x="490" y="252" fontSize="9" className="muted">à chaque étape : journal vs backtest</text>
+</svg>
+</Figure>
+
+## La recherche quantitative au quotidien
+
+Trader une fiche et chercher la suivante sont deux métiers ; le second se pratique à heures fixes, hors séance, avec une routine.
+
+**Le carnet d'idées.** Une idée par ligne, datée, avec le comportement de marché qu'elle suppose (« les sweeps de l'ONH en première demi-heure sont repris plus souvent les jours de gap ») ; les idées viennent du journal (les colonnes « idées » des chapitres 6 et 7), de la lecture, de l'observation ; elles ne se testent pas le jour où elles arrivent.
+
+**Le cycle hebdomadaire.** Une demi-journée par semaine (le samedi matin, par exemple) : choisir **une** idée du carnet ; l'écrire en fiche (chapitre 1) avec ses seuils, **avant** de regarder les données ; la tester (chapitre 7) sur l'IS convenu ; noter le résultat, positif ou non, dans le carnet ; si positif, la mettre en file pour l'OOS et la robustesse (chapitre 9), qui se font une autre semaine, à froid. Une idée sur dix passe la première étape ; une sur cinq de celles-là passe la seconde ; le carnet accumule surtout des idées réfutées, ce qui est le résultat normal et utile d'une recherche honnête.
+
+**Le suivi des fiches vivantes.** Une fois par mois : Monte Carlo mis à jour avec les trades réels (chapitre 8), position du drawdown courant dans la distribution, indicateurs de vie (setup 2 : taux de manipulation et de vraie direction), décomposition par régime ; les conditions d'invalidité vérifiées ; rien d'autre : pas de retouche de seuil en réaction à un mois.
+
+**L'hygiène.** Un seul code pour le backtest et le direct ; des données versionnées (on sait quel fichier a servi à quel test) ; chaque test enregistré avec sa date, sa fiche, ses paramètres, ses résultats (le nombre de versions du chapitre 9 se compte tout seul) ; et une règle : on ne cherche pas pendant les heures de séance, et l'on ne trade pas pendant les heures de recherche.
+
+Ce que cette routine produit en un an : une cinquantaine d'idées testées, cinq ou six qui méritent un OOS, une ou deux qui entrent dans la sélection en remplaçant une fiche en pause. C'est peu, et c'est le rythme réel.
+
+## Les usages réalistes de l'IA pour un trader
+
+Par « IA », on entend ici deux choses différentes : les modèles de langage (assistants conversationnels, génération de code) et l'apprentissage automatique classique (régression, arbres, réseaux) appliqué aux prix. Leurs usages réalistes ne sont pas ceux qu'on annonce.
+
+**Écrire et relire du code.** C'est l'usage le plus solide. Un assistant écrit en quelques minutes le squelette du moteur du chapitre 7 pour un nouveau réservoir, une fonction de nettoyage, un test unitaire ; il relit un code et repère un `.shift(1)` manquant (look-ahead), une condition inversée, un stop testé après la cible. Le trader reste responsable : il lit, il comprend, il exécute sur des données synthétiques dont il connaît la réponse (chapitres 7 et 9) avant de faire confiance. Une bonne pratique : demander à l'assistant de **chercher les biais** de son propre code (« où ce backtest pourrait-il utiliser le futur ? »).
+
+**Structurer une fiche et un journal.** Transformer des notes en fiche standard, vérifier qu'aucun bloc ne manque, reformuler un critère flou en critère chiffré, proposer les colonnes d'une feuille de collecte : l'assistant est un bon secrétaire de rédaction, à condition que les seuils viennent du trader et du test, pas de l'assistant.
+
+**Résumer et surveiller l'information.** Résumer un communiqué de banque centrale en trois lignes factuelles, extraire les chiffres d'un rapport de stocks, lister les annonces de la semaine, traduire ; le protocole news du niveau 5 y gagne du temps. La lecture du sens (« est-ce plus restrictif qu'attendu ? ») reste une lecture ; l'assistant peut proposer, le trader confronte au prix.
+
+**Analyser le journal.** Décomposer 300 trades par régime, heure, variante ; trouver les sous-groupes qui portent le résultat ; formuler des hypothèses à tester (« vos trades du vendredi après 20 h ont une expectancy négative sur 22 trades : à vérifier sur un échantillon plus grand ») ; c'est de l'analyse de données ordinaire, que l'assistant fait vite et bien si on lui donne la feuille de collecte. Les hypothèses vont dans le carnet d'idées ; elles ne deviennent pas des filtres sans le chapitre 9.
+
+**Apprentissage automatique sur les prix.** C'est l'usage le plus vendu et le moins solide. Un modèle qui apprend à prédire le rendement de la prochaine bougie à partir de centaines de variables a des milliers de degrés de liberté ; le chapitre 9 a montré ce que 140 en font sur du bruit ; les rendements de marché ont un rapport signal / bruit très faible et des régimes qui changent ; le résultat habituel est un modèle magnifique in-sample et nul out-of-sample, ou un modèle qui a appris un régime et meurt au suivant. Les usages qui tiennent sont modestes et bien encadrés : **classer le régime** (la matrice du niveau 5 avec un modèle simple sur volatilité, corrélations, structure : quelques variables, des classes grossières, un OOS long) ; **filtrer** un signal existant (le modèle dit « ce sweep ressemble à ceux qui ont été repris » sur des variables de contexte, avec le même protocole de validation qu'un filtre humain) ; **détecter des anomalies** de données ou d'exécution. Dans tous les cas : peu de variables, des modèles simples, un OOS postérieur et long, un walk-forward, et la checklist du chapitre 9 appliquée sans exception ; l'apprentissage automatique ne dispense d'aucune ligne, il en aggrave le besoin.
+
+<Figure caption="Figure 3 · Les usages de l'IA pour un trader, du plus solide au plus fragile : écrire et relire du code (chercher les biais), structurer fiche et journal, résumer l'information, analyser le journal (hypothèses, pas filtres) ; puis l'apprentissage automatique sur les prix, encadré (régime, filtre de contexte, anomalies) avec toute la checklist du chapitre 9 ; et ce qu'elle ne fera pas : la fiche, la validation, le régime, la discipline.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Usages de l'IA pour un trader" xmlns="http://www.w3.org/2000/svg">
+  <text x="60" y="36" fontSize="10" fontWeight="600" className="green">solide</text>
+  <text x="660" y="36" fontSize="10" fontWeight="600" textAnchor="end" className="red">fragile</text>
+  <line x1="60" y1="44" x2="660" y2="44" className="line" strokeWidth="1" />
+  <rect x="40" y="60" width="150" height="80" rx="6" className="box" strokeWidth="1" />
+  <text x="115" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Écrire, relire du code</text>
+  <text x="115" y="97" fontSize="8" textAnchor="middle" className="muted">squelettes, tests, revue</text>
+  <text x="115" y="111" fontSize="8" textAnchor="middle" className="muted">« où est le look-ahead ? »</text>
+  <text x="115" y="128" fontSize="8" textAnchor="middle" className="gold">vérifier sur du synthétique</text>
+  <rect x="200" y="60" width="150" height="80" rx="6" className="box" strokeWidth="1" />
+  <text x="275" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Fiche, journal, info</text>
+  <text x="275" y="97" fontSize="8" textAnchor="middle" className="muted">notes → fiche standard</text>
+  <text x="275" y="111" fontSize="8" textAnchor="middle" className="muted">résumés factuels, calendrier</text>
+  <text x="275" y="128" fontSize="8" textAnchor="middle" className="gold">les seuils viennent du test</text>
+  <rect x="360" y="60" width="150" height="80" rx="6" className="box" strokeWidth="1" />
+  <text x="435" y="80" fontSize="9" fontWeight="600" textAnchor="middle">Analyse du journal</text>
+  <text x="435" y="97" fontSize="8" textAnchor="middle" className="muted">décompositions, sous-groupes</text>
+  <text x="435" y="111" fontSize="8" textAnchor="middle" className="muted">hypothèses → carnet d'idées</text>
+  <text x="435" y="128" fontSize="8" textAnchor="middle" className="gold">pas de filtre sans le ch. 9</text>
+  <rect x="520" y="60" width="160" height="80" rx="6" className="box" strokeWidth="1" />
+  <text x="600" y="80" fontSize="9" fontWeight="600" textAnchor="middle" className="red">Apprentissage sur les prix</text>
+  <text x="600" y="97" fontSize="8" textAnchor="middle" className="muted">encadré : régime, filtre, anomalies</text>
+  <text x="600" y="111" fontSize="8" textAnchor="middle" className="muted">peu de variables, OOS long, WF</text>
+  <text x="600" y="128" fontSize="8" textAnchor="middle" className="red">« prédire la bougie » : non</text>
+  <rect x="40" y="170" width="640" height="120" rx="6" className="gold" opacity="0.12" />
+  <text x="360" y="192" fontSize="10" fontWeight="600" textAnchor="middle">Ce que l'IA ne fera pas à votre place</text>
+  <text x="60" y="216" fontSize="9">· nommer le comportement de marché derrière une fiche, et décider qu'il vaut la peine</text>
+  <text x="60" y="234" fontSize="9">· la validation : OOS regardé une fois, robustesse, checklist ; elle multiplie les degrés de liberté, elle ne les réduit pas</text>
+  <text x="60" y="252" fontSize="9">· lire le régime et le calendrier un matin donné, et refuser de trader</text>
+  <text x="60" y="270" fontSize="9">· la discipline : la taille, le stop, l'arrêt du jour, la revue ; et porter la responsabilité de la perte</text>
+</svg>
+</Figure>
+
+## Ce que l'IA ne fera pas à votre place
+
+Il faut le dire nettement, parce que le contraire se vend bien.
+
+Elle ne **trouvera pas votre edge**. Un edge est un comportement de marché nommé, compris, mesuré (le sweep repris, la manipulation de Londres, le moteur macro qui entraîne l'or) ; le nommer demande d'avoir regardé le marché et d'avoir compris qui fait quoi (niveaux 3 à 6) ; un modèle qui « trouve des motifs » trouve d'abord du bruit, et il ne sait pas dire pourquoi un motif tiendrait demain.
+
+Elle ne **validera pas votre fiche**. La validation est une discipline de restriction : moins de versions, un OOS regardé une fois, des seuils grossiers ; l'IA est une machine à générer des variantes ; elle multiplie les degrés de liberté à une vitesse que le chapitre 9 devrait faire craindre ; c'est un outil de recherche puissant, donc un outil de sur-ajustement puissant, et c'est au trader de tenir la checklist.
+
+Elle ne **lira pas le régime pour vous** un matin donné, ni le calendrier, ni le « quelque chose ne va pas » d'un flux d'ordres qui ne se comporte pas comme d'habitude ; ou plutôt elle le lira comme le journal l'a appris, c'est-à-dire en retard d'un régime.
+
+Elle ne **portera pas la discipline** : la taille calculée et respectée, le stop qui ne bouge pas, l'arrêt du jour à −2R, la revue hebdomadaire, le refus de trader hors sélection ; ces gestes sont les vôtres, et l'automate le plus parfait ne fait que les exécuter tels que vous les avez écrits, y compris quand vous les avez mal écrits.
+
+Et elle ne **portera pas la perte**. La responsabilité de chaque trade, de chaque ligne de code, de chaque garde-fou qui manquait, reste au trader ; c'est la raison pour laquelle ce cours a passé sept niveaux à construire une méthode qu'un être humain peut comprendre, mesurer et tenir. L'IA est un excellent assistant de cette méthode ; elle n'en est pas le sujet.
+
+## Deux trades exécutés par un automate
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, automate du setup 1, mode taille de fiche (troisième mois)"
+  direction="Long"
+  setup="Signal complet détecté par le même code que le backtest ; module de risque : budget du jour disponible, chaleur 1,2 %, taille 3 MES ; bracket envoyé à 16 h 04 : limite 5 262,50, stop 5 254,50, C1 5 275, C2 5 289 (le trade du chapitre 2, rejoué par la machine)"
+  entree="5 262,50 (limite servie à 16 h 11)"
+  stop="5 254,50 (32 ticks)"
+  objectif="C1 5 275 ; C2 5 289"
+  r="+2,3R">
+
+Le journal machine : 16 h 04 signal S1-S4 complet, S5 non disponible (pas de footprint dans l'automate : coefficient 2/3 → 2 MES au lieu de 3 ; le module de risque a appliqué la règle sans discussion) ; 16 h 11 servi 2 ; 16 h 41 C1 : 1 MES sorti, stop à 5 262,75 ; 17 h 20 HL M15 : stop 5 269 ; 20 h 05 C2 : 1 MES sorti. Résultat (12,5 + 26,5) × 5 $ = 195 $ − 2 $ sur 80 $ de risque : **+2,4R brut, +2,3R net**. Ce que la comparaison avec le trade humain du chapitre 2 apprend : mêmes prix à un tick près, même gestion ; une différence : la taille (2 au lieu de 3), parce que l'automate n'avait pas S5 ; le trader note qu'un footprint automatisé est une extension possible, à tester, pas à bricoler.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, automate du setup 1, mode micro (deuxième mois)"
+  direction="Short"
+  setup="Signal complet à 19 h 52 ; bracket envoyé ; le flux de données se coupe 40 secondes à 19 h 58 ; l'automate n'a pas de détection de retard et continue avec la dernière bougie connue ; la limite est servie à 19 h 59 ; le stop et les cibles ont bien été posés (bracket) ; à 20 h 07 le flux revient, la position est déjà stoppée"
+  entree="18 412,00"
+  stop="18 452,00 (160 ticks)"
+  objectif="18 352,00"
+  r="−1,05R">
+
+Le trade a perdu 1R comme un trade ordinaire, et ce n'est pas le problème ; c'est un signal complet stoppé, cela arrive une fois sur deux. Le problème est ce que la relecture du journal machine a montré : pendant 9 minutes, l'automate a « géré » une position sur des données figées ; s'il avait eu à remonter un stop ou à sortir sur temps, il ne l'aurait pas fait ; le bracket côté courtier a fait le travail (c'est pour cela qu'il est **côté courtier**). Correctifs le soir même : détection de retard (halte à 20 secondes sans bougie), réconciliation à chaque minute, alerte. Le mode micro existe pour ça : la leçon a coûté 20 $ et pas 400.
+
+</TradeExample>
+
+:::tip À retenir
+
+- On n'**automatise** que ce qui est validé et entièrement mécanique ; l'architecture minimale : données (retards, trous), signal (le **même code** que le backtest), risque (droit de refus), exécution (bracket OCO, états, gestion), journal ; rien n'apprend en cours de route.
+- Les **garde-fous** sont la moitié du travail : limites en dur chez le courtier, kill switch et arrêt autonome, réconciliation, heartbeat et alertes, calendrier et fenêtres, montée en charge paper → micro → taille de fiche avec comparaison au backtest à chaque étape.
+- La **recherche quantitative** se pratique hors séance, à heures fixes : carnet d'idées, une idée par semaine écrite en fiche avant de regarder les données, OOS et robustesse une autre semaine, suivi mensuel des fiches vivantes ; une ou deux fiches par an entrent dans la sélection, c'est le rythme réel.
+- **Usages réalistes de l'IA** : écrire et relire du code (chercher les biais), structurer fiche et journal, résumer l'information, analyser le journal (hypothèses, pas filtres) ; l'apprentissage sur les prix, seulement encadré (régime, filtre de contexte, anomalies) et soumis à toute la checklist du chapitre 9.
+- Ce qu'elle **ne fera pas** : nommer votre edge, valider votre fiche (elle multiplie les degrés de liberté), lire le régime un matin donné, porter la discipline, porter la perte.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Le module de risque refuse">
+
+Un automate du setup 1 reçoit un signal complet à 20 h 40 : entrée 5 310,25, stop 5 301,75, compte 15 000 $, budget 1 %, S5 absent, S6 présent, deux trades déjà perdus dans la journée (−1R et −0,9R), une position ouverte sur MNQ (setup 9) avec un risque restant de 0,6 %.
+
+1. Taille demandée par le signal.
+2. Le module de risque doit-il envoyer l'ordre ? Sur quelles règles ?
+
+<Solution>
+
+1. Stop 8,5 points = 34 ticks = 42,50 $ par MES ; budget 150 $ → 3,5 → 3 MES ; × 2/3 (S5 absent) = 2 → **2 MES** (85 $).
+2. **Refus**, pour deux raisons indépendantes : le budget quotidien du niveau 1 est −2R et la journée est à −1,9R (un nouveau trade à −1R le dépasserait ; la fiche du chapitre 2 dit : second candidat autorisé si le budget n'est pas atteint, et « pas de troisième » : c'est le troisième) ; et la chaleur : 0,6 % ouvert + 0,57 % demandé = 1,17 %, à comparer au plafond de la fiche de portefeuille (niveau 1 : souvent 1,5 à 2 % ; ici passable), mais la première raison suffit. Le journal enregistre « refus : budget quotidien, troisième trade » ; c'est une ligne que la revue hebdomadaire lira avec intérêt.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Concevoir un garde-fou">
+
+Décrivez, en trois à cinq lignes de pseudo-code, la détection de « boucle folle » (l'automate qui envoie des ordres en rafale à cause d'un bug) et la réaction attendue.
+
+<Solution>
+
+```python
+# fenêtre glissante des envois d'ordres
+orders_last_5min = journal.count_orders(since=now - 5 * 60)
+if orders_last_5min > MAX_ORDERS_PER_5MIN:        # ex. 6 pour un setup qui en envoie 1 ou 2 par heure
+    broker.cancel_all()                            # annuler tout ordre en attente
+    broker.flatten()                               # fermer les positions au marché (le bracket est aussi annulé)
+    risk.halt("boucle folle : trop d'ordres")      # aucun nouvel ordre tant qu'un humain n'a pas réarmé
+    alerts.send("HALTE : rafale d'ordres, positions fermées")
+```
+
+Et, indépendamment du code, la limite en dur chez le courtier (nombre d'ordres ou de contrats par minute) qui fonctionne même si ce garde-fou a lui-même un bug.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Un usage d'IA, bien ou mal encadré">
+
+Un lecteur demande à un assistant : « Voici mes 400 trades ; trouve les filtres qui améliorent le plus mon expectancy. » L'assistant en propose trois (pas le lundi, VIX inférieur à 18, entrée après 16 h 15) qui font passer l'expectancy de +0,3R à +0,7R sur les 400 trades. Que faut-il en faire ?
+
+<Solution>
+
+Ce que l'assistant a fait est exactement l'exercice du chapitre 9 : sélectionner, parmi de nombreux filtres possibles (il en a probablement essayé des dizaines : degrés de liberté), ceux qui **s'ajustent le mieux au bruit** de ces 400 trades. Le +0,7R n'est pas une mesure, c'est un sommet. Ce qu'il faut en faire : les trois filtres vont dans le **carnet d'idées** comme hypothèses ; pour chacun, se demander s'il correspond à un comportement de marché nommé (« pas le lundi » : peu probable ; « VIX inférieur à 18 » : c'est le régime, défendable, mais le seuil 18 est un seuil trouvé, à arrondir et à tester ; « après 16 h 15 » : peut-être l'évitement de la première demi-heure agitée, à formuler ainsi) ; puis les tester **un par un** sur des trades **postérieurs** (les 400 sont brûlés pour ce test), avec l'exigence du chapitre 9. La bonne question à poser à l'assistant était différente : « Décompose mes trades par régime, heure et jour, avec n et l'incertitude de chaque sous-groupe, sans recommander de filtre. »
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "On automatise une stratégie :",
+      options: [
+        "Dès qu'elle a une idée",
+        "Seulement si elle est validée (chapitre 9) et entièrement mécanique, avec le même code que le backtest",
+        "Pour trouver son edge",
+        "Pour trader plus gros",
+      ],
+      answer: 1,
+      explain: "L'automatisation est une affaire d'exécution : elle applique une fiche, elle ne crée pas d'edge.",
+    },
+    {
+      q: "Les limites qui comptent (taille max, perte du jour) doivent vivre :",
+      options: [
+        "Dans le code de l'automate seulement",
+        "En dur chez le courtier ou la plateforme, hors de l'automate : elles servent le jour où le code se trompe",
+        "Dans un fichier texte",
+        "Nulle part",
+      ],
+      answer: 1,
+      explain: "La ceinture de sécurité est indépendante du conducteur.",
+    },
+    {
+      q: "La montée en charge d'un automate suit :",
+      options: [
+        "Taille pleine dès le premier jour",
+        "Paper contre flux réel (un mois), puis un micro (un mois), puis la taille de la fiche, avec comparaison au backtest à chaque étape",
+        "Le replay seulement",
+        "Le hasard",
+      ],
+      answer: 1,
+      explain: "Le direct a des retards, des rejets et des états partiels que le replay ignore ; le trade perdant du chapitre a coûté 20 $ parce qu'il était en mode micro.",
+    },
+    {
+      q: "La recherche quantitative au quotidien consiste à :",
+      options: [
+        "Tester chaque idée le jour où elle vient, en séance",
+        "Tenir un carnet, écrire une idée par semaine en fiche avant de regarder les données, tester l'IS, faire l'OOS une autre semaine, suivre les fiches vivantes chaque mois",
+        "Optimiser les fiches chaque semaine",
+        "Lire des forums",
+      ],
+      answer: 1,
+      explain: "Une ou deux fiches par an entrent dans la sélection ; le carnet accumule surtout des idées réfutées, ce qui est normal.",
+    },
+    {
+      q: "L'usage le plus solide de l'IA pour un trader est :",
+      options: [
+        "Prédire la prochaine bougie",
+        "Écrire et relire du code (chercher les biais), structurer fiche et journal, résumer l'information, analyser le journal en hypothèses",
+        "Choisir la taille",
+        "Remplacer la validation",
+      ],
+      answer: 1,
+      explain: "L'apprentissage sur les prix n'est acceptable qu'encadré (régime, filtre de contexte, anomalies) et soumis à toute la checklist du chapitre 9.",
+    },
+    {
+      q: "Un assistant propose trois filtres qui font passer l'expectancy de +0,3 à +0,7R sur les 400 trades du journal. Ces filtres sont :",
+      options: [
+        "À appliquer immédiatement",
+        "Des hypothèses sélectionnées sur le bruit de ces 400 trades : au carnet d'idées, un comportement nommé pour chacun, test un par un sur des trades postérieurs",
+        "Une preuve d'edge",
+        "À ignorer",
+      ],
+      answer: 1,
+      explain: "L'IA multiplie les degrés de liberté ; c'est au trader de tenir la checklist.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 7 se termine par son examen : 25 questions couvrant la construction d'une stratégie, les trois setups, la bibliothèque, le backtest manuel et en code, les statistiques et le Monte Carlo, la validation et l'automatisation, et une étude de cas notée où il faudra juger une fiche et son backtest comme ce niveau a appris à le faire.
