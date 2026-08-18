@@ -1,0 +1,440 @@
+---
+title: "Backtesting en Python"
+description: "Passer du replay manuel au code : préparer et nettoyer des données OHLC sans inventer de prix, comprendre ce qu'un backtest vectorisé peut et ne peut pas faire face à un backtest event-driven, simuler coûts, spread et slippage honnêtement, produire expectancy, profit factor et drawdown, avec un script complet, commenté et reproductible."
+---
+
+# Backtesting en Python
+
+Le chapitre précédent a montré la limite du replay manuel : cent trades, c'est un an de marché et vingt-cinq heures ; un swing à dix trades par an ne se teste pas à la main. Le code lève cette limite : il rejoue dix ans en dix secondes, il ne triche pas par fatigue, il n'a pas de regard en arrière **si on l'écrit correctement**, et il permet de poser à l'échantillon les questions du chapitre 9 (validation, robustesse). En échange, il exige de la rigueur sur trois points : les données, la manière de rejouer, et les coûts. Ce chapitre les traite dans l'ordre et livre un script complet, [`backtest_sweep_fvg.py`](pathname:///code/backtest_sweep_fvg.py), à télécharger, lire et adapter. Il tourne avec pandas, numpy et matplotlib, génère ses propres données synthétiques (graine fixée) et ne fait aucun appel réseau : le résultat est reproductible à l'octet près, et il n'a **aucune valeur prédictive**. Le but est la méthode.
+
+## Préparer et nettoyer des données OHLC
+
+Un backtest vaut ce que valent ses données. Un fichier OHLC réel (fourni par un courtier, une plateforme ou un vendeur de données) contient toujours des défauts : lignes dupliquées, bougies manquantes, bougies incohérentes (un plus haut sous le plus bas), prix aberrants (une erreur de saisie, un « fat finger » qui n'a jamais été tradé), heures hors séance, fuseaux horaires ambigus. Le script simule ces défauts sur des données propres, puis les nettoie ; c'est la séquence à appliquer à un vrai fichier.
+
+```python
+def clean_ohlc(df, session_start="15:30", session_end="22:00"):
+    """Nettoyage standard d'un fichier OHLC.
+
+    - index datetime trié, doublons supprimés (on garde la première ligne) ;
+    - bougies incohérentes retirées (high < low, high < max(o,c), etc.) ;
+    - prix aberrants retirés (écart de plus de 5 % au précédent close) ;
+    - filtre de séance ;
+    - trous : on NE comble PAS les bougies manquantes (les remplir invente
+      des prix) ; on les compte pour information.
+    """
+    df = df.sort_index()
+    df = df[~df.index.duplicated(keep="first")]          # doublons
+
+    coherent = (                                          # cohérence OHLC
+        (df["high"] >= df["low"])
+        & (df["high"] >= df[["open", "close"]].max(axis=1))
+        & (df["low"] <= df[["open", "close"]].min(axis=1))
+    )
+    df = df[coherent]
+
+    prev_close = df["close"].shift(1)                     # aberrants
+    jump = (df["low"] / prev_close - 1).abs()
+    df = df[~(jump > 0.05)]
+
+    df = df.between_time(session_start, session_end)      # séance
+    return df
+```
+
+Trois règles derrière ce code. **On supprime, on ne corrige pas** : une bougie incohérente est retirée, pas « réparée » ; un trou est compté, pas comblé (interpoler des prix crée des bougies que le marché n'a jamais faites, et le backtest s'y exécutera). **On mesure ce qu'on a retiré** : le script imprime un rapport (doublons, incohérentes, aberrantes, trous) ; si le rapport dit 8 % de lignes retirées, les données ne sont pas utilisables, et il faut une autre source. **On fixe le fuseau et la séance** avant tout : le setup 1 vit entre 15 h 30 et 22 h Paris ; une donnée en UTC ou en heure de New York décale tout d'une à six heures, et le changement d'heure (qui n'a pas lieu la même semaine en Europe et aux États-Unis) crée deux à trois semaines par an où l'ouverture n'est pas à 15 h 30 ; c'est la première chose à vérifier sur un fichier réel.
+
+Les données du script sont **synthétiques** : un processus aléatoire à queues épaisses, avec des régimes de tendance et de range qui alternent, des impulsions aléatoires, et deux comportements injectés volontairement : une réaction sur le plus bas de la veille dans 60 % des cas, et une continuation dans la moitié de ces cas. Sans ces comportements, un sweep repris n'existerait pas dans un bruit pur, et le backtest ne trouverait rien. C'est un point à comprendre avant d'aller plus loin : **le backtest mesure une règle sur un passé donné ; il ne prouve rien sur le futur**. Ici, le passé a été construit avec la propriété qu'on cherche ; sur un vrai marché, on ne sait pas si elle y est ; c'est justement ce que le backtest cherche à savoir.
+
+<Figure caption="Figure 1 · Le pipeline du backtest en code : données brutes (ou synthétiques), nettoyage (supprimer, ne pas corriger ; compter les trous ; fixer fuseau et séance), moteur (vectorisé pour explorer, event-driven pour mesurer), coûts, métriques et courbe. Chaque étape est reproductible : même graine, même résultat.">
+<svg className="tm-svg" viewBox="0 0 720 260" role="img" aria-label="Pipeline du backtest en Python" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="60" width="120" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="80" y="85" fontSize="10" fontWeight="600" textAnchor="middle">Données OHLC</text>
+  <text x="80" y="102" fontSize="9" textAnchor="middle" className="muted">réelles (fichier)</text>
+  <text x="80" y="116" fontSize="9" textAnchor="middle" className="muted">ou synthétiques (seed)</text>
+  <line x1="140" y1="95" x2="160" y2="95" className="line" strokeWidth="1.5" />
+  <rect x="160" y="60" width="130" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="225" y="85" fontSize="10" fontWeight="600" textAnchor="middle">Nettoyage</text>
+  <text x="225" y="102" fontSize="9" textAnchor="middle" className="muted">doublons, incohérentes,</text>
+  <text x="225" y="116" fontSize="9" textAnchor="middle" className="muted">aberrantes, séance, trous</text>
+  <line x1="290" y1="95" x2="310" y2="95" className="line" strokeWidth="1.5" />
+  <rect x="310" y="40" width="130" height="50" rx="6" className="box" strokeWidth="1" />
+  <text x="375" y="60" fontSize="10" fontWeight="600" textAnchor="middle">Vectorisé</text>
+  <text x="375" y="78" fontSize="9" textAnchor="middle" className="muted">explorer, filtrer vite</text>
+  <rect x="310" y="100" width="130" height="50" rx="6" className="box" strokeWidth="1.5" />
+  <text x="375" y="120" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Event-driven</text>
+  <text x="375" y="138" fontSize="9" textAnchor="middle" className="muted">mesurer : ordres, stops, gestion</text>
+  <line x1="440" y1="125" x2="460" y2="125" className="line" strokeWidth="1.5" />
+  <rect x="460" y="90" width="110" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="515" y="115" fontSize="10" fontWeight="600" textAnchor="middle">Coûts</text>
+  <text x="515" y="132" fontSize="9" textAnchor="middle" className="muted">commission, spread,</text>
+  <text x="515" y="146" fontSize="9" textAnchor="middle" className="muted">slippage, règle du doute</text>
+  <line x1="570" y1="125" x2="590" y2="125" className="line" strokeWidth="1.5" />
+  <rect x="590" y="90" width="115" height="70" rx="6" className="box" strokeWidth="1" />
+  <text x="647" y="115" fontSize="10" fontWeight="600" textAnchor="middle">Métriques</text>
+  <text x="647" y="132" fontSize="9" textAnchor="middle" className="muted">E, PF, DD, séries,</text>
+  <text x="647" y="146" fontSize="9" textAnchor="middle" className="muted">MFE / MAE, courbe</text>
+  <text x="360" y="200" fontSize="10" textAnchor="middle" className="red">on supprime, on ne corrige pas · on ne comble pas les trous · le fuseau et la séance d'abord</text>
+  <text x="360" y="230" fontSize="10" textAnchor="middle" className="muted">le backtest mesure une règle sur un passé donné ; il ne prouve rien sur le futur</text>
+</svg>
+</Figure>
+
+## Backtest vectorisé contre event-driven
+
+Il y a deux manières de rejouer le marché en code, et confondre leurs usages est la première source de résultats faux.
+
+**Le backtest vectorisé** traite toute la série d'un coup : une colonne « position » (+1, −1, 0) calculée à partir des indicateurs, multipliée par la colonne des rendements, sommée. Dix lignes, un résultat instantané, idéal pour **explorer** (une règle a-t-elle un signe sur dix ans ?) et pour les stratégies simples sans gestion (rééquilibrage, croisements de moyennes). Le script en donne un pour illustration :
+
+```python
+def vectorized_ma_cross(df, fast=20, slow=50, cost_per_trade=0.0002):
+    close = df["close"]
+    ma_f = close.rolling(fast).mean()
+    ma_s = close.rolling(slow).mean()
+    # position décidée sur la clôture, appliquée à la bougie SUIVANTE
+    # (sinon on utilise le futur : biais look-ahead)
+    pos = np.sign(ma_f - ma_s).shift(1).fillna(0)
+    ret = close.pct_change().fillna(0)
+    gross = pos * ret
+    turnover = pos.diff().abs().fillna(0)
+    net = gross - turnover * cost_per_trade
+    return net.cumsum()
+```
+
+La ligne qui compte est le `.shift(1)` : la position calculée sur la clôture de la bougie t s'applique au rendement de la bougie t + 1. Sans ce décalage, on trade avec un prix qu'on ne connaît pas encore ; c'est le **biais de look-ahead**, l'équivalent du regard en arrière du replay manuel, et il fabrique des résultats miraculeux. Les limites du vectorisé sont structurelles : pas de stop (la position ne dépend pas du chemin du prix à l'intérieur de la bougie), pas de cible, pas d'ordre limite, pas de breakeven, une position par bougie ; les coûts sont approximés par les changements de position. Il ne peut pas rejouer une fiche du niveau 7.
+
+**Le backtest event-driven** avance bougie par bougie et maintient un **état** : y a-t-il un ordre en attente, une position ouverte, quel est le stop actuel, quelle partie est déjà sortie ? À chaque bougie, il applique la fiche : le signal est-il complet ? l'ordre limite est-il servi ? le stop est-il touché ? la cible ? le breakeven se déclenche-t-il ? C'est exactement le protocole du chapitre 6, exécuté par une machine qui ne se fatigue pas. Il est plus lent (une boucle Python sur 40 000 bougies prend une seconde ; sur dix ans de M1, une minute) et plus long à écrire ; c'est le seul qui mesure une fiche.
+
+Le cœur du moteur du script tient dans cette logique (extrait simplifié ; le fichier complet est commenté ligne à ligne) :
+
+```python
+# --- attente d'exécution de la limite au bord haut du FVG + 1 tick
+while k < n and k <= j + 1 + max_wait_bars:
+    if times[k].date() != times[j].date():          # la limite meurt le soir
+        break
+    if c[k] < fvg_low or l[k] < sweep_low:          # invalidation avant entrée
+        break
+    if l[k] < entry_px - tick:                       # traversée d'un tick : servi
+        filled = k
+        break
+    k += 1
+
+# --- gestion bougie par bougie après exécution
+while m < n:
+    if l[m] <= stop_now:                             # stop D'ABORD (règle du doute)
+        px = stop_now - slippage_ticks_market * tick
+        ...
+        break
+    if remaining == qty and h[m] >= c1 + tick:       # C1 : 50 % sortis, stop à BE + 1 tick
+        realized_ticks += (qty / 2) * (c1 - entry_px) / tick
+        remaining = qty / 2
+        stop_now = entry_px + tick
+    if remaining < qty and h[m] >= c2 + tick:        # C2 : solde
+        ...
+        break
+    if times[m].strftime("%H:%M") >= "21:15":        # sortie sur temps
+        ...
+        break
+    m += 1
+```
+
+Trois choix y sont codés en dur, et ce sont les mêmes que dans le protocole manuel : la limite n'est servie que si la bougie **traverse** son prix d'un tick ; le stop est testé **avant** les cibles dans chaque bougie (en cas de doute, la perte) ; la sortie sur temps est mécanique. Ces choix sont pessimistes ; ils protègent contre l'exécution optimiste que le code rend si facile (il suffit d'oublier un `+ tick` pour gagner 0,2R par trade sur le papier).
+
+<Figure caption="Figure 2 · Vectorisé contre event-driven. Le vectorisé calcule une position par bougie et la multiplie par les rendements : rapide, sans stop ni cible ni ordre limite, avec un décalage d'une bougie obligatoire (look-ahead sinon). L'event-driven avance bougie par bougie avec un état (ordre en attente, position, stop courant, partielles) : c'est le protocole du chapitre 6 exécuté par une machine.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Vectorisé contre event-driven" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="320" height="230" rx="6" className="box" strokeWidth="1" />
+  <text x="190" y="52" fontSize="11" fontWeight="600" textAnchor="middle">Vectorisé</text>
+  <text x="45" y="76" fontSize="9" className="mono">pos = sign(ma_f - ma_s).shift(1)</text>
+  <text x="45" y="92" fontSize="9" className="mono">pnl = pos * close.pct_change()</text>
+  <text x="45" y="120" fontSize="9" className="green">+ dix lignes, instantané, explore dix ans</text>
+  <text x="45" y="136" fontSize="9" className="green">+ suffisant pour tester un signe</text>
+  <text x="45" y="164" fontSize="9" className="red">− pas de stop, pas de cible, pas de limite</text>
+  <text x="45" y="180" fontSize="9" className="red">− une position par bougie, coûts approximés</text>
+  <text x="45" y="196" fontSize="9" className="red">− ignore le chemin du prix dans la bougie</text>
+  <text x="45" y="224" fontSize="9" className="gold" fontWeight="600">.shift(1) obligatoire : sinon look-ahead</text>
+  <text x="45" y="244" fontSize="9" className="muted">usage : explorer, filtrer, jamais mesurer une fiche</text>
+  <rect x="370" y="30" width="320" height="230" rx="6" className="box" strokeWidth="1.5" />
+  <text x="530" y="52" fontSize="11" fontWeight="600" textAnchor="middle" className="gold">Event-driven</text>
+  <text x="385" y="76" fontSize="9" className="mono">for each bar: signal ? order ? stop ? target ?</text>
+  <text x="385" y="92" fontSize="9" className="mono">state = pending, position, stop_now, remaining</text>
+  <text x="385" y="120" fontSize="9" className="green">+ rejoue la fiche : limite, stop, C1 / C2, BE, temps</text>
+  <text x="385" y="136" fontSize="9" className="green">+ règles du doute codées (traversée, stop d'abord)</text>
+  <text x="385" y="152" fontSize="9" className="green">+ MFE / MAE, raison de sortie, coûts par ordre</text>
+  <text x="385" y="180" fontSize="9" className="red">− plus lent (boucle), plus long à écrire</text>
+  <text x="385" y="196" fontSize="9" className="red">− chaque oubli (un + tick) fausse le résultat</text>
+  <text x="385" y="224" fontSize="9" className="gold" fontWeight="600">c'est le protocole du chapitre 6, sans fatigue</text>
+  <text x="385" y="244" fontSize="9" className="muted">usage : mesurer une fiche, valider (chapitre 9)</text>
+  <text x="360" y="285" fontSize="10" textAnchor="middle" className="muted">le vectorisé pour savoir s'il y a quelque chose ; l'event-driven pour savoir combien</text>
+</svg>
+</Figure>
+
+## Simuler coûts, spread et slippage honnêtement
+
+Un backtest sans coûts ment toujours dans le même sens. Le script les modélise à trois endroits :
+
+- **Commission** : un montant fixe par contrat et par aller-retour (`commission_rt = 1.0` $ pour un micro : ordre de grandeur, à remplacer par le tarif réel de votre courtier, qui peut être le double).
+- **Slippage** : les ordres **au marché** (le stop déclenché, la sortie sur temps) sont exécutés un tick plus mal que le prix théorique (`slippage_ticks_market = 1`) ; sur un marché moins liquide ou en régime agité, deux ou trois ticks ; les ordres **limites** servis n'ont pas de slippage mais peuvent ne pas être servis (la règle de la traversée s'en charge).
+- **Spread** : sur les futures liquides en séance, il vaut un tick et il est déjà dans le slippage ; sur le forex spot, il faut l'ajouter explicitement (entrée au ask, sortie au bid), et il n'est pas constant : deux à trois fois plus large à l'ouverture de Londres et pendant les annonces ; un backtest de setup 2 avec un spread fixe de 0,5 pip est optimiste.
+
+Deux tests d'honnêteté à faire sur tout backtest : **doubler les coûts** (si l'expectancy passe de +0,4R à +0,1R, la stratégie vit des coûts, pas de son edge : elle ne survivra pas au réel) ; et **retirer les cinq meilleurs trades** (si l'expectancy devient négative, le résultat tient à quelques accidents heureux). Le chapitre 8 formalise le second test avec le bootstrap.
+
+## Les métriques de sortie : expectancy, profit factor, drawdown
+
+Le script calcule ce que le chapitre 6 demandait :
+
+```python
+def metrics(trades):
+    r = trades["r_net"]
+    n = len(r)
+    wins, losses = r[r > 0], r[r <= 0]
+    equity = r.cumsum()
+    dd = equity - equity.cummax()          # drawdown en R à chaque trade
+    streak = best = 0                       # plus longue série de pertes
+    for x in r:
+        streak = streak + 1 if x <= 0 else 0
+        best = max(best, streak)
+    return dict(
+        n=n,
+        expectancy=r.mean(),
+        stderr=r.std(ddof=1) / np.sqrt(n),  # incertitude (1 écart-type)
+        win_rate=len(wins) / n,
+        avg_win=wins.mean(), avg_loss=losses.mean(),
+        profit_factor=wins.sum() / -losses.sum(),
+        max_dd=dd.min(),
+        longest_loss_streak=best,
+        mfe_ge_1_5=(trades["mfe"] >= 1.5).mean(),
+    )
+```
+
+Sortie du script, avec la graine 42 (le chiffre exact n'a d'intérêt que pour vérifier la reproductibilité chez vous) :
+
+```text
+=== Backtest event-driven : sweep + displacement + FVG (long, PDL) ===
+  trades              : 43
+  expectancy (R net)  : +0.391 ± 0.157 (1 écart-type)
+  taux de réussite    : 58.1 %
+  gain moyen / perte  : +1.09R / -0.58R
+  profit factor       : 2.60
+  drawdown max        : -2.0R
+  série de pertes max : 2
+  total               : +16.8R
+  MFE >= 1,5R / 3R    : 26 % / 2 %
+  sorties : sortie sur temps 34 · stop 8 · C2 1
+```
+
+Comment lire cela comme un trader et non comme un programmeur. **n = 43** sur deux ans de données synthétiques : l'incertitude est de ±0,16R ; l'expectancy est probablement positive (deux écarts-types donnent +0,08R à +0,70R), mais on ne sait pas si elle vaut +0,2 ou +0,6 ; c'est un échantillon d'exploration, pas de validation (chapitre 6 : 100 au minimum). **34 sorties sur temps, 8 stops, 1 C2** : le setup, dans ces données, entre, avance un peu, et se fait fermer à 21 h 15 ; C1 n'est atteint que par un quart des trades (26 % de MFE ≥ 1,5R) ; les gains viennent de la fermeture de fin de séance en territoire positif. C'est une information de **placement** : dans ce marché synthétique, la continuation n'a pas l'ampleur que la fiche suppose ; sur un vrai marché, on lirait la même distribution du MFE avant de toucher aux cibles, et on la testerait au chapitre 9. **Profit factor 2,6 et drawdown 2R** sur 43 trades ne veulent presque rien dire : les vraies séries de pertes (niveau 1) n'ont pas encore eu le temps de se produire ; le chapitre 8 les simule.
+
+Ce que le script imprime aussi : le rapport de nettoyage (20 doublons, 5 incohérentes, 3 aberrantes, une vingtaine de trous sur 39 000 lignes : un fichier propre), le rendement cumulé du croisement de moyennes vectorisé (négatif, sans intérêt : il est là pour la méthode), et il enregistre une figure avec la courbe de capital en R et l'histogramme des résultats.
+
+<Figure caption="Figure 3 · Lecture des métriques comme un trader : l'expectancy avec son incertitude et n (43 trades : exploration, pas validation), la répartition des raisons de sortie (34 sur temps, 8 stops, 1 C2 : information de placement des cibles), le MFE (26 % atteignent 1,5R), le profit factor et le drawdown qui n'ont de sens qu'à partir de 100 trades. Le chiffre est reproductible ; il n'est pas prédictif.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Lecture des métriques du backtest" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="240" x2="380" y2="240" className="line" strokeWidth="1" />
+  <line x1="60" y1="60" x2="60" y2="240" className="line" strokeWidth="1" />
+  <text x="220" y="262" fontSize="9" textAnchor="middle" className="muted">trades (1 à 43)</text>
+  <text x="30" y="150" fontSize="9" className="muted" transform="rotate(-90 30 150)">R cumulés</text>
+  <polyline points="60,200 70,196 80,204 90,192 100,186 110,190 120,180 130,176 140,182 150,170 160,164 170,168 180,158 190,162 200,150 210,144 220,150 230,140 240,146 250,152 260,142 270,134 280,128 290,132 300,122 310,116 320,120 330,110 340,104 350,108 360,98 370,92 380,88" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <line x1="60" y1="200" x2="380" y2="200" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="66" y="196" fontSize="8" className="muted">0</text>
+  <text x="380" y="82" fontSize="9" textAnchor="end" className="gold" fontWeight="600">+16,8R</text>
+  <text x="220" y="52" fontSize="10" textAnchor="middle" fontWeight="600">courbe de capital (schéma)</text>
+  <rect x="420" y="50" width="280" height="200" rx="6" className="box" strokeWidth="1" />
+  <text x="560" y="72" fontSize="10" fontWeight="600" textAnchor="middle">Ce que dit chaque chiffre</text>
+  <text x="430" y="96" fontSize="9"><tspan fontWeight="600">n = 43</tspan> : exploration, pas validation</text>
+  <text x="430" y="114" fontSize="9"><tspan fontWeight="600">E = +0,39 ± 0,16</tspan> : signe probable, valeur floue</text>
+  <text x="430" y="132" fontSize="9"><tspan fontWeight="600">34 sur temps / 8 stops / 1 C2</tspan> : cibles trop loin</text>
+  <text x="430" y="150" fontSize="9"><tspan fontWeight="600">MFE ≥ 1,5R : 26 %</tspan> : à lire avant de bouger C1</text>
+  <text x="430" y="168" fontSize="9"><tspan fontWeight="600">PF 2,6, DD 2R</tspan> : sans sens à 43 trades</text>
+  <text x="430" y="196" fontSize="9" className="red">tests d'honnêteté : coûts × 2 ; − 5 meilleurs trades</text>
+  <text x="430" y="214" fontSize="9" className="muted">données synthétiques : reproductible, non prédictif</text>
+  <text x="430" y="238" fontSize="9" className="muted">suite : Monte Carlo (ch. 8), validation (ch. 9)</text>
+</svg>
+</Figure>
+
+## Un script complet commenté, prêt à adapter
+
+Le fichier [`backtest_sweep_fvg.py`](pathname:///code/backtest_sweep_fvg.py) contient, dans l'ordre : la génération des données synthétiques (`make_synthetic_ohlc`), l'injection de défauts (`inject_defects`), le nettoyage (`clean_ohlc`), le backtest vectorisé (`vectorized_ma_cross`), l'ATR (`atr`), le moteur event-driven (`event_driven_backtest`), les métriques (`metrics`) et le programme principal qui imprime le tout et enregistre la figure. Il s'exécute avec `python backtest_sweep_fvg.py` dans un environnement où pandas, numpy et matplotlib sont installés ; il ne lit et n'écrit rien d'autre que `backtest_sweep_fvg.png`.
+
+Pour l'adapter à un vrai fichier et à votre fiche :
+
+1. **Remplacer la source** : `raw = pd.read_csv("mon_fichier.csv", parse_dates=["time"], index_col="time")` à la place de `make_synthetic_ohlc()`, en vérifiant les noms de colonnes (`open, high, low, close, volume`), le fuseau (`.tz_localize("UTC").tz_convert("Europe/Paris")` si nécessaire) et la séance.
+2. **Vérifier le rapport de nettoyage** avant toute autre chose ; au-delà de quelques pour cent de lignes retirées, changer de source.
+3. **Recopier les seuils de la fiche** dans les paramètres de `event_driven_backtest` (`sweep_min_ticks`, `disp_atr`, `fvg_atr`, `stop_atr_margin`, `c1_ratio`, `c2_ratio`, `max_wait_bars`, `last_entry_time`) et **ne pas les changer** avant d'avoir lu le chapitre 9 ; toute idée va dans un commentaire.
+4. **Mettre les vrais coûts** (`commission_rt`, `slippage_ticks_market`, et le spread pour le forex).
+5. **Ajouter les réservoirs de votre fiche** : le script ne modélise que le PDL ; le PDH (pour les shorts symétriques), l'ONL / ONH, la VAL / VAH demandent chacun quelques lignes de calcul quotidien sur le même modèle que `pdl_map`.
+6. **Ajouter les filtres du bloc 1** : fenêtre horaire (le script accepte toute la séance ; la fiche dit 15 h 30 - 17 h 30 et 19 h 30 - 21 h 15), régime (un ATR quotidien 5 / 20 jours calculé sur `df.groupby("date")`), calendrier (une liste de dates à exclure).
+7. **Exporter les trades** (`trades.to_csv("trades.csv")`) : c'est la feuille de collecte du chapitre 6, remplie par la machine ; les chapitres 8 et 9 la relisent.
+
+Ce que le script ne fait pas, à dessein : il n'optimise rien, ne teste pas plusieurs valeurs de seuils, ne choisit pas la meilleure. C'est le travail du chapitre 9, et le faire ici sans méthode produirait exactement le sur-ajustement que ce chapitre décrit.
+
+## Deux trades du backtest
+
+Deux lignes tirées de `trades`, telles que le moteur les a produites (données synthétiques, MES, 2 contrats), pour montrer ce que le code enregistre et ce qu'un trader en fait.
+
+<TradeExample
+  resultat="gain"
+  instrument="MES synthétique, ligne 25 de trades (2 contrats, moteur event-driven)"
+  direction="Long"
+  setup="Sweep du PDL avec clôture au-dessus, displacement validé (range ≥ 1,5 ATR M15 estimé, corps ≥ 60 %, cassure du plus haut des six bougies précédentes), FVG ≥ 0,4 ATR ; limite au bord haut du FVG + 1 tick servie à 16 h 05 (traversée d'un tick)"
+  entree="7 043,75"
+  stop="7 001,25 (plus bas du sweep − 0,5 ATR, arrondi au tick inférieur ; 170 ticks = 42,50 points)"
+  objectif="C1 7 107,50 (+1,5R) atteint : 1 contrat sorti, stop à 7 044,00 ; C2 7 171,25 (+3R) atteint à 20 h 15 : solde sorti"
+  r="+2,25R">
+
+Ce que la ligne dit : 1 contrat à +63,75 points (255 ticks) et 1 contrat à +127,50 points (510 ticks) : 765 ticks × 1,25 $ = 956,25 $, moins 2 $ de commission ; risque 2 × 170 × 1,25 = 425 $ : **+2,245R**. MFE 3,1R, MAE 0,1R, raison « C2 ». C'est le seul trade des 43 qui atteint C2 : ce n'est pas une preuve que C2 est bien placé, c'est un point dans la distribution du MFE. Ce que le code a fait de mieux qu'un humain : il n'a pas remonté le stop à 7 080 « pour sécuriser » entre C1 et C2 pendant les trois heures d'attente ; il a exécuté la fiche.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="MES synthétique, ligne 19 de trades (2 contrats, moteur event-driven)"
+  direction="Long"
+  setup="Sweep du PDL avec clôture au-dessus, displacement et FVG validés aux seuils ; limite servie à 16 h 00"
+  entree="7 251,00"
+  stop="7 223,00 (112 ticks = 28 points)"
+  objectif="C1 7 293,00 non atteint (MFE 0,03R) ; stop touché à 16 h 15, trois bougies après l'entrée, exécuté à 7 222,75 (1 tick de slippage)"
+  r="−1,02R">
+
+Ce que la ligne dit : 2 contrats à −113 ticks = −282,50 $, moins 2 $ de commission, sur 280 $ de risque : **−1,016R**. C'est le coût réel d'un stop : jamais exactement −1R, à cause du slippage et de la commission ; sur 100 trades, ces 0,02R par perte pèsent près de 1R, ce que le backtest sans coûts ne montre pas (et sur un compte réel, le slippage des jours agités est de plusieurs ticks). Ce que le trader en fait : le trade a été stoppé en quinze minutes avec un MFE presque nul ; le sous-groupe « stoppés sans MFE » (5 des 8 stops ici ont un MFE sous 0,1R) est une décomposition à faire quand n le permettra ; elle dira si l'entrée au bord du FVG est trop tôt (variante B au milieu ?) : question pour le chapitre 9, pas pour une ligne.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le code lève la limite de taille du replay manuel, mais exige la même rigueur : **données** nettoyées sans inventer (supprimer, ne pas corriger ; ne pas combler les trous ; fuseau et séance d'abord), **moteur** honnête, **coûts** explicites.
+- **Vectorisé** : une position par bougie × rendements, dix lignes, avec un `.shift(1)` obligatoire (look-ahead sinon) ; sert à explorer, ne peut pas rejouer une fiche (pas de stop, de cible, de limite). **Event-driven** : bougie par bougie avec un état ; c'est le protocole du chapitre 6 exécuté par une machine ; seul moyen de mesurer une fiche.
+- Les **règles du doute** se codent : limite servie si traversée d'un tick, stop testé avant les cibles, slippage sur les ordres au marché, spread réel sur le forex ; tests d'honnêteté : coûts × 2, moins les cinq meilleurs trades.
+- Les **métriques** se lisent avec n et l'incertitude : 43 trades à +0,39 ± 0,16R est une exploration ; la répartition des raisons de sortie et le MFE renseignent le placement des cibles ; profit factor et drawdown n'ont de sens qu'à partir de 100 trades.
+- Le script `backtest_sweep_fvg.py` est **complet, reproductible, non prédictif** (données synthétiques avec les comportements injectés) ; il s'adapte en remplaçant la source, en recopiant les seuils de la fiche sans les changer, en mettant les vrais coûts, en ajoutant réservoirs et filtres ; il n'optimise rien : c'est le chapitre 9.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Le look-ahead">
+
+Un lecteur écrit `pos = np.sign(ma_f - ma_s)` sans `.shift(1)` et obtient +48 % sur deux ans au lieu de −30 %. Expliquez ce qui s'est passé, et donnez un second exemple de look-ahead possible dans le moteur event-driven du script (une erreur d'une ligne qui utiliserait le futur).
+
+<Solution>
+
+Sans décalage, la position de la bougie t est calculée avec la clôture de t et multipliée par le rendement de t (de t − 1 à t) : on « décide » d'être long sur une bougie dont on connaît déjà la clôture ; le rendement est celui qui a produit le croisement ; c'est acheter après avoir vu que ça monte, au prix d'avant la hausse. D'où le résultat mirifique. Dans le moteur event-driven, un look-ahead typique : calculer le PDL avec `daily_low` **sans** le `.shift(1)` (on utiliserait le plus bas du jour même, connu seulement le soir), ou tester le stop après les cibles dans une bougie qui touche les deux (on choisirait la version favorable en connaissant la bougie entière), ou encore servir la limite au tick exact sans traversée. Chacune se corrige en une ligne ; chacune, oubliée, ajoute quelques dixièmes de R par trade sur le papier.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Le poids des coûts">
+
+Un backtest sans coûts donne, sur 200 trades de MES à 2 contrats : expectancy +0,32R, risque moyen 120 $ par trade, 40 % de sorties sur stop au marché, 60 % de sorties en limite (cibles). Commission réelle 1,20 $ par contrat aller-retour ; slippage moyen 1 tick sur les ordres au marché.
+
+1. Coût moyen par trade en dollars.
+2. Coût moyen par trade en R, et expectancy nette.
+3. Que devient l'expectancy si l'on double ces coûts, et que conclure ?
+
+<Solution>
+
+1. Commission : 2 × 1,20 = **2,40 $** par trade. Slippage : 40 % des trades × 2 contrats × 1 tick × 1,25 $ = **1,00 $** en moyenne. Total **3,40 $**.
+2. 3,40 / 120 = **0,028R** ; expectancy nette ≈ +0,32 − 0,03 = **+0,29R**.
+3. Coûts doublés : −0,057R → **+0,26R**. La stratégie perd moins de 20 % de son expectancy quand les coûts doublent : elle vit de son edge, pas d'un tarif de courtier ; c'est un bon signe. (À l'inverse, une stratégie de scalping à +0,08R avec 0,05R de coûts tomberait à −0,02R avec des coûts doublés : elle ne survivrait pas au réel.)
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Adapter le script">
+
+Écrivez (en pseudo-code ou en Python) les lignes qui ajouteraient au moteur du script le filtre de fenêtre horaire de la fiche du setup 1 (entrées seulement entre 15 h 30 - 17 h 30 et 19 h 30 - 21 h 15) et le calcul d'un second réservoir, le PDH, pour la version short symétrique.
+
+<Solution>
+
+Fenêtre : au moment de tester l'exécution de la limite (boucle `while k`), ajouter une condition d'heure sur `times[k]` :
+
+```python
+hm = times[k].strftime("%H:%M")
+in_window = ("15:30" <= hm <= "17:30") or ("19:30" <= hm <= "21:15")
+if not in_window:
+    k += 1
+    continue          # la limite reste en place mais ne peut pas être servie hors fenêtre
+```
+
+(Ou, plus strict et plus proche de la fiche : annuler l'ordre à 17 h 30 et ne pas en placer entre 17 h 30 et 19 h 30.) PDH : sur le modèle du PDL,
+
+```python
+daily_high = df.groupby("date")["high"].max()
+pdh_map = daily_high.shift(1)          # plus haut de la VEILLE (shift : pas de look-ahead)
+df["pdh"] = df["date"].map(pdh_map)
+```
+
+puis un bloc symétrique : S1 = `h[i] > pdh[i] + sweep_min_ticks * tick and c[i] < pdh[i]`, displacement baissier (corps négatif, clôture sous le plus bas des six bougies précédentes), FVG baissier (`h[j+1] < l[j-1]`), limite au bord bas du FVG − 1 tick servie si `h[k] > entry_px + tick`, stop au-dessus du sweep + marge, cibles en dessous. Le plus simple pour ne pas dupliquer le code : écrire la fonction pour un sens et l'appeler sur des données inversées en signe (prix × −1), ce que beaucoup de moteurs font.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Face à une bougie manquante dans un fichier OHLC, on :",
+      options: [
+        "L'interpole entre ses voisines",
+        "La compte et on ne la comble pas : remplir invente des prix que le marché n'a pas faits",
+        "Recopie la bougie précédente",
+        "Arrête tout",
+      ],
+      answer: 1,
+      explain: "On supprime, on ne corrige pas ; on mesure ce qu'on a retiré ; au-delà de quelques pour cent, on change de source.",
+    },
+    {
+      q: "Le .shift(1) du backtest vectorisé sert à :",
+      options: [
+        "Lisser la courbe",
+        "Appliquer la position décidée sur la clôture de t au rendement de t + 1, pour ne pas utiliser un prix qu'on ne connaît pas encore (look-ahead)",
+        "Réduire les coûts",
+        "Rien d'important",
+      ],
+      answer: 1,
+      explain: "Sans lui, on trade avec le futur et les résultats deviennent miraculeux.",
+    },
+    {
+      q: "Pour mesurer une fiche du niveau 7 (limite, stop, C1 / C2, breakeven, sortie sur temps), il faut :",
+      options: [
+        "Un backtest vectorisé",
+        "Un backtest event-driven, bougie par bougie avec un état",
+        "Un tableur",
+        "Une régression",
+      ],
+      answer: 1,
+      explain: "Le vectorisé ignore le chemin du prix dans la bougie ; il ne peut pas modéliser un stop ni un ordre limite.",
+    },
+    {
+      q: "Dans une bougie qui touche à la fois le stop et la cible, le moteur du script :",
+      options: [
+        "Prend la cible",
+        "Prend le stop d'abord (règle du doute, comme le protocole manuel)",
+        "Tire au sort",
+        "Ignore la bougie",
+      ],
+      answer: 1,
+      explain: "L'exécution pessimiste protège contre l'optimisme que le code rend facile.",
+    },
+    {
+      q: "Le test « doubler les coûts » sert à :",
+      options: [
+        "Choisir un courtier",
+        "Savoir si la stratégie vit de son edge ou d'un tarif : si l'expectancy s'effondre, elle ne survivra pas au réel",
+        "Calculer l'impôt",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Avec « retirer les cinq meilleurs trades », c'est l'un des deux tests d'honnêteté rapides.",
+    },
+    {
+      q: "Le résultat du script (+0,39R sur 43 trades synthétiques) :",
+      options: [
+        "Prouve que le setup 1 gagne",
+        "Est reproductible mais non prédictif : données construites avec les comportements cherchés, n trop petit ; c'est la méthode qui compte",
+        "Peut être tradé tel quel",
+        "Est faux",
+      ],
+      answer: 1,
+      explain: "Le backtest mesure une règle sur un passé donné ; ici, un passé fabriqué. Sur un vrai marché, c'est justement ce qu'on cherche à savoir.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Quarante-trois trades, un drawdown de 2R : la vraie série de pertes n'a pas encore eu lieu. Le chapitre suivant la fabrique : distributions et intervalles de confiance sur l'expectancy, simulation Monte Carlo des séquences de trades pour connaître les drawdowns plausibles, calcul du risque de ruine, et lecture d'un rapport de simulation, avec un second script.
