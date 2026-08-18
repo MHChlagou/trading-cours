@@ -1,0 +1,372 @@
+---
+title: "La routine quotidienne"
+description: "La journée d'un trader minutée : trente minutes de préparation pré-marché en six étapes, les règles et limites de l'exécution en séance, dix minutes de débrief, l'hygiène de vie qui conditionne la capacité de décision, et les routines hebdomadaire, mensuelle et trimestrielle qui bouclent l'ensemble."
+---
+
+# La routine quotidienne
+
+Une méthode qui n'entre pas dans une journée n'existe pas. Ce chapitre transforme les sept niveaux précédents en emploi du temps : ce qu'on fait avant l'ouverture, pendant la séance, après la clôture, et ce qui, dans la vie du trader, détermine la qualité de ses décisions plus sûrement que n'importe quel indicateur. Le principe directeur est celui du chapitre 1 : **déplacer les décisions dans le temps**. Ce qui est décidé à froid, la veille ou le matin, n'a plus à être décidé à chaud. Une bonne routine ne demande pas de courage ; elle demande d'être courte, ordonnée, et toujours la même.
+
+Les horaires ci-dessous sont donnés pour un trader d'indices en séance américaine (Paris, heure d'été) et pour le setup 2 en matinée ; ils se translatent sans difficulté.
+
+## La préparation pré-marché en trente minutes
+
+Trente minutes, six étapes, dans cet ordre, chronomètre visible. La préparation ne consiste pas à prévoir le marché : elle consiste à **écrire les conditions** dans lesquelles on acceptera de trader.
+
+**1 · État du trader (2 min).** Avant les graphiques : sommeil (heures et qualité), disponibilité réelle du créneau, événements personnels, état déclaré (normal / fatigué / pressé / perturbé). C'est la couche 2 du journal. Si l'état est « perturbé », la préparation s'arrête ici : protocole 5 du chapitre 1, on ne trade pas. Mettre cette étape en premier n'est pas une coquetterie : c'est la seule décision de la journée qu'on prend encore avec un cerveau non contaminé par le prix.
+
+**2 · Régime et volatilité (5 min).** La matrice du niveau 5 : ATR quotidien 5 jours sur 20 jours, VIX et sa structure, corrélations du moment. Verdict en un mot : tendance calme, tendance normale, tendance agitée, range normal, range de stress. De ce mot découlent les setups autorisés et les coefficients de taille.
+
+**3 · Structure et réservoirs (10 min).** Le travail technique : structure quotidienne et H1 (niveau 2), puis la liste des réservoirs préparés (niveau 3 et 6) : PDH / PDL, POC / VAH / VAL de la veille, ONH / ONL, EQH / EQL H1, zones HTF non mitigées. **Sept niveaux au maximum**, les confluences en priorité, tracés sur le graphique et notés dans le journal. C'est ici que se joue la qualité de la séance : un sweep n'est un signal que s'il porte sur un réservoir **préparé avant** l'ouverture.
+
+**4 · Calendrier (3 min).** Annonces du jour avec leur heure et leur niveau (1, 2, 3), échéances particulières (rollover, expiration, fin de mois), et la traduction en règles : fenêtres neutralisées à plus ou moins 15 et 20 minutes, jours de FOMC avec fermeture à 19 h 45, etc.
+
+**5 · Plan de trade écrit (7 min).** Trois à cinq lignes maximum, sous la forme : « si le prix balaie X et que le displacement casse Y, j'achète en Z avec stop sous W, cibles C1 et C2, taille N ». On écrit les scénarios **des deux côtés** (haussier et baissier) pour ne pas se retrouver spectateur du sens qu'on n'avait pas envisagé, et l'on écrit aussi ce qu'on **ne** tradera pas (« pas de rotation aujourd'hui : régime tendance »). Le plan comprend le budget du jour (en R), le nombre de trades autorisés et l'heure limite d'entrée.
+
+**6 · Checklist matérielle (3 min).** Plateforme connectée, données à jour, ordres résiduels annulés, position résiduelle vérifiée, marge disponible, taille par défaut réglée, P&L masqué, téléphone hors de portée, chronomètre et carte des protocoles à portée de main.
+
+Une préparation qui dépasse quarante minutes finit par ne plus se faire ; une préparation qui descend sous quinze minutes saute les réservoirs, et le trader passe la séance à improviser sur des niveaux trouvés en direct.
+
+<Figure caption="Figure 1 · La préparation pré-marché en six étapes minutées (30 minutes) : état du trader d'abord (la seule décision prise avec un cerveau non contaminé par le prix), régime, structure et réservoirs, calendrier, plan écrit des deux côtés, checklist matérielle. La préparation n'anticipe pas le marché : elle écrit les conditions dans lesquelles on acceptera de trader.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Préparation pré-marché en six étapes" xmlns="http://www.w3.org/2000/svg">
+  <line x1="50" y1="60" x2="680" y2="60" className="line" strokeWidth="1" />
+  <text x="50" y="44" fontSize="9" className="muted">15 h 00</text>
+  <text x="660" y="44" fontSize="9" className="muted">15 h 30</text>
+  <rect x="50" y="70" width="42" height="46" rx="4" className="gold" opacity="0.45" />
+  <text x="71" y="98" fontSize="11" textAnchor="middle" fontWeight="600">1</text>
+  <text x="71" y="132" fontSize="9" textAnchor="middle" fontWeight="600">État</text>
+  <text x="71" y="145" fontSize="8" textAnchor="middle" className="muted">2 min</text>
+  <text x="71" y="162" fontSize="8" textAnchor="middle" className="red">perturbé → stop</text>
+  <rect x="100" y="70" width="105" height="46" rx="4" className="gold" opacity="0.3" />
+  <text x="152" y="98" fontSize="11" textAnchor="middle" fontWeight="600">2</text>
+  <text x="152" y="132" fontSize="9" textAnchor="middle" fontWeight="600">Régime</text>
+  <text x="152" y="145" fontSize="8" textAnchor="middle" className="muted">5 min · matrice N5</text>
+  <text x="152" y="162" fontSize="8" textAnchor="middle" className="muted">setups autorisés</text>
+  <rect x="213" y="70" width="210" height="46" rx="4" className="gold" opacity="0.3" />
+  <text x="318" y="98" fontSize="11" textAnchor="middle" fontWeight="600">3</text>
+  <text x="318" y="132" fontSize="9" textAnchor="middle" fontWeight="600">Structure et réservoirs</text>
+  <text x="318" y="145" fontSize="8" textAnchor="middle" className="muted">10 min · sept niveaux au plus, confluences</text>
+  <text x="318" y="162" fontSize="8" textAnchor="middle" className="gold">un sweep n'est un signal que sur un réservoir préparé</text>
+  <rect x="431" y="70" width="63" height="46" rx="4" className="gold" opacity="0.3" />
+  <text x="462" y="98" fontSize="11" textAnchor="middle" fontWeight="600">4</text>
+  <text x="462" y="132" fontSize="9" textAnchor="middle" fontWeight="600">Calendrier</text>
+  <text x="462" y="145" fontSize="8" textAnchor="middle" className="muted">3 min</text>
+  <rect x="502" y="70" width="126" height="46" rx="4" className="gold" opacity="0.3" />
+  <text x="565" y="98" fontSize="11" textAnchor="middle" fontWeight="600">5</text>
+  <text x="565" y="132" fontSize="9" textAnchor="middle" fontWeight="600">Plan écrit</text>
+  <text x="565" y="145" fontSize="8" textAnchor="middle" className="muted">7 min · les deux côtés</text>
+  <text x="565" y="162" fontSize="8" textAnchor="middle" className="muted">budget, nb de trades, heure limite</text>
+  <rect x="636" y="70" width="44" height="46" rx="4" className="gold" opacity="0.3" />
+  <text x="658" y="98" fontSize="11" textAnchor="middle" fontWeight="600">6</text>
+  <text x="658" y="132" fontSize="9" textAnchor="middle" fontWeight="600">Matériel</text>
+  <text x="658" y="145" fontSize="8" textAnchor="middle" className="muted">3 min</text>
+  <text x="360" y="205" fontSize="10" textAnchor="middle" className="muted">au-delà de 40 minutes, la préparation cesse de se faire ; sous 15, on improvise sur des niveaux trouvés en direct</text>
+  <rect x="140" y="225" width="440" height="46" rx="6" className="box" strokeWidth="1.5" />
+  <text x="360" y="245" fontSize="10" fontWeight="600" textAnchor="middle">Sortie de la préparation : une page écrite</text>
+  <text x="360" y="262" fontSize="9" textAnchor="middle" className="muted">régime · 7 niveaux · calendrier · 3 à 5 scénarios · budget du jour · ce qu'on ne tradera pas</text>
+</svg>
+</Figure>
+
+## L'exécution en séance : règles et limites
+
+En séance, le trader n'analyse plus : il **reconnaît** et il **exécute**. Tout ce qui ressemble à de l'analyse en direct est un signal d'alarme, parce que l'analyse en direct est presque toujours une justification d'un désir d'entrer.
+
+**Le rythme.** On regarde le graphique aux **clôtures de bougies** de l'unité d'exécution (toutes les cinq minutes pour le setup 1), pas en continu. Entre deux clôtures, l'écran peut rester affiché mais l'attention se relâche ; les alertes de prix (posées sur les réservoirs préparés) remplacent la surveillance. Ce rythme, à lui seul, supprime une bonne partie des erreurs d'illusion de contrôle du chapitre 1.
+
+**La checklist d'entrée.** Six cases, cochées avant chaque envoi d'ordre, toujours dans le même ordre : (1) régime autorisé ; (2) réservoir préparé ce matin ; (3) critères obligatoires du signal validés, valeurs notées ; (4) géométrie suffisante (ratio à C1 au-dessus du seuil de refus) ; (5) taille issue de la formule et du coefficient ; (6) budget du jour et nombre de trades encore disponibles. Une case non cochable annule le trade, sans discussion. Cocher prend vingt secondes ; un trade forcé coûte quatorze trades conformes (chapitre 1).
+
+**Les limites du jour**, écrites dans le plan et, quand c'est possible, dans la plateforme : budget en R (−2R par exemple), nombre de trades (deux), heure limite d'entrée, taille maximale, un seul trade ouvert à la fois par instrument, plafond de chaleur du portefeuille. Une limite atteinte n'est pas un sujet de réflexion : c'est un protocole (chapitre 1).
+
+**Pendant la position.** Aucune décision qui ne soit pas dans la fiche. Les ordres sont en place ; le trader vérifie qu'ils y sont, puis attend. Il ne descend pas d'unité de temps, ne lit pas les réseaux, ne cherche pas d'avis. La seule chose qui puisse arriver légitimement est une **règle prévue** : partielle à C1, breakeven, trailing structurel, sortie sur temps, protocole news.
+
+**Les temps morts.** Un trader en séance passe l'essentiel de son temps à ne rien faire, et c'est là qu'il se met en danger. Trois occupations autorisées, préparées d'avance : mettre à jour la couche 1 du journal (les lignes se remplissent à l'entrée), annoter les captures des trades du jour, ou travailler sur un dossier hors séance qui ne demande pas de décision (relire un chapitre, préparer un backtest). Trois occupations interdites : chercher un autre setup sur un autre marché, regarder le P&L en euros, discuter du marché en direct.
+
+**La fin de séance.** Heure limite d'entrée d'abord, puis heure de fermeture des positions selon les fiches, puis fermeture de la plateforme. Le trader qui reste connecté après l'heure limite prend, un jour ou l'autre, le trade que sa fiche interdit.
+
+<Figure caption="Figure 2 · L'exécution en séance : lecture aux clôtures de bougies (alertes pour le reste), checklist d'entrée en six cases dont une seule non cochable annule le trade, limites du jour codées, aucune décision hors fiche pendant la position, temps morts occupés par des tâches sans décision, fin de séance en trois temps.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Règles d'exécution en séance" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="200" height="130" rx="6" className="box" strokeWidth="1" />
+  <text x="130" y="52" fontSize="10" fontWeight="600" textAnchor="middle">Rythme</text>
+  <text x="40" y="74" fontSize="9">lecture aux clôtures M5</text>
+  <text x="40" y="90" fontSize="9">alertes sur les réservoirs</text>
+  <text x="40" y="106" fontSize="9" className="muted">jamais en continu</text>
+  <text x="40" y="128" fontSize="9" className="red">analyser en direct = signal</text>
+  <text x="40" y="142" fontSize="9" className="red">d'un désir d'entrer</text>
+  <rect x="250" y="30" width="230" height="130" rx="6" className="box" strokeWidth="1.5" />
+  <text x="365" y="52" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Checklist d'entrée (20 secondes)</text>
+  <text x="260" y="72" fontSize="9">1 · régime autorisé</text>
+  <text x="260" y="88" fontSize="9">2 · réservoir préparé ce matin</text>
+  <text x="260" y="104" fontSize="9">3 · critères obligatoires, valeurs notées</text>
+  <text x="260" y="120" fontSize="9">4 · géométrie (ratio à C1)</text>
+  <text x="260" y="136" fontSize="9">5 · taille = formule × coefficient</text>
+  <text x="260" y="152" fontSize="9">6 · budget et nb de trades restants</text>
+  <rect x="500" y="30" width="190" height="130" rx="6" className="box" strokeWidth="1" />
+  <text x="595" y="52" fontSize="10" fontWeight="600" textAnchor="middle">Limites du jour</text>
+  <text x="510" y="74" fontSize="9">budget −2R · 2 trades</text>
+  <text x="510" y="90" fontSize="9">heure limite d'entrée</text>
+  <text x="510" y="106" fontSize="9">taille max · 1 position</text>
+  <text x="510" y="122" fontSize="9">chaleur du portefeuille</text>
+  <text x="510" y="144" fontSize="9" className="gold">atteinte = protocole,</text>
+  <text x="510" y="157" fontSize="9" className="gold">pas réflexion</text>
+  <rect x="30" y="180" width="320" height="100" rx="6" className="box" strokeWidth="1" />
+  <text x="190" y="202" fontSize="10" fontWeight="600" textAnchor="middle">Pendant la position</text>
+  <text x="40" y="222" fontSize="9" className="green">autorisé : partielle à C1, breakeven, trailing,</text>
+  <text x="40" y="236" fontSize="9" className="green">sortie sur temps, protocole news</text>
+  <text x="40" y="256" fontSize="9" className="red">interdit : descendre d'unité, lire les réseaux,</text>
+  <text x="40" y="270" fontSize="9" className="red">chercher un avis, modifier une cible</text>
+  <rect x="370" y="180" width="320" height="100" rx="6" className="box" strokeWidth="1" />
+  <text x="530" y="202" fontSize="10" fontWeight="600" textAnchor="middle">Temps morts (le vrai danger)</text>
+  <text x="380" y="222" fontSize="9" className="green">journal (couche 1), annotation des captures,</text>
+  <text x="380" y="236" fontSize="9" className="green">dossier sans décision</text>
+  <text x="380" y="256" fontSize="9" className="red">autre setup sur un autre marché, P&amp;L en euros,</text>
+  <text x="380" y="270" fontSize="9" className="red">discussion en direct</text>
+  <text x="360" y="305" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">fin de séance en trois temps : heure limite d'entrée → fermeture des positions → fermeture de la plateforme</text>
+</svg>
+</Figure>
+
+## Le débrief post-marché en dix minutes
+
+Le débrief se fait **le jour même**, plateforme fermée, en dix minutes. Son but n'est pas de juger la journée mais de la **classer** : ce qui est fait est fait, ce qui est noté sera analysé samedi.
+
+1. **Compléter la couche 1** (3 min) : sorties, R net, MFE, MAE, raison de sortie, conformité, tags d'erreur. Les captures sont enregistrées et nommées.
+2. **Remplir la fin de la couche 2** (3 min) : signaux vus, pris, refusés avec le critère qui a tranché ; R du jour ; conformité du jour ; protocoles déclenchés ; une phrase factuelle.
+3. **Trois questions fixes** (3 min), répondues en une ligne chacune : *Ai-je exécuté ce que j'avais écrit ?* *Qu'est-ce qui a failli me faire dévier ?* *Qu'est-ce que je referais à l'identique ?* La deuxième est la plus utile : elle attrape les signaux de tilt avant qu'ils deviennent des fautes.
+4. **Fermer** (1 min) : cocher « journal rempli », noter l'heure de fin, et **arrêter**. Pas de replay du jour, pas de recherche, pas de « je regarde juste ce que ça a fait après ».
+
+Ce que le débrief ne contient pas : d'auto-évaluation morale (« j'ai été nul »), de conclusion statistique (une journée n'est pas un échantillon), de modification de règle (les modifications se décident en revue hebdomadaire, une seule à la fois). Un débrief de dix minutes tenu tous les jours vaut infiniment mieux qu'une analyse de deux heures faite trois fois par mois.
+
+## Hygiène de vie et capacité de décision
+
+La qualité des décisions d'un trader dépend de facteurs qui n'ont rien à voir avec les marchés, et qui sont mesurables dans son propre journal. C'est le sujet le plus facile à mépriser et le plus rentable à traiter.
+
+**Le sommeil** est le premier facteur. Une nuit courte dégrade l'attention soutenue et le contrôle de l'impulsion, exactement les deux fonctions dont dépendent l'attente d'un signal et le respect d'un stop. La règle pratique du cours : après une nuit de moins de six heures, taille divisée par deux et un seul trade ; après une nuit blanche, on ne trade pas. Ce n'est pas de la prudence excessive : le journal de la plupart des traders montre une expectancy nettement dégradée dans l'état « fatigué » (chapitre 3), et c'est une variable **sous contrôle**.
+
+**L'alimentation et l'hydratation** en séance : pas de séance à jeun ni juste après un repas lourd ; de l'eau à portée ; la caféine avant l'ouverture plutôt qu'au milieu d'un creux d'attention (elle amplifie l'impulsivité, ce qui est précisément le risque de la fin de séance).
+
+**Le mouvement** : dix minutes de marche avant la séance valent mieux qu'un dixième graphique ; une pause debout toutes les heures ; le trader assis huit heures devant un écran prend de mauvaises décisions à la septième.
+
+**Les frontières.** Horaires connus des proches, téléphone hors de portée, un lieu dédié si possible. Le trading depuis un canapé, entre deux conversations, produit des trades de canapé.
+
+**La charge mentale extérieure.** Déménagement, séparation, procédure administrative lourde, maladie d'un proche : ces périodes consomment exactement la ressource qu'exige l'exécution. La bonne décision est d'y **réduire la taille par défaut** ou de s'arrêter, décidée à l'avance et écrite (protocole 5).
+
+**Le rapport à l'argent.** Un trader qui a besoin du résultat du mois pour payer son loyer n'exécute pas la même fiche que celui qui ne l'a pas. Cette contrainte est réelle et se traite au niveau 9 (construction du compte, revenus, dimensionnement) ; en attendant, elle se **déclare** dans le journal, parce qu'elle explique une bonne partie des écarts de conformité.
+
+Aucun de ces points n'est un conseil de bien-être : ils sont des paramètres d'un système dont le trader est le composant le plus fragile et le plus coûteux à remplacer.
+
+## La routine hebdomadaire et mensuelle
+
+La journée s'emboîte dans des cycles plus longs, chacun avec sa fonction propre.
+
+**Chaque semaine (samedi matin, environ 1 h 30).** La revue hebdomadaire du chapitre 2 en 45 minutes chronométrées (chiffres, conformité, pertes conformes, non-trades, captures, **une** décision de process, préparation de la semaine). Puis 45 minutes de travail de fond, à choisir : une idée du carnet écrite en fiche, un backtest, une relecture d'album de captures. Le week-end contient aussi la préparation du setup 3 (verdict macro du niveau 7) quand il est dans la sélection.
+
+**Chaque mois (une heure de plus).** Statistiques par setup et par tag avec les n et les incertitudes ; mise à jour du Monte Carlo et position du drawdown ; conditions d'invalidité des fiches ; courbe d'équité en R à deux tracés ; tableau des fuites et vérification de la modification de process du mois précédent ; décision éventuelle de **taille** (jamais sur un mois seul : sur la conformité et sur l'échantillon cumulé) ; vérification administrative (frais, relevés, marge).
+
+**Chaque trimestre (deux heures).** Sélection de setups (niveau 7, chapitre 5) : une fiche entre si une autre sort. Objectifs de **process** du trimestre, formulés en actions vérifiables (« conformité supérieure à 90 % », « journal rempli en séance à 100 % », « préparation faite avant 15 h 10 »), jamais en euros. État du carnet d'idées. Et la question de fond : est-ce que ce rythme est soutenable dans ma vie telle qu'elle est ?
+
+**Chaque année.** Bilan complet : expectancy par fiche avec les intervalles, courbe d'équité, coût total des fautes, évolution de la conformité, révision de la sélection, décision de capital et d'ambition (niveau 9), et deux semaines d'arrêt complet quelque part dans l'année, planifiées comme le reste.
+
+Une dernière remarque, qui vaut pour tout le chapitre : les routines se dégradent silencieusement. La préparation passe de trente à vingt minutes, puis à dix ; le débrief se fait le lendemain, puis le samedi ; la checklist se coche de mémoire. Le seul garde-fou fiable est **mesuré** : le bloc process du tableau de bord (chapitre 3) compte les préparations faites, les débriefs du jour même, les revues tenues. Ces trois nombres prédisent la conformité du mois suivant mieux que n'importe quelle résolution.
+
+<Figure caption="Figure 3 · Les cycles emboîtés : la journée (préparation 30 min, séance, débrief 10 min), la semaine (revue 45 min + travail de fond), le mois (statistiques, Monte Carlo, fuites, décision de taille), le trimestre (sélection de setups, objectifs de process), l'année (bilan, capital, arrêt planifié). Les routines se dégradent silencieusement : on les compte.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Cycles emboîtés de la routine" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="40" width="180" height="200" rx="6" className="box" strokeWidth="1.5" />
+  <text x="120" y="62" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Jour</text>
+  <text x="40" y="84" fontSize="9">préparation · 30 min</text>
+  <text x="40" y="100" fontSize="9" className="muted">état, régime, réservoirs,</text>
+  <text x="40" y="114" fontSize="9" className="muted">calendrier, plan, matériel</text>
+  <text x="40" y="138" fontSize="9">séance · reconnaître, exécuter</text>
+  <text x="40" y="154" fontSize="9" className="muted">clôtures M5, checklist 6 cases,</text>
+  <text x="40" y="168" fontSize="9" className="muted">limites, aucune décision hors fiche</text>
+  <text x="40" y="192" fontSize="9">débrief · 10 min</text>
+  <text x="40" y="208" fontSize="9" className="muted">couches 1 et 2, trois questions,</text>
+  <text x="40" y="222" fontSize="9" className="muted">fermer et arrêter</text>
+  <rect x="225" y="40" width="150" height="200" rx="6" className="box" strokeWidth="1" />
+  <text x="300" y="62" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Semaine</text>
+  <text x="235" y="84" fontSize="9">revue · 45 min</text>
+  <text x="235" y="100" fontSize="9" className="muted">7 étapes, une décision</text>
+  <text x="235" y="114" fontSize="9" className="muted">de process</text>
+  <text x="235" y="138" fontSize="9">travail de fond · 45 min</text>
+  <text x="235" y="154" fontSize="9" className="muted">une idée en fiche,</text>
+  <text x="235" y="168" fontSize="9" className="muted">un backtest, un album</text>
+  <text x="235" y="192" fontSize="9">verdict macro (setup 3)</text>
+  <text x="235" y="212" fontSize="9" className="muted">jours où l'on ne tradera pas</text>
+  <rect x="390" y="40" width="150" height="200" rx="6" className="box" strokeWidth="1" />
+  <text x="465" y="62" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Mois</text>
+  <text x="400" y="84" fontSize="9">stats par setup et tag</text>
+  <text x="400" y="100" fontSize="9" className="muted">avec n et incertitudes</text>
+  <text x="400" y="120" fontSize="9">Monte Carlo à jour</text>
+  <text x="400" y="140" fontSize="9">fuites + vérification</text>
+  <text x="400" y="156" fontSize="9" className="muted">de la modif du mois passé</text>
+  <text x="400" y="176" fontSize="9">décision de taille</text>
+  <text x="400" y="192" fontSize="9" className="muted">sur la conformité, pas le mois</text>
+  <text x="400" y="212" fontSize="9">administratif (frais, marge)</text>
+  <rect x="555" y="40" width="135" height="200" rx="6" className="box" strokeWidth="1" />
+  <text x="622" y="62" fontSize="10" fontWeight="600" textAnchor="middle" className="gold">Trimestre / année</text>
+  <text x="565" y="84" fontSize="9">sélection de setups</text>
+  <text x="565" y="100" fontSize="9" className="muted">une entre, une sort</text>
+  <text x="565" y="120" fontSize="9">objectifs de process</text>
+  <text x="565" y="136" fontSize="9" className="muted">jamais en euros</text>
+  <text x="565" y="156" fontSize="9">bilan annuel, capital</text>
+  <text x="565" y="176" fontSize="9">deux semaines d'arrêt</text>
+  <text x="565" y="192" fontSize="9" className="muted">planifiées comme le reste</text>
+  <text x="565" y="216" fontSize="9" className="gold">soutenable dans ma vie ?</text>
+  <text x="360" y="275" fontSize="10" textAnchor="middle" className="red">on compte les préparations faites, les débriefs du jour même, les revues tenues : ces trois nombres prédisent la conformité du mois suivant</text>
+</svg>
+</Figure>
+
+## Deux journées
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES, setup 1 (journée conforme de bout en bout)"
+  direction="Long"
+  setup="Préparation terminée à 15 h 12 : état normal (7 h 30 de sommeil), régime tendance normale, sept niveaux tracés dont le PDL à 5 388 en confluence avec la VAL, aucune annonce de niveau 1, plan écrit des deux côtés, budget −2R, deux trades autorisés, heure limite 21 h 15 ; signal complet à 16 h 08 sur le PDL, checklist cochée en 20 secondes"
+  entree="5 391,50"
+  stop="5 383,00 (34 ticks)"
+  objectif="C1 5 404,25 ; C2 5 417,00"
+  r="+2,2R">
+
+La séance a duré cinq heures et le trader a pris **un** trade. Entre 16 h 45 et 20 h 30, il a mis à jour son journal, annoté ses captures et relu un album de sweeps ; il n'a pas cherché de second setup, n'a pas regardé son P&L en euros et n'a pas ouvert le M1 pendant la position. C1 puis C2 en fin d'après-midi. Débrief à 21 h 25, dix minutes, plateforme fermée à 21 h 35. Ce qui rend ce trade possible n'est pas la lecture du marché à 16 h 08 : c'est le PDL noté à 15 h 05 et la case « réservoir préparé ce matin » qui a pu être cochée.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ, setup 1 dégradé (journée sans routine)"
+  direction="Short"
+  setup="Aucune préparation (réveil tardif, séance rejointe à 16 h 20), niveaux tracés en direct, régime non vérifié, plan non écrit, sommeil 5 h, P&L visible ; entrée sur un sweep d'un plus haut repéré trois minutes plus tôt, checklist non utilisée"
+  entree="18 812,00"
+  stop="18 852,00 (160 ticks)"
+  objectif="18 752,00"
+  r="−1,05R">
+
+La perte est ordinaire ; la journée ne l'est pas. Quatre défaillances de routine se cumulent : pas d'étape 1 (sommeil de 5 h, qui imposait taille divisée par deux et un seul trade), pas d'étape 3 (le « réservoir » n'était pas préparé, donc le signal n'existait pas au sens de la fiche), pas d'étape 5 (aucun plan, donc aucune invalidation écrite), P&L visible (étape 6). La ligne de journal porte les tags `hors régime` non vérifié et `réservoir non préparé` ; elle est classée **hors plan** et sort des statistiques du setup 1. La décision de la revue du samedi : une règle simple et vérifiable, « pas de séance sans préparation complète, même partielle : si je rejoins après 15 h 30, je ne trade pas ce jour-là ». Le mois suivant, cette règle a supprimé quatre trades du même type.
+
+</TradeExample>
+
+:::tip À retenir
+
+- **Préparation en 30 minutes, six étapes** : état du trader d'abord (perturbé → on ne trade pas), régime, structure et sept réservoirs au plus, calendrier, plan écrit des deux côtés avec budget et nombre de trades, checklist matérielle. Un sweep n'est un signal que sur un réservoir **préparé avant**.
+- **En séance on ne fait que reconnaître et exécuter** : lecture aux clôtures de bougies, alertes pour le reste, checklist de six cases (une case non cochable annule le trade), limites du jour codées, aucune décision hors fiche pendant la position, temps morts occupés par des tâches sans décision.
+- **Débrief de 10 minutes le jour même** : compléter les couches 1 et 2, trois questions fixes (dont « qu'est-ce qui a failli me faire dévier ? »), fermer et arrêter. Ni jugement moral, ni conclusion statistique, ni modification de règle.
+- **L'hygiène de vie est un paramètre du système** : sommeil (moins de six heures → taille ÷2 et un trade ; nuit blanche → rien), alimentation, mouvement, frontières, charge mentale extérieure, rapport à l'argent déclaré au journal.
+- **Cycles emboîtés** : semaine (revue 45 min + travail de fond), mois (statistiques, Monte Carlo, fuites, décision de taille sur la conformité), trimestre (sélection, objectifs de process en actions), année (bilan, capital, arrêt planifié). Les routines se dégradent en silence : on **compte** les préparations, débriefs et revues.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Reconstituer une préparation">
+
+Il est 15 h 05, vous tradez le setup 1 sur MES. Écrivez votre préparation en six étapes pour aujourd'hui, avec des valeurs inventées mais cohérentes : état, régime (avec les deux mesures qui le justifient), sept niveaux au maximum, calendrier, plan des deux côtés, checklist matérielle. Comptez le temps que cela vous prend réellement.
+
+<Solution>
+
+Pas de corrigé unique ; un exemple conforme, en moins de 200 mots : « **État** : 7 h de sommeil, normal, créneau libre jusqu'à 18 h. **Régime** : ATR 5 j / 20 j = 1,05, VIX 15 en contango → tendance normale ; setups 1 et 9 autorisés, coefficient plein. **Niveaux** : PDH 5 462, PDL 5 401, POC 5 428, VAH 5 448, VAL 5 412, ONH 5 455, ONL 5 419 (confluence PDL / VAL notée). **Calendrier** : ISM services 16 h 00 (niveau 2) → pas d'entrée entre 15 h 45 et 16 h 20 ; rien d'autre. **Plan** : (haussier) si sweep du PDL / VAL avec displacement ≥ 1,5 ATR M15 et FVG ≥ 0,4 ATR, achat au bord du FVG, stop sous le sweep − 0,5 ATR, C1 POC, C2 VAH ; (baissier) si sweep de l'ONH sans acceptation, vente symétrique, C1 POC, C2 VAL ; **pas de rotation aujourd'hui** (régime tendance). Budget −2R, deux trades, heure limite 17 h 30 aujourd'hui. **Matériel** : plateforme OK, aucun ordre résiduel, taille par défaut 2 MES, P&L masqué, téléphone dans l'autre pièce. » Ce qu'on vérifie : sept niveaux au plus, un régime justifié par des mesures, un plan des deux côtés, des limites chiffrées.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Diagnostiquer une routine">
+
+Un lecteur décrit sa journée : « Je me connecte à 15 h 25, je regarde vite les niveaux, je trade jusqu'à 22 h en gardant un œil sur le graphique pendant le dîner, je note mes trades le week-end, et je fais une grande analyse de trois heures une fois par mois. » Listez les défaillances par étape et proposez trois corrections, classées par gain attendu.
+
+<Solution>
+
+Défaillances : **étape 1** absente (état non déclaré) ; **étape 3** expédiée (niveaux « vite », donc non préparés : les sweeps ne comptent pas) ; **étapes 4-5** absentes (pas de calendrier, pas de plan écrit, donc pas d'invalidation ni de budget) ; **séance** trop longue (six heures et demie, dont un dîner) et non délimitée (pas d'heure limite d'entrée) ; **débrief** absent (journal rempli le week-end, donc mémoire reconstruite, qualité de signal contaminée par le résultat) ; **cycles** déséquilibrés (rien chaque semaine, trois heures une fois par mois : c'est l'inverse du bon rythme). Trois corrections par gain attendu : (1) **journal rempli en séance**, ligne pré-remplie à l'entrée : sans lui, aucune des analyses des chapitres 2 et 3 n'est possible ; (2) **préparation de 30 minutes à heure fixe** avec les sept niveaux et le plan écrit : c'est ce qui transforme des trades improvisés en signaux de fiche ; (3) **fenêtre d'exécution réduite** (par exemple 15 h 30 - 17 h 30) avec heure limite d'entrée, plus la revue hebdomadaire de 45 minutes à la place de l'analyse mensuelle de trois heures.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Le coût d'une routine dégradée">
+
+Sur trois mois, un trader a fait sa préparation complète 34 jours sur 60. Son journal montre : sur les 34 jours préparés, 41 trades, conformité 93 %, +14,2R ; sur les 26 jours non préparés, 33 trades, conformité 61 %, −7,8R.
+
+1. Expectancy par groupe.
+2. Quelle aurait été l'expectancy du trimestre si les 26 jours non préparés n'avaient pas été tradés ?
+3. Quelle règle de process écrire, et quel indicateur suivre pour vérifier qu'elle tient ?
+
+<Solution>
+
+1. Jours préparés : 14,2 / 41 = **+0,35R** par trade ; jours non préparés : −7,8 / 33 = **−0,24R** par trade. Écart de près de 0,6R par trade, sur une variable entièrement sous contrôle.
+2. Le trimestre passerait de +6,4R (14,2 − 7,8) à **+14,2R**, soit plus du double, sans toucher à une seule fiche et en tradant 33 trades de moins.
+3. Règle : « **pas de séance sans préparation complète** ; si la préparation n'est pas finie 15 minutes avant l'ouverture de ma fenêtre, la journée est en observation (aucune entrée) ». Indicateur à suivre dans le bloc process du tableau de bord : **nombre de jours préparés / nombre de jours tradés**, avec l'objectif 100 % ; il se vérifie chaque semaine en revue et chaque mois dans le tableau de bord, à côté de la conformité.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "La première étape de la préparation pré-marché est :",
+      options: [
+        "Tracer les niveaux",
+        "Déclarer son état (sommeil, disponibilité, événements) : c'est la seule décision de la journée prise avec un cerveau non contaminé par le prix",
+        "Regarder les actualités",
+        "Vérifier la marge",
+      ],
+      answer: 1,
+      explain: "Si l'état est « perturbé », la préparation s'arrête là : protocole 5 du chapitre 1.",
+    },
+    {
+      q: "Combien de niveaux trace-t-on au maximum en préparation ?",
+      options: [
+        "Autant que possible",
+        "Sept, confluences en priorité : au-delà, tout devient un niveau et plus rien n'en est un",
+        "Trois obligatoirement",
+        "Quinze",
+      ],
+      answer: 1,
+      explain: "Un sweep n'est un signal que s'il porte sur un réservoir préparé avant l'ouverture.",
+    },
+    {
+      q: "En séance, le graphique se regarde :",
+      options: [
+        "En continu, pour ne rien manquer",
+        "Aux clôtures de bougies de l'unité d'exécution, les alertes de prix remplaçant la surveillance",
+        "Une fois par heure au hasard",
+        "Seulement quand on est en position",
+      ],
+      answer: 1,
+      explain: "Ce rythme supprime une bonne partie des erreurs d'illusion de contrôle du chapitre 1.",
+    },
+    {
+      q: "Une case de la checklist d'entrée n'est pas cochable. On :",
+      options: [
+        "Prend le trade en taille réduite",
+        "Annule le trade, sans discussion",
+        "Coche quand même si les autres sont bonnes",
+        "Demande un avis",
+      ],
+      answer: 1,
+      explain: "Cocher prend vingt secondes ; un trade forcé coûte quatorze trades conformes (chapitre 1).",
+    },
+    {
+      q: "Le débrief post-marché :",
+      options: [
+        "Se fait le week-end, en une longue session",
+        "Se fait le jour même, en dix minutes : couches 1 et 2, trois questions fixes, fermer et arrêter ; aucune modification de règle",
+        "Sert à juger la journée",
+        "Est optionnel si la journée était calme",
+      ],
+      answer: 1,
+      explain: "Un débrief de dix minutes tenu tous les jours vaut mieux qu'une analyse de deux heures trois fois par mois.",
+    },
+    {
+      q: "Après une nuit de moins de six heures, la règle du cours est :",
+      options: [
+        "Trader normalement, avec plus de café",
+        "Taille divisée par deux et un seul trade ; après une nuit blanche, on ne trade pas",
+        "Trader plus gros pour compenser le manque de temps",
+        "Passer en simulation toute la semaine",
+      ],
+      answer: 1,
+      explain: "Le sommeil dégrade l'attention soutenue et le contrôle de l'impulsion, les deux fonctions dont dépendent l'attente d'un signal et le respect d'un stop ; et c'est une variable sous contrôle.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le niveau 8 se termine par son examen : vingt-cinq questions sur les biais et les protocoles, le journal, l'analyse de performance et les routines, puis une étude de cas notée où il faudra diagnostiquer un semestre de journal et prescrire les corrections de process dans le bon ordre.
