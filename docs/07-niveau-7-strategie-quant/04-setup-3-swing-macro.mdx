@@ -1,0 +1,304 @@
+---
+title: "Setup avancé 3 : swing macro sur or et pétrole"
+description: "Le troisième setup change d'échelle : un swing de plusieurs jours à plusieurs semaines sur l'or ou le pétrole, filtré par le régime macro, confirmé par le COT et la saisonnalité, déclenché par la structure quotidienne et H4, géré par pyramidage, sorties partielles et trailing structurel, et suivi chaque week-end."
+---
+
+# Setup avancé 3 : swing macro sur or et pétrole
+
+Les deux premiers setups vivent en minutes et se ferment le soir. Le troisième vit en jours et en semaines. Il s'applique à l'or (GC / MGC) et au pétrole (CL / MCL), deux marchés dont le niveau 6 a montré qu'ils obéissent à des moteurs macro lisibles (taux réels et dollar pour l'or, stocks et OPEP pour le pétrole) et dont la structure hebdomadaire est propre. Sa logique : quand le régime macro, le positionnement et la saisonnalité poussent dans le même sens, la structure quotidienne finit par se réaligner, et le premier repli qui suit ce réalignement est le point d'entrée d'un mouvement dont l'ampleur se mesure en plusieurs ATR quotidiens. Ce setup demande moins d'écran et plus de patience ; il produit peu de trades (une dizaine par an et par marché) et des ratios élevés ; il ne convient pas à qui a besoin d'action chaque jour.
+
+## Le filtre de régime macro préalable
+
+Le bloc 1 se remplit le **week-end**, sur une heure ; il vaut pour la semaine et n'est pas rediscuté en séance.
+
+**Le moteur du marché est-il orienté ?** Pour l'or : la direction des taux réels à 10 ans sur un mois (en baisse : favorable aux achats ; en hausse : aux ventes) et celle du dollar (DXY) sur un mois ; les deux dans le même sens donnent un moteur **orienté** ; discordants, un moteur **neutre**. Pour le pétrole : la tendance des stocks hebdomadaires sur quatre semaines (baisses répétées : favorable aux achats), l'écart entre offre et demande dans les rapports mensuels (l'AIE et l'OPEP publient des bilans ; on ne retient que le sens), et la structure de la courbe des contrats (backwardation : tension, favorable aux achats ; contango prononcé : excédent) ; deux sur trois dans le même sens : orienté.
+
+**Le régime général autorise-t-il un swing ?** La matrice du niveau 5 : tendance calme et normale (les swings s'y développent), range normal (les swings avortent ; on ne prend que ceux dont le moteur est très orienté et la cible proche), tendance agitée (autorisée avec taille ÷2 et stops ×1,5), range de stress (interdit). Sur ces marchés, le stress se lit à l'ATR quotidien 5 jours rapporté à 20 jours (au-dessus de 1,6) et, pour l'or, au VIX.
+
+**Le calendrier laisse-t-il de la place ?** Un swing traverse des annonces ; c'est admis (le stop est large et la taille petite). Mais on n'**ouvre** pas un swing dans les trois jours qui précèdent un FOMC ou une réunion de l'OPEP ; on l'ouvre après, quand le marché a réagi et que la structure a parlé.
+
+**Le verdict** est l'un de trois mots, écrit en tête de la fiche hebdomadaire : **achats autorisés**, **ventes autorisées**, **aucun swing** (moteur neutre ou régime interdit). Le mot ne change pas en semaine, sauf choc (une annonce qui renverse le moteur : on ferme ce qui est ouvert, chapitre suivant du bloc 4).
+
+<Figure caption="Figure 1 · Le filtre de régime macro (rempli le week-end) : moteur du marché (taux réels et dollar pour l'or ; stocks, bilan offre-demande et courbe pour le pétrole), régime de la matrice, calendrier. Trois verdicts possibles ; le verdict de la semaine ne se rediscute pas en séance.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Filtre macro du setup swing" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="200" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="130" y="50" fontSize="11" fontWeight="600" textAnchor="middle">1 · Moteur orienté ?</text>
+  <text x="40" y="70" fontSize="9" className="gold">Or : taux réels 10 ans (1 mois)</text>
+  <text x="40" y="84" fontSize="9" className="gold">      + dollar (DXY, 1 mois)</text>
+  <text x="40" y="104" fontSize="9" className="gold">Pétrole : stocks 4 sem., bilan</text>
+  <text x="40" y="118" fontSize="9" className="gold">      offre-demande, courbe</text>
+  <text x="40" y="134" fontSize="9" className="muted">même sens → orienté ; sinon neutre</text>
+  <rect x="260" y="30" width="200" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="360" y="50" fontSize="11" fontWeight="600" textAnchor="middle">2 · Régime autorisé ?</text>
+  <text x="270" y="70" fontSize="9" className="green">tendance calme / normale : oui</text>
+  <text x="270" y="86" fontSize="9" className="muted">range normal : moteur très orienté seulement</text>
+  <text x="270" y="102" fontSize="9" className="muted">tendance agitée : taille ÷2, stops ×1,5</text>
+  <text x="270" y="118" fontSize="9" className="red">range de stress : interdit</text>
+  <text x="270" y="134" fontSize="9" className="muted">ATR 5 j / 20 j supérieur à 1,6 = stress</text>
+  <rect x="490" y="30" width="200" height="110" rx="6" className="box" strokeWidth="1" />
+  <text x="590" y="50" fontSize="11" fontWeight="600" textAnchor="middle">3 · Calendrier</text>
+  <text x="500" y="70" fontSize="9">pas d'ouverture à moins de 3 jours</text>
+  <text x="500" y="84" fontSize="9">d'un FOMC ou d'une réunion OPEP</text>
+  <text x="500" y="104" fontSize="9" className="muted">traverser une annonce est admis :</text>
+  <text x="500" y="118" fontSize="9" className="muted">stop large, taille petite</text>
+  <line x1="360" y1="140" x2="360" y2="180" className="line" strokeWidth="1.5" />
+  <rect x="120" y="180" width="480" height="70" rx="6" className="box" strokeWidth="1.5" />
+  <text x="360" y="202" fontSize="12" fontWeight="600" textAnchor="middle">Verdict de la semaine (un mot, écrit) :</text>
+  <text x="200" y="230" fontSize="11" textAnchor="middle" className="green" fontWeight="600">achats autorisés</text>
+  <text x="360" y="230" fontSize="11" textAnchor="middle" className="red" fontWeight="600">ventes autorisées</text>
+  <text x="520" y="230" fontSize="11" textAnchor="middle" className="muted" fontWeight="600">aucun swing</text>
+  <text x="360" y="280" fontSize="10" textAnchor="middle" className="muted">le mot ne change pas en semaine, sauf choc qui renverse le moteur : alors on ferme ce qui est ouvert</text>
+</svg>
+</Figure>
+
+## La confluence COT et saisonnalité
+
+Le bloc 1 se complète de deux lectures qui **modulent** sans jamais déclencher (niveau 5).
+
+**Le COT.** On lit la position nette des commerciaux (et, en miroir, celle des grands spéculateurs) en **percentile sur trois ans**. Trois zones : au-dessus du 85e percentile ou en dessous du 15e, le positionnement est **extrême** ; entre 40 et 60, il est **neutre** ; entre les deux, **ordinaire**. La règle : un extrême dans le sens du verdict (par exemple, les commerciaux sont anormalement acheteurs quand le verdict est « achats autorisés ») donne un **facteur 1** ; un positionnement neutre ou ordinaire, **facteur 1** aussi ; un extrême **contre** le verdict (les grands spéculateurs sont déjà massivement acheteurs quand on veut acheter : le carburant est consommé) donne un facteur **2/3** et impose une cible plus proche (C2 réduit au premier réservoir hebdomadaire). Le COT ne dit pas « quand » ; il dit si le mouvement a de la place.
+
+**La saisonnalité.** On regarde le profil moyen des vingt dernières années sur le mois en cours et le suivant (niveau 5 : à prendre comme une tendance de fond, jamais comme un signal). Trois cas : saisonnalité **favorable** (le mois est historiquement dans le sens du verdict), **neutre**, **défavorable**. Facteur 1, 1, 2/3 respectivement. Sur le pétrole, la saison est un vrai facteur (demande d'essence de l'été, hiver pour le fioul, maintenance des raffineries) ; sur l'or, elle est plus faible (fêtes indiennes, début d'année) et le facteur ne descend qu'à 5/6 en cas défavorable.
+
+**La combinaison.** Le coefficient de taille du bloc 1 est le produit : régime × COT × saisonnalité. Un swing avec moteur orienté, régime normal, COT extrême dans le sens et saison favorable a un coefficient de 1 (taille pleine, cibles lointaines) ; le même swing avec COT contre et saison contre a un coefficient de 4/9 (ou 5/9 sur l'or) et une cible rapprochée. La confluence n'est jamais une condition d'entrée : un swing sans confluence se prend, plus petit et moins ambitieux.
+
+## Le déclencheur technique d'entrée
+
+Le bloc 2 se lit sur trois horizons ; il se prépare le week-end (les zones) et se déclenche en semaine (la bougie).
+
+**Hebdomadaire.** La structure hebdomadaire doit être **dans le sens du verdict** ou en train de se réaligner (un CHoCH hebdomadaire validé par une clôture). Une structure hebdomadaire contre le verdict interdit le swing, quel que soit le moteur : le marché n'a pas encore décidé de suivre son moteur, et il peut le faire attendre des mois.
+
+**Quotidien.** Trois formes de déclencheur, mutuellement exclusives, à noter au journal comme des variantes :
+
+- **T1 · Sweep hebdomadaire et reprise.** Le prix prend un plus bas hebdomadaire (ou un plus haut, pour une vente) d'au moins 0,3 ATR quotidien, puis **clôture quotidienne** au-dessus, puis, dans les trois jours, cassure quotidienne d'un LH interne (le CHoCH quotidien). C'est le setup 1 à l'échelle quotidienne ; c'est le déclencheur le plus fiable, et le plus rare.
+- **T2 · Premier repli après réalignement.** La structure quotidienne vient de se réaligner (nouveau HH après CHoCH) ; le prix revient sur la zone du breaker ou du FVG quotidien qui a produit le réalignement ; une bougie quotidienne (ou deux) y rejette avec clôture dans le sens. C'est le déclencheur le plus fréquent.
+- **T3 · Retest de la zone hebdomadaire.** Un niveau hebdomadaire majeur (ancien plus haut de plusieurs mois devenu support) est retesté pour la première fois avec un CHoCH H4 sur la zone. Il est autorisé seulement quand le coefficient du bloc 1 est 1.
+
+**H4.** L'entrée se déclenche sur le **CHoCH H4** dans la zone (cassure du dernier LH interne H4 en clôture), qui donne l'ancre du stop et le prix. Il n'y a pas d'entrée « au feeling » sur la bougie quotidienne : on attend le H4.
+
+**Géométrie.** C1 est le premier réservoir hebdomadaire dans le sens (le dernier LH hebdomadaire, un plus haut mensuel), C2 le suivant ; C1 doit donner un ratio d'au moins **2** depuis l'entrée avec le stop initial (les swings paient rarement en taux de réussite ; ils paient en amplitude ; un ratio de 2 sur C1 est le minimum pour que le taux de réussite d'environ 40 % suffise). Sinon le trade est refusé.
+
+<Figure caption="Figure 2 · Le déclencheur technique sur trois horizons : structure hebdomadaire dans le sens ; déclencheur quotidien T1 (sweep hebdomadaire et reprise), T2 (premier repli sur la zone du réalignement) ou T3 (retest d'une zone hebdomadaire majeure) ; entrée sur le CHoCH H4 dans la zone. C1 doit donner un ratio d'au moins 2.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Déclencheur technique du swing macro" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <polyline points="50,250 90,200 120,225 170,150 210,180 250,120 290,160 320,140 350,175 380,165 410,120 450,90 490,110 530,70 570,85 610,50" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" opacity="0.5" />
+  <text x="130" y="100" fontSize="10" fontWeight="600">hebdo : HH / HL dans le sens du verdict</text>
+  <line x1="290" y1="160" x2="360" y2="160" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="366" y="164" fontSize="9" className="muted">LH quotidien cassé : réalignement</text>
+  <rect x="330" y="168" width="70" height="14" className="gold" opacity="0.35" /><text x="330" y="196" fontSize="9" className="gold" fontWeight="600">T2 : zone du réalignement (breaker / FVG D)</text>
+  <circle cx="380" cy="165" r="6" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="395" y="210" fontSize="9" className="gold">CHoCH H4 dans la zone → entrée</text>
+  <line x1="60" y1="225" x2="130" y2="225" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="60" y="240" fontSize="9" className="green">T1 : sweep du plus bas hebdo, clôture D au-dessus, CHoCH D</text>
+  <line x1="60" y1="120" x2="270" y2="120" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="60" y="116" fontSize="9" className="red">C1 : LH hebdo précédent · ratio ≥ 2</text>
+  <line x1="60" y1="50" x2="700" y2="50" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="6 4" /><text x="690" y="46" fontSize="9" textAnchor="end" className="red">C2 : plus haut mensuel</text>
+  <text x="380" y="270" fontSize="10" textAnchor="middle" className="muted">T3 (retest d'une zone hebdo majeure) seulement avec coefficient 1 ; jamais d'entrée sur la bougie D sans le H4</text>
+</svg>
+</Figure>
+
+## Pyramidage, sorties partielles et trailing
+
+**Stop initial.** Sous le plus bas du CHoCH H4 (ou du sweep, en T1) **moins 0,5 ATR quotidien**. Raison écrite : si ce prix est repris, la structure H4 qui a déclenché l'entrée est cassée et le repli n'était pas un repli. Ordre de grandeur : sur l'or, 25 à 45 $ (250 à 450 $ par MGC) ; sur le pétrole, 1,80 à 3,00 $ (180 à 300 $ par MCL). Les swings demandent des micros et des comptes qui ne sont pas minuscules : un stop de 40 $ sur l'or et un budget de 1 % imposent au moins 40 000 $ de compte pour un seul MGC.
+
+**Taille.** Budget par swing : **1 %** du capital multiplié par le coefficient du bloc 1 ; c'est le budget de **la position entière**, ajouts compris (le pyramidage n'ajoute jamais de risque au-delà de ce budget, niveau 1). Le premier ordre porte la moitié à deux tiers de la taille finale prévue.
+
+**Pyramidage.** Un ajout est autorisé (deux au maximum) quand **trois conditions** sont réunies : la position initiale est en gain d'au moins **1R** ; la structure quotidienne a formé un **nouveau HL** au-dessus de l'entrée initiale ; le stop de **toute la position** peut être remonté sous ce HL moins 0,5 ATR quotidien de sorte que le **risque total** (position initiale au nouveau stop, ajout au même stop) reste **inférieur au budget initial**. L'ajout se déclenche comme l'entrée : CHoCH H4 sur le repli. Sa taille est au plus égale à la moitié de la position initiale.
+
+**Sorties partielles.** À **C1** (le premier réservoir hebdomadaire) : sortie du **tiers** de la position (le pyramidage a rendu la position divisible), stop remonté sous le dernier HL quotidien. La règle du tiers plutôt que de la moitié tient au ratio : le swing paie sur la partie qui reste ; on paie l'attente avec un tiers, pas avec la moitié.
+
+**Trailing.** Structurel, quotidien : sous chaque nouveau HL quotidien confirmé (une clôture au-dessus du dernier HH), moins 0,5 ATR quotidien. Jamais de trailing en points ni en pourcentage ; jamais de resserrement « parce que ça monte vite » ; jamais de trailing H4 (trop serré pour l'horizon). Un choc macro qui renverse le moteur ferme la position au marché (bloc 1).
+
+**Sortie finale.** Le solde sort à C2 (le second réservoir hebdomadaire ; en cas de COT contre, C1 sert de C2 et l'on sort la moitié à C1, le solde en trailing), ou sur le stop suiveur, ou sur un CHoCH quotidien contre la position (une clôture quotidienne sous le dernier HL : la structure a parlé, on ne discute pas), ou après **30 jours de calendrier** sans que C1 soit atteint (sortie sur temps : le moteur n'a pas entraîné le prix ; l'hypothèse n'était pas la bonne).
+
+<Figure caption="Figure 3 · Gestion d'un swing long : entrée sur CHoCH H4 (moitié à deux tiers de la taille), stop sous le CHoCH − 0,5 ATR D ; ajout sur le nouveau HL quotidien avec stop global remonté et risque total sous le budget ; un tiers sorti à C1 ; trailing sous chaque HL quotidien − 0,5 ATR D ; sortie finale à C2, sur trailing, sur CHoCH quotidien contre, ou après 30 jours.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Pyramidage, sorties partielles et trailing" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <polyline points="60,240 100,215 130,232 170,190 200,205 240,160 270,180 310,135 340,150 380,105 420,120 460,80 500,95 540,60 580,75 620,45" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <circle cx="130" cy="232" r="6" className="gold" /><text x="140" y="250" fontSize="9" className="gold" fontWeight="600">entrée (CHoCH H4) : 2/3 de la taille</text>
+  <line x1="60" y1="262" x2="200" y2="262" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="66" y="276" fontSize="9" className="red">stop initial : bas du CHoCH − 0,5 ATR D · budget 1 % × coef</text>
+  <circle cx="270" cy="180" r="6" className="gold" /><text x="280" y="198" fontSize="9" className="gold" fontWeight="600">ajout : gain ≥ 1R, nouveau HL D, CHoCH H4</text>
+  <line x1="200" y1="212" x2="330" y2="212" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="330" y="216" fontSize="9" className="red">stop global sous le HL − 0,5 ATR D ; risque total inférieur au budget</text>
+  <line x1="60" y1="120" x2="700" y2="120" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="116" fontSize="10" textAnchor="end" className="green" fontWeight="600">C1 (LH hebdo) : sortie d'un tiers · ratio ≥ 2</text>
+  <line x1="330" y1="160" x2="470" y2="160" stroke="var(--tm-red)" strokeWidth="1.5" /><line x1="470" y1="112" x2="580" y2="112" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="480" y="175" fontSize="9" className="red">trailing : sous chaque HL D confirmé − 0,5 ATR D</text>
+  <line x1="60" y1="45" x2="700" y2="45" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="6 4" /><text x="690" y="41" fontSize="10" textAnchor="end" className="green" fontWeight="600">C2 (plus haut mensuel) : solde</text>
+  <text x="380" y="308" fontSize="10" textAnchor="middle" className="muted">sorties finales : C2 · trailing · CHoCH D contre · 30 jours sans C1 · choc macro qui renverse le moteur</text>
+</svg>
+</Figure>
+
+## Le suivi hebdomadaire de la position
+
+Un swing ne se surveille pas à la minute ; il se **révise** une fois par semaine, le week-end, sur une grille fixe. La révision produit l'un de quatre mots.
+
+1. **Le moteur est-il toujours orienté ?** Relecture des mêmes indicateurs que le bloc 1. S'il est devenu neutre : on ne ferme pas mais on **n'ajoute plus** et l'on serre le trailing au dernier HL sans marge. S'il s'est renversé : on **ferme** lundi à l'ouverture, quel que soit le P&L.
+2. **La structure hebdomadaire et quotidienne est-elle intacte ?** Une clôture hebdomadaire sous le dernier HL hebdomadaire ferme le swing (même si le stop n'est pas touché). Une clôture quotidienne sous le dernier HL quotidien l'a déjà fermé en semaine (règle de sortie).
+3. **Le positionnement a-t-il basculé ?** Un COT qui passe à l'extrême **contre** la position pendant le swing rapproche C2 à C1 : on sort la moitié du solde à C1 si elle n'est pas déjà sortie et le reste suit le trailing.
+4. **Le calendrier de la semaine.** Annonces de niveau 1 (FOMC, OPEP, CPI, stocks EIA du mercredi pour le pétrole) : on ne ferme pas devant, on ne les traverse pas non plus avec un stop resserré ; on **note** ce qui, dans l'annonce, confirmerait ou infirmerait la thèse (« si les stocks montent une quatrième semaine, le moteur est neutre »), pour que la lecture de mercredi soit une exécution, pas une improvisation.
+
+Les quatre mots : **garder** (rien n'a changé), **garder sans ajouter** (moteur neutre ou COT contre), **serrer** (structure fragile : trailing au dernier HL sans marge), **fermer** (moteur renversé ou structure hebdomadaire cassée). Le mot est écrit dans le journal du swing avec la date, à côté du R latent ; l'historique de ces mots est ce qui permettra, au chapitre 6, de savoir si les révisions ont ajouté ou retiré de la valeur.
+
+Statistiques attendues (hypothèses avant test) : 8 à 12 signaux par an et par marché, 6 à 9 exécutés ; taux de réussite (C1 atteint) autour de 40 % ; R moyen net de +0,6 à +1,0R grâce à l'amplitude ; drawdown attendu de 6 à 9R sur 30 trades, soit une à deux années difficiles possibles ; c'est un setup dont l'échantillon met des années à se constituer, ce qui impose le backtest historique (chapitres 6 et 7) plutôt que la collecte en direct pour le valider. Invalidité : DD supérieur à 1,5 fois le backtest ; deux années civiles consécutives à expectancy négative avec conformité ; disparition durable des moteurs (par exemple si l'or cesse de suivre les taux réels pendant plus de douze mois, comme il l'a fait par périodes : la fiche est alors mise en pause, non jetée).
+
+## Deux swings
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures or MGC (10 oz, 1 $ par tick de 0,10 $)"
+  direction="Long"
+  setup="Verdict « achats autorisés » (taux réels en baisse, DXY en baisse sur un mois, tendance normale) ; COT : commerciaux au 30e percentile (ordinaire, facteur 1) ; saisonnalité neutre ; structure hebdomadaire HH / HL ; déclencheur T2 : premier repli sur le breaker quotidien 2 300 - 2 316 après réalignement, CHoCH H4 dans la zone ; ATR quotidien 28 $"
+  entree="2 312 (2 MGC sur CHoCH H4) ; ajout 1 MGC à 2 348 sur nouveau HL quotidien 2 324 et CHoCH H4"
+  stop="Initial 2 282 (bas du CHoCH 2 296 − 14 = 2 282 ; 30 $ = 300 $ par MGC) ; après ajout : 2 318 pour toute la position (HL 2 324 − 0,5 ATR ≈ 2 310 aurait été la règle stricte ; le trader retient 2 318, sous le HL H4 le plus proche, plus serré : à noter)"
+  objectif="C1 LH hebdomadaire 2 395 (83 $ depuis l'entrée : ratio 2,8) ; C2 plus haut mensuel 2 430"
+  r="+4,4R">
+
+Compte 60 000 $, budget 1 % = 600 $ ; 300 $ par MGC → 2 MGC en position initiale, plein budget. Neuf jours plus tard, le prix est à 2 350 (gain latent 2 × 38 × 10 = 760 $ ≈ 1,3R) et un HL quotidien s'est formé à 2 324 : ajout de 1 MGC à 2 348 après CHoCH H4 ; stop global à 2 318 : risque total = 2 MGC × (2 318 − 2 312) × 10 = +120 $ de gain garanti sur l'initial, 1 MGC × (2 348 − 2 318) × 10 = −300 $ sur l'ajout ; net −180 $, sous le budget de 600 $ : ajout conforme. C1 (2 395) atteint au jour 16 : sortie de 1 MGC (+83 $ × 10 = 830 $), stop remonté sous le HL quotidien 2 361 → 2 347. Trailing : HL 2 388 au jour 22 → stop 2 374 ; le prix touche 2 428 au jour 27 (C2 à 2 430 non atteint de 2 $), puis un CHoCH quotidien contre au jour 30 sort le solde à 2 421 : 1 MGC de l'initial (+109 × 10 = 1 090 $), 1 MGC de l'ajout (+73 × 10 = 730 $). Total +2 650 $, coûts environ 12 $ ; sur 600 $ de risque initial : **+4,4R net**. Révisions hebdomadaires : « garder », « garder », « garder », « serrer » (COT passé au 80e percentile) ; le journal note l'entorse mineure sur le stop après ajout (plus serré que la règle : il aurait pu coûter la position ; il n'a pas coûté cette fois ; la règle reste la règle).
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures pétrole MCL (100 barils, 1 $ par tick de 0,01 $)"
+  direction="Short"
+  setup="Verdict « ventes autorisées » (stocks en hausse trois semaines, bilan mensuel en excédent, contango) ; COT : grands spéculateurs au 12e percentile (déjà très vendeurs : extrême contre, facteur 2/3, C2 rapproché à C1) ; saisonnalité défavorable (octobre, facteur 2/3) : coefficient 4/9 ; structure hebdomadaire LH / LL ; T2 : premier rebond sur le breaker quotidien 78,00 - 79,20, CHoCH H4 ; ATR quotidien 1,90 $"
+  entree="78,40 (1 MCL)"
+  stop="80,90 (haut du CHoCH 79,95 + 0,95 = 80,90 ; 2,50 $ = 250 $ par MCL)"
+  objectif="C1 = C2 : LL hebdomadaire 73,10 (5,30 $ : ratio 2,1)"
+  r="−0,55R">
+
+Compte 60 000 $, budget 600 $ × 4/9 = 267 $ → 1 MCL (250 $). Le trade se comporte d'abord : 76,60 au jour 4 (+1,8 $ latent, +0,7R). Le mercredi du jour 6, les stocks EIA baissent fortement pour la première fois en quatre semaines ; le journal du week-end précédent avait écrit : « une baisse de plus de 4 M de barils rend le moteur neutre ». C'est le cas : le moteur passe à neutre ; le prix remonte à 78,10 le jour même. Révision anticipée (le choc de mercredi vaut révision) : moteur neutre → « garder sans ajouter, serrer » ; le trailing serré au LH H4 79,80 ; puis vendredi une annonce géopolitique renverse le moteur (risque d'offre) : le verdict passe à « aucun swing » et la règle dit **fermer**. Sortie lundi à l'ouverture, 79,78 : −1,38 $ × 100 = −138 $ sur 250 $ de risque : **−0,55R**. La semaine suivante, le prix est à 84 : le stop initial aurait été touché (−1R). La perte est ordinaire ; ce qui compte au journal, c'est que la révision a fait son travail : la ligne « ce qui infirmerait la thèse » écrite le week-end a rendu la décision de mercredi mécanique, et le coefficient 4/9 avait déjà réduit la mise sur un swing à confluence faible.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le setup 3 est un **swing de jours à semaines** sur or et pétrole : peu de trades (une dizaine par an et par marché), taux de réussite autour de 40 %, ratios élevés ; il ne convient pas à qui a besoin d'action quotidienne.
+- **Filtre macro** le week-end : moteur orienté (taux réels et dollar pour l'or ; stocks, bilan, courbe pour le pétrole), régime autorisé, calendrier ; verdict en un mot (achats / ventes / aucun swing) qui ne se rediscute pas en semaine.
+- **COT et saisonnalité modulent** (facteurs 1 ou 2/3, coefficient multiplié), rapprochent C2 quand le COT est contre ; ils ne déclenchent jamais.
+- **Déclencheur** : structure hebdomadaire dans le sens ; T1 sweep hebdo, T2 premier repli sur la zone du réalignement, T3 retest de zone hebdo majeure ; entrée sur **CHoCH H4** ; C1 à ratio ≥ 2 sinon refus.
+- **Gestion** : stop sous le CHoCH − 0,5 ATR D ; budget 1 % × coefficient pour toute la position ; **ajout** seulement à +1R, nouveau HL quotidien, risque total sous le budget ; **un tiers à C1** ; trailing sous les HL quotidiens ; sortie sur C2, trailing, CHoCH quotidien contre, 30 jours, ou choc qui renverse le moteur ; **révision hebdomadaire** en un mot (garder / sans ajouter / serrer / fermer).
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Coefficient et taille d'un swing">
+
+Compte 80 000 $, budget 1 %. Or, verdict « achats autorisés », régime tendance agitée (taille ÷2), COT : commerciaux au 90e percentile (extrême dans le sens), saisonnalité défavorable (or : facteur 5/6). Entrée prévue 2 405, stop 2 367 sur MGC (1 $ par tick de 0,10 $).
+
+1. Coefficient de taille et budget du swing.
+2. Risque par MGC et nombre de MGC de la position entière.
+3. Le premier ordre porte deux tiers de la position : combien de MGC, et combien pour l'ajout éventuel ?
+
+<Solution>
+
+1. Coefficient = 1/2 (agitée) × 1 (COT dans le sens) × 5/6 (saison) = **5/12 ≈ 0,42** ; budget = 800 × 5/12 = **333 $**.
+2. Stop 38 $ = 380 ticks = **380 $ par MGC** ; 333 ÷ 380 = 0,88 → **zéro MGC** : le swing ne se prend pas à cette taille. Le trader a deux options conformes : attendre un déclencheur avec un stop plus court (par exemple 25 $ → 250 $ par MGC → 1 MGC), ou constater que le régime agité rend ce swing trop cher pour ce compte. Il n'a pas l'option de prendre 1 MGC « quand même » (risque 380 $ contre 333 $ de budget : dépassement de 14 %).
+3. Sans objet à cette taille. Si le stop était de 25 $ (250 $ par MGC), 333 ÷ 250 = 1,33 → 1 MGC en tout, donc pas de pyramidage possible : la position entière tient dans le premier ordre.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Un ajout est-il conforme ?">
+
+Swing long pétrole, 2 MCL entrés à 72,40, stop initial 70,20 (2,20 $ = 220 $ par MCL, risque 440 $, budget 450 $). Le prix est à 75,10 ; nouveau HL quotidien à 74,00 ; ATR quotidien 1,60 $ ; CHoCH H4 sur le repli à 74,60.
+
+1. La position est-elle en gain d'au moins 1R ?
+2. Où va le stop global si l'ajout est fait, et quel est le risque total avec 1 MCL ajouté à 74,60 ?
+3. L'ajout est-il conforme ?
+
+<Solution>
+
+1. Gain latent : (75,10 − 72,40) × 100 × 2 = **540 $** ; 1R = 440 $ : oui (**1,23R**).
+2. Stop global = HL 74,00 − 0,5 × 1,60 = **73,20**. Risque total : initial 2 MCL × (73,20 − 72,40) × 100 = **+160 $** (gain garanti) ; ajout 1 MCL × (74,60 − 73,20) × 100 = **−140 $** ; net **+20 $** : le pire cas est un petit gain.
+3. Oui : gain ≥ 1R, nouveau HL quotidien, CHoCH H4, risque total (+20 $) inférieur au budget (450 $), taille de l'ajout (1) ≤ moitié de l'initial (1). Conforme.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="La révision du week-end">
+
+Swing short or ouvert depuis 12 jours, en gain latent de 1,6R, C1 non encore atteint. Révision : taux réels remontés sur le mois (favorable aux ventes, moteur intact) ; DXY passé de hausse à plat (moteur devenu neutre sur un des deux indicateurs) ; structure hebdomadaire LH / LL intacte ; COT : grands spéculateurs passés au 10e percentile (extrême vendeur : contre une vente) ; FOMC mercredi.
+
+1. Quel mot pour la semaine ?
+2. Quelles actions concrètes ?
+3. Qu'écrire à propos du FOMC ?
+
+<Solution>
+
+1. Moteur : un indicateur sur deux neutre → **moteur neutre** ; COT contre → cibles rapprochées. Mot : **garder sans ajouter**, avec C2 ramené à C1.
+2. Aucun ajout ; trailing serré au dernier LH quotidien sans marge (moteur neutre) ; ordre à C1 porté à la **moitié** du solde (COT contre) ; le reste suit le trailing.
+3. Une ligne du type : « FOMC mercredi : si le communiqué est plus accommodant qu'attendu et que les taux réels rebaissent, le moteur se renverse → fermer jeudi à l'ouverture ; s'il est plus restrictif, le moteur redevient orienté → garder ». La décision de mercredi soir est alors une lecture, pas une improvisation.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le filtre macro du setup 3 est rempli :",
+      options: [
+        "Chaque matin en séance",
+        "Le week-end, pour la semaine, avec un verdict en un mot qui ne se rediscute pas en séance sauf choc renversant le moteur",
+        "Après l'entrée",
+        "Jamais, le graphique suffit",
+      ],
+      answer: 1,
+      explain: "Le swing se décide à froid ; en séance, on exécute le déclencheur technique dans le sens du verdict.",
+    },
+    {
+      q: "Le COT et la saisonnalité, dans ce setup :",
+      options: [
+        "Déclenchent l'entrée",
+        "Modulent la taille (facteurs 1 ou 2/3) et rapprochent la cible quand le COT est contre ; ils ne déclenchent jamais",
+        "Remplacent le stop",
+        "Sont ignorés",
+      ],
+      answer: 1,
+      explain: "Ils disent si le mouvement a de la place et si la saison aide ; le « quand » vient de la structure et du H4.",
+    },
+    {
+      q: "L'entrée d'un swing se déclenche :",
+      options: [
+        "Sur la bougie quotidienne, à l'œil",
+        "Sur le CHoCH H4 dans la zone quotidienne (T1, T2 ou T3), avec structure hebdomadaire dans le sens et C1 à ratio ≥ 2",
+        "Sur un signal M5",
+        "Le lundi matin systématiquement",
+      ],
+      answer: 1,
+      explain: "Le H4 donne l'ancre du stop et le prix ; sans lui, on n'entre pas.",
+    },
+    {
+      q: "Un ajout (pyramidage) est autorisé si :",
+      options: [
+        "Le trade est en perte",
+        "La position est en gain ≥ 1R, un nouveau HL quotidien s'est formé, et le stop global remonté garde le risque total sous le budget initial",
+        "On a envie d'accélérer",
+        "Le prix a fait un nouveau plus haut",
+      ],
+      answer: 1,
+      explain: "Le pyramidage n'ajoute jamais de risque au-delà du budget de la position entière (niveau 1).",
+    },
+    {
+      q: "Le trailing du swing est :",
+      options: [
+        "En points fixes",
+        "Structurel et quotidien : sous chaque HL quotidien confirmé, moins 0,5 ATR quotidien ; jamais H4, jamais resserré sur l'émotion",
+        "Sur H4",
+        "Inexistant",
+      ],
+      answer: 1,
+      explain: "L'horizon du swing est quotidien ; un trailing plus fin sort trop tôt et casse le ratio qui fait l'edge.",
+    },
+    {
+      q: "La révision hebdomadaire se conclut par :",
+      options: [
+        "Un P&L",
+        "Un des quatre mots : garder, garder sans ajouter, serrer, fermer, écrit au journal avec la date",
+        "Une nouvelle entrée",
+        "Rien",
+      ],
+      answer: 1,
+      explain: "Le mot rend la semaine mécanique ; son historique dira au chapitre 6 si les révisions ajoutent de la valeur.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Trois setups écrits en fiche standard, c'est le début d'une bibliothèque. Le chapitre suivant explique comment l'organiser : classer les setups par régime et par marché, décider lequel se prend quand plusieurs se présentent, gérer les corrélations entre eux, et faire vivre la bibliothèque (ajouter, retirer, mettre en pause) sans se disperser.
