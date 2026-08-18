@@ -1,0 +1,324 @@
+---
+title: "Setup avancé 2 : ouverture de Londres en forex"
+description: "Le second setup complet : pourquoi l'ouverture de Londres crée une inefficacité répétée sur EUR/USD et GBP/USD, la lecture du range asiatique et de la manipulation d'ouverture, les conditions de validation et les filtres, l'exécution et les sorties, et le journal spécifique de ce setup."
+---
+
+# Setup avancé 2 : ouverture de Londres en forex
+
+Le second setup change de marché, de fenêtre et de logique. Le premier se déclenche autour d'un réservoir intraday sur les indices ; celui-ci se déclenche autour d'une **heure**, celle où la liquidité européenne arrive sur un marché qui a dormi pendant la nuit asiatique. Il s'applique à EUR/USD et GBP/USD (spot ou futures 6E / 6B et micros), entre 9 h et 11 h 30 (Paris, heure d'été). Sa mécanique repose sur ce que le niveau 6 a décrit : la session asiatique construit un range, l'ouverture de Londres le viole d'un côté pour prendre la liquidité, puis la vraie direction du jour se déclare. Ce chapitre le livre en fiche standard.
+
+## La logique de session derrière le setup
+
+Trois faits font ce setup, tous décrits au niveau 6.
+
+**Le range asiatique est étroit et symétrique.** Entre 2 h et 8 h (Paris), EUR/USD bouge en général de 20 à 40 pips, sans direction ; il construit une boîte dont le haut et le bas deviennent, mécaniquement, des paquets de stops : ceux des vendeurs de range au-dessus, ceux des acheteurs de range en dessous, plus les ordres de cassure des deux côtés. C'est le réservoir le mieux défini de la journée forex.
+
+**L'ouverture de Londres apporte la première vraie liquidité.** À partir de 9 h, les banques et les fonds européens exécutent leurs ordres du jour ; le volume triple par rapport à la nuit. Ces gros ordres cherchent des contreparties ; ils les trouvent là où les stops sont : au-dessus ou en dessous du range asiatique. D'où le mouvement typique décrit au niveau 3 sous le nom de manipulation ou « Judas swing » : une sortie du range d'un côté, souvent dans les 30 à 90 minutes après l'ouverture, qui échoue, suivie d'un mouvement dans l'autre sens qui donne la direction de la matinée, et souvent du jour.
+
+**Ce mouvement est mesurable et répété.** Il ne se produit pas tous les jours ; il ne réussit pas à chaque fois ; mais sa géométrie est stable : un range de référence, une sortie qui échoue, un réalignement, une extension vers la liquidité opposée. C'est cette répétabilité qui autorise une fiche avec des seuils, et un backtest.
+
+Ce que le setup n'est pas : une « stratégie de cassure de range ». La cassure initiale est justement ce qu'on **ne suit pas** ; on attend son échec. Un jour où le range est cassé et tenu (une vraie sortie de range, en tendance), le setup ne se déclenche pas ; le trader qui achète toutes les cassures et celui qui vend toutes les cassures perdent tous les deux ; celui qui attend le retour dans le range et le réalignement prend le trade dont la géométrie est connue.
+
+<Figure caption="Figure 1 · La logique de session : range asiatique (2 h - 8 h), sortie d'un côté à l'ouverture de Londres (manipulation, ici par le haut), retour dans le range et réalignement, extension vers la liquidité opposée puis au-delà. Le setup se prend sur l'échec de la sortie, jamais sur la sortie elle-même.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Logique du setup ouverture de Londres" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <rect x="60" y="130" width="230" height="60" className="box" strokeWidth="1" opacity="0.6" />
+  <text x="175" y="122" fontSize="10" textAnchor="middle" fontWeight="600">range asiatique 2 h - 8 h (Paris)</text>
+  <text x="66" y="145" fontSize="9" className="muted">haut : stops des vendeurs, ordres de cassure</text>
+  <text x="66" y="203" fontSize="9" className="muted">bas : stops des acheteurs, ordres de cassure</text>
+  <polyline points="65,165 90,150 115,175 140,145 165,170 190,150 215,180 240,150 265,170 290,155" fill="none" stroke="var(--tm-gold)" strokeWidth="1.5" opacity="0.6" />
+  <line x1="290" y1="60" x2="290" y2="290" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="290" y="52" fontSize="9" textAnchor="middle" className="muted">9 h : Londres</text>
+  <polyline points="290,155 320,135 345,110 360,118 380,150 400,170 425,200 450,190 470,215 500,232 540,250 590,258 640,268 690,272" fill="none" stroke="var(--tm-gold)" strokeWidth="2.5" />
+  <circle cx="345" cy="110" r="6" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="360" y="100" fontSize="9" className="red" fontWeight="600">1 · sortie par le haut : manipulation</text>
+  <circle cx="400" cy="170" r="6" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="415" y="165" fontSize="9" className="gold" fontWeight="600">2 · retour dans le range, réalignement M5</text>
+  <circle cx="470" cy="215" r="6" fill="none" stroke="var(--tm-green)" strokeWidth="2" /><text x="485" y="205" fontSize="9" className="green" fontWeight="600">3 · liquidité opposée : première cible</text>
+  <text x="600" y="245" fontSize="9" className="green">4 · extension : PDL, zone HTF</text>
+  <text x="380" y="285" fontSize="10" textAnchor="middle" className="muted">on ne suit jamais la sortie ; on prend son échec ; si la sortie tient, il n'y a pas de setup ce jour-là</text>
+</svg>
+</Figure>
+
+## Range asiatique, manipulation et vraie direction
+
+Les trois objets du setup, définis pour être mesurés.
+
+**Le range asiatique (RA).** Plus haut et plus bas de la période **2 h 00 - 8 h 00** (Paris ; on ajuste d'une heure aux changements d'horaire, la référence étant 0 h - 6 h UTC en été). On note RAH, RAL, la hauteur H = RAH − RAL et le milieu. **Filtre de hauteur** : le setup n'est valide que si H est compris entre **0,4 et 1,2 fois l'ADR** divisé par 4, où l'ADR est l'amplitude quotidienne moyenne sur 20 jours (niveau 6). Concrètement, avec un ADR de 80 pips sur EUR/USD, on veut un range de 8 à 24 pips ; un range de 5 pips (nuit morte, souvent veille de férié) ne définit pas de réservoir ; un range de 45 pips (nuit agitée, nouvelle asiatique) est déjà une session de tendance et le setup ne s'applique pas.
+
+**La manipulation (M).** Entre **9 h 00 et 10 h 30**, une sortie du RA d'un côté : au moins **3 pips** au-delà de RAH ou RAL (le sweep, S1 du setup 1 dans un autre habit), au plus 1 fois H au-delà (au-delà, c'est une cassure de tendance) ; puis un **retour dans le range en clôture M5** ; puis un **réalignement M5** : la cassure en clôture du dernier point de structure interne M5 formé pendant la sortie (pour une sortie par le haut, la cassure du dernier HL formé pendant la montée : c'est le CHoCH interne du niveau 3). Le réalignement doit se produire au plus tard à **10 h 45**. La bougie de réalignement laisse en général un FVG M5 ; s'il existe, il sert de zone d'entrée ; sinon, la zone d'entrée est le retest de la borne du range.
+
+**La vraie direction (D).** Le sens opposé à la manipulation. Elle se confirme si le prix atteint le milieu du range dans les 30 minutes qui suivent le réalignement ; elle est fortement confirmée s'il atteint la borne opposée. Le setup ne demande pas cette confirmation pour entrer (elle arrive après l'entrée) ; il la demande pour **garder** : un trade qui, 30 minutes après l'entrée, n'a pas atteint le milieu du range est fermé au marché quel que soit son signe (sortie sur temps).
+
+Deux configurations qui ne sont **pas** le setup et se notent au journal comme « pas de setup » : la double manipulation (sortie par le haut, retour, sortie par le bas, retour : une matinée de range large ; on n'entre pas sur la seconde) ; et la sortie tenue (le prix sort et ne revient pas en clôture M5 dans les 45 minutes : c'est une journée de tendance ; le setup 3 ou une entrée de continuation sur pullback H1 s'appliquent peut-être, pas celui-ci).
+
+<Figure caption="Figure 2 · Les trois objets mesurés : le range asiatique (2 h - 8 h) filtré par sa hauteur relative à l'ADR ; la manipulation (sortie de 3 pips à 1 H, retour en clôture M5, réalignement interne M5 avant 10 h 45) ; la vraie direction (milieu du range atteint en 30 minutes, sinon sortie sur temps).">
+<svg className="tm-svg" viewBox="0 0 720 340" role="img" aria-label="Range asiatique, manipulation et direction" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="310" x2="700" y2="310" className="line" strokeWidth="1" />
+  <line x1="60" y1="110" x2="700" y2="110" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="66" y="106" fontSize="9" className="red">RAH</text>
+  <line x1="60" y1="200" x2="700" y2="200" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="66" y="214" fontSize="9" className="green">RAL</text>
+  <line x1="60" y1="155" x2="700" y2="155" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="66" y="151" fontSize="9" className="muted">milieu</text>
+  <text x="120" y="240" fontSize="9" className="muted">H = RAH − RAL : entre 0,4 et 1,2 × ADR / 4</text>
+  <line x1="240" y1="90" x2="240" y2="200" className="line" strokeWidth="1.5" /><rect x="234" y="95" width="12" height="60" className="green" opacity="0.9" />
+  <line x1="265" y1="70" x2="265" y2="120" className="line" strokeWidth="1.5" /><rect x="259" y="75" width="12" height="35" className="green" opacity="0.9" />
+  <line x1="290" y1="65" x2="290" y2="125" className="line" strokeWidth="1.5" /><rect x="284" y="90" width="12" height="30" className="red" opacity="0.9" />
+  <text x="300" y="60" fontSize="9" className="red" fontWeight="600">M : sortie 3 pips à 1 H, puis clôture M5 dans le range</text>
+  <line x1="315" y1="105" x2="315" y2="185" className="line" strokeWidth="1.5" /><rect x="309" y="112" width="12" height="70" className="red" opacity="0.9" />
+  <line x1="280" y1="128" x2="380" y2="128" className="line" strokeWidth="1" strokeDasharray="3 3" /><text x="386" y="132" fontSize="9" className="muted">dernier HL interne M5 de la sortie</text>
+  <circle cx="315" cy="182" r="6" fill="none" stroke="var(--tm-gold)" strokeWidth="2" /><text x="330" y="245" fontSize="9" className="gold" fontWeight="600">réalignement M5 avant 10 h 45 ; FVG = zone d'entrée</text>
+  <rect x="300" y="128" width="60" height="16" className="gold" opacity="0.35" />
+  <line x1="340" y1="120" x2="340" y2="160" className="line" strokeWidth="1.5" /><rect x="334" y="122" width="12" height="30" className="green" opacity="0.9" />
+  <line x1="365" y1="130" x2="365" y2="220" className="line" strokeWidth="1.5" /><rect x="359" y="132" width="12" height="80" className="red" opacity="0.9" />
+  <line x1="390" y1="190" x2="390" y2="260" className="line" strokeWidth="1.5" /><rect x="384" y="195" width="12" height="55" className="red" opacity="0.9" />
+  <text x="470" y="185" fontSize="9" className="green" fontWeight="600">D : milieu atteint en 30 min → on garde</text>
+  <text x="470" y="270" fontSize="9" className="green">borne opposée = C1 ; PDL / zone HTF = C2</text>
+  <text x="380" y="300" fontSize="10" textAnchor="middle" className="muted">pas de setup : double manipulation (haut puis bas) ; sortie tenue 45 min (journée de tendance)</text>
+</svg>
+</Figure>
+
+## Conditions de validation et filtres
+
+La fiche, blocs 1 et 2.
+
+**Bloc 1 · Contexte.**
+
+- Marché : EUR/USD (référence), GBP/USD (variante, ranges plus larges, coefficient 1,3 sur les seuils en pips) ; spot chez un courtier à spread serré (≤ 0,8 pip sur EUR/USD à 9 h), ou futures 6E / M6E, 6B / M6B.
+- Fenêtre : manipulation entre 9 h et 10 h 30 ; réalignement au plus tard 10 h 45 ; entrée au plus tard 11 h 00 ; tout est fermé à **12 h 30** (l'ouverture de New York est un autre marché).
+- Régime : tendance calme ou normale, range normal ; range de stress interdit ; tendance agitée avec taille ÷2. Sur le forex, la mesure de stress est le rapport de l'ATR quotidien 5 jours à l'ATR 20 jours (niveau 5) : au-dessus de 1,6, on est en stress.
+- Calendrier : pas de niveau 1 (BCE, BoE, CPI zone euro / UK, NFP le vendredi à 14 h 30 ne gêne pas la matinée) entre 8 h 30 et 12 h 30 ; jour de BCE : pas de setup (la matinée est morte, l'après-midi est violent) ; premier lundi après un changement d'heure : à noter (le décalage entre Londres et New York fausse les habitudes pendant deux à trois semaines par an, l'échantillon est à séparer).
+- Structure quotidienne : le setup se prend dans les deux sens ; mais la **taille est pleine** quand la vraie direction va dans le sens de la structure quotidienne (HH / HL et l'on achète), et **aux deux tiers** quand elle va contre. Une exception : quand la borne opposée du range asiatique et le PDL / PDH sont du même côté et proches (moins de 0,5 H), la géométrie est mauvaise (la première cible est trop près) et le trade est refusé.
+
+**Bloc 2 · Signal.**
+
+- L1 (obligatoire) : range asiatique valide (hauteur H dans les bornes, pas de trou de cotation, pas de nouvelle asiatique de niveau 1 pendant la nuit).
+- L2 (obligatoire) : manipulation valide (sortie 3 pips à 1 H, entre 9 h et 10 h 30, retour en clôture M5).
+- L3 (obligatoire) : réalignement M5 avant 10 h 45, sans que le prix ait déjà atteint le milieu du range au moment de la clôture de réalignement (sinon la moitié du chemin est faite ; le trade est refusé, ou reporté à un pullback sur le FVG s'il en existe un et si le pullback intervient avant 11 h).
+- L4 (obligatoire) : géométrie : la borne opposée du range (C1) doit donner un ratio d'au moins **1,2** depuis l'entrée prévue avec le stop prévu ; sinon refus. (Le ratio minimal est plus faible que sur le setup 1 parce que le taux de réussite attendu est plus élevé et que C2 apporte le complément ; le backtest le confirme ou l'infirme.)
+- L5 (optionnel, module) : le sweep de la borne s'est fait sur un **niveau HTF confluent** (PDH / PDL, zone H4, plus haut de la semaine) : taille pleine ; sinon deux tiers.
+- L6 (optionnel, module) : le dollar (DXY ou l'autre paire majeure) montre la manipulation **inverse** au même moment (le DXY sort par le bas et revient quand EUR/USD sort par le haut et revient) : taille pleine ; discordance : deux tiers.
+
+Le signal est complet quand L1 à L4 sont présents ; L5 et L6 se combinent aux règles de taille du bloc 1 (les coefficients se multiplient ; sous un demi-lot de la taille pleine, ou sous un contrat, le trade ne se prend pas).
+
+## Exécution, gestion et sorties
+
+**Entrée.** Deux variantes, à choisir par fiche :
+
+- Variante A (au marché sur réalignement) : à la clôture de la bougie M5 de réalignement, ordre au marché. Simple, taux d'exécution de 100 %, prix moins bon de quelques pips.
+- Variante B (limite sur le FVG ou la borne) : ordre limite au bord du FVG laissé par le réalignement (ou, en l'absence de FVG, à la borne du range revisitée), valable jusqu'à 11 h 00 ; meilleur prix, une partie des trades part sans nous.
+
+**Stop.** Au-delà de l'extrême de la manipulation de **3 pips plus le spread** (pour une manipulation par le haut : le plus haut de la sortie + 3 pips + spread). Raison écrite : si cet extrême est repris, la sortie n'était pas une manipulation. Ordre de grandeur : 10 à 25 pips sur EUR/USD. Le stop ne descend jamais (pour un short : ne monte jamais).
+
+**Taille.** Budget du jour (1 % du capital) ÷ (distance en pips × valeur du pip du lot considéré) ; en spot, on utilise des micro-lots (0,10 $ / pip) ou des mini-lots (1 $ / pip) pour arrondir finement ; en futures, M6E (1,25 $ / pip) puis 6E (12,50 $ / pip). Coefficients : ×2/3 par optionnel manquant, ×2/3 contre la structure quotidienne, ÷2 en tendance agitée.
+
+**Cibles.**
+
+- C1 : la **borne opposée du range asiatique** (RAL pour un short après manipulation par le haut). Sortie de **50 %**, stop du solde à l'entrée plus 1 pip (breakeven plus le spread).
+- C2 : la **liquidité suivante** dans le sens : PDL / PDH, plus bas ou plus haut de la semaine, zone H4 ; ratio minimal 2,5 ; s'il n'y a rien sous 1,5 ADR, C2 est fixé à 1 ADR depuis RAH (pour un short) : la journée « ordinaire » ne va guère plus loin le matin.
+- Trailing : après C1, si le prix forme un nouveau LH M15 sous le milieu du range (short), le stop descend au-dessus de ce LH plus 3 pips.
+
+**Sorties sur temps.**
+
+- 30 minutes après l'entrée, si le milieu du range n'est pas atteint : sortie au marché (le setup dit que la vraie direction se déclare vite ; si elle ne se déclare pas, l'hypothèse n'est pas confirmée et l'on ne paie pas pour attendre).
+- 12 h 30 : tout est fermé, quel que soit le résultat.
+
+**Second trade.** Aucun. Une manipulation par matinée ; si elle échoue, la matinée est finie pour ce setup (la double manipulation n'est pas tradée). Le budget quotidien du niveau 1 reste la limite globale avec les autres setups.
+
+<Figure caption="Figure 3 · L'exécution du setup 2 (short après manipulation par le haut) : entrée à la clôture du réalignement (A) ou en limite sur le FVG (B), stop au-dessus de l'extrême de la manipulation + 3 pips + spread, C1 à la borne opposée du range (50 %, BE + 1 pip), C2 à la liquidité suivante, sortie sur temps si le milieu n'est pas atteint en 30 minutes, tout fermé à 12 h 30.">
+<svg className="tm-svg" viewBox="0 0 720 320" role="img" aria-label="Exécution du setup ouverture de Londres" xmlns="http://www.w3.org/2000/svg">
+  <line x1="40" y1="290" x2="700" y2="290" className="line" strokeWidth="1" />
+  <line x1="60" y1="60" x2="700" y2="60" stroke="var(--tm-red)" strokeWidth="1.5" /><text x="690" y="56" fontSize="10" textAnchor="end" className="red" fontWeight="600">stop : extrême de M + 3 pips + spread</text>
+  <line x1="60" y1="90" x2="700" y2="90" stroke="var(--tm-red)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="86" fontSize="9" textAnchor="end" className="red">RAH</text>
+  <rect x="60" y="120" width="640" height="16" className="gold" opacity="0.3" /><text x="66" y="116" fontSize="9" className="gold">FVG du réalignement : entrée B (limite) · entrée A : clôture de réalignement</text>
+  <line x1="60" y1="160" x2="700" y2="160" className="line" strokeWidth="1" strokeDasharray="2 2" /><text x="66" y="156" fontSize="9" className="muted">milieu : à atteindre en 30 min, sinon sortie sur temps</text>
+  <line x1="60" y1="200" x2="700" y2="200" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="4 3" /><text x="690" y="196" fontSize="10" textAnchor="end" className="green" fontWeight="600">C1 : RAL · 50 %, stop à BE + 1 pip</text>
+  <line x1="60" y1="260" x2="700" y2="260" stroke="var(--tm-green)" strokeWidth="1" strokeDasharray="6 4" /><text x="690" y="256" fontSize="10" textAnchor="end" className="green" fontWeight="600">C2 : PDL / zone H4 · ratio ≥ 2,5</text>
+  <polyline points="80,140 110,110 140,75 165,95 190,140 215,125 240,150 270,175 300,165 330,200 360,190 390,225 430,240 470,262 510,255" fill="none" stroke="var(--tm-gold)" strokeWidth="2" />
+  <circle cx="140" cy="75" r="5" fill="none" stroke="var(--tm-red)" strokeWidth="2" /><text x="150" y="70" fontSize="9" className="red">extrême de M</text>
+  <circle cx="215" cy="125" r="5" className="gold" /><text x="230" y="112" fontSize="9" className="gold" fontWeight="600">entrée</text>
+  <text x="380" y="285" fontSize="10" textAnchor="middle" className="muted">une manipulation par matinée · pas de second trade · tout fermé à 12 h 30 · trailing sous les LH M15 après C1</text>
+</svg>
+</Figure>
+
+## Le journal spécifique de ce setup
+
+Le journal général (niveau 1) s'applique ; ce setup a en plus sa **feuille de collecte quotidienne**, remplie même les jours sans trade, car c'est elle qui alimente le backtest et qui montre les dérives. Chaque ligne, un jour :
+
+- Date, paire, ADR 20 jours, régime (ratio ATR 5 / 20), niveau 1 du jour, jour de BCE / changement d'heure.
+- RAH, RAL, H, H / (ADR / 4) et le verdict L1.
+- Manipulation : côté, heure de la sortie, extrême, distance en pips et en H, heure du retour en clôture, verdict L2 ; « aucune », « double », « tenue » le cas échéant.
+- Réalignement : heure, présence d'un FVG, milieu déjà atteint ou non, verdict L3.
+- Géométrie : entrée prévue, stop prévu, C1, ratio, verdict L4 ; L5, L6, structure quotidienne, coefficient de taille final.
+- Trade : variante, heure et prix d'entrée, taille, milieu atteint à +30 min (oui / non), C1 atteint (heure), C2 atteint (heure), sortie (raison : C2, trailing, temps 30 min, 12 h 30, stop), R net.
+- Conformité (toutes les règles suivies : oui / non, et laquelle sinon), et une remarque libre en une ligne.
+
+Deux colonnes dérivées, calculées chaque mois : le **taux de manipulation** (jours avec L2 valide / jours avec L1 valide : autour de 50 à 60 % est ordinaire ; s'il tombe sous 35 % pendant deux mois, le marché a changé) et le **taux de vraie direction** (jours où le milieu est atteint en 30 minutes / jours entrés : c'est le cœur de l'edge ; il doit rester nettement au-dessus de 50 %). Ces deux chiffres sont les indicateurs de vie du setup ; l'expectancy suit.
+
+Statistiques attendues (hypothèses avant test, à confronter aux chapitres 6 à 9) : 2 à 3 trades par semaine sur EUR/USD ; taux de réussite (C1 atteint) autour de 55 à 65 %, plus élevé que le setup 1 mais avec des cibles plus proches ; R moyen net de +0,25 à +0,45R ; drawdown attendu 6 à 10R en médiane sur 100 trades. Invalidité : les mêmes lignes que le setup 1 (DD supérieur à 1,5 fois le backtest, E(50) négative avec conformité, changement de microstructure), plus les deux taux ci-dessus sous leurs seuils pendant deux mois.
+
+## Deux trades du setup 2
+
+<TradeExample
+  resultat="gain"
+  instrument="EUR/USD spot (mini-lots)"
+  direction="Short"
+  setup="Range asiatique 1,0862 - 1,0880 (H = 18 pips, ADR 76 : H / (ADR/4) = 0,95, valide) ; manipulation par le haut à 9 h 25, extrême 1,0891 (11 pips = 0,6 H, sur le PDH 1,0889 : L5) ; retour en clôture M5 à 9 h 40 ; réalignement M5 à 9 h 50 (cassure du HL interne 1,0876) avec FVG 1,0876 - 1,0881, clôture à 1,0873 (milieu 1,0871 non atteint) ; DXY montre la manipulation inverse (L6) ; structure quotidienne baissière (dans le sens) ; taille pleine"
+  entree="1,0881 (variante B, limite au bord haut du FVG, servi à 9 h 58)"
+  stop="1,0895 (extrême 1,0891 + 3 pips + spread 1 pip ; 14 pips)"
+  objectif="C1 RAL 1,0862 (19 pips, ratio 1,36) ; C2 PDL 1,0836 (45 pips, ratio 3,2)"
+  r="+2,3R">
+
+Compte 10 000 $, budget 100 $ ; 14 pips × 1 $ = 14 $ par mini-lot → 7 mini-lots, risque 98 $. Milieu du range atteint à 10 h 12 (l'hypothèse est confirmée, on garde) ; C1 à 10 h 31 : 3 mini-lots sortis (+57 $), stop du solde à 1,0880 ; LH M15 sous le milieu à 10 h 55 : stop descendu à 1,0870 ; C2 atteint à 11 h 48 : 4 mini-lots sortis (+180 $). Total +237 $ moins 7 $ de coûts (1 pip par mini-lot aller-retour) sur 98 $ de risque : +2,4R brut, **+2,3R net**. Journal : L1 à L6 cochés, variante B, dans le sens de la structure quotidienne, conformité oui. Le trade a mis deux heures ; la moitié du travail était faite à 8 h 45, quand le range et l'ADR étaient notés.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures M6E (EUR/USD)"
+  direction="Long"
+  setup="Range asiatique 1,0910 - 1,0926 (H = 16 pips, valide) ; manipulation par le bas à 9 h 15, extrême 1,0904 ; retour en clôture M5 à 9 h 30 ; réalignement M5 à 9 h 45 ; pas de FVG ; L5 absent (aucun niveau HTF au sweep), L6 discordant (le DXY ne montre rien) ; structure quotidienne baissière (contre) : coefficient 2/3 × 2/3 × 2/3 = 0,30"
+  entree="1,0916 (variante A, marché à la clôture de réalignement)"
+  stop="1,0900 (extrême 1,0904 − 3 pips − 1 pip ; 16 pips)"
+  objectif="C1 RAH 1,0926 (10 pips : ratio 0,63)"
+  r="−1R">
+
+Deux fautes s'additionnent. La géométrie d'abord : le réalignement s'est fait à 1,0916, à 6 pips du milieu ; C1 (RAH 1,0926) ne donne que 10 pips pour 16 de stop : ratio 0,63, très en dessous de 1,2 : **refus obligatoire** (L4). La taille ensuite : le coefficient de 0,30 sur une taille pleine de 3 M6E donne 0,9 contrat, donc **zéro** : la fiche disait deux fois de ne pas prendre. Le trader prend 3 M6E « parce que la manipulation était propre ». Le prix atteint 1,0921 puis se retourne, casse RAL et le stop à 10 h 20 : −16 pips × 1,25 $ × 3 = −60 $ sur un budget de 100 $ ; par rapport à la taille prévue (zéro), c'est une perte hors plan ; par rapport au risque pris, −1R. Journal : hors setup (L4 non validé, taille non conforme). Le contenu de la matinée est resté conforme à ce que la feuille de collecte enregistre : L1 oui, L2 oui, L3 oui, L4 **non** ; ce jour-là, le setup disait de regarder, pas de trader.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Le setup 2 tient à une **heure**, pas à un réservoir intraday : l'ouverture de Londres viole le range asiatique d'un côté pour prendre la liquidité, échoue, puis la vraie direction se déclare ; on prend **l'échec de la sortie**, jamais la sortie.
+- Trois objets mesurés : **range asiatique** 2 h - 8 h filtré par sa hauteur (0,4 à 1,2 × ADR / 4) ; **manipulation** 9 h - 10 h 30 (3 pips à 1 H, retour en clôture M5, réalignement M5 avant 10 h 45) ; **vraie direction** (milieu atteint en 30 minutes, sinon sortie sur temps).
+- Validation : L1 range, L2 manipulation, L3 réalignement sans que le milieu soit déjà atteint, L4 géométrie (C1 = borne opposée à ≥ 1,2R) ; L5 confluence HTF et L6 dollar inverse modulent ; contre la structure quotidienne, deux tiers ; les coefficients se multiplient ; sous un contrat, pas de trade.
+- Exécution : entrée A (marché sur réalignement) ou B (limite sur FVG) ; stop au-delà de l'extrême + 3 pips + spread ; C1 borne opposée (50 %, BE + 1 pip), C2 liquidité suivante (≥ 2,5R) ; trailing sous les LH M15 ; **une manipulation par matinée** ; **tout fermé à 12 h 30**.
+- Le journal spécifique enregistre **tous les jours**, trade ou pas ; le taux de manipulation et le taux de vraie direction sont les indicateurs de vie du setup.
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Valider une matinée">
+
+EUR/USD, ADR 20 jours = 84 pips. Range asiatique : 1,0740 - 1,0765. À 9 h 35, sortie par le bas jusqu'à 1,0731 ; clôture M5 de 9 h 50 à 1,0744 ; réalignement M5 (cassure du dernier LH interne 1,0748) à 10 h 05, clôture à 1,0750, avec un FVG 1,0745 - 1,0748. Spread 0,8 pip. Structure quotidienne haussière.
+
+1. L1 : le range est-il valide ?
+2. L2 : la manipulation est-elle valide (distance en pips et en H) ?
+3. L3 : le milieu était-il déjà atteint à la clôture de réalignement ?
+4. Variante A (entrée 1,0750) : stop, distance, ratio à C1 (RAH) : le trade est-il pris ? Et en variante B au bord du FVG (1,0748) ?
+
+<Solution>
+
+1. H = 25 pips ; ADR / 4 = 21 ; H / 21 = **1,19** : dans [0,4 ; 1,2], **valide** (juste sous la borne : à noter).
+2. Sortie 1,0740 − 1,0731 = **9 pips** = 0,36 H : entre 3 pips et 1 H ; entre 9 h et 10 h 30 ; retour en clôture M5 (1,0744 dans le range) : **valide**.
+3. Milieu = 1,07525. Clôture de réalignement 1,0750 : **sous** le milieu, non atteint : L3 **valide** (de justesse : 2,5 pips).
+4. Stop = extrême − 3 pips − spread = 1,0731 − 0,0003 − 0,00008 ≈ **1,07272**, arrondi à **1,0727** ; distance depuis 1,0750 = **23 pips**. C1 = RAH 1,0765 : 15 pips ; ratio **0,65** : **refusé** en variante A. Variante B à 1,0748 : distance 21 pips, C1 17 pips, ratio **0,81** : **refusé** aussi. Cette matinée est un « L1-L2-L3 oui, L4 non » : la manipulation a été trop courte et le réalignement trop tard dans le range pour laisser de la géométrie. Le journal l'enregistre ; le trader ne trade pas.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Taille et coefficients">
+
+Compte 20 000 $, budget 1 %. Setup 2 short, stop 14 pips, spot EUR/USD en mini-lots (1 $ / pip). L5 présent, L6 absent, structure quotidienne haussière (contre), régime tendance normale.
+
+1. Taille pleine ?
+2. Coefficient final et taille retenue ?
+3. Si le trade sort 50 % à C1 (+18 pips) et le solde au stop remonté à BE + 1 pip, quel est le R net avec 1 pip de coûts par mini-lot aller-retour ?
+
+<Solution>
+
+1. Budget 200 $ ; 14 $ par mini-lot → 200 ÷ 14 = 14,3 → **14 mini-lots** (risque 196 $).
+2. L6 absent : ×2/3 ; contre la structure : ×2/3 ; coefficient **4/9 ≈ 0,44** ; 14 × 0,44 = 6,2 → **6 mini-lots** (risque 84 $).
+3. Moitié = 3 mini-lots à +18 pips = +54 $ ; 3 mini-lots à +1 pip = +3 $ ; coûts 6 $ ; net **+51 $** sur 84 $ de risque = **+0,61R** (le R se rapporte au risque effectivement pris, 84 $, pas au budget de 200 $).
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Lire les indicateurs de vie">
+
+Sur trois mois, la feuille de collecte donne : 62 jours ouvrés, 55 jours avec L1 valide, 31 jours avec L2 valide, 22 jours entrés (après L3 et L4), 15 jours où le milieu a été atteint en 30 minutes, 12 trades à C1, 6 à C2, expectancy nette +0,32R.
+
+1. Taux de manipulation et taux de vraie direction.
+2. Le setup est-il « en vie » selon les seuils du chapitre ?
+3. Que dirait une chute du taux de vraie direction à 40 % le trimestre suivant, avec un taux de manipulation inchangé ?
+
+<Solution>
+
+1. Taux de manipulation = 31 / 55 = **56 %** ; taux de vraie direction = 15 / 22 = **68 %**.
+2. Oui : 56 % est dans l'ordinaire (50 - 60 %), 68 % est nettement au-dessus de 50 %, l'expectancy est positive avec un taux de C1 de 12 / 22 = 55 % dans la fourchette attendue.
+3. Les manipulations existent toujours (le marché sort du range et revient) mais la direction ne se déclare plus vite : soit les matinées deviennent des ranges larges (double manipulation), soit la liquidité de Londres a changé (période de faible volatilité, été, ou changement d'heure). C'est un signal d'**alerte** : passer en simulation si cela dure deux mois, séparer l'échantillon par période, et ne surtout pas « élargir la fenêtre à 45 minutes » pour sauver le chiffre (chapitre 9 : ce serait ajuster la règle au bruit).
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Le setup 2 se prend :",
+      options: [
+        "Sur la cassure du range asiatique",
+        "Sur l'échec de la sortie du range asiatique à l'ouverture de Londres, après retour en clôture M5 et réalignement",
+        "À 9 h pile au marché",
+        "Sur toute paire à toute heure",
+      ],
+      answer: 1,
+      explain: "La sortie initiale est la manipulation ; on ne la suit jamais. Si elle tient 45 minutes, c'est une journée de tendance et il n'y a pas de setup.",
+    },
+    {
+      q: "Le filtre L1 sur le range asiatique exige :",
+      options: [
+        "Un range d'au moins 50 pips",
+        "Une hauteur entre 0,4 et 1,2 fois l'ADR / 4 (par exemple 8 à 24 pips pour un ADR de 80)",
+        "Un range de moins de 5 pips",
+        "Aucun filtre",
+      ],
+      answer: 1,
+      explain: "Trop étroit, il ne définit pas de réservoir ; trop large, la nuit était déjà une session de tendance.",
+    },
+    {
+      q: "Le stop du setup 2 est :",
+      options: [
+        "10 pips fixes",
+        "Au-delà de l'extrême de la manipulation, de 3 pips plus le spread ; s'il est repris, la sortie n'était pas une manipulation",
+        "Au milieu du range",
+        "Sans stop, sortie à 12 h 30",
+      ],
+      answer: 1,
+      explain: "L'objet est l'extrême de la manipulation ; la marge tient compte du spread, qui s'élargit à l'ouverture.",
+    },
+    {
+      q: "Trente minutes après l'entrée, le milieu du range n'est pas atteint. La fiche dit :",
+      options: [
+        "D'attendre C1",
+        "De sortir au marché quel que soit le signe : la vraie direction se déclare vite ou l'hypothèse n'est pas confirmée",
+        "D'ajouter",
+        "De déplacer le stop",
+      ],
+      answer: 1,
+      explain: "La sortie sur temps est une règle du setup, pas une humeur : elle évite de payer l'attente sur les matinées qui deviennent des ranges.",
+    },
+    {
+      q: "Une seconde manipulation se produit le même matin (sortie par le haut, retour, puis sortie par le bas, retour) :",
+      options: [
+        "On trade la seconde",
+        "On ne trade pas : la double manipulation est une matinée de range large, hors setup ; une manipulation par matinée",
+        "On double la taille",
+        "On trade les deux",
+      ],
+      answer: 1,
+      explain: "La double manipulation se note « pas de setup ». Le second trade n'existe pas dans cette fiche.",
+    },
+    {
+      q: "Les deux indicateurs de vie du setup sont :",
+      options: [
+        "Le P&L du mois et le nombre de trades",
+        "Le taux de manipulation (L2 / L1) et le taux de vraie direction (milieu atteint en 30 min / entrées)",
+        "Le spread et le volume",
+        "Le VIX et le DXY",
+      ],
+      answer: 1,
+      explain: "Ils mesurent si le comportement du marché à l'ouverture de Londres est toujours celui sur lequel repose l'edge ; l'expectancy suit.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Le troisième setup change d'échelle : un swing de plusieurs jours à plusieurs semaines sur l'or ou le pétrole, dont l'entrée n'est plus une bougie M5 mais un alignement du contexte macro, de la structure hebdomadaire et quotidienne, et d'un déclencheur H4. Le chapitre suivant en donne la lecture des horizons, l'alignement macro et technique, l'entrée échelonnée, la gestion sur plusieurs jours et le suivi de la thèse.
