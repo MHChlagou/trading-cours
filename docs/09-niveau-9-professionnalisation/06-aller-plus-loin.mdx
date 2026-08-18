@@ -1,0 +1,337 @@
+---
+title: "Aller plus loin : capital et carrière"
+description: "Ce qui vient après la méthode : le modèle économique réel des prop firms et l'arithmétique de leurs règles, la gestion d'un compte qui grossit et ses contraintes de liquidité, les points de vigilance fiscaux à vérifier auprès d'un professionnel local, la formation continue utile, et les signaux d'alarme des communautés et des mentors."
+---
+
+# Aller plus loin : capital et carrière
+
+Ce dernier chapitre du cours traite de ce qui entoure la méthode : d'où vient le capital, comment il grossit, ce que l'administration en attend, et à qui l'on parle. Ce sont des sujets où l'on trouve beaucoup de promesses et peu de chiffres. Le parti pris ici est le même que dans le reste du cours : des ordres de grandeur, des arithmétiques vérifiables, et une distinction nette entre ce que l'on peut affirmer et ce qui dépend de votre situation. Sur la fiscalité en particulier, ce chapitre ne donne **aucun conseil** : il donne une liste de questions à poser à un professionnel de votre pays.
+
+## Prop firms : promesses, règles et pièges
+
+Une société de financement de traders (« prop firm » au sens actuel du terme) vend un **examen payant** : vous payez des frais d'inscription, vous tradez un compte de démonstration en respectant des règles, et si vous atteignez un objectif de gain sans violer ces règles, vous obtenez un compte « financé » dont les gains vous sont reversés en partie (souvent 70 à 90 %). Le modèle économique de la société repose donc sur deux sources : les **frais d'examen** de ceux qui échouent, et, pour les comptes financés, l'écart entre ce que les traders gagnent et ce qu'ils coûtent.
+
+Les règles typiques, qu'il faut lire dans le détail parce que ce sont elles qui décident de tout :
+
+- **Objectif de gain** : souvent 8 à 10 % du capital nominal, parfois en deux étapes.
+- **Perte maximale totale** : 6 à 12 % du nominal, **statique** (mesurée depuis le solde de départ) ou **suiveuse** (mesurée depuis le plus haut atteint par le compte : bien plus contraignante).
+- **Perte maximale quotidienne** : 4 à 5 %, souvent calculée sur l'équité intrajournalière, positions ouvertes comprises.
+- **Règles annexes** : durée minimale, nombre minimal de jours tradés, interdiction de tenir pendant certaines annonces, interdiction des positions de nuit ou du week-end, « règle de cohérence » (aucun jour ne doit représenter plus de x % du gain total), taille maximale, instruments autorisés.
+
+L'arithmétique compte davantage que les promesses. Voici une simulation faite avec la même distribution de résultats que le niveau 7 (des pertes autour de −1R, des gains partiels et complets), pour un trader qui risque **1 % du nominal par trade** et vise un objectif de 8 % (soit +8R) :
+
+| Espérance par trade | Perte max **statique** 10 % | Perte max **suiveuse** 10 % | Perte max **suiveuse** 5 % |
+| --- | --- | --- | --- |
+| +0,10R | 78 % | 68 % | 38 % |
+| +0,20R | 93 % | 85 % | 53 % |
+| +0,30R | 98 % | 95 % | 69 % |
+
+Trois enseignements. D'abord, **passer l'examen est faisable** pour un trader à expectancy positive, surtout avec une perte maximale statique : la difficulté annoncée est en partie un argument de vente. Ensuite, la **nature de la perte maximale change tout** : une limite suiveuse de 5 % divise presque par deux les chances d'un trader à +0,2R. Enfin, et c'est le point que la publicité n'aborde jamais : **passer n'est pas garder**. Avec les mêmes hypothèses, la probabilité de **perdre** le compte financé (en touchant la limite suiveuse) sur les 300 trades suivants est de l'ordre de **77 %** pour un trader à +0,2R avec une limite de 10 %, et proche de **100 %** avec une limite de 5 %. Un drawdown suiveur est une condition qui se déclenche tôt ou tard, parce que le drawdown ordinaire d'une bonne stratégie (niveau 7, chapitre 8) finit toujours par arriver.
+
+La conséquence pratique est simple et rarement appliquée : sur un compte financé, on **risque beaucoup moins par trade** que sur un compte propre — 0,25 % à 0,5 % du nominal plutôt que 1 % — parce que la contrainte n'est plus la ruine du compte mais une limite administrative bien plus proche. Cela réduit d'autant le revenu attendu ; c'est le prix du levier emprunté.
+
+Les pièges à vérifier avant de payer : le **délai et les conditions de paiement** (fréquence, montant minimal, justificatifs) ; la **clause de résiliation discrétionnaire** ; le traitement des **arbitrages de latence** et des stratégies interdites (souvent définies vaguement) ; l'existence de **comptes réellement exécutés** ou d'une simple réplication interne ; les **frais cachés** (réinitialisation, données, inactivité) ; et la solidité de la société elle-même, dont la faillite est un risque réel puisque vos gains ne sont pas des fonds déposés chez un courtier régulé mais une créance sur une entreprise privée.
+
+Enfin, un point de méthode : un examen de prop firm n'est **pas** un test de stratégie. Il teste votre capacité à atteindre un objectif dans une contrainte administrative, sur un échantillon minuscule (souvent moins de trente trades). Le réussir ne valide rien de votre fiche ; l'échouer n'invalide rien non plus.
+
+<Figure caption="Figure 1 · L'arithmétique d'un examen de financement : probabilité d'atteindre +8R avant la limite de perte, selon l'espérance par trade et le type de limite (statique ou suiveuse), pour un risque de 1 % du nominal par trade. Et le point rarement dit : la probabilité de perdre le compte financé ensuite, sur 300 trades, avec une limite suiveuse.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Probabilités d'un examen de prop firm" xmlns="http://www.w3.org/2000/svg">
+  <text x="80" y="44" fontSize="10" fontWeight="600">Espérance</text>
+  <text x="250" y="44" fontSize="10" fontWeight="600" textAnchor="middle">statique 10 %</text>
+  <text x="400" y="44" fontSize="10" fontWeight="600" textAnchor="middle">suiveuse 10 %</text>
+  <text x="550" y="44" fontSize="10" fontWeight="600" textAnchor="middle">suiveuse 5 %</text>
+  <line x1="40" y1="54" x2="640" y2="54" className="line" strokeWidth="1" />
+  <text x="60" y="80" fontSize="10">+0,10R</text>
+  <rect x="180" y="66" width="140" height="18" className="gold" opacity="0.25" /><rect x="180" y="66" width="109" height="18" className="green" opacity="0.5" /><text x="250" y="80" fontSize="9" textAnchor="middle">78 %</text>
+  <rect x="330" y="66" width="140" height="18" className="gold" opacity="0.25" /><rect x="330" y="66" width="95" height="18" className="green" opacity="0.5" /><text x="400" y="80" fontSize="9" textAnchor="middle">68 %</text>
+  <rect x="480" y="66" width="140" height="18" className="gold" opacity="0.25" /><rect x="480" y="66" width="53" height="18" className="red" opacity="0.5" /><text x="550" y="80" fontSize="9" textAnchor="middle">38 %</text>
+  <text x="60" y="112" fontSize="10">+0,20R</text>
+  <rect x="180" y="98" width="140" height="18" className="gold" opacity="0.25" /><rect x="180" y="98" width="130" height="18" className="green" opacity="0.5" /><text x="250" y="112" fontSize="9" textAnchor="middle">93 %</text>
+  <rect x="330" y="98" width="140" height="18" className="gold" opacity="0.25" /><rect x="330" y="98" width="119" height="18" className="green" opacity="0.5" /><text x="400" y="112" fontSize="9" textAnchor="middle">85 %</text>
+  <rect x="480" y="98" width="140" height="18" className="gold" opacity="0.25" /><rect x="480" y="98" width="74" height="18" className="gold" opacity="0.6" /><text x="550" y="112" fontSize="9" textAnchor="middle">53 %</text>
+  <text x="60" y="144" fontSize="10">+0,30R</text>
+  <rect x="180" y="130" width="140" height="18" className="gold" opacity="0.25" /><rect x="180" y="130" width="137" height="18" className="green" opacity="0.5" /><text x="250" y="144" fontSize="9" textAnchor="middle">98 %</text>
+  <rect x="330" y="130" width="140" height="18" className="gold" opacity="0.25" /><rect x="330" y="130" width="133" height="18" className="green" opacity="0.5" /><text x="400" y="144" fontSize="9" textAnchor="middle">95 %</text>
+  <rect x="480" y="130" width="140" height="18" className="gold" opacity="0.25" /><rect x="480" y="130" width="97" height="18" className="gold" opacity="0.6" /><text x="550" y="144" fontSize="9" textAnchor="middle">69 %</text>
+  <line x1="40" y1="160" x2="640" y2="160" className="line" strokeWidth="1" />
+  <rect x="60" y="180" width="580" height="66" rx="6" className="red" opacity="0.12" />
+  <rect x="60" y="180" width="580" height="66" rx="6" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="350" y="202" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Passer n'est pas garder</text>
+  <text x="350" y="222" fontSize="9" textAnchor="middle">probabilité de perdre le compte financé sur 300 trades, à 1 % de risque par trade :</text>
+  <text x="350" y="238" fontSize="9" textAnchor="middle" fontWeight="600">limite suiveuse 10 % → environ 77 % (E = +0,20R) · limite suiveuse 5 % → proche de 100 %</text>
+  <text x="360" y="272" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">d'où la règle : sur un compte financé, risquer 0,25 à 0,5 % par trade, pas 1 %</text>
+  <text x="360" y="290" fontSize="9" textAnchor="middle" className="muted">simulation sous hypothèses explicites (distribution du niveau 7, risque fixe, aucune limite quotidienne modélisée)</text>
+</svg>
+</Figure>
+
+## Gérer un compte qui grossit
+
+Un compte qui grossit change trois choses : la taille des positions, le rapport psychologique à l'argent, et les contraintes matérielles. Les trois se préparent avant d'y arriver.
+
+**Le plan de montée en taille** s'écrit à l'avance, en paliers, avec des critères de passage et de retour. Un exemple de structure : on augmente d'un palier quand la conformité dépasse 90 % sur trois mois **et** que le capital a progressé d'un montant équivalent au p90 du Monte Carlo (niveau 7) ; on redescend d'un palier au premier drawdown dépassant le p90. Les paliers eux-mêmes sont modestes : passer de 2 à 3 micros, pas de 2 à 6. Le principe est que **la taille suit le capital et la conformité, jamais l'humeur ni le résultat récent**.
+
+**Les contraintes de liquidité** apparaissent plus tôt qu'on ne croit sur certains marchés. Sur les micro-futures d'indices, quelques dizaines de contrats passent sans effet notable en séance américaine ; sur des marchés moins profonds (micro pétrole, certaines paires exotiques, petites capitalisations, crypto hors majors), la taille commence à peser à des montants bien plus faibles. Le symptôme se lit dans le journal : le **slippage moyen augmente** avec la taille. C'est une mesure à suivre dans le tableau de bord dès que la taille double, et c'est le seul critère objectif pour décider qu'il faut passer du micro au mini, ou changer d'instrument, ou plafonner.
+
+**Le rapport à l'argent** est la contrainte la plus sous-estimée. Un trader parfaitement à l'aise avec 50 $ de risque par trade peut voir sa conformité s'effondrer à 500 $, pour la simple raison que la somme commence à représenter quelque chose dans sa vie. La parade est la même qu'au chapitre 4 du niveau 8 : monter par petits paliers, mesurer la conformité à chaque palier, redescendre sans état d'âme si elle se dégrade. Certains traders arrivent à un plafond personnel bien avant le plafond de liquidité ; le reconnaître est une décision lucide, pas un échec.
+
+**Les retraits** doivent être une règle, pas une impulsion. Une pratique courante et saine : retirer périodiquement une fraction des gains (par exemple la moitié du gain trimestriel) et laisser le reste capitaliser, avec deux garde-fous — ne jamais retirer au point de descendre sous le capital nécessaire au dimensionnement de la fiche, et provisionner l'impôt dès le retrait (section suivante). Le retrait a aussi une fonction psychologique : il rend le résultat réel et évite le sentiment de jouer avec des jetons.
+
+**La diversification des contreparties** enfin : au-delà d'un certain montant, tout laisser chez un seul courtier fait porter un risque qui n'a rien à voir avec le marché. Les protections des dépôts existent mais sont plafonnées et varient selon les juridictions ; répartir les avoirs, garder hors marché la partie du capital qui n'est pas nécessaire au trading, et vérifier la régulation de chaque intermédiaire font partie de la gestion du capital.
+
+<Figure caption="Figure 2 · Faire grossir un compte : paliers de taille avec critères de passage (conformité et capital) et de retour (drawdown au-delà du p90), surveillance du slippage moyen comme signal de contrainte de liquidité, plafond psychologique personnel mesuré par la conformité, règle de retrait écrite avec provision d'impôt, répartition des avoirs entre contreparties.">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Montée en taille d'un compte" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="250" x2="660" y2="250" className="line" strokeWidth="1" />
+  <line x1="60" y1="60" x2="60" y2="250" className="line" strokeWidth="1" />
+  <text x="30" y="160" fontSize="9" className="muted" transform="rotate(-90 30 160)">taille</text>
+  <rect x="80" y="220" width="90" height="30" className="gold" opacity="0.3" /><text x="125" y="240" fontSize="9" textAnchor="middle">1 micro</text>
+  <rect x="200" y="190" width="90" height="60" className="gold" opacity="0.35" /><text x="245" y="225" fontSize="9" textAnchor="middle">2 micros</text>
+  <rect x="320" y="160" width="90" height="90" className="gold" opacity="0.4" /><text x="365" y="210" fontSize="9" textAnchor="middle">3 micros</text>
+  <rect x="440" y="130" width="90" height="120" className="gold" opacity="0.45" /><text x="485" y="195" fontSize="9" textAnchor="middle">4 micros</text>
+  <rect x="560" y="100" width="90" height="150" className="gold" opacity="0.5" /><text x="605" y="180" fontSize="9" textAnchor="middle">mini / plafond</text>
+  <path d="M170,215 L200,215" stroke="var(--tm-green)" strokeWidth="2" /><path d="M290,185 L320,185" stroke="var(--tm-green)" strokeWidth="2" /><path d="M410,155 L440,155" stroke="var(--tm-green)" strokeWidth="2" /><path d="M530,125 L560,125" stroke="var(--tm-green)" strokeWidth="2" />
+  <text x="360" y="88" fontSize="9" textAnchor="middle" className="green" fontWeight="600">passage : conformité supérieure à 90 % sur trois mois ET capital progressé d'un p90</text>
+  <path d="M320,270 L200,270" stroke="var(--tm-red)" strokeWidth="2" /><polygon points="200,270 208,266 208,274" fill="var(--tm-red)" />
+  <text x="360" y="284" fontSize="9" textAnchor="middle" className="red">retour d'un palier au premier drawdown au-delà du p90, sans discussion</text>
+  <rect x="420" y="30" width="240" height="52" rx="6" className="box" strokeWidth="1" />
+  <text x="540" y="48" fontSize="9" fontWeight="600" textAnchor="middle">Signaux à surveiller</text>
+  <text x="430" y="64" fontSize="8">slippage moyen qui augmente → liquidité</text>
+  <text x="430" y="76" fontSize="8">conformité qui baisse → plafond personnel</text>
+  <rect x="60" y="30" width="330" height="52" rx="6" className="box" strokeWidth="1" />
+  <text x="225" y="48" fontSize="9" fontWeight="600" textAnchor="middle">Retraits et contreparties</text>
+  <text x="70" y="64" fontSize="8">retrait périodique écrit (ex. moitié du gain trimestriel), jamais sous le capital</text>
+  <text x="70" y="76" fontSize="8">nécessaire à la fiche · impôt provisionné · avoirs répartis, régulation vérifiée</text>
+</svg>
+</Figure>
+
+## Fiscalité : les points de vigilance à vérifier localement
+
+**Avertissement.** Cette section ne donne aucun conseil fiscal et ne remplace pas un professionnel. Les règles dépendent de votre pays de résidence, de votre statut, des instruments tradés et de votre volume d'activité ; elles changent régulièrement. Ce qui suit est une **liste de questions** à poser à un expert-comptable ou à un avocat fiscaliste de votre juridiction, idéalement **avant** de commencer, et à revoir chaque année.
+
+- **Qualification des revenus.** Vos résultats sont-ils imposés comme des plus-values de cession, comme des revenus d'activité, ou selon un régime spécifique aux produits dérivés ? La réponse dépend souvent du caractère habituel et de l'organisation de l'activité, et elle change tout.
+- **Instruments.** Les futures, les CFD, les options, le forex au comptant et les crypto-actifs relèvent fréquemment de régimes différents dans un même pays, y compris pour l'imputation des pertes.
+- **Compensation et report des pertes.** Les pertes sont-elles imputables sur les gains de même nature ? Reportables sur combien d'années ? Une année perdante mal déclarée peut coûter plusieurs années d'impôt.
+- **Base imposable.** Résultat réalisé ou position valorisée en fin d'année ? Les frais, commissions et abonnements de données sont-ils déductibles ? Sous quel régime ?
+- **Comptes à l'étranger.** Un compte chez un courtier hors de votre pays de résidence entraîne presque toujours une **obligation déclarative spécifique**, indépendante de l'impôt dû, avec des sanctions propres en cas d'omission.
+- **Prop firms.** Les sommes reversées par une société de financement ne sont généralement pas des plus-values de marché mais une **rémunération contractuelle** ; leur traitement fiscal, et parfois social, peut être très différent. À faire préciser explicitement.
+- **Statut et cotisations.** À partir de quel volume ou de quelle organisation l'activité devient-elle professionnelle dans votre pays, avec les conséquences correspondantes (statut, cotisations, comptabilité) ?
+- **Justificatifs.** Quels documents faut-il conserver et combien de temps ? Les relevés de courtier suffisent-ils, ou faut-il un registre distinct ? Votre journal (niveau 8) et vos relevés archivés constituent la trace la plus solide.
+- **Provision.** Quel pourcentage mettre de côté à chaque retrait pour ne pas se retrouver à payer l'impôt d'une bonne année avec le capital d'une mauvaise ?
+
+Le principe de prudence qui traverse tout le cours s'applique ici : ce qui n'est pas écrit et provisionné finira par coûter plus cher que prévu, au pire moment.
+
+## La formation continue du trader
+
+Après quatre-vingt-dix jours de méthode et quelques mois d'exécution, l'apprentissage change de nature : il devient **lent, spécialisé et guidé par les mesures**. Trois sources, dans cet ordre d'importance.
+
+**Votre propre journal.** C'est la source la plus riche et la seule qui parle de vous. La lecture d'un trimestre de journal, album de captures à l'appui, apprend plus que dix vidéos : elle montre vos motifs récurrents, vos fuites, vos heures. Le rythme utile est celui du niveau 8 : revue mensuelle et bilan trimestriel écrits.
+
+**L'approfondissement ciblé.** Une fois par trimestre, une question précise, née d'une mesure : « mes trades du soir sont-ils vraiment moins bons, et pourquoi ? », « le footprint améliorerait-il mon filtre S5 ? », « ma gestion après C1 laisse-t-elle du R sur la table ? ». On y répond par un backtest, une lecture spécialisée, ou une observation dédiée. Une question par trimestre, traitée à fond, vaut mieux que dix survolées.
+
+**Les fondamentaux périodiquement relus.** Les niveaux 1 (risque), 5 (macro et régimes) et 7 (validation) se relisent avec profit une fois par an : ce sont ceux dont les principes se dégradent en silence. Les lectures extérieures utiles à ce stade sont plutôt des ouvrages sérieux sur la microstructure des marchés, la macroéconomie appliquée et les statistiques que des contenus de « stratégies » — vous en avez trois, testées, et une quatrième n'ajouterait rien.
+
+Une pratique délibérée, enfin : le **replay régulier**. Une heure par semaine de rejeu bougie par bougie sur des périodes non familières entretient la reconnaissance des motifs sans risquer d'argent, et sert aussi à tester les idées du carnet. C'est l'équivalent des gammes ; les traders qui durent en font.
+
+## Communautés, mentors et signaux d'alarme
+
+Le milieu du trading attire beaucoup de vendeurs. Quelques critères simples permettent de trier, et ils fonctionnent aussi bien pour une communauté, un mentor payant ou un contenu gratuit.
+
+**Signaux d'alarme.** Promesses de rendement, même implicites (« objectif 10 % par mois ») ; captures d'écran de gains sans les pertes ni le journal complet ; absence totale de mesures (aucune expectancy, aucun n, aucun drawdown) ; vente de **signaux** à suivre plutôt que d'une méthode à comprendre ; urgence et rareté artificielles (« il reste trois places ») ; liens d'affiliation vers des courtiers non régulés ou vers des sociétés de financement, surtout s'ils ne sont pas déclarés ; discours sur le style de vie plutôt que sur le process ; refus de répondre aux questions sur les pertes ; groupes où toute critique est traitée comme un manque de mentalité ; « garantie » de financement ou de réussite.
+
+**Signes positifs.** Des chiffres avec leurs échantillons et leurs incertitudes ; des pertes montrées et analysées ; une méthode reproductible sans la personne qui l'enseigne ; l'acceptation explicite du fait qu'une partie des élèves n'y arrivera pas ; une critique interne autorisée ; l'absence de pression à trader plus gros ou plus souvent ; et, très simplement, une pédagogie qui vous rend **plus autonome** avec le temps plutôt que plus dépendant.
+
+**Sur les mentors payants** : le seul cas où cela vaut clairement le coût est celui d'un praticien qui accepte de regarder **votre journal** et votre exécution, et qui vous corrige sur ce que vous faites, avec des mesures. Un mentor qui explique sa propre méthode sans jamais regarder vos données vend un cours, pas un accompagnement.
+
+**Sur les groupes de signaux** : ils empêchent structurellement l'apprentissage, parce qu'ils suppriment la décision et donc la mesure ; et ils déplacent la question de la performance vers quelqu'un dont vous ne pouvez vérifier ni l'échantillon, ni la conformité, ni le risque.
+
+**Sur les réseaux sociaux** : le biais de survie y est total. On y voit les comptes qui ont gagné, jamais ceux qui ont disparu ; les captures de journées à +8R, jamais les mois à −12R ; et un discours de certitude qui est l'exact opposé de ce que le niveau 7 a établi sur l'incertitude des mesures. Le meilleur usage possible d'un réseau social pour un trader est technique et étroit : suivre quelques sources de données ou de calendrier, et fermer le reste pendant les heures de séance.
+
+<Figure caption="Figure 3 · Trier les sources : signaux d'alarme (promesses de rendement, captures sans pertes, vente de signaux, urgence artificielle, affiliations non déclarées, critique interdite) contre signes positifs (chiffres avec n et incertitudes, pertes analysées, méthode reproductible sans son auteur, autonomie croissante). Le test final : après six mois, êtes-vous plus autonome ou plus dépendant ?">
+<svg className="tm-svg" viewBox="0 0 720 300" role="img" aria-label="Signaux d'alarme et signes positifs" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="40" width="320" height="200" rx="6" className="red" opacity="0.12" />
+  <rect x="30" y="40" width="320" height="200" rx="6" fill="none" stroke="var(--tm-red)" strokeWidth="1.5" />
+  <text x="190" y="64" fontSize="11" fontWeight="600" textAnchor="middle" className="red">Signaux d'alarme</text>
+  <text x="45" y="88" fontSize="9">promesses de rendement, même implicites</text>
+  <text x="45" y="108" fontSize="9">captures de gains sans les pertes ni le journal</text>
+  <text x="45" y="128" fontSize="9">aucune mesure : ni expectancy, ni n, ni drawdown</text>
+  <text x="45" y="148" fontSize="9">vente de signaux plutôt que d'une méthode</text>
+  <text x="45" y="168" fontSize="9">urgence et rareté artificielles</text>
+  <text x="45" y="188" fontSize="9">affiliations non déclarées, courtiers non régulés</text>
+  <text x="45" y="208" fontSize="9">style de vie mis en avant, critique interdite</text>
+  <text x="45" y="228" fontSize="9">« garantie » de financement ou de réussite</text>
+  <rect x="370" y="40" width="320" height="200" rx="6" className="green" opacity="0.12" />
+  <rect x="370" y="40" width="320" height="200" rx="6" fill="none" stroke="var(--tm-green)" strokeWidth="1.5" />
+  <text x="530" y="64" fontSize="11" fontWeight="600" textAnchor="middle" className="green">Signes positifs</text>
+  <text x="385" y="88" fontSize="9">des chiffres avec leur échantillon et leur incertitude</text>
+  <text x="385" y="108" fontSize="9">des pertes montrées et analysées</text>
+  <text x="385" y="128" fontSize="9">une méthode reproductible sans son auteur</text>
+  <text x="385" y="148" fontSize="9">acceptation qu'une partie des élèves échouera</text>
+  <text x="385" y="168" fontSize="9">critique interne autorisée</text>
+  <text x="385" y="188" fontSize="9">aucune pression à trader plus gros ou plus souvent</text>
+  <text x="385" y="208" fontSize="9">un mentor qui regarde VOTRE journal</text>
+  <text x="385" y="228" fontSize="9">autonomie croissante avec le temps</text>
+  <text x="360" y="272" fontSize="10" textAnchor="middle" className="gold" fontWeight="600">test final : après six mois, êtes-vous plus autonome, ou plus dépendant ?</text>
+</svg>
+</Figure>
+
+## Deux trades, deux cadres
+
+<TradeExample
+  resultat="gain"
+  instrument="Micro-futures MES sur compte financé (nominal 50 000 $, limite suiveuse 4 %)"
+  direction="Long"
+  setup="Setup 1, signal complet ; risque calibré à 0,4 % du nominal (200 $) et non 1 %, parce que la limite suiveuse de 4 % ne laisse que 10 R de marge : à 1 % de risque, la probabilité de perdre le compte sur 300 trades serait proche de la certitude"
+  entree="5 426,50"
+  stop="5 415,50 (44 ticks)"
+  objectif="C1 5 443,00 (1,5R) ; C2 5 459,50 (3R)"
+  r="+2,1R">
+
+Trois contrats (165 $ de risque, sous les 200 $ autorisés). Le trade est identique à celui qu'aurait pris le même trader sur son compte propre ; seule la **taille** change, et elle change à cause d'une contrainte administrative, pas à cause du marché. C'est la bonne façon de traiter un compte financé : la fiche ne bouge pas, le risque par trade est divisé par deux ou trois, le revenu attendu baisse dans la même proportion, et la probabilité de survivre à un drawdown ordinaire devient acceptable. Le trader a aussi noté dans son playbook la clause de paiement (fréquence, minimum, justificatifs) et provisionné l'impôt dès le premier versement.
+
+</TradeExample>
+
+<TradeExample
+  resultat="perte"
+  instrument="Micro-futures MNQ sur compte financé (nominal 100 000 $, limite suiveuse 3 %)"
+  direction="Short"
+  setup="Trade conforme à la fiche, mais taille calibrée à 1 % du nominal (1 000 $) « puisque c'est le maximum autorisé » ; c'est le neuvième trade du compte, qui affichait +2 400 $ deux jours plus tôt (le plus haut sert de référence à la limite suiveuse)"
+  entree="18 744,00"
+  stop="18 784,00 (160 ticks)"
+  objectif="18 664,00"
+  r="−1R (−1 000 $) et compte perdu">
+
+La perte du trade est ordinaire : −1R, sur un signal conforme. Le problème est arithmétique. Avec une limite suiveuse de 3 % sur 100 000 $, la marge est de 3 000 $ depuis le plus haut atteint, soit **trois trades** à 1 % de risque. Après +2 400 $, le seuil de perte s'est déplacé avec le compte ; deux pertes précédentes et celle-ci suffisent à le franchir. Le compte est fermé, les frais d'examen sont perdus, et le trader conclura peut-être que « sa stratégie ne marche pas » alors qu'il n'a rien mesuré d'autre qu'une contrainte administrative sur neuf trades. À 0,3 % de risque, la même série n'aurait consommé qu'un tiers de la marge. La leçon n'est pas d'éviter les comptes financés, c'est de **calibrer le risque sur la contrainte la plus proche**, qui n'est presque jamais la ruine du compte.
+
+</TradeExample>
+
+:::tip À retenir
+
+- Une société de financement vend un **examen payant** ; ses règles décident de tout, et la **nature de la perte maximale** (statique ou suiveuse) change les probabilités du simple au double. Passer est faisable ; **garder** est le vrai problème : à 1 % de risque avec une limite suiveuse, la perte du compte sur 300 trades est très probable.
+- Sur un compte financé, on **risque 0,25 à 0,5 %** par trade, pas 1 % : la contrainte n'est pas la ruine mais une limite administrative bien plus proche ; le revenu attendu baisse d'autant, et c'est le prix du levier emprunté.
+- Un compte qui grossit se gère par **paliers écrits** (passage sur conformité et capital, retour au premier drawdown au-delà du p90), en surveillant le **slippage moyen** (liquidité) et la **conformité** (plafond personnel), avec une règle de **retrait** et une **répartition des contreparties**.
+- La **fiscalité** ne s'improvise pas : qualification des revenus, instruments, report des pertes, comptes à l'étranger, traitement des versements de prop firms, statut, justificatifs, provision. Ce chapitre ne donne pas de conseil : il donne la liste des questions à poser à un professionnel de votre pays.
+- La **formation continue** se nourrit d'abord de votre journal, puis d'une question approfondie par trimestre, puis des fondamentaux relus une fois par an, plus une heure de replay par semaine. Le test d'une source ou d'un mentor : après six mois, **êtes-vous plus autonome ou plus dépendant ?**
+
+:::
+
+## Exercices
+
+<Exercise n={1} title="Lire des règles de financement">
+
+Une société propose : compte de 50 000 $, objectif 8 %, perte maximale totale 5 % **suiveuse**, perte quotidienne 3 %, partage 80 / 20, frais 350 $, minimum dix jours tradés. Votre fiche a une expectancy mesurée de +0,25R.
+
+1. Combien de R représente l'objectif et combien la limite, si vous risquez 1 % par trade ? Et à 0,4 % ?
+2. Que dit le tableau du chapitre sur vos chances, et surtout sur la conservation du compte ?
+3. Quelle taille de risque choisissez-vous, et quel revenu attendu par trade cela implique-t-il en dollars ?
+
+<Solution>
+
+1. À **1 %** (500 $ par trade) : objectif 8 % = 4 000 $ = **+8R** ; limite 5 % = 2 500 $ = **5R** de marge depuis le plus haut. À **0,4 %** (200 $) : objectif = **+20R**, limite = **12,5R**.
+2. À 1 % avec une limite suiveuse de 5 %, la ligne « suiveuse 5 % » donne environ **60 %** de chances de passer pour une expectancy entre +0,2 et +0,3R ; et surtout, la probabilité de **perdre** le compte ensuite est proche de la certitude sur quelques centaines de trades, puisque cinq R de marge suiveuse correspondent à un drawdown parfaitement ordinaire (niveau 7 : p90 souvent supérieur à 15R). À 0,4 %, la marge passe à 12,5R : c'est encore serré, mais l'ordre de grandeur devient compatible avec la distribution des drawdowns.
+3. Choix raisonnable : **0,3 à 0,4 %** par trade (150 à 200 $). Revenu attendu par trade : 0,25R × 200 $ = **50 $ brut**, dont 80 % reversés = **40 $**. Sur 12 trades par mois : environ 480 $ par mois d'espérance, avec une variance large et un risque de perdre le compte non nul. C'est un ordre de grandeur honnête, très éloigné des présentations commerciales, et il permet de décider si les 350 $ de frais valent la peine.
+
+</Solution>
+</Exercise>
+
+<Exercise n={2} title="Écrire un plan de montée en taille">
+
+Compte de 15 000 $, fiche à +0,28R mesurée sur 180 trades, p90 du Monte Carlo à 17R, risque actuel 0,75 % (112 $ par trade, soit 2 micros MES avec un stop de 45 ticks). Écrivez le plan de montée en taille en paliers, avec critères de passage, critères de retour et indicateurs à surveiller.
+
+<Solution>
+
+Exemple conforme : « **Palier actuel** : 2 MES, risque 0,75 % (112 $). **Passage au palier 3 MES** si les trois conditions sont réunies : conformité ≥ 90 % sur les trois derniers mois ; capital ≥ 17 000 $ (progression d'environ un p90 en dollars, soit 17R × 112 $ ≈ 1 900 $, arrondi) ; drawdown courant inférieur au p90. **Palier 4 MES** aux mêmes conditions depuis le palier 3. **Retour au palier précédent** : au premier drawdown dépassant le p90 (17R), ou si la conformité passe sous 85 % sur un mois. **Indicateurs suivis dans le tableau de bord** : slippage moyen par palier (une hausse signale la liquidité ou une exécution dégradée), conformité par palier, R moyen par palier (à titre d'observation seulement : trois mois ne suffisent pas à conclure). **Plafond provisoire** : 5 MES, à revoir au bilan annuel. » Ce qu'on vérifie : des paliers modestes, des critères chiffrés dans les deux sens, et des indicateurs qui ne sont pas le P&L.
+
+</Solution>
+</Exercise>
+
+<Exercise n={3} title="Trier trois offres">
+
+Pour chacune, dites ce que vous retenez et ce que vous vérifiez avant de payer quoi que ce soit.
+
+- (a) Une communauté payante qui publie chaque soir les trades de son fondateur, avec captures des gains, et propose un lien vers une société de financement partenaire.
+- (b) Un praticien qui propose quatre séances d'une heure pour relire votre journal et votre exécution, et refuse de donner ses propres résultats.
+- (c) Un cours en ligne qui publie l'expectancy de sa méthode, son échantillon (400 trades), son drawdown maximal et la proportion d'élèves qui abandonnent.
+
+<Solution>
+
+- **(a)** Deux signaux d'alarme majeurs : publication des gains sans les pertes ni le journal complet (biais de sélection), et **lien d'affiliation** vers une société de financement (conflit d'intérêts direct : la communauté gagne quand vous payez des examens). À vérifier avant tout paiement : l'existence de mesures complètes (n, expectancy, drawdown), la déclaration explicite de l'affiliation, et si l'on vend une méthode ou des signaux. En l'état, à éviter.
+- **(b)** Le refus de donner ses résultats est ambigu : ce n'est pas rédhibitoire s'il s'agit d'un accompagnement sur **vos** données (c'est le seul format qui vaut clairement son coût), car c'est votre exécution qui est l'objet. À vérifier : qu'il travaille bien sur votre journal et vos captures, qu'il propose des corrections mesurables, et qu'il n'oriente pas vers un courtier ou une plateforme partenaire. Une séance d'essai payante suffit à trancher.
+- **(c)** Ce sont exactement les signes positifs du chapitre : chiffres avec échantillon, drawdown assumé, et surtout **taux d'abandon publié**, ce qui est rarissime et honnête. À vérifier tout de même : que l'expectancy est accompagnée de son intervalle et de la période, que la méthode est reproductible sans son auteur, et qu'aucune promesse de rendement n'accompagne le discours commercial.
+
+</Solution>
+</Exercise>
+
+<Quiz
+  title="Valider le chapitre"
+  questions={[
+    {
+      q: "Dans un examen de financement, ce qui change le plus les probabilités est :",
+      options: [
+        "Le montant de l'objectif",
+        "La nature de la perte maximale : statique (depuis le solde de départ) ou suiveuse (depuis le plus haut atteint)",
+        "Le partage des gains",
+        "Le nombre de jours minimum",
+      ],
+      answer: 1,
+      explain: "Une limite suiveuse de 5 % fait passer les chances d'un trader à +0,2R d'environ 93 % à environ 53 %.",
+    },
+    {
+      q: "Sur un compte financé, le risque par trade recommandé est :",
+      options: [
+        "Le maximum autorisé, pour atteindre l'objectif vite",
+        "0,25 à 0,5 % du nominal : la contrainte n'est pas la ruine du compte mais une limite administrative bien plus proche",
+        "2 % comme sur un compte propre",
+        "Variable selon la confiance",
+      ],
+      answer: 1,
+      explain: "À 1 % avec une limite suiveuse, la probabilité de perdre le compte sur 300 trades est très élevée, même pour une expectancy positive.",
+    },
+    {
+      q: "Le signal objectif d'une contrainte de liquidité quand la taille grossit est :",
+      options: [
+        "La baisse du taux de réussite",
+        "L'augmentation du slippage moyen, mesurée dans le journal",
+        "L'augmentation de la marge demandée",
+        "Le nombre de contrats",
+      ],
+      answer: 1,
+      explain: "C'est le seul critère objectif pour décider de passer du micro au mini, de changer d'instrument ou de plafonner.",
+    },
+    {
+      q: "Sur la fiscalité, ce chapitre :",
+      options: [
+        "Donne les taux applicables",
+        "Ne donne aucun conseil et fournit une liste de questions à poser à un professionnel de votre pays (qualification, instruments, report des pertes, comptes à l'étranger, versements de prop firms, statut, justificatifs, provision)",
+        "Recommande un statut particulier",
+        "Explique comment optimiser",
+      ],
+      answer: 1,
+      explain: "Les règles dépendent du pays, du statut, des instruments et du volume, et elles changent ; ce qui n'est pas provisionné coûte cher au pire moment.",
+    },
+    {
+      q: "La première source de formation continue d'un trader expérimenté est :",
+      options: [
+        "Les réseaux sociaux",
+        "Son propre journal, relu par revues mensuelles et bilans trimestriels, avec une question approfondie par trimestre",
+        "Un nouveau setup chaque mois",
+        "Les webinaires gratuits",
+      ],
+      answer: 1,
+      explain: "C'est la seule source qui parle de vous ; s'y ajoutent les fondamentaux relus annuellement et une heure de replay par semaine.",
+    },
+    {
+      q: "Le test final d'une communauté ou d'un mentor est :",
+      options: [
+        "Le nombre d'abonnés",
+        "Après six mois, êtes-vous plus autonome ou plus dépendant ?",
+        "Le prix",
+        "Les captures de gains publiées",
+      ],
+      answer: 1,
+      explain: "Les groupes de signaux empêchent structurellement l'apprentissage : ils suppriment la décision, donc la mesure.",
+    },
+  ]}
+/>
+
+## Prochain chapitre
+
+Il ne reste que l'examen final : soixante-quinze questions couvrant les dix niveaux, et une étude de cas de synthèse où il faudra préparer une séance, juger une fiche, dimensionner un risque et prescrire des corrections de process. C'est la dernière étape du cours, et la première du travail qui suit.
